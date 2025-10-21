@@ -1,5 +1,13 @@
 // js/main.js - Main Application Logic
 
+// ✨ v16: Products by Segment mapping
+const productsBySegment = {
+    'Leben': ['Risikoleben', 'Kapitallebensversicherung', 'Fondsgebundene LV', 'Berufsunfähigkeit', 'Rentenversicherung'],
+    'Kranken': ['Vollversicherung', 'Zusatzversicherung', 'Pflegeversicherung', 'Zahnzusatz', 'Auslandsreise'],
+    'Schaden': ['Hausrat', 'Wohngebäude', 'Haftpflicht', 'Rechtsschutz', 'Gewerbe'],
+    'Kfz': ['Kfz-Haftpflicht', 'Vollkasko', 'Teilkasko', 'Flottenversicherung', 'Schutzbrief']
+};
+
 // Create KPI card
 function createKPICard(kpi) {
     const card = document.createElement('div');
