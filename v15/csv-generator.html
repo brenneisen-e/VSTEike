@@ -176,6 +176,8 @@
                 <h3>✅ Features</h3>
                 <p>• Generiert realistische deutsche Vor- und Nachnamen für Vermittler</p>
                 <p>• <strong>NEU: Regierungsbezirk-Zuordnung</strong> für Kartenvisualisierung (40 Regionen)</p>
+                <p>• <strong>✨ v15: Realistische Agenturverteilung</strong> - Log-normale Performance-Verteilung simuliert 80/20-Regel</p>
+                <p>• <strong>✨ v15: Optimierte KPI-Standardwerte</strong> - NPS 42 (statt 80), Stornoquote 8.5% (statt 7.5%), Underwriting 86% (statt 92%)</p>
                 <p>• Verwendet reale Bundeslandfaktoren für unterschiedliche Wirtschaftskraft</p>
                 <p>• Saisonale Schwankungen je Bundesland (z.B. Tourismus in MV)</p>
                 <p>• Silo-spezifische Performance (Ausschließlichkeit vs. Makler vs. Direktvertrieb)</p>
@@ -230,11 +232,11 @@
                     </div>
                     <div class="input-group">
                         <label>Stornoquote (%)</label>
-                        <input type="number" id="kpi_storno" value="7.5" step="0.1">
+                        <input type="number" id="kpi_storno" value="8.5" step="0.1">
                     </div>
                     <div class="input-group">
                         <label>NPS Score</label>
-                        <input type="number" id="kpi_nps" value="80" min="-100" max="100">
+                        <input type="number" id="kpi_nps" value="42" min="-100" max="100">
                     </div>
                     <div class="input-group">
                         <label>Risikoscore</label>
@@ -242,7 +244,7 @@
                     </div>
                     <div class="input-group">
                         <label>Combined Ratio (%)</label>
-                        <input type="number" id="kpi_combined" value="93" step="0.1">
+                        <input type="number" id="kpi_combined" value="95" step="0.1">
                     </div>
                     <div class="input-group">
                         <label>Ergebnis (€/Monat)</label>
@@ -250,7 +252,7 @@
                     </div>
                     <div class="input-group">
                         <label>Underwriting (%)</label>
-                        <input type="number" id="kpi_underwriting" value="92" step="0.1">
+                        <input type="number" id="kpi_underwriting" value="86" step="0.1">
                     </div>
                     <div class="input-group">
                         <label>Deckungsbeitrag (€/Monat)</label>
@@ -368,21 +370,53 @@
         function applyPreset(preset) {
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
+
+            // ✨ v15: Realistischere Preset-Werte
             const presets = {
-                'small': { numAgents: 100, neugeschaeft: 5000000, bestand: 500000000, ergebnis: 2000000, deckungsbeitrag: 10000000 },
-                'medium': { numAgents: 500, neugeschaeft: 30000000, bestand: 14000000000, ergebnis: 13000000, deckungsbeitrag: 75000000 },
-                'large': { numAgents: 5000, neugeschaeft: 150000000, bestand: 70000000000, ergebnis: 65000000, deckungsbeitrag: 375000000 }
+                'small': {
+                    numAgents: 100,
+                    neugeschaeft: 5000000,      // 5 Mio/Monat
+                    bestand: 500000000,          // 500 Mio
+                    ergebnis: 2000000,           // 2 Mio/Monat
+                    deckungsbeitrag: 10000000    // 10 Mio/Monat
+                },
+                'medium': {
+                    numAgents: 500,
+                    neugeschaeft: 30000000,      // 30 Mio/Monat
+                    bestand: 14000000000,        // 14 Mrd
+                    ergebnis: 13000000,          // 13 Mio/Monat
+                    deckungsbeitrag: 75000000    // 75 Mio/Monat
+                },
+                'large': {
+                    numAgents: 5000,
+                    neugeschaeft: 150000000,     // 150 Mio/Monat
+                    bestand: 70000000000,        // 70 Mrd
+                    ergebnis: 65000000,          // 65 Mio/Monat
+                    deckungsbeitrag: 375000000   // 375 Mio/Monat
+                }
             };
-            
+
             const p = presets[preset];
             if (!p) return;
-            
+
             document.getElementById('numAgents').value = p.numAgents;
             document.getElementById('kpi_neugeschaeft').value = p.neugeschaeft;
             document.getElementById('kpi_bestand').value = p.bestand;
             document.getElementById('kpi_ergebnis').value = p.ergebnis;
             document.getElementById('kpi_deckungsbeitrag').value = p.deckungsbeitrag;
+        }
+
+        // ✨ v15: Realistische Log-Normale Verteilung für Agenturperformance
+        // Simuliert 80/20-Regel: 20% der Agenten machen 80% des Geschäfts
+        function logNormalRandom(mean, sigma) {
+            // Box-Muller für Normalverteilung
+            let u = 0, v = 0;
+            while(u === 0) u = Math.random();
+            while(v === 0) v = Math.random();
+            const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+            // Konvertiere zu Log-Normal
+            return Math.exp(mean + sigma * normal);
         }
         
         function normalRandom(mean, std) {
@@ -426,7 +460,16 @@
                 const silo = silos[Math.floor(Math.random() * silos.length)];
                 const bundesland = bundeslaender[Math.floor(Math.random() * bundeslaender.length)];
                 const landkreis = landkreiseByBundesland[bundesland][Math.floor(Math.random() * landkreiseByBundesland[bundesland].length)];
-                
+
+                // ✨ v15: Realistische Performance-Verteilung (Log-Normal)
+                // mean=-0.1, sigma=0.6 ergibt:
+                // - Median ~0.9 (50% der Agenten)
+                // - 80% zwischen 0.4 und 1.8
+                // - Top 10% über 2.0
+                // - Top 1% über 4.0
+                // Simuliert realistisch, dass wenige Agenten sehr erfolgreich sind
+                const performanceFactor = logNormalRandom(-0.1, 0.6);
+
                 agentProfiles.push({
                     id: `VM${String(i + 1).padStart(5, '0')}`,
                     name: agentNames[i],
@@ -434,7 +477,7 @@
                     segment: segment,
                     bundesland: bundesland,
                     landkreis: landkreis,
-                    performanceFactor: 0.5 + Math.random() * 1.5,
+                    performanceFactor: performanceFactor,
                     landData: bundeslandData[bundesland],
                     segmentFactors: segmentFactors[segment],
                     siloFactors: siloFactors[silo]
