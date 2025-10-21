@@ -13,13 +13,6 @@
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css">
-
-<div class="header-left">
-    <button class="back-button" onclick="backToLanding()">← Zurück</button>
-
-    <!-- Rest bleibt gleich -->
-</div>
-
 </head>
 <body>
   <!-- ========================================
@@ -48,7 +41,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="welcome-chat-body">
             <div class="welcome-message">
                 <div class="chat-avatar">🤖</div>
@@ -88,20 +81,20 @@
                 <div id="quickUploadStatus" class="upload-status"></div>
             </div>
 
-            <!-- NEU: Chat Bereich -->
+            <!-- Chat Bereich -->
             <div class="landing-chat-section">
                 <div class="chat-divider">
                     <span>Oder stelle mir eine Frage</span>
                 </div>
-                
+
                 <div class="landing-chat-messages" id="landingChatMessages">
                     <!-- Messages werden hier eingefügt -->
                 </div>
-                
+
                 <div class="landing-chat-input-container">
-                    <textarea 
-                        class="landing-chat-input" 
-                        id="landingChatInput" 
+                    <textarea
+                        class="landing-chat-input"
+                        id="landingChatInput"
                         placeholder="Frag mich etwas über das Dashboard..."
                         rows="1"
                     ></textarea>
@@ -115,10 +108,9 @@
 </div>
 
     <!-- ========================================
-         MAIN APPLICATION (Ihr bestehendes Dashboard)
+         MAIN APPLICATION (v02 Dashboard)
          ======================================== -->
     <div id="mainApp" style="display: none;">
-        <!-- Ihr gesamter bestehender Dashboard-Code bleibt hier unverändert -->
     <!-- Upload Section -->
     <div class="upload-section">
         <label class="upload-label" for="csvUpload">
@@ -128,18 +120,16 @@
         <span id="fileStatus" style="margin-left: 1rem; color: #0369a1; font-weight: 600;"></span>
     </div>
 
-<!-- Header -->
-<header class="header">
-    <div class="header-content">
-        <div class="header-left">
-            <button class="back-button" onclick="backToLanding()">← Zurück</button>
-            <div class="view-mode-toggle">
-                <button class="active" data-mode="dashboard">📊 Dashboard</button>
-                <button data-mode="table">📋 Tabelle</button>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="back-button" onclick="backToLanding()">← Zurück</button>
+                <div class="view-mode-toggle">
+                    <button class="active" data-mode="dashboard">📊 Dashboard</button>
+                    <button data-mode="table">📋 Tabelle</button>
+                </div>
             </div>
-        </div>
-
-            <!-- Ihre Filter bleiben unverändert -->
             <div class="filters">
                 <div class="filter-group">
                     <span class="filter-label">Jahr:</span>
@@ -335,6 +325,7 @@
         font-size: 13px;
         border: 1px solid #e2e8f0;
     "></div>
+    </div>
 
     <!-- JavaScript Modules -->
     <script src="js/config.js"></script>
@@ -343,7 +334,6 @@
     <script src="js/charts.js"></script>
     <script src="js/tables.js"></script>
     <script src="js/map-counties.js"></script>
-    <script src="js/chat-common.js"></script>
     <script src="js/main.js"></script>
     <script src="js/chat.js"></script>
     <script src="js/landing.js"></script>

@@ -124,13 +124,8 @@ function updateKPICard(kpi) {
     }
 }
 
-// Update all KPIs (with cache clearing)
+// Update all KPIs
 function updateAllKPIs() {
-    // Clear cache to force fresh data
-    if (typeof clearDataCache === 'function') {
-        clearDataCache();
-    }
-
     kpiDefinitions.forEach(kpi => {
         updateKPICard(kpi);
     });
@@ -401,12 +396,7 @@ waitForLibraries(function() {
                 try {
                     const csvText = event.target.result;
                     const parsedData = parseCSV(csvText);
-
-                    // Clear cache when new data is loaded
-                    if (typeof clearDataCache === 'function') {
-                        clearDataCache();
-                    }
-
+                    
                     const firstRow = parsedData[0] || {};
                     const hasDay = 'day' in firstRow;
                     const hasMonth = 'month' in firstRow;

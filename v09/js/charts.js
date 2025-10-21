@@ -90,25 +90,13 @@ function generateDailyData(monthlyData, kpiId, timeRange = 'year', offset = 0) {
     return dailyData;
 }
 
-// Destroy chart safely
-function destroyChart(kpiId) {
-    if (state.charts[kpiId]) {
-        try {
-            state.charts[kpiId].destroy();
-        } catch (e) {
-            console.warn('Error destroying chart:', kpiId, e);
-        }
-        state.charts[kpiId] = null;
-    }
-}
-
 // Create chart
 function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
     const canvas = document.getElementById(`chart-${kpiId}`);
     if (!canvas) return;
-
+    
     const ctx = canvas.getContext('2d');
-
+    
     let chartData;
     let chartType = 'line';
     
@@ -169,12 +157,11 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
         };
     }
 
-    // Destroy existing chart before creating new one
-    destroyChart(kpiId);
+    if (state.charts[kpiId]) {
+        state.charts[kpiId].destroy();
+    }
 
-    // Create new chart with error handling
-    try {
-        state.charts[kpiId] = new Chart(ctx, {
+    state.charts[kpiId] = new Chart(ctx, {
         type: chartType,
         data: chartData,
         options: {
@@ -206,12 +193,8 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
                     }
                 }
             }
-        });
-    } catch (error) {
-        console.error('Error creating chart:', kpiId, error);
-        // Cleanup on error
-        destroyChart(kpiId);
-    }
+        }
+    });
 }
 
 // Navigate time
@@ -302,32 +285,10 @@ function closeFullscreen() {
     const modal = document.getElementById('fullscreenModal');
     modal.classList.remove('show');
     if (state.fullscreenChart) {
-        try {
-            state.fullscreenChart.destroy();
-        } catch (e) {
-            console.warn('Error destroying fullscreen chart:', e);
-        }
+        state.fullscreenChart.destroy();
         state.fullscreenChart = null;
     }
 }
-
-// Cleanup all charts (useful when switching views or reloading)
-function cleanupAllCharts() {
-    Object.keys(state.charts).forEach(kpiId => {
-        destroyChart(kpiId);
-    });
-    if (state.fullscreenChart) {
-        try {
-            state.fullscreenChart.destroy();
-        } catch (e) {
-            console.warn('Error destroying fullscreen chart:', e);
-        }
-        state.fullscreenChart = null;
-    }
-}
-
-// Make cleanup available globally
-window.cleanupAllCharts = cleanupAllCharts;
 
 function switchToDaily(kpiId) {
     const viewButtons = document.querySelectorAll(`[data-kpi="${kpiId}"]`);
