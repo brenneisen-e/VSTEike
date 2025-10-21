@@ -167,13 +167,13 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            // ✨ v18: Einheitliches Layout für alle Charts
+            // ✨ v18.1: Optimiertes Layout für perfekte Ausrichtung
             layout: {
                 padding: {
-                    top: 10,
-                    right: 15,
-                    bottom: 10,
-                    left: 15
+                    top: 5,
+                    right: 10,
+                    bottom: 5,
+                    left: 5
                 }
             },
             plugins: {
@@ -193,7 +193,7 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
             },
             scales: {
                 x: {
-                    // ✨ v18: Einheitliche X-Achse
+                    // ✨ v18.1: Einheitliche X-Achse mit festem Padding
                     grid: {
                         display: true,
                         color: 'rgba(0, 0, 0, 0.05)',
@@ -206,11 +206,12 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
                         color: '#64748b',
                         maxRotation: 0,
                         autoSkip: true,
-                        maxTicksLimit: 8
+                        maxTicksLimit: 8,
+                        padding: 10 // Konsistenter Abstand nach unten
                     }
                 },
                 y: {
-                    // ✨ v18: Einheitliche Y-Achse für alle KPIs
+                    // ✨ v18.1: Einheitliche Y-Achse mit Zentrierung
                     beginAtZero: view === 'distribution' || kpi.id === 'ergebnis',
                     grid: {
                         display: true,
@@ -223,13 +224,18 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
                         },
                         color: '#64748b',
                         maxTicksLimit: 6,
-                        padding: 8,
+                        padding: 12,
+                        align: 'center', // Zentriert die Beschriftung
+                        crossAlign: 'near',
                         callback: function(value) {
                             if (view === 'distribution') {
                                 return Math.round(value);
                             }
                             return formatValue(value, kpi.unit);
                         }
+                    },
+                    title: {
+                        display: false
                     }
                 }
             }

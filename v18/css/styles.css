@@ -2202,3 +2202,29 @@ select:focus, .dropdown-button:focus {
 .ai-response-content::-webkit-scrollbar-thumb:hover {
     background: #764ba2;
 }
+/* ========================================
+   Version Display
+   ======================================== */
+
+.version-display {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(37, 99, 235, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    font-family: 'Aptos', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.version-display:hover {
+    background: rgba(37, 99, 235, 1);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
