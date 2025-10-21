@@ -231,14 +231,27 @@ function updateProductFilter() {
     updateProductDisplay();
 }
 
-// Update product display
+// ✨ v18: Update product display mit Checkbox-Update
 function updateProductDisplay() {
     const button = document.getElementById('productButton');
     if (button) {
-        const text = state.filters.products.includes('alle') ? 
+        const text = state.filters.products.includes('alle') ?
             'Alle Produkte' : state.filters.products.join(', ');
         button.querySelector('span').textContent = text;
     }
+
+    // Update Checkboxen im productMenu
+    document.querySelectorAll('#productMenu .dropdown-item').forEach(item => {
+        const value = item.dataset.value;
+        const checkbox = item.querySelector('.checkbox');
+        if (checkbox) {
+            if (state.filters.products.includes(value)) {
+                checkbox.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
+            }
+        }
+    });
 }
 
 // Update Agentur filter dropdown

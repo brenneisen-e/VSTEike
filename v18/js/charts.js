@@ -167,8 +167,19 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            // ✨ v18: Einheitliches Layout für alle Charts
+            layout: {
+                padding: {
+                    top: 10,
+                    right: 15,
+                    bottom: 10,
+                    left: 15
+                }
+            },
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: false
+                },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -181,9 +192,38 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
                 }
             },
             scales: {
-                y: {
-                    beginAtZero: view === 'distribution' || kpi.id === 'ergebnis',
+                x: {
+                    // ✨ v18: Einheitliche X-Achse
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    },
                     ticks: {
+                        font: {
+                            size: 11
+                        },
+                        color: '#64748b',
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 8
+                    }
+                },
+                y: {
+                    // ✨ v18: Einheitliche Y-Achse für alle KPIs
+                    beginAtZero: view === 'distribution' || kpi.id === 'ergebnis',
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        color: '#64748b',
+                        maxTicksLimit: 6,
+                        padding: 8,
                         callback: function(value) {
                             if (view === 'distribution') {
                                 return Math.round(value);
