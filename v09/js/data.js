@@ -22,28 +22,17 @@ const state = {
     tableSort: {
         column: null,
         direction: 'asc'
-    },
-    // Cache für Performance-Optimierung
-    cache: {
-        filteredData: null,
-        cacheKey: null
     }
 };
 
 // Store daily data globally
 let dailyRawData = null;
 
-// Aggregate daily to monthly with error handling
+// Aggregate daily to monthly
 function aggregateDailyToMonthly(dailyData) {
-    try {
-        if (!dailyData || !Array.isArray(dailyData) || dailyData.length === 0) {
-            console.warn('No data to aggregate');
-            return [];
-        }
-
-        const monthlyData = {};
-
-        dailyData.forEach(row => {
+    const monthlyData = {};
+    
+    dailyData.forEach(row => {
         const key = `${row.year || 2025}-${row.month}`;
         if (!monthlyData[key]) {
             monthlyData[key] = {
@@ -107,119 +96,77 @@ function aggregateDailyToMonthly(dailyData) {
             deckungsbeitrag: month.deckungsbeitrag
         };
     });
-
-
-        result.sort((a, b) => a.month - b.month);
-        return result;
-    } catch (error) {
-        console.error('Error aggregating data:', error);
-        return [];
-    }
+    
+    result.sort((a, b) => a.month - b.month);
+    return result;
 }
 
-// Generate cache key from current filter state
-function getCacheKey() {
-    return JSON.stringify({
-        year: state.filters.year,
-        agentur: state.filters.agentur,
-        silo: state.filters.silo,
-        segments: state.filters.segments,
-        products: state.filters.products,
-        states: Array.from(state.selectedStates).sort(),
-        counties: Array.from(state.selectedCounties).sort()
-    });
-}
-
-// Get filtered data (with caching)
+// Get filtered data
 function getFilteredData() {
     const year = state.filters.year;
-    const cacheKey = getCacheKey();
-
-    // Return cached data if available and valid
-    if (state.cache.cacheKey === cacheKey && state.cache.filteredData) {
-        return state.cache.filteredData;
-    }
-
-    console.log('🔎 getFilteredData aufgerufen - Cache Miss - selectedCounties:', state.selectedCounties.size, Array.from(state.selectedCounties));
-
+    
+    console.log('🔎 getFilteredData aufgerufen - selectedCounties:', state.selectedCounties.size, Array.from(state.selectedCounties));
+    
     if (dailyRawData && dailyRawData.length > 0) {
-        // Optimized: Single pass filtering with all conditions
-        const firstRow = dailyRawData[0];
-        const hasYear = firstRow.year !== undefined;
-        const hasVermittlerId = firstRow.vermittler_id !== undefined;
-        const hasSilo = firstRow.silo !== undefined;
-        const hasSegment = firstRow.segment !== undefined;
-        const hasProduct = firstRow.product !== undefined;
-
-        const filteredDaily = dailyRawData.filter(row => {
-            // Year filter
-            if (hasYear && !(row.year == year || row.year == parseInt(year))) {
-                return false;
-            }
-
-            // Agentur filter
-            if (state.filters.agentur !== 'alle' && hasVermittlerId && row.vermittler_id !== state.filters.agentur) {
-                return false;
-            }
-
-            // Bundesland filter
-            if (state.selectedStates.size > 0 && !state.selectedStates.has(row.bundesland)) {
-                return false;
-            }
-
-            // County filter
-            if (state.selectedCounties && state.selectedCounties.size > 0) {
+        let filteredDaily = dailyRawData;
+        
+        if (dailyRawData[0].year !== undefined) {
+            filteredDaily = filteredDaily.filter(row => row.year == year || row.year == parseInt(year));
+        }
+        
+        if (state.filters.agentur !== 'alle' && dailyRawData[0].vermittler_id !== undefined) {
+            filteredDaily = filteredDaily.filter(row => row.vermittler_id === state.filters.agentur);
+        }
+        
+        if (state.selectedStates.size > 0) {
+            filteredDaily = filteredDaily.filter(row => state.selectedStates.has(row.bundesland));
+        }
+        
+        // NEU: Filter by selected counties (Regierungsbezirke) - MIT DEBUG!
+        if (state.selectedCounties && state.selectedCounties.size > 0) {
+            console.log('🔍 Filtere nach Regionen:', Array.from(state.selectedCounties));
+            const beforeCount = filteredDaily.length;
+            
+            filteredDaily = filteredDaily.filter(row => {
                 let kreis = row.landkreis || row.kreis;
                 if (!kreis) return false;
-
-                // Remove quotes
+                
+                // Entferne Anführungszeichen
                 if (typeof kreis === 'string') {
                     kreis = kreis.replace(/^["']|["']$/g, '').trim();
                 }
-
-                if (!state.selectedCounties.has(kreis)) {
-                    return false;
+                
+                const match = state.selectedCounties.has(kreis);
+                if (!match && Math.random() < 0.001) {
+                    console.log('🔸 Beispiel nicht-Match:', kreis, 'gesucht:', Array.from(state.selectedCounties)[0]);
                 }
-            }
-
-            // Silo filter
-            if (state.filters.silo !== 'alle' && hasSilo && row.silo !== state.filters.silo) {
-                return false;
-            }
-
-            // Segment filter
-            if (!state.filters.segments.includes('alle') && hasSegment && !state.filters.segments.includes(row.segment)) {
-                return false;
-            }
-
-            // Product filter
-            if (!state.filters.products.includes('alle') && hasProduct && !state.filters.products.includes(row.product)) {
-                return false;
-            }
-
-            return true;
-        });
-
-        const result = aggregateDailyToMonthly(filteredDaily);
-
-        // Cache the result
-        state.cache.filteredData = result;
-        state.cache.cacheKey = cacheKey;
-
-        return result;
+                
+                return match;
+            });
+            
+            console.log(`📉 Gefiltert: ${beforeCount} → ${filteredDaily.length} Zeilen`);
+        }
+        
+        if (state.filters.silo !== 'alle' && dailyRawData[0].silo !== undefined) {
+            filteredDaily = filteredDaily.filter(row => row.silo === state.filters.silo);
+        }
+        
+        if (!state.filters.segments.includes('alle') && dailyRawData[0].segment !== undefined) {
+            filteredDaily = filteredDaily.filter(row => state.filters.segments.includes(row.segment));
+        }
+        
+        if (!state.filters.products.includes('alle') && dailyRawData[0].product !== undefined) {
+            filteredDaily = filteredDaily.filter(row => state.filters.products.includes(row.product));
+        }
+        
+        return aggregateDailyToMonthly(filteredDaily);
     }
-
+    
     if (state.uploadedData && state.uploadedData.length > 0) {
         return state.uploadedData;
     }
-
+    
     return [];
-}
-
-// Clear cache when data changes
-function clearDataCache() {
-    state.cache.filteredData = null;
-    state.cache.cacheKey = null;
 }
 
 // Get available Agenturen with names

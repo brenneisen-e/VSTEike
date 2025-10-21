@@ -321,9 +321,8 @@ async function sendLandingChatMessage() {
     
     try {
         // Importiere die gleichen Konstanten wie im Dashboard Chat
-        // IMPORTANT: Use CHAT_CONFIG from chat-common.js instead of hardcoding here
-        const OPENAI_API_KEY = window.CHAT_CONFIG?.OPENAI_API_KEY || 'YOUR_OPENAI_API_KEY_HERE';
-        const USE_MOCK_MODE = window.CHAT_CONFIG?.USE_MOCK_MODE !== false; // Default to true for safety
+        const OPENAI_API_KEY = 'DEIN_API_KEY_HIER'; // ⚠️ Gleicher Key wie in chat.js!
+        const USE_MOCK_MODE = false; // false = Echte API, true = Mock
         
         if (USE_MOCK_MODE) {
             // Mock response

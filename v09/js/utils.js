@@ -1,30 +1,5 @@
 // js/utils.js - Utility Functions
 
-// Debounce function for performance optimization
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Throttle function for performance optimization
-function throttle(func, limit) {
-    let inThrottle;
-    return function(...args) {
-        if (!inThrottle) {
-            func.apply(this, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    };
-}
-
 // Format value based on unit type
 function formatValue(value, unit) {
     if (value === null || typeof value === 'undefined' || isNaN(value)) return '--';
@@ -60,70 +35,44 @@ function getMonthName(monthNum) {
     return months[monthNum - 1] || '';
 }
 
-// Parse CSV with improved error handling
+// Parse CSV
 function parseCSV(csvText) {
-    try {
-        if (!csvText || typeof csvText !== 'string') {
-            throw new Error('Invalid CSV text');
-        }
-
-        const lines = csvText.split('\n').filter(line => line.trim());
-
-        if (lines.length < 2) {
-            throw new Error('CSV must contain at least a header row and one data row');
-        }
-
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-
-        if (headers.length === 0) {
-            throw new Error('CSV must contain at least one column');
-        }
-
-        const data = [];
-
-        for (let i = 1; i < lines.length; i++) {
-            try {
-                const values = lines[i].split(',').map(v => v.trim());
-                const row = {};
-
-                headers.forEach((header, index) => {
-                    const value = values[index] || '';
-                    let normalizedHeader = header;
-
-                    const headerMapping = {
-                        'vermittler_id': 'vermittler_id',
-                        'vermittlerid': 'vermittler_id',
-                        'agent_id': 'vermittler_id',
-                        'agentid': 'vermittler_id'
-                    };
-
-                    if (headerMapping[header]) {
-                        normalizedHeader = headerMapping[header];
-                    }
-
-                    if (!isNaN(value) && value !== '') {
-                        row[normalizedHeader] = parseFloat(value);
-                    } else {
-                        row[normalizedHeader] = value;
-                    }
-                });
-
-                data.push(row);
-            } catch (rowError) {
-                console.warn(`Warning: Error parsing row ${i}:`, rowError);
-                // Continue parsing other rows
+    const lines = csvText.split('\n').filter(line => line.trim());
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+    const data = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        const row = {};
+        headers.forEach((header, index) => {
+            const value = values[index];
+            let normalizedHeader = header;
+            
+            const headerMapping = {
+                'vermittler_id': 'vermittler_id',
+                'vermittlerid': 'vermittler_id',
+                'agent_id': 'vermittler_id',
+                'agentid': 'vermittler_id'
+            };
+            
+            if (headerMapping[header]) {
+                normalizedHeader = headerMapping[header];
             }
-        }
-
-        console.log('CSV parsed:', data.length, 'rows');
-        console.log('Headers:', headers);
-        console.log('Sample row:', data[0]);
-
-        return data;
-    } catch (error) {
-        console.error('CSV parsing error:', error);
-        throw new Error(`Failed to parse CSV: ${error.message}`);
+            
+            if (!isNaN(value) && value !== '') {
+                row[normalizedHeader] = parseFloat(value);
+            } else {
+                row[normalizedHeader] = value;
+            }
+        });
+        data.push(row);
     }
+    
+    console.log('CSV parsed:', data.length, 'rows');
+    console.log('Headers:', headers);
+    console.log('Sample row:', data[0]);
+    
+    return data;
 }
 
 // Toggle dropdown
