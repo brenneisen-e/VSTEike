@@ -386,13 +386,16 @@ waitForLibraries(function() {
             renderTable();
         });
     });
-    
-    // Agentur select
-    document.getElementById('agenturSelect').addEventListener('change', function() {
-        state.selectedAgentur = this.value;
-        renderTable();
-    });
-    
+
+    // Agentur select (falls vorhanden - v18.3: wurde durch Multi-Select ersetzt)
+    const agenturSelect = document.getElementById('agenturSelect');
+    if (agenturSelect) {
+        agenturSelect.addEventListener('change', function() {
+            state.selectedAgentur = this.value;
+            renderTable();
+        });
+    }
+
     // Table sorting
     document.addEventListener('click', function(e) {
         if (e.target.closest('.data-table th.sortable')) {
