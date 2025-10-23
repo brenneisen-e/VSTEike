@@ -185,6 +185,7 @@
                 <p>• <strong>NEU: Regierungsbezirk-Zuordnung</strong> für Kartenvisualisierung (40 Regionen)</p>
                 <p>• <strong>✨ v15: Realistische Agenturverteilung</strong> - Log-normale Performance-Verteilung simuliert 80/20-Regel</p>
                 <p>• <strong>✨ v15: Optimierte KPI-Standardwerte</strong> - NPS 42 (statt 80), Stornoquote 8.5% (statt 7.5%), Underwriting 86% (statt 92%)</p>
+                <p>• <strong>✨ v18.3: Marktübliche Top-Performer-Werte</strong> - Neugeschäft 16x erhöht, Top-Performer erreichen 800k-1M+ über 12 Monate</p>
                 <p>• Verwendet reale Bundeslandfaktoren für unterschiedliche Wirtschaftskraft</p>
                 <p>• Saisonale Schwankungen je Bundesland (z.B. Tourismus in MV)</p>
                 <p>• Silo-spezifische Performance (Ausschließlichkeit vs. Makler vs. Direktvertrieb)</p>
@@ -212,7 +213,7 @@
                     </div>
                     <div class="input-group">
                         <label>Monate pro Jahr (1-12)</label>
-                        <input type="number" id="months" value="10" min="1" max="12">
+                        <input type="number" id="months" value="12" min="1" max="12">
                     </div>
                     <div class="input-group">
                         <label>Anzahl Vermittler</label>
@@ -230,7 +231,7 @@
                 <div class="grid">
                     <div class="input-group">
                         <label>Neugeschäft (€/Monat)</label>
-                        <input type="number" id="kpi_neugeschaeft" value="30000000" step="1000000">
+                        <input type="number" id="kpi_neugeschaeft" value="500000000" step="10000000">
                     </div>
                     <div class="input-group">
                         <label>Bestand (€)</label>
@@ -254,7 +255,7 @@
                     </div>
                     <div class="input-group">
                         <label>Ergebnis (€/Monat)</label>
-                        <input type="number" id="kpi_ergebnis" value="13000000" step="100000">
+                        <input type="number" id="kpi_ergebnis" value="200000000" step="10000000">
                     </div>
                     <div class="input-group">
                         <label>Underwriting (%)</label>
@@ -262,7 +263,7 @@
                     </div>
                     <div class="input-group">
                         <label>Deckungsbeitrag (€/Monat)</label>
-                        <input type="number" id="kpi_deckungsbeitrag" value="75000000" step="1000000">
+                        <input type="number" id="kpi_deckungsbeitrag" value="1250000000" step="50000000">
                     </div>
                 </div>
             </div>
@@ -377,28 +378,29 @@
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // ✨ v15: Realistischere Preset-Werte
+            // ✨ v18.3: Realistische Werte für marktübliche Top-Performer
+            // Top-Performer sollten 800k-1M+ Neugeschäft über 12 Monate erreichen
             const presets = {
                 'small': {
                     numAgents: 100,
-                    neugeschaeft: 5000000,      // 5 Mio/Monat
+                    neugeschaeft: 80000000,      // 80 Mio/Monat
                     bestand: 500000000,          // 500 Mio
-                    ergebnis: 2000000,           // 2 Mio/Monat
-                    deckungsbeitrag: 10000000    // 10 Mio/Monat
+                    ergebnis: 30000000,          // 30 Mio/Monat
+                    deckungsbeitrag: 200000000   // 200 Mio/Monat
                 },
                 'medium': {
                     numAgents: 500,
-                    neugeschaeft: 30000000,      // 30 Mio/Monat
+                    neugeschaeft: 500000000,     // 500 Mio/Monat
                     bestand: 14000000000,        // 14 Mrd
-                    ergebnis: 13000000,          // 13 Mio/Monat
-                    deckungsbeitrag: 75000000    // 75 Mio/Monat
+                    ergebnis: 200000000,         // 200 Mio/Monat
+                    deckungsbeitrag: 1250000000  // 1,25 Mrd/Monat
                 },
                 'large': {
                     numAgents: 5000,
-                    neugeschaeft: 150000000,     // 150 Mio/Monat
+                    neugeschaeft: 2500000000,    // 2,5 Mrd/Monat
                     bestand: 70000000000,        // 70 Mrd
-                    ergebnis: 65000000,          // 65 Mio/Monat
-                    deckungsbeitrag: 375000000   // 375 Mio/Monat
+                    ergebnis: 1000000000,        // 1 Mrd/Monat
+                    deckungsbeitrag: 6250000000  // 6,25 Mrd/Monat
                 }
             };
 
