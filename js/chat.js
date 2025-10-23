@@ -327,16 +327,22 @@ VERFÜGBARE FUNKTIONEN:
    - Verwende IMMER die Vermittler-ID (z.B. 'VM00001'), NIEMALS den Namen!
    - Beispiel: setAgenturFilter('VM00001') für Eike Brenneisen
    - Nach dem Filtern erhältst du automatisch die gefilterten Daten zur Analyse
-   
+
 2. setSiloFilter(silo) - Filtert nach Silo
    - Gültige Werte: 'Ausschließlichkeit', 'Makler', 'Direktvertrieb', 'Banken'
-   
+
 3. setSegmentFilter(segments) - Filtert nach Segmenten
    - Gültige Werte: 'Leben', 'Kranken', 'Schaden', 'Kfz'
-   
+
 4. setBundeslandFilter(bundeslaender) - Filtert nach Bundesländern
-   
+
 5. clearAllFilters() - Setzt alle Filter zurück
+
+6. showTopAgenturen(anzahl, sortBy) - NEU! Zeigt Top N Vermittler in Tabellenansicht
+   - Beispiel: showTopAgenturen(5, 'neugeschaeft') für Top 5 nach Neugeschäft
+   - Verfügbare sortBy: 'neugeschaeft', 'bestand', 'ergebnis', 'deckungsbeitrag'
+   - Wechselt automatisch zur Tabelle und wählt Top N Agenturen aus
+   - Nutze diese Funktion bei Fragen wie "Zeige Top 5 Vermittler"
 
 WICHTIG beim Filtern:
 - Nenne die Funktion GENAU so in deiner Antwort: setAgenturFilter('VM00001')
@@ -602,12 +608,29 @@ async function processFilterCommands(message) {
         console.log('📊 Gefunden: clearAllFilters');
         clearAllFilters();
         filterWasSet = true;
-        
+
         filterInfo = {
             type: 'clear'
         };
     }
-    
+
+    // NEU: Check for showTopAgenturen - direkt oder implizit
+    const topMatch = message.match(/showTopAgenturen\((\d+)(?:,\s*['"](\w+)['"])?\)|top\s+(\d+)\s+(vermittler|agenturen)/i);
+    if (topMatch) {
+        const topN = parseInt(topMatch[1] || topMatch[3] || '5');
+        const sortBy = topMatch[2] || 'neugeschaeft';
+        console.log(`📊 Gefunden: Top ${topN} Agenturen nach ${sortBy}`);
+
+        showTopAgenturen(topN, sortBy);
+        filterWasSet = true;
+
+        filterInfo = {
+            type: 'topAgenturen',
+            topN: topN,
+            sortBy: sortBy
+        };
+    }
+
     // If a filter was set, automatically trigger analysis
     if (filterWasSet && filterInfo) {
         console.log('✅ Filter wurde gesetzt - starte automatische Analyse...');
@@ -624,6 +647,11 @@ async function processFilterCommands(message) {
                 confirmationMessage = `✅ **Filter aktiv:** Dashboard zeigt jetzt nur ${filterInfo.value}-Segmente`;
             } else if (filterInfo.type === 'clear') {
                 confirmationMessage = `✅ **Alle Filter zurückgesetzt:** Dashboard zeigt wieder alle Daten`;
+            } else if (filterInfo.type === 'topAgenturen') {
+                confirmationMessage = `✅ **Tabellen-Ansicht:** Zeige die Top ${filterInfo.topN} Vermittler nach ${filterInfo.sortBy}`;
+                // Skip analysis for topAgenturen - data is already visible in table
+                addMessage('assistant', confirmationMessage);
+                return;  // Early return - no need for auto-analysis
             }
             
             addMessage('assistant', confirmationMessage);
@@ -755,14 +783,65 @@ function clearAllFilters() {
     state.filters.segments = ['alle'];
     state.filters.products = ['alle'];
     state.selectedStates.clear();
-    
+
     updateAgenturFilterDisplay();
     document.getElementById('siloFilter').value = 'alle';
     updateSegmentDisplay();
     updateMapSelection();
     updateAllKPIs();
-    
+
     console.log('✅ Alle Filter zurückgesetzt');
+}
+
+// NEU: Show Top N Agenturen in Table View
+function showTopAgenturen(topN = 5, sortBy = 'neugeschaeft') {
+    console.log(`📊 Zeige Top ${topN} Agenturen nach ${sortBy}`);
+
+    // 1. Wechsel zur Tabellenansicht
+    state.currentView = 'table';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('tableView').style.display = 'block';
+
+    // 2. Wechsel zum Agentur-Tab
+    state.currentTableView = 'agenturen';
+    document.querySelectorAll('.table-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.view === 'agenturen') {
+            btn.classList.add('active');
+        }
+    });
+
+    // 3. Ermittle Top N Agenturen
+    const allAgenturen = getAgenturenData();
+    if (allAgenturen.length === 0) {
+        console.warn('⚠️ Keine Agenturen gefunden');
+        return;
+    }
+
+    // Sortiere nach gewünschtem KPI
+    allAgenturen.sort((a, b) => (b[sortBy] || 0) - (a[sortBy] || 0));
+
+    // Nimm Top N
+    const topAgenturen = allAgenturen.slice(0, topN);
+
+    // 4. Wähle diese Agenturen aus
+    state.selectedAgenturen.clear();
+    topAgenturen.forEach(agentur => {
+        state.selectedAgenturen.add(agentur.agentur);
+    });
+
+    // 5. Setze Sortierung auf das gewählte KPI (absteigend)
+    state.tableSort = {
+        column: sortBy,
+        direction: 'desc'
+    };
+
+    // 6. Rendere Tabelle
+    if (typeof renderTable === 'function') {
+        renderTable();
+    }
+
+    console.log(`✅ Top ${topN} Agenturen ausgewählt:`, Array.from(state.selectedAgenturen));
 }
 
 // UI functions

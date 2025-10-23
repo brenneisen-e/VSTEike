@@ -11,6 +11,7 @@ const state = {
     },
     selectedStates: new Set(),
     selectedCounties: new Set(), // NEU für Regierungsbezirke
+    selectedAgenturen: new Set(), // NEU für Mehrfach-Agentur-Auswahl
     charts: {},
     fullscreenChart: null,
     useUploadedData: false,
@@ -18,7 +19,7 @@ const state = {
     timeNavigation: {},
     currentView: 'dashboard',
     currentTableView: 'bundeslaender',
-    selectedAgentur: null,
+    selectedAgentur: null,  // Behalten für Abwärtskompatibilität
     tableSort: {
         column: null,
         direction: 'asc'
@@ -408,10 +409,32 @@ function updateAgenturFilterDisplay() {
         const agenturen = getAgenturen();
         const selected = agenturen.find(a => a.id === state.filters.agentur);
         if (selected) {
-            const displayText = selected.name ? 
-                `${selected.id} - ${selected.name}` : 
+            const displayText = selected.name ?
+                `${selected.id} - ${selected.name}` :
                 selected.id;
             button.querySelector('span').textContent = displayText;
         }
     }
+}
+
+// NEU: Get data for multiple Agenturen (für Tabellen-View)
+function getAgenturenData() {
+    if (!dailyRawData || dailyRawData.length === 0) return [];
+
+    const agenturen = getAgenturen();
+    const selectedIds = Array.from(state.selectedAgenturen);
+
+    // Wenn keine Auswahl, zeige alle
+    const agenturenToShow = selectedIds.length > 0 ?
+        agenturen.filter(a => selectedIds.includes(a.id)) :
+        agenturen;
+
+    return agenturenToShow.map(agentur => {
+        const agenturData = getAgenturData(agentur.id);
+        return agenturData || {
+            agentur: agentur.id,
+            agentur_name: agentur.name || agentur.id,
+            ...Object.fromEntries(kpiDefinitions.map(kpi => [kpi.id, 0]))
+        };
+    }).filter(a => a !== null);
 }
