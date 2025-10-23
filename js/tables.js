@@ -183,23 +183,30 @@ function renderTable() {
 // Update Agentur selector with names
 function updateAgenturSelector() {
     const selector = document.getElementById('agenturSelect');
+
+    // ✨ v18.3: agenturSelect existiert nicht mehr (ersetzt durch Multi-Select)
+    if (!selector) {
+        console.log('ℹ️ agenturSelect nicht gefunden - Multi-Select UI wird verwendet');
+        return;
+    }
+
     const agenturen = getAgenturen();
-    
+
     if (agenturen.length === 0) {
         selector.innerHTML = '<option value="">Keine Agenturen verfügbar (CSV hochladen)</option>';
         selector.disabled = true;
         return;
     }
-    
+
     selector.disabled = false;
-    selector.innerHTML = '<option value="">-- Agentur wählen --</option>' + 
+    selector.innerHTML = '<option value="">-- Agentur wählen --</option>' +
         agenturen.map(agent => {
-            const displayText = agent.name ? 
-                `${agent.id} - ${agent.name}` : 
+            const displayText = agent.name ?
+                `${agent.id} - ${agent.name}` :
                 agent.id;
             return `<option value="${agent.id}">${displayText}</option>`;
         }).join('');
-    
+
     if (state.selectedAgentur) {
         selector.value = state.selectedAgentur;
     }
