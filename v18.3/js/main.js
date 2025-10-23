@@ -361,19 +361,28 @@ waitForLibraries(function() {
         btn.addEventListener('click', function() {
             state.currentTableView = this.dataset.tableView;
             state.tableSort = { column: null, direction: 'asc' };
-            
+
             document.querySelectorAll('.table-view-toggle button').forEach(b => {
                 b.classList.remove('active');
             });
             this.classList.add('active');
-            
-            const agenturSelector = document.getElementById('agenturSelector');
+
+            // NEU: Zeige Agentur-Mehrfachauswahl bei Agentur-View
+            const agenturMultiSelector = document.getElementById('agenturMultiSelector');
+            const selectedAgenturen = document.getElementById('selectedAgenturen');
+
             if (state.currentTableView === 'agentur') {
-                agenturSelector.style.display = '';
+                agenturMultiSelector.style.display = '';
+                selectedAgenturen.style.display = '';
+                // Fülle Agentur-Liste beim ersten Mal
+                if (document.getElementById('agenturCheckboxList').children.length === 0) {
+                    populateAgenturCheckboxes();
+                }
             } else {
-                agenturSelector.style.display = 'none';
+                agenturMultiSelector.style.display = 'none';
+                selectedAgenturen.style.display = 'none';
             }
-            
+
             renderTable();
         });
     });
@@ -649,5 +658,119 @@ waitForLibraries(function() {
         }
     });
 
+    // NEU: Agentur-Mehrfachauswahl Dropdown Toggle
+    const agenturMultiButton = document.getElementById('agenturMultiButton');
+    const agenturMultiMenu = document.getElementById('agenturMultiMenu');
+
+    if (agenturMultiButton && agenturMultiMenu) {
+        agenturMultiButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            agenturMultiMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            agenturMultiMenu.classList.remove('show');
+        });
+
+        agenturMultiMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
     console.log('Dashboard initialized successfully');
 });
+
+// NEU: Agentur-Checkboxen füllen
+function populateAgenturCheckboxes() {
+    const container = document.getElementById('agenturCheckboxList');
+    if (!container) return;
+
+    const agenturen = getAgenturen();
+    if (agenturen.length === 0) return;
+
+    container.innerHTML = agenturen.map(agentur => {
+        const displayName = agentur.name ?
+            `${agentur.id} - ${agentur.name}` :
+            agentur.id;
+
+        return `
+            <div class="dropdown-item" data-agentur-id="${agentur.id}">
+                <span class="checkbox"></span>
+                <span>${displayName}</span>
+            </div>
+        `;
+    }).join('');
+
+    // Event-Listener für Checkboxen
+    container.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const agenturId = this.dataset.agenturId;
+            const checkbox = this.querySelector('.checkbox');
+
+            if (state.selectedAgenturen.has(agenturId)) {
+                state.selectedAgenturen.delete(agenturId);
+                checkbox.classList.remove('checked');
+            } else {
+                state.selectedAgenturen.add(agenturId);
+                checkbox.classList.add('checked');
+            }
+
+            updateSelectedAgenturenDisplay();
+            renderTable();
+        });
+    });
+
+    // "Alle" Checkbox
+    const alleItem = document.querySelector('.dropdown-item[data-value="alle"]');
+    if (alleItem) {
+        alleItem.addEventListener('click', function() {
+            const checkbox = this.querySelector('.checkbox');
+            const isChecked = checkbox.classList.contains('checked');
+
+            if (isChecked) {
+                // Alle abwählen
+                state.selectedAgenturen.clear();
+                checkbox.classList.remove('checked');
+                container.querySelectorAll('.checkbox').forEach(cb => {
+                    cb.classList.remove('checked');
+                });
+            } else {
+                // Alle auswählen
+                agenturen.forEach(a => state.selectedAgenturen.add(a.id));
+                checkbox.classList.add('checked');
+                container.querySelectorAll('.checkbox').forEach(cb => {
+                    cb.classList.add('checked');
+                });
+            }
+
+            updateSelectedAgenturenDisplay();
+            renderTable();
+        });
+    }
+}
+
+// NEU: Anzeige der ausgewählten Agenturen
+function updateSelectedAgenturenDisplay() {
+    const container = document.getElementById('selectedAgenturen');
+    if (!container) return;
+
+    if (state.selectedAgenturen.size === 0) {
+        container.innerHTML = '<span class="empty-state">— keine ausgewählt —</span>';
+        return;
+    }
+
+    const agenturen = getAgenturen();
+    const selectedNames = Array.from(state.selectedAgenturen).map(id => {
+        const agentur = agenturen.find(a => a.id === id);
+        if (!agentur) return id;
+
+        const displayName = agentur.name ?
+            `${agentur.id.substring(2)} - ${agentur.name}` :
+            agentur.id;
+
+        return `<span class="selected-tag">${displayName}</span>`;
+    }).join('');
+
+    container.innerHTML = selectedNames;
+}

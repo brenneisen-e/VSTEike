@@ -275,14 +275,26 @@
                 <div class="table-view-toggle">
                     <button class="active" data-table-view="bundeslaender">🗺️ Bundesländer</button>
                     <button data-table-view="landkreise">🏘️ Landkreise</button>
-                    <button data-table-view="agentur">👤 Agentur</button>
+                    <button data-table-view="agentur">👤 Agenturen</button>
                 </div>
-                <div class="filter-group" id="agenturSelector" style="display: none;">
-                    <span class="filter-label">Agentur auswählen:</span>
-                    <select id="agenturSelect">
-                        <option value="">-- Agentur wählen --</option>
-                    </select>
+                <!-- NEU: Agentur-Mehrfachauswahl Panel -->
+                <div class="filter-group" id="agenturMultiSelector" style="display: none;">
+                    <button class="filter-button" id="agenturMultiButton">
+                        <span>Agenturen auswählen</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="dropdown-menu agentur-dropdown" id="agenturMultiMenu" style="max-height: 400px; overflow-y: auto;">
+                        <div class="dropdown-item" data-value="alle">
+                            <span class="checkbox"></span>
+                            <span>Alle Agenturen</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div id="agenturCheckboxList">
+                            <!-- Wird dynamisch gefüllt -->
+                        </div>
+                    </div>
                 </div>
+                <div class="selected-agenturen" id="selectedAgenturen" style="display: none;"></div>
             </div>
             <div class="table-wrapper">
                 <table class="data-table" id="dataTable">
