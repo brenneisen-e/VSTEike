@@ -143,97 +143,143 @@ function setupQuickUpload() {
     });
 }
 
-// Handle quick upload - OHNE Auto-Navigation
+// Handle quick upload - IDENTISCH ZUM COCKPIT
 function handleQuickUpload(file) {
     const statusDiv = document.getElementById('quickUploadStatus');
-    
+
     if (!file) return;
-    
+
     statusDiv.className = 'upload-status';
     statusDiv.textContent = '⏳ Lade Datei...';
-    
+
     const reader = new FileReader();
     reader.onload = function(event) {
         try {
             const csvText = event.target.result;
             const parsedData = parseCSV(csvText);
-            
+
             const firstRow = parsedData[0] || {};
             const hasDay = 'day' in firstRow;
+            const hasMonth = 'month' in firstRow;
+            const hasYear = 'year' in firstRow;
             const hasVermittler = 'vermittler_id' in firstRow;
             const hasLandkreis = 'landkreis' in firstRow || 'kreis' in firstRow;
-            
-            // Store data globally - WICHTIG: Beide Variablen setzen!
+
+            // EXAKT GLEICHE LOGIK WIE IM COCKPIT (main.js:421-448)
             if (hasDay && hasVermittler) {
-                // Set both window.dailyRawData AND global dailyRawData
+                // Tagesdaten
                 window.dailyRawData = parsedData;
-                dailyRawData = parsedData;  // ← FIX: Auch globale Variable setzen!
+                dailyRawData = parsedData;
+                console.log('Stored', dailyRawData.length, 'daily records');
 
                 const monthlyData = aggregateDailyToMonthly(parsedData);
                 state.uploadedData = monthlyData;
-                state.useUploadedData = true;
 
                 const landkreisInfo = hasLandkreis ? ' mit Landkreisen' : '';
                 statusDiv.className = 'upload-status success';
                 statusDiv.textContent = `✅ ${file.name} geladen (${parsedData.length} Tagesdaten → ${monthlyData.length} Monate${landkreisInfo})`;
-
-                console.log('📊 dailyRawData gesetzt:', dailyRawData.length, 'Zeilen');
-            } else {
+            } else if (hasMonth && !hasDay) {
+                // Monatsdaten
                 state.uploadedData = parsedData;
-                state.useUploadedData = true;
                 window.dailyRawData = null;
-                dailyRawData = null;  // ← FIX: Auch globale Variable setzen!
+                dailyRawData = null;
 
                 statusDiv.className = 'upload-status success';
-                statusDiv.textContent = `✅ ${file.name} geladen (${parsedData.length} Zeilen)`;
+                statusDiv.textContent = `✅ ${file.name} geladen (${parsedData.length} Monatsdaten)`;
+            } else {
+                // Unbekanntes Format
+                state.uploadedData = parsedData;
+                window.dailyRawData = null;
+                dailyRawData = null;
+
+                statusDiv.className = 'upload-status success';
+                statusDiv.textContent = `⚠️ ${file.name} geladen (${parsedData.length} Zeilen)`;
             }
-            
+
+            state.useUploadedData = true;
+
+            // Update year filter if years are present
+            if (hasYear && parsedData.length > 0) {
+                const years = [...new Set(parsedData.map(row => row.year))].sort();
+                console.log('📅 Gefundene Jahre:', years);
+
+                // Store years for Dashboard initialization
+                state.availableYears = years;
+
+                // Set current year to first available year if not already set
+                if (!years.includes(parseInt(state.filters.year))) {
+                    state.filters.year = String(years[0]);
+                    console.log('📅 Jahr-Filter gesetzt auf:', years[0]);
+                }
+            }
+
             console.log('✅ Daten erfolgreich geladen:', parsedData.length, 'Zeilen');
-            
-            // KEIN Auto-Navigation mehr!
-            
+
         } catch (error) {
             console.error('Fehler beim Parsen:', error);
             statusDiv.className = 'upload-status error';
             statusDiv.textContent = '❌ Fehler beim Laden der Datei: ' + error.message;
         }
     };
-    
+
     reader.onerror = function() {
         statusDiv.className = 'upload-status error';
         statusDiv.textContent = '❌ Fehler beim Lesen der Datei';
     };
-    
+
     reader.readAsText(file);
 }
 
 // Open main dashboard - MIT CHAT!
 function openDashboard() {
     console.log('📊 Dashboard öffnen...');
-    
+
     // Hide landing page
     const landingPage = document.getElementById('landingPage');
     if (landingPage) {
         landingPage.style.display = 'none';
     }
-    
+
     // Show main app
     const mainApp = document.getElementById('mainApp');
     if (mainApp) {
         mainApp.style.display = 'block';
     }
-    
+
     // Initialize dashboard
     setTimeout(function() {
         if (typeof waitForLibraries === 'function') {
             waitForLibraries(function() {
                 console.log('📚 Libraries geladen, initialisiere Dashboard...');
-                
+
+                // Update year filter if years were loaded from CSV
+                if (state.availableYears && state.availableYears.length > 0) {
+                    const yearFilter = document.getElementById('yearFilter');
+                    if (yearFilter) {
+                        state.availableYears.forEach(year => {
+                            if (!Array.from(yearFilter.options).some(opt => opt.value == year)) {
+                                const option = document.createElement('option');
+                                option.value = year;
+                                option.textContent = year;
+                                yearFilter.appendChild(option);
+                            }
+                        });
+                        yearFilter.value = state.filters.year;
+                        console.log('📅 Jahr-Filter aktualisiert:', state.availableYears);
+                    }
+                }
+
+                // Update Agentur dropdown with uploaded data
+                if (typeof updateAgenturFilterDropdown === 'function') {
+                    updateAgenturFilterDropdown();
+                    console.log('✅ Agentur-Filter Dropdown aktualisiert');
+                }
+
                 if (typeof initKPIGrid === 'function') {
                     initKPIGrid();
                     console.log('✅ KPI Grid initialisiert');
                 }
-                
+
                 if (typeof updateAllKPIs === 'function') {
                     updateAllKPIs();
                     console.log('✅ KPIs aktualisiert');
@@ -834,12 +880,26 @@ async function parseAndExecuteCommands(message) {
 function setAgenturFilter(vermittlerId) {
     console.log('🎯 setAgenturFilter:', vermittlerId);
 
-    // Speichere Filter im state (wird beim Dashboard-Load verwendet)
+    // WICHTIG: Erst alle anderen Filter zurücksetzen!
     if (typeof state !== 'undefined') {
-        state.filters.agentur = vermittlerId;
-        console.log('✅ Filter gespeichert:', state.filters);
+        // Speichere aktuelles Jahr
+        const currentYear = state.filters.year;
+
+        // Setze alle Filter zurück (außer Jahr)
+        state.filters = {
+            year: currentYear,
+            agentur: vermittlerId,  // Neuer Agentur-Filter
+            silo: 'alle',
+            segments: [],
+            bundeslaender: []
+        };
+
+        console.log('✅ Filter zurückgesetzt und Agentur-Filter gesetzt:', state.filters);
     } else {
         // Falls state noch nicht existiert, speichere im localStorage
+        localStorage.removeItem('pendingSiloFilter');
+        localStorage.removeItem('pendingSegmentFilter');
+        localStorage.removeItem('pendingBundeslandFilter');
         localStorage.setItem('pendingAgenturFilter', vermittlerId);
         console.log('✅ Filter im localStorage gespeichert');
     }

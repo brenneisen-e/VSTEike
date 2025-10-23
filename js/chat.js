@@ -702,10 +702,29 @@ Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den ech
 
 // Filter functions
 function setAgenturFilter(vermittlerId) {
-    state.filters.agentur = vermittlerId;
+    // WICHTIG: Erst alle anderen Filter zurücksetzen (außer Jahr)!
+    const currentYear = state.filters.year;
+
+    state.filters = {
+        year: currentYear,
+        agentur: vermittlerId,  // Neuer Agentur-Filter
+        silo: 'alle',
+        segments: [],
+        products: ['alle'],
+        bundeslaender: []
+    };
+
+    // Leere Bundesland-Auswahl
+    state.selectedStates.clear();
+
+    // Update UI
     updateAgenturFilterDisplay();
+    document.getElementById('siloFilter').value = 'alle';
+    updateSegmentDisplay();
+    updateMapSelection();
     updateAllKPIs();
-    console.log('✅ Filter gesetzt: Agentur =', vermittlerId);
+
+    console.log('✅ Alle Filter zurückgesetzt, Agentur-Filter gesetzt:', vermittlerId);
 }
 
 function setSiloFilter(silo) {
