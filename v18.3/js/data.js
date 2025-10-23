@@ -104,9 +104,7 @@ function aggregateDailyToMonthly(dailyData) {
 // Get filtered data
 function getFilteredData() {
     const year = state.filters.year;
-    
-    console.log('🔎 getFilteredData aufgerufen - selectedCounties:', state.selectedCounties.size, Array.from(state.selectedCounties));
-    
+
     if (dailyRawData && dailyRawData.length > 0) {
         let filteredDaily = dailyRawData;
         
@@ -122,28 +120,23 @@ function getFilteredData() {
             filteredDaily = filteredDaily.filter(row => state.selectedStates.has(row.bundesland));
         }
         
-        // NEU: Filter by selected counties (Regierungsbezirke) - MIT DEBUG!
+        // NEU: Filter by selected counties (Regierungsbezirke)
         if (state.selectedCounties && state.selectedCounties.size > 0) {
             console.log('🔍 Filtere nach Regionen:', Array.from(state.selectedCounties));
             const beforeCount = filteredDaily.length;
-            
+
             filteredDaily = filteredDaily.filter(row => {
                 let kreis = row.landkreis || row.kreis;
                 if (!kreis) return false;
-                
+
                 // Entferne Anführungszeichen
                 if (typeof kreis === 'string') {
                     kreis = kreis.replace(/^["']|["']$/g, '').trim();
                 }
-                
-                const match = state.selectedCounties.has(kreis);
-                if (!match && Math.random() < 0.001) {
-                    console.log('🔸 Beispiel nicht-Match:', kreis, 'gesucht:', Array.from(state.selectedCounties)[0]);
-                }
-                
-                return match;
+
+                return state.selectedCounties.has(kreis);
             });
-            
+
             console.log(`📉 Gefiltert: ${beforeCount} → ${filteredDaily.length} Zeilen`);
         }
         

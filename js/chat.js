@@ -709,7 +709,7 @@ function setAgenturFilter(vermittlerId) {
         year: currentYear,
         agentur: vermittlerId,  // Neuer Agentur-Filter
         silo: 'alle',
-        segments: [],
+        segments: ['alle'],     // WICHTIG: ['alle'] nicht []
         products: ['alle'],
         bundeslaender: []
     };
