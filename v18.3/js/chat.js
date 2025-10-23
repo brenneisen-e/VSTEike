@@ -391,12 +391,29 @@ USER FRAGE: ${message}`
     const assistantMessage = data.choices[0].message.content;
     
     console.log('✅ API Antwort erhalten:', assistantMessage.substring(0, 100) + '...');
-    
+    console.log('📝 VOLLSTÄNDIGE API-Antwort:', assistantMessage);  // DEBUG
+
     hideTyping();
     addMessage('assistant', assistantMessage);
-    
+
     // Check if response contains filter commands and process them
     const filterWasSet = await processFilterCommands(assistantMessage);
+
+    // FALLBACK: Wenn KI keine showTopAgenturen() Funktion nutzte, prüfe User-Message
+    if (!filterWasSet && message.toLowerCase().match(/top\s+(\d+)/)) {
+        console.log('🔄 FALLBACK: Erkenne "Top X" direkt aus User-Message');
+        const match = message.toLowerCase().match(/top\s+(\d+)/);
+        const topN = parseInt(match[1]);
+
+        // Erkenne KPI aus Message
+        let sortBy = 'neugeschaeft';  // Default
+        if (message.toLowerCase().includes('ergebnis')) sortBy = 'ergebnis';
+        else if (message.toLowerCase().includes('bestand')) sortBy = 'bestand';
+        else if (message.toLowerCase().includes('deckungsbeitrag')) sortBy = 'deckungsbeitrag';
+
+        console.log(`🎯 Führe direkt aus: showTopAgenturen(${topN}, '${sortBy}')`);
+        showTopAgenturen(topN, sortBy);
+    }
     
     // Add to history
     chatHistory.push(
@@ -534,7 +551,8 @@ ${specificAgentData}
 // Process filter commands in response - VERBESSERT mit Auto-Analyse!
 async function processFilterCommands(message) {
     console.log('🔍 Prüfe Filter-Befehle in Antwort...');
-    
+    console.log('📄 Message to parse:', message.substring(0, 300));  // DEBUG: Erste 300 Zeichen
+
     let filterWasSet = false;
     let filterInfo = null;
     
@@ -614,12 +632,22 @@ async function processFilterCommands(message) {
         };
     }
 
-    // NEU: Check for showTopAgenturen - direkt oder implizit
-    const topMatch = message.match(/showTopAgenturen\((\d+)(?:,\s*['"](\w+)['"])?\)|top\s+(\d+)\s+(vermittler|agenturen)/i);
+    // NEU: Check for showTopAgenturen - direkt oder implizit (VERBESSERTER PARSER)
+    const topMatch = message.match(/showTopAgenturen\((\d+)(?:,\s*['"](\w+)['"])?\)|top\s*(\d+)\s*(vermittler|agenturen|nach)/i);
     if (topMatch) {
         const topN = parseInt(topMatch[1] || topMatch[3] || '5');
-        const sortBy = topMatch[2] || 'neugeschaeft';
+        let sortBy = topMatch[2] || 'neugeschaeft';
+
+        // Erkenne KPI aus Text, falls nicht explizit angegeben
+        if (!topMatch[2]) {
+            if (message.toLowerCase().includes('ergebnis')) sortBy = 'ergebnis';
+            else if (message.toLowerCase().includes('bestand')) sortBy = 'bestand';
+            else if (message.toLowerCase().includes('deckungsbeitrag')) sortBy = 'deckungsbeitrag';
+            else if (message.toLowerCase().includes('neugeschäft')) sortBy = 'neugeschaeft';
+        }
+
         console.log(`📊 Gefunden: Top ${topN} Agenturen nach ${sortBy}`);
+        console.log(`📊 Match details:`, topMatch);  // DEBUG
 
         showTopAgenturen(topN, sortBy);
         filterWasSet = true;
@@ -629,6 +657,11 @@ async function processFilterCommands(message) {
             topN: topN,
             sortBy: sortBy
         };
+    }
+
+    // DEBUG: Log ob etwas gefunden wurde
+    if (!filterWasSet) {
+        console.log('⚠️ Keine Filter-Befehle gefunden in der Antwort');
     }
 
     // If a filter was set, automatically trigger analysis
