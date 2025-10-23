@@ -830,10 +830,17 @@ function clearAllFilters() {
 function showTopAgenturen(topN = 5, sortBy = 'neugeschaeft') {
     console.log(`📊 Zeige Top ${topN} Agenturen nach ${sortBy}`);
 
-    // 1. Wechsel zur Tabellenansicht
-    state.currentView = 'table';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('tableView').style.display = 'block';
+    // 1. Wechsel zur Tabellenansicht mit existierender Funktion
+    if (typeof switchView === 'function') {
+        switchView('table');
+    } else {
+        // Fallback falls switchView nicht verfügbar
+        state.currentView = 'table';
+        const dashboardView = document.getElementById('dashboardView');
+        const tableView = document.getElementById('tableView');
+        if (dashboardView) dashboardView.style.display = 'none';
+        if (tableView) tableView.classList.add('active');
+    }
 
     // 2. Wechsel zum Agentur-Tab
     state.currentTableView = 'agenturen';
