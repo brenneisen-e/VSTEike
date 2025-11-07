@@ -1,14 +1,9 @@
 name = "vsteike"
 compatibility_date = "2024-01-01"
 
-# Cloudflare Pages Konfiguration für statische Website
-pages_build_output_dir = "."
+# Cloudflare Pages Configuration
+# Pages deployments don't use most wrangler.toml settings
+# This file is minimal and mainly for local development with wrangler pages dev
 
-# Asset-Handling
-[site]
-bucket = "."
-
-# Optional: Environment Variables
-[env.production]
-
-# Optional: Custom Headers und Redirects können auch über _headers und _redirects Dateien gesetzt werden
+# For production deployments, configure settings in the Cloudflare Dashboard
+# under Pages > Project Settings
