@@ -1,0 +1,7 @@
+# Cloudflare Pages Redirects
+
+# Redirect root to index.html (falls nicht automatisch geschieht)
+/  /index.html  200
+
+# SPA Fallback - Alle nicht existierenden Pfade zu index.html
+/*  /index.html  200
