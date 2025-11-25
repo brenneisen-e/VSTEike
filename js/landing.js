@@ -715,28 +715,33 @@ function generateLandingMockResponse(message) {
 // Add message to chat - GLEICH WIE DASHBOARD
 function addLandingChatMessage(role, content) {
     const chatMessages = document.getElementById('landingChatMessages');
-    
+
     const messageDiv = document.createElement('div');
     messageDiv.className = `landing-chat-message ${role}`;
-    
+
     const avatar = document.createElement('div');
-    avatar.className = 'chat-avatar';
-    avatar.textContent = role === 'user' ? '👤' : '🤖';
-    
+    if (role === 'user') {
+        avatar.className = 'chat-avatar';
+        avatar.textContent = '👤';
+    } else {
+        avatar.className = 'chat-avatar-deloitte';
+        avatar.innerHTML = '<span class="deloitte-d">D</span>';
+    }
+
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
-    
+
     // Format content (basic markdown support)
     let formattedContent = content
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/`(.*?)`/g, '<code>$1</code>')
         .replace(/\n/g, '<br>');
-    
+
     bubble.innerHTML = formattedContent;
-    
+
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(bubble);
-    
+
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -744,22 +749,22 @@ function addLandingChatMessage(role, content) {
 // Show typing indicator
 function showLandingChatTyping() {
     const chatMessages = document.getElementById('landingChatMessages');
-    
+
     const typingDiv = document.createElement('div');
     typingDiv.className = 'landing-chat-message assistant';
     typingDiv.id = 'landingTypingIndicator';
-    
+
     const avatar = document.createElement('div');
-    avatar.className = 'chat-avatar';
-    avatar.textContent = '🤖';
-    
+    avatar.className = 'chat-avatar-deloitte';
+    avatar.innerHTML = '<span class="deloitte-d">D</span>';
+
     const typing = document.createElement('div');
     typing.className = 'landing-chat-typing';
     typing.innerHTML = '<span></span><span></span><span></span>';
-    
+
     typingDiv.appendChild(avatar);
     typingDiv.appendChild(typing);
-    
+
     chatMessages.appendChild(typingDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -1100,14 +1105,14 @@ window.askLandingSampleQuestion = askLandingSampleQuestion;
 // UPLOAD MODUS
 // ========================================
 
-let uploadModeActive = false;
+let uploadModeActive = true; // Standardmäßig aktiviert
 
 function toggleUploadMode() {
     const toggle = document.getElementById('uploadModeToggle');
     const hint = document.getElementById('uploadModeHint');
     const body = document.body;
 
-    uploadModeActive = toggle.checked;
+    uploadModeActive = toggle ? toggle.checked : true;
 
     if (uploadModeActive) {
         body.classList.add('upload-mode-active');
@@ -1118,6 +1123,19 @@ function toggleUploadMode() {
         if (hint) hint.style.display = 'none';
         console.log('📤 Upload-Modus deaktiviert');
     }
+}
+
+// Upload-Modus beim Start aktivieren
+function initUploadMode() {
+    const toggle = document.getElementById('uploadModeToggle');
+    if (toggle) {
+        toggle.checked = true;
+    }
+    document.body.classList.add('upload-mode-active');
+    const hint = document.getElementById('uploadModeHint');
+    if (hint) hint.style.display = 'block';
+    uploadModeActive = true;
+    console.log('📤 Upload-Modus standardmäßig aktiviert');
 }
 
 // Logo Upload
@@ -1200,6 +1218,8 @@ function loadSavedImages() {
 // POTENTIALANALYSE
 // ========================================
 
+let currentPotentialFilter = null;
+
 function openPotentialAnalyse() {
     console.log('📊 Potentialanalyse öffnen...');
 
@@ -1208,14 +1228,44 @@ function openPotentialAnalyse() {
     document.getElementById('mainApp').style.display = 'none';
     const agenturOverview = document.getElementById('agenturOverview');
     if (agenturOverview) agenturOverview.style.display = 'none';
+    const kundenDetail = document.getElementById('kundenDetailPage');
+    if (kundenDetail) kundenDetail.style.display = 'none';
 
     // Zeige Potentialanalyse
     document.getElementById('potentialAnalysePage').style.display = 'block';
+
+    // Reset Filter
+    currentPotentialFilter = null;
+    updatePotentialFilter();
+}
+
+function openPotentialAnalyseWithFilter(productId, productName) {
+    console.log('📊 Potentialanalyse öffnen mit Filter:', productId);
+
+    // Verstecke alle Seiten
+    document.getElementById('landingPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'none';
+    const agenturOverview = document.getElementById('agenturOverview');
+    if (agenturOverview) agenturOverview.style.display = 'none';
+    const kundenDetail = document.getElementById('kundenDetailPage');
+    if (kundenDetail) kundenDetail.style.display = 'none';
+
+    // Zeige Potentialanalyse
+    document.getElementById('potentialAnalysePage').style.display = 'block';
+
+    // Setze Filter
+    currentPotentialFilter = productId;
+    const filterSelect = document.getElementById('potentialProductFilter');
+    if (filterSelect) {
+        filterSelect.value = productId;
+    }
+    updatePotentialFilter();
 }
 
 function closePotentialAnalyse() {
     document.getElementById('potentialAnalysePage').style.display = 'none';
     document.getElementById('landingPage').style.display = 'flex';
+    currentPotentialFilter = null;
 }
 
 function showEigeneDaten() {
@@ -1232,6 +1282,190 @@ function showDoraDaten() {
     document.getElementById('doraBtn').classList.add('active');
 }
 
+function updatePotentialFilter() {
+    const filter = currentPotentialFilter;
+    const eigeneDatenRows = document.querySelectorAll('#eigeneDatenTable tbody tr');
+    const doraRows = document.querySelectorAll('#doraTable tbody tr');
+
+    // Zeige/Verstecke Zeilen basierend auf Filter
+    eigeneDatenRows.forEach(row => {
+        if (!filter) {
+            row.style.display = '';
+        } else {
+            const badge = row.querySelector('.potential-badge');
+            if (badge && badge.classList.contains(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+
+    doraRows.forEach(row => {
+        if (!filter) {
+            row.style.display = '';
+        } else {
+            const badge = row.querySelector('.potential-badge');
+            if (badge && badge.classList.contains(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+
+    // Update aktiven Filter-Button
+    const filterBtns = document.querySelectorAll('.potential-filter-btn');
+    filterBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+}
+
+function filterPotentials(productId) {
+    currentPotentialFilter = productId === 'alle' ? null : productId;
+    updatePotentialFilter();
+}
+
+// ========================================
+// KUNDENDETAIL SEITE
+// ========================================
+
+function openKundenDetail(kundenName, vermittlerId) {
+    console.log('👤 Kundendetail öffnen:', kundenName, vermittlerId);
+
+    // Verstecke alle Seiten
+    document.getElementById('landingPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('potentialAnalysePage').style.display = 'none';
+    const agenturOverview = document.getElementById('agenturOverview');
+    if (agenturOverview) agenturOverview.style.display = 'none';
+
+    // Zeige Kundendetail-Seite
+    const kundenDetail = document.getElementById('kundenDetailPage');
+    if (kundenDetail) {
+        kundenDetail.style.display = 'block';
+
+        // Fülle Kundendaten
+        fillKundenDetail(kundenName, vermittlerId);
+    }
+}
+
+function closeKundenDetail() {
+    document.getElementById('kundenDetailPage').style.display = 'none';
+    document.getElementById('potentialAnalysePage').style.display = 'block';
+}
+
+function fillKundenDetail(kundenName, vermittlerId) {
+    // Stammdaten füllen
+    const nameEl = document.getElementById('kundenName');
+    if (nameEl) nameEl.textContent = kundenName;
+
+    const idEl = document.getElementById('kundenVermittlerId');
+    if (idEl) idEl.textContent = vermittlerId;
+
+    // Mock-Daten für Demo
+    const mockKunden = {
+        'Max Mustermann': {
+            geburtsdatum: '15.03.1985',
+            adresse: 'Musterstraße 123, 12345 Musterstadt',
+            telefon: '+49 123 456789',
+            email: 'max.mustermann@email.de',
+            beruf: 'Angestellter',
+            familienstand: 'Verheiratet',
+            kinder: [{ name: 'Lena', alter: 8 }, { name: 'Paul', alter: 5 }],
+            vertraege: [
+                { typ: 'Wohngebäudeversicherung', praemie: '€450/Jahr', status: 'Aktiv' },
+                { typ: 'Kfz-Versicherung', praemie: '€680/Jahr', status: 'Aktiv' }
+            ],
+            doraVertraege: [
+                { anbieter: 'Sparkasse', typ: 'Girokonto', info: 'Hauptkonto' },
+                { anbieter: 'DWS', typ: 'Depot', info: 'Fondssparen' }
+            ]
+        },
+        'Klaus Meier': {
+            geburtsdatum: '22.07.1978',
+            adresse: 'Hauptstraße 45, 54321 Beispielstadt',
+            telefon: '+49 987 654321',
+            email: 'klaus.meier@email.de',
+            beruf: 'Selbstständig',
+            familienstand: 'Ledig',
+            kinder: [],
+            vertraege: [
+                { typ: 'Haftpflichtversicherung', praemie: '€120/Jahr', status: 'Aktiv' }
+            ],
+            doraVertraege: [
+                { anbieter: 'Commerzbank', typ: 'Geschäftskonto', info: 'Selbstständigkeit' },
+                { anbieter: 'Union Investment', typ: 'Riester', info: 'Altersvorsorge' }
+            ]
+        }
+    };
+
+    const kunde = mockKunden[kundenName] || mockKunden['Max Mustermann'];
+
+    // Stammdaten
+    document.getElementById('kundenGeburtsdatum').textContent = kunde.geburtsdatum;
+    document.getElementById('kundenAdresse').textContent = kunde.adresse;
+    document.getElementById('kundenTelefon').textContent = kunde.telefon;
+    document.getElementById('kundenEmail').textContent = kunde.email;
+    document.getElementById('kundenBeruf').textContent = kunde.beruf;
+    document.getElementById('kundenFamilienstand').textContent = kunde.familienstand;
+
+    // Kinder
+    const kinderList = document.getElementById('kundenKinder');
+    if (kinderList) {
+        if (kunde.kinder.length > 0) {
+            kinderList.innerHTML = kunde.kinder.map(k =>
+                `<span class="kinder-badge">${k.name} (${k.alter} Jahre)</span>`
+            ).join('');
+        } else {
+            kinderList.innerHTML = '<span class="no-children">Keine Kinder</span>';
+        }
+    }
+
+    // Verträge
+    const vertraegeBody = document.getElementById('kundenVertraege');
+    if (vertraegeBody) {
+        vertraegeBody.innerHTML = kunde.vertraege.map(v => `
+            <tr>
+                <td>${v.typ}</td>
+                <td>${v.praemie}</td>
+                <td><span class="status-badge aktiv">${v.status}</span></td>
+            </tr>
+        `).join('');
+    }
+
+    // DORA Verträge
+    const doraBody = document.getElementById('kundenDoraVertraege');
+    if (doraBody) {
+        doraBody.innerHTML = kunde.doraVertraege.map(v => `
+            <tr>
+                <td>${v.anbieter}</td>
+                <td>${v.typ}</td>
+                <td>${v.info}</td>
+            </tr>
+        `).join('');
+    }
+}
+
+function toggleKundenDora() {
+    const eigeneDaten = document.getElementById('kundenEigeneDaten');
+    const doraDaten = document.getElementById('kundenDoraDaten');
+    const eigenBtn = document.getElementById('kundenEigenBtn');
+    const doraBtn = document.getElementById('kundenDoraBtn');
+
+    if (doraDaten.style.display === 'none') {
+        eigeneDaten.style.display = 'none';
+        doraDaten.style.display = 'block';
+        eigenBtn.classList.remove('active');
+        doraBtn.classList.add('active');
+    } else {
+        eigeneDaten.style.display = 'block';
+        doraDaten.style.display = 'none';
+        eigenBtn.classList.add('active');
+        doraBtn.classList.remove('active');
+    }
+}
+
 // ========================================
 // CHATBOT AUTOCOMPLETE
 // ========================================
@@ -1244,7 +1478,23 @@ const mockAgents = [
     { id: 'VM00005', name: 'Markus Braun' }
 ];
 
+const potentialProducts = [
+    { id: 'hausrat', name: 'Hausratversicherung' },
+    { id: 'haftpflicht', name: 'Haftpflichtversicherung' },
+    { id: 'kfz', name: 'Kfz-Versicherung' },
+    { id: 'leben', name: 'Lebensversicherung' },
+    { id: 'bu', name: 'Berufsunfähigkeitsversicherung' },
+    { id: 'unfall', name: 'Unfallversicherung' },
+    { id: 'rechtsschutz', name: 'Rechtsschutzversicherung' },
+    { id: 'kranken', name: 'Krankenversicherung' },
+    { id: 'pflege', name: 'Pflegeversicherung' },
+    { id: 'altersvorsorge', name: 'Private Altersvorsorge' },
+    { id: 'sach', name: 'Sachversicherung' },
+    { id: 'wohngebaeude', name: 'Wohngebäudeversicherung' }
+];
+
 let selectedSuggestionIndex = -1;
+let currentSuggestionType = null; // 'agentur' oder 'potential'
 
 function setupAutocomplete() {
     const chatInput = document.getElementById('landingChatInput');
@@ -1257,9 +1507,22 @@ function setupAutocomplete() {
 
         // Prüfe ob "agentur" im Text vorkommt
         if (value.includes('agentur ')) {
+            currentSuggestionType = 'agentur';
             const searchTerm = value.split('agentur ')[1];
             if (searchTerm && searchTerm.length > 0) {
-                showSuggestions(searchTerm, suggestionsContainer);
+                showAgentSuggestions(searchTerm, suggestionsContainer);
+            } else {
+                hideSuggestions(suggestionsContainer);
+            }
+        }
+        // Prüfe ob "potentiale für" im Text vorkommt
+        else if (value.includes('potentiale für ') || value.includes('potential für ')) {
+            currentSuggestionType = 'potential';
+            const searchTerm = value.includes('potentiale für ')
+                ? value.split('potentiale für ')[1]
+                : value.split('potential für ')[1];
+            if (searchTerm && searchTerm.length > 0) {
+                showPotentialSuggestions(searchTerm, suggestionsContainer);
             } else {
                 hideSuggestions(suggestionsContainer);
             }
@@ -1288,7 +1551,11 @@ function setupAutocomplete() {
             e.preventDefault();
             const selectedItem = items[selectedSuggestionIndex];
             if (selectedItem) {
-                selectSuggestion(selectedItem.dataset.id, selectedItem.dataset.name);
+                if (currentSuggestionType === 'potential') {
+                    selectPotentialSuggestion(selectedItem.dataset.id, selectedItem.dataset.name);
+                } else {
+                    selectAgentSuggestion(selectedItem.dataset.id, selectedItem.dataset.name);
+                }
             }
         }
     });
@@ -1301,7 +1568,7 @@ function setupAutocomplete() {
     });
 }
 
-function showSuggestions(searchTerm, container) {
+function showAgentSuggestions(searchTerm, container) {
     // Hole Agenturen aus Daten oder nutze Mock
     const agenturen = typeof getAgenturen === 'function' ? getAgenturen() : mockAgents;
 
@@ -1317,7 +1584,7 @@ function showSuggestions(searchTerm, container) {
     }
 
     container.innerHTML = matches.map((agent, index) => `
-        <div class="autocomplete-item" data-id="${agent.id}" data-name="${agent.name || agent.id}" onclick="selectSuggestion('${agent.id}', '${agent.name || agent.id}')">
+        <div class="autocomplete-item" data-id="${agent.id}" data-name="${agent.name || agent.id}" onclick="selectAgentSuggestion('${agent.id}', '${agent.name || agent.id}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
@@ -1331,9 +1598,37 @@ function showSuggestions(searchTerm, container) {
     selectedSuggestionIndex = -1;
 }
 
+function showPotentialSuggestions(searchTerm, container) {
+    // Filtere Produkte nach Suchbegriff
+    const matches = potentialProducts.filter(p =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.id.toLowerCase().includes(searchTerm.toLowerCase())
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+        hideSuggestions(container);
+        return;
+    }
+
+    container.innerHTML = matches.map((product, index) => `
+        <div class="autocomplete-item" data-id="${product.id}" data-name="${product.name}" onclick="selectPotentialSuggestion('${product.id}', '${product.name}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span class="agent-name">Potentiale für ${product.name}</span>
+        </div>
+    `).join('');
+
+    container.style.display = 'block';
+    selectedSuggestionIndex = -1;
+}
+
 function hideSuggestions(container) {
     container.style.display = 'none';
     selectedSuggestionIndex = -1;
+    currentSuggestionType = null;
 }
 
 function updateSuggestionSelection(items) {
@@ -1342,12 +1637,16 @@ function updateSuggestionSelection(items) {
     });
 }
 
-function selectSuggestion(agentId, agentName) {
+function selectAgentSuggestion(agentId, agentName) {
     console.log('✅ Agentur ausgewählt:', agentId, agentName);
 
     // Verstecke Suggestions
     const container = document.getElementById('autocompleteSuggestions');
     if (container) container.style.display = 'none';
+
+    // Leere Input
+    const chatInput = document.getElementById('landingChatInput');
+    if (chatInput) chatInput.value = '';
 
     // Öffne Agenturansicht
     if (typeof showAgenturOverview === 'function') {
@@ -1356,6 +1655,31 @@ function selectSuggestion(agentId, agentName) {
         // Fallback
         setAgenturFilter(agentId);
         openDashboard();
+    }
+}
+
+function selectPotentialSuggestion(productId, productName) {
+    console.log('✅ Potential ausgewählt:', productId, productName);
+
+    // Verstecke Suggestions
+    const container = document.getElementById('autocompleteSuggestions');
+    if (container) container.style.display = 'none';
+
+    // Leere Input
+    const chatInput = document.getElementById('landingChatInput');
+    if (chatInput) chatInput.value = '';
+
+    // Setze Filter und öffne Potentialanalyse
+    currentPotentialFilter = productId;
+    openPotentialAnalyseWithFilter(productId, productName);
+}
+
+// Für Rückwärtskompatibilität
+function selectSuggestion(id, name) {
+    if (currentSuggestionType === 'potential') {
+        selectPotentialSuggestion(id, name);
+    } else {
+        selectAgentSuggestion(id, name);
     }
 }
 
@@ -1370,6 +1694,9 @@ window.addEventListener('load', function() {
     // Lade gespeicherte Bilder
     loadSavedImages();
 
+    // Upload-Modus standardmäßig aktivieren
+    initUploadMode();
+
     // Setup Autocomplete
     setupAutocomplete();
 });
@@ -1380,9 +1707,17 @@ window.triggerLogoUpload = triggerLogoUpload;
 window.handleLogoUpload = handleLogoUpload;
 window.triggerProfileUpload = triggerProfileUpload;
 window.openPotentialAnalyse = openPotentialAnalyse;
+window.openPotentialAnalyseWithFilter = openPotentialAnalyseWithFilter;
 window.closePotentialAnalyse = closePotentialAnalyse;
 window.showEigeneDaten = showEigeneDaten;
 window.showDoraDaten = showDoraDaten;
 window.selectSuggestion = selectSuggestion;
+window.selectAgentSuggestion = selectAgentSuggestion;
+window.selectPotentialSuggestion = selectPotentialSuggestion;
+window.filterPotentials = filterPotentials;
+window.openKundenDetail = openKundenDetail;
+window.closeKundenDetail = closeKundenDetail;
+window.toggleKundenDora = toggleKundenDora;
+window.initUploadMode = initUploadMode;
 
 console.log('✅ landing.js geladen');

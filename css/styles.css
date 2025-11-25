@@ -3579,3 +3579,309 @@ select:focus, .dropdown-button:focus {
     height: 40px;
     color: white;
 }
+
+/* ========================================
+   POTENTIAL FILTER
+   ======================================== */
+
+.potential-filters {
+    max-width: 1400px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.potential-filters .filter-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 8px;
+}
+
+.potential-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.potential-filter-btn:hover {
+    border-color: #86BC25;
+    color: #86BC25;
+}
+
+.potential-filter-btn.active {
+    background: #86BC25;
+    border-color: #86BC25;
+    color: white;
+}
+
+/* Klickbare Zeilen */
+.clickable-row {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.clickable-row:hover {
+    background: #f8fdf5 !important;
+}
+
+/* ========================================
+   KUNDENDETAIL PAGE
+   ======================================== */
+
+.kunden-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 24px;
+}
+
+.kunden-header {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.kunden-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    flex: 1;
+}
+
+.kunden-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.kunden-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.kunden-card-header {
+    padding: 20px 24px;
+    background: #f8fdf5;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.kunden-card-header.dora {
+    background: #eff6ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kunden-card-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.consent-info {
+    font-size: 12px;
+    font-weight: 600;
+    color: #166534;
+    background: #dcfce7;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.kunden-stammdaten {
+    display: flex;
+    gap: 40px;
+    padding: 24px;
+}
+
+.kunden-foto-container {
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.kunden-foto {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    border: 3px solid #86BC25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kunden-foto:hover {
+    background: #f8fdf5;
+    transform: scale(1.05);
+}
+
+.kunden-foto svg {
+    width: 48px;
+    height: 48px;
+    color: #64748b;
+}
+
+.kunden-foto-container h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.kunden-id {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.kunden-info-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.kunden-info-grid .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.kunden-info-grid .info-item.full-width {
+    grid-column: span 2;
+}
+
+.info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 15px;
+    color: #1e293b;
+}
+
+.kinder-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: 8px;
+    margin-bottom: 4px;
+}
+
+.no-children {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.kunden-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.kunden-table thead {
+    background: #f8fafc;
+}
+
+.kunden-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.kunden-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.kunden-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.aktiv {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.dora-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #fef3c7;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.dora-notice svg {
+    flex-shrink: 0;
+    color: #92400e;
+}
+
+.dora-notice p {
+    font-size: 13px;
+    color: #92400e;
+    margin: 0;
+}
+
+.dora-card .kunden-table thead {
+    background: #eff6ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .kunden-stammdaten {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .kunden-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kunden-info-grid .info-item.full-width {
+        grid-column: span 1;
+    }
+
+    .potential-filters {
+        justify-content: flex-start;
+    }
+}

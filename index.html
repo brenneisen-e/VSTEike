@@ -64,7 +64,7 @@
                     <span class="deloitte-d">D</span>
                 </div>
                 <div class="chat-bubble">
-                    <p><strong>Willkommen zurück Max, was kann ich für dich tun?</strong></p>
+                    <p><strong>Willkommen zurück Jens, was kann ich für dich tun?</strong></p>
                 </div>
             </div>
 
@@ -348,12 +348,25 @@
                 </div>
             </div>
 
+            <!-- Filter Leiste -->
+            <div class="potential-filters">
+                <span class="filter-label">Filter:</span>
+                <button class="potential-filter-btn active" data-filter="alle" onclick="filterPotentials('alle')">Alle</button>
+                <button class="potential-filter-btn" data-filter="hausrat" onclick="filterPotentials('hausrat')">Hausrat</button>
+                <button class="potential-filter-btn" data-filter="haftpflicht" onclick="filterPotentials('haftpflicht')">Haftpflicht</button>
+                <button class="potential-filter-btn" data-filter="kfz" onclick="filterPotentials('kfz')">Kfz</button>
+                <button class="potential-filter-btn" data-filter="leben" onclick="filterPotentials('leben')">Leben</button>
+                <button class="potential-filter-btn" data-filter="bu" onclick="filterPotentials('bu')">BU</button>
+                <button class="potential-filter-btn" data-filter="unfall" onclick="filterPotentials('unfall')">Unfall</button>
+                <button class="potential-filter-btn" data-filter="sach" onclick="filterPotentials('sach')">Sach</button>
+            </div>
+
             <div class="potential-content">
                 <!-- Eigene Daten Tabelle -->
                 <div class="potential-table-container" id="eigeneDatenContainer">
                     <div class="potential-info-box">
                         <h3>Cross-Selling Potentiale aus eigenen Bestandsdaten</h3>
-                        <p>Identifizierte Potentiale basierend auf vorhandenen Verträgen und Kundenmerkmalen.</p>
+                        <p>Identifizierte Potentiale basierend auf vorhandenen Verträgen und Kundenmerkmalen. Klicken Sie auf eine Zeile für Kundendetails.</p>
                     </div>
                     <table class="potential-table" id="eigeneDatenTable">
                         <thead>
@@ -366,14 +379,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr onclick="openKundenDetail('Max Mustermann', 'VM00001')" class="clickable-row">
                                 <td>Max Mustermann</td>
                                 <td>VM00001</td>
                                 <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
                                 <td>Hat bereits Wohngebäudeversicherung abgeschlossen</td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Anna Schmidt', 'VM00002')" class="clickable-row">
                                 <td>Anna Schmidt</td>
                                 <td>VM00002</td>
                                 <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
@@ -487,6 +500,159 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         KUNDENDETAIL PAGE
+         ======================================== -->
+    <div id="kundenDetailPage" style="display: none;">
+        <div class="kunden-page">
+            <div class="kunden-header">
+                <button class="back-button" onclick="closeKundenDetail()">← Zurück</button>
+                <h1 class="kunden-page-title">Kundendetails</h1>
+                <div class="potential-toggle-container">
+                    <button class="potential-toggle-btn active" id="kundenEigenBtn" onclick="toggleKundenDora()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        Eigene Daten
+                    </button>
+                    <button class="potential-toggle-btn dora-btn" id="kundenDoraBtn" onclick="toggleKundenDora()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+                        DORA
+                    </button>
+                </div>
+            </div>
+
+            <div class="kunden-content">
+                <!-- Eigene Daten -->
+                <div id="kundenEigeneDaten">
+                    <!-- Stammdaten Karte -->
+                    <div class="kunden-card stammdaten-card">
+                        <div class="kunden-card-header">
+                            <h2>Stammdaten</h2>
+                        </div>
+                        <div class="kunden-stammdaten">
+                            <div class="kunden-foto-container">
+                                <div class="kunden-foto" onclick="triggerProfileUpload('kunde')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <h3 id="kundenName">Max Mustermann</h3>
+                                <span class="kunden-id" id="kundenVermittlerId">VM00001</span>
+                            </div>
+                            <div class="kunden-info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Geburtsdatum</span>
+                                    <span class="info-value" id="kundenGeburtsdatum">15.03.1985</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Adresse</span>
+                                    <span class="info-value" id="kundenAdresse">Musterstraße 123, 12345 Musterstadt</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Telefon</span>
+                                    <span class="info-value" id="kundenTelefon">+49 123 456789</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">E-Mail</span>
+                                    <span class="info-value" id="kundenEmail">max.mustermann@email.de</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Beruf</span>
+                                    <span class="info-value" id="kundenBeruf">Angestellter</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Familienstand</span>
+                                    <span class="info-value" id="kundenFamilienstand">Verheiratet</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <span class="info-label">Kinder</span>
+                                    <div class="info-value" id="kundenKinder">
+                                        <span class="kinder-badge">Lena (8 Jahre)</span>
+                                        <span class="kinder-badge">Paul (5 Jahre)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vorhandene Verträge -->
+                    <div class="kunden-card">
+                        <div class="kunden-card-header">
+                            <h2>Vorhandene Verträge</h2>
+                        </div>
+                        <table class="kunden-table">
+                            <thead>
+                                <tr>
+                                    <th>Versicherungstyp</th>
+                                    <th>Jahresprämie</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kundenVertraege">
+                                <tr>
+                                    <td>Wohngebäudeversicherung</td>
+                                    <td>€450/Jahr</td>
+                                    <td><span class="status-badge aktiv">Aktiv</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Kfz-Versicherung</td>
+                                    <td>€680/Jahr</td>
+                                    <td><span class="status-badge aktiv">Aktiv</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- DORA Daten -->
+                <div id="kundenDoraDaten" style="display: none;">
+                    <div class="kunden-card dora-card">
+                        <div class="kunden-card-header dora">
+                            <h2>DORA - Externe Finanzbeziehungen</h2>
+                            <span class="consent-info">Einverständniserklärung liegt vor</span>
+                        </div>
+                        <div class="dora-notice">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                            <p>Nur Stammdaten zu externen Finanzbeziehungen verfügbar. Details zu Vertragsinhalten erfordern separate Anfrage.</p>
+                        </div>
+                        <table class="kunden-table dora-table">
+                            <thead>
+                                <tr>
+                                    <th>Finanzinstitut</th>
+                                    <th>Produktart</th>
+                                    <th>Hinweis</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kundenDoraVertraege">
+                                <tr>
+                                    <td>Sparkasse</td>
+                                    <td>Girokonto</td>
+                                    <td>Hauptkonto</td>
+                                </tr>
+                                <tr>
+                                    <td>DWS</td>
+                                    <td>Depot</td>
+                                    <td>Fondssparen</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
