@@ -44,16 +44,7 @@ class CountyMapHandler {
             .fitSize([width, height], geojson);
         
         this.path = d3.geoPath().projection(this.projection);
-        
-        // Zoom-Verhalten
-        this.zoom = d3.zoom()
-            .scaleExtent([1, 8])
-            .on('zoom', (event) => {
-                countiesGroup.attr('transform', event.transform);
-            });
-        
-        this.svg.call(this.zoom);
-        
+
         // Landkreise zeichnen
         const countiesGroup = this.svg.append('g')
             .attr('id', 'counties-layer');
@@ -102,12 +93,9 @@ class CountyMapHandler {
         });
         
         console.log('✅ Karte initialisiert:', this.counties.size, 'Regierungsbezirke');
-        
+
         // DEBUG: Zeige alle Regierungsbezirk-Namen gruppiert nach Bundesland
         this.logCountiesByState();
-        
-        // Zoom Controls hinzufügen
-        this.addZoomControls();
     }
     
     // NEU: Debug-Funktion um alle Regionen nach Bundesland zu loggen
@@ -170,42 +158,6 @@ class CountyMapHandler {
         }
         
         return null;
-    }
-
-    addZoomControls() {
-        const controls = d3.select('#map')
-            .append('div')
-            .attr('class', 'zoom-controls')
-            .style('position', 'absolute')
-            .style('bottom', '10px')
-            .style('right', '10px')
-            .style('display', 'flex')
-            .style('flex-direction', 'column')
-            .style('gap', '5px');
-        
-        controls.append('button')
-            .html('➕')
-            .style('padding', '8px 12px')
-            .style('cursor', 'pointer')
-            .on('click', () => {
-                this.svg.transition().call(this.zoom.scaleBy, 1.3);
-            });
-        
-        controls.append('button')
-            .html('➖')
-            .style('padding', '8px 12px')
-            .style('cursor', 'pointer')
-            .on('click', () => {
-                this.svg.transition().call(this.zoom.scaleBy, 0.7);
-            });
-        
-        controls.append('button')
-            .html('🏠')
-            .style('padding', '8px 12px')
-            .style('cursor', 'pointer')
-            .on('click', () => {
-                this.svg.transition().call(this.zoom.transform, d3.zoomIdentity);
-            });
     }
 
     onMouseEnter(event, d) {
