@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
             padding: 20px;
             min-height: 100vh;
         }
@@ -16,21 +16,57 @@
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             overflow: hidden;
         }
         .header {
-            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
             color: white;
             padding: 30px;
-            text-align: center;
         }
-        .header h1 { font-size: 2rem; margin-bottom: 10px; }
-        .header p { opacity: 0.9; }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header h1 svg {
+            width: 32px;
+            height: 32px;
+        }
+        .header p { opacity: 0.9; font-size: 0.95rem; }
+        .back-btn {
+            background: white;
+            color: #86BC25;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
         .content { padding: 30px; }
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             background: #f8fafc;
             border-radius: 10px;
             padding: 20px;
@@ -39,7 +75,15 @@
         .section h2 {
             color: #1e293b;
             margin-bottom: 15px;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section h2 svg {
+            width: 20px;
+            height: 20px;
+            color: #86BC25;
         }
         .grid {
             display: grid;
@@ -58,86 +102,125 @@
             font-size: 0.9rem;
         }
         input[type="number"], select {
-            padding: 8px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
             font-size: 0.95rem;
+            transition: all 0.2s;
         }
         input:focus, select:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: #86BC25;
+            box-shadow: 0 0 0 3px rgba(134, 188, 37, 0.15);
         }
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 30px;
             justify-content: center;
             flex-wrap: wrap;
         }
         button {
-            padding: 12px 30px;
+            padding: 12px 24px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             border: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        button svg {
+            width: 18px;
+            height: 18px;
         }
         .btn-primary {
-            background: #2563eb;
+            background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
             color: white;
         }
         .btn-primary:hover {
-            background: #1d4ed8;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(134, 188, 37, 0.3);
         }
         .btn-secondary {
-            background: #10b981;
+            background: #1e293b;
             color: white;
         }
         .btn-secondary:hover {
-            background: #059669;
+            background: #0f172a;
             transform: translateY(-2px);
         }
         .info-box {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(134, 188, 37, 0.08) 0%, rgba(134, 188, 37, 0.04) 100%);
+            border: 1px solid rgba(134, 188, 37, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
         }
         .info-box h3 {
-            color: #1e40af;
-            margin-bottom: 5px;
+            color: #86BC25;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+        .info-box h3 svg {
+            width: 20px;
+            height: 20px;
+        }
+        .info-box p {
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 4px;
+        }
+        .info-box strong {
+            color: #1e293b;
         }
         .statistics-box {
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 24px;
         }
         .statistics-box h4 {
-            color: #92400e;
-            margin-bottom: 10px;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+        .statistics-box h4 svg {
+            width: 20px;
+            height: 20px;
+            color: #86BC25;
         }
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
         }
         .stat-item {
             text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
         }
         .stat-value {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: #1e293b;
+            font-weight: 700;
+            color: #86BC25;
         }
         .stat-label {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: #64748b;
+            margin-top: 4px;
         }
         .preset-buttons {
             display: flex;
@@ -146,69 +229,155 @@
             flex-wrap: wrap;
         }
         .preset-btn {
-            padding: 8px 16px;
-            background: #e2e8f0;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+        }
+        .preset-btn svg {
+            width: 18px;
+            height: 18px;
+            color: #86BC25;
         }
         .preset-btn:hover {
-            background: #cbd5e1;
+            border-color: #86BC25;
+            background: rgba(134, 188, 37, 0.05);
         }
         .preset-btn.active {
-            background: #2563eb;
+            background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
             color: white;
-            border-color: #2563eb;
+            border-color: #86BC25;
+        }
+        .preset-btn.active svg {
+            color: white;
+        }
+        .year-badge {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, rgba(134, 188, 37, 0.1) 0%, rgba(134, 188, 37, 0.05) 100%);
+            border: 1px solid rgba(134, 188, 37, 0.2);
+            border-radius: 8px;
+            color: #86BC25;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .year-badge svg {
+            width: 18px;
+            height: 18px;
+        }
+        .download-btn {
+            margin-top: 16px;
+            width: 100%;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="header-content">
                 <div>
-                    <h1>📊 CSV Datengenerator mit Regierungsbezirken</h1>
+                    <h1>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        CSV Datengenerator mit Regierungsbezirken
+                    </h1>
                     <p>Generiert realistische Daten mit Namen, Regierungsbezirken und allen KPIs</p>
                 </div>
-                <button onclick="window.location.href='index.html'" style="background: white; color: #2563eb; padding: 10px 20px; border: 2px solid white; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
-                    ← Zurück zum Dashboard
+                <button class="back-btn" onclick="window.location.href='index.html'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Zurück zum Dashboard
                 </button>
             </div>
         </div>
-        
+
         <div class="content">
             <div class="info-box">
-                <h3>✅ Features</h3>
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Features
+                </h3>
                 <p>• Generiert realistische deutsche Vor- und Nachnamen für Vermittler</p>
-                <p>• <strong>NEU: Regierungsbezirk-Zuordnung</strong> für Kartenvisualisierung (40 Regionen)</p>
-                <p>• <strong>✨ v15: Realistische Agenturverteilung</strong> - Log-normale Performance-Verteilung simuliert 80/20-Regel</p>
-                <p>• <strong>✨ v15: Optimierte KPI-Standardwerte</strong> - NPS 42 (statt 80), Stornoquote 8.5% (statt 7.5%), Underwriting 86% (statt 92%)</p>
-                <p>• <strong>✨ v19: Marktübliche Top-Performer-Werte</strong> - Neugeschäft 16x erhöht, Top-Performer erreichen 800k-1M+ über 12 Monate</p>
+                <p>• <strong>Regierungsbezirk-Zuordnung</strong> für Kartenvisualisierung (40 Regionen)</p>
+                <p>• <strong>Realistische Agenturverteilung</strong> - Log-normale Performance-Verteilung simuliert 80/20-Regel</p>
+                <p>• <strong>Optimierte KPI-Standardwerte</strong> - NPS 42, Stornoquote 8.5%, Underwriting 86%</p>
+                <p>• <strong>Marktübliche Top-Performer-Werte</strong> - Neugeschäft 16x erhöht, Top-Performer erreichen 800k-1M+</p>
                 <p>• Verwendet reale Bundeslandfaktoren für unterschiedliche Wirtschaftskraft</p>
-                <p>• Saisonale Schwankungen je Bundesland (z.B. Tourismus in MV)</p>
-                <p>• Silo-spezifische Performance (Ausschließlichkeit vs. Makler vs. Direktvertrieb)</p>
-                <p>• Segment-spezifische Faktoren (Leben, Kranken, Schaden, Kfz)</p>
-                <p>• Realistische Volatilität und Trends</p>
+                <p>• Saisonale Schwankungen, Silo-spezifische Performance, Segment-spezifische Faktoren</p>
             </div>
-            
+
             <div class="section">
-                <h2>🎯 Schnellstart - Presets</h2>
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Schnellstart - Presets
+                </h2>
                 <div class="preset-buttons">
-                    <button class="preset-btn" onclick="applyPreset('small')">🏢 Kleines Unternehmen (100 Vermittler)</button>
-                    <button class="preset-btn" onclick="applyPreset('medium')">🏛️ Mittleres Unternehmen (500 Vermittler)</button>
-                    <button class="preset-btn" onclick="applyPreset('large')">🏙️ Großkonzern (5000 Vermittler)</button>
+                    <button class="preset-btn" onclick="applyPreset('small')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Kleines Unternehmen (100 Vermittler)
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset('medium')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                        Mittleres Unternehmen (500 Vermittler)
+                    </button>
+                    <button class="preset-btn" onclick="applyPreset('large')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 010 7.75"></path>
+                        </svg>
+                        Großkonzern (5000 Vermittler)
+                    </button>
                 </div>
             </div>
-            
+
             <div class="section">
-                <h2>⚙️ Grundeinstellungen</h2>
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path>
+                    </svg>
+                    Grundeinstellungen
+                </h2>
                 <div class="grid">
                     <div class="input-group">
                         <label>Jahre</label>
-                        <div style="padding: 10px; background: #e0f2fe; border-radius: 6px; color: #0369a1; font-weight: 500;">
-                            📅 2024 + 2025 (beide Jahre)
+                        <div class="year-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            2024 + 2025 (beide Jahre)
                         </div>
                     </div>
                     <div class="input-group">
@@ -225,9 +394,16 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
-                <h2>🎯 KPI-Basiswerte</h2>
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    KPI-Basiswerte
+                </h2>
                 <div class="grid">
                     <div class="input-group">
                         <label>Neugeschäft (€/Monat)</label>
@@ -267,18 +443,35 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="button-group">
                 <button class="btn-primary" onclick="generateDailyCSV()">
-                    📅 Tägliche Daten generieren
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Tägliche Daten generieren
                 </button>
                 <button class="btn-secondary" onclick="generateMonthlyCSV()">
-                    📈 Monatsdaten generieren
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="20" x2="12" y2="10"></line>
+                        <line x1="18" y1="20" x2="18" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="16"></line>
+                    </svg>
+                    Monatsdaten generieren
                 </button>
             </div>
-            
+
             <div class="statistics-box" id="statsBox" style="display:none;">
-                <h4>📊 Generierte Daten-Statistik</h4>
+                <h4>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.21 15.89A10 10 0 118 2.83"></path>
+                        <path d="M22 12A10 10 0 0012 2v10z"></path>
+                    </svg>
+                    Generierte Daten-Statistik
+                </h4>
                 <div class="stats-grid">
                     <div class="stat-item">
                         <div class="stat-value" id="statRows">0</div>
@@ -297,18 +490,23 @@
                         <div class="stat-label">Monate</div>
                     </div>
                 </div>
-                <button class="btn-primary" onclick="downloadCSV()" style="margin-top: 15px; width: 100%;">
-                    💾 CSV herunterladen
+                <button class="btn-primary download-btn" onclick="downloadCSV()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    CSV herunterladen
                 </button>
             </div>
         </div>
     </div>
-    
+
     <script src="js/names.js"></script>
-    
+
     <script>
         let generatedCSV = '';
-        
+
         // Regierungsbezirke nach Bundesland (exakte Namen aus GeoJSON!)
         const landkreiseByBundesland = {
             'Baden-Württemberg': ['Freiburg', 'Karlsruhe', 'Stuttgart', 'Tübingen'],
@@ -328,7 +526,7 @@
             'Schleswig-Holstein': ['Schleswig-Holstein'],
             'Thüringen': ['Thüringen']
         };
-        
+
         // Faktoren aus config.js
         const bundeslandData = {
             'Baden-Württemberg': { baseFactor: 1.35, seasonPattern: [1.1, 1.0, 1.05, 1.1, 0.95, 0.85, 0.8, 0.75, 1.0, 1.15, 1.2, 1.25], volatility: 0.15 },
@@ -362,45 +560,43 @@
             'Direktvertrieb': { neugeschaeft: 0.60, bestand: 0.55, storno: 1.20, nps: 1.10, risiko: 0.90, combined: 0.94, ergebnis: 1.10, underwriting: 1.05, deckungsbeitrag: 0.95 },
             'Banken': { neugeschaeft: 0.30, bestand: 0.35, storno: 0.95, nps: 0.90, risiko: 1.00, combined: 1.00, ergebnis: 0.80, underwriting: 0.98, deckungsbeitrag: 0.85 }
         };
-        
+
         const bundeslaender = Object.keys(bundeslandData);
         const silos = Object.keys(siloFactors);
         const segments = Object.keys(segmentFactors);
-        
+
         const products = {
             'Leben': ['Risikoleben', 'Kapitallebensversicherung', 'Fondsgebundene LV', 'Berufsunfähigkeit', 'Rentenversicherung'],
             'Kranken': ['Vollversicherung', 'Zusatzversicherung', 'Pflegeversicherung', 'Zahnzusatz', 'Auslandsreise'],
             'Schaden': ['Hausrat', 'Wohngebäude', 'Haftpflicht', 'Rechtsschutz', 'Gewerbe'],
             'Kfz': ['Kfz-Haftpflicht', 'Vollkasko', 'Teilkasko', 'Flottenversicherung', 'Schutzbrief']
         };
-        
+
         function applyPreset(preset) {
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            event.target.closest('.preset-btn').classList.add('active');
 
-            // ✨ v19: Realistische Werte für marktübliche Top-Performer
-            // Top-Performer sollten 800k-1M+ Neugeschäft über 12 Monate erreichen
             const presets = {
                 'small': {
                     numAgents: 100,
-                    neugeschaeft: 80000000,      // 80 Mio/Monat
-                    bestand: 500000000,          // 500 Mio
-                    ergebnis: 30000000,          // 30 Mio/Monat
-                    deckungsbeitrag: 200000000   // 200 Mio/Monat
+                    neugeschaeft: 80000000,
+                    bestand: 500000000,
+                    ergebnis: 30000000,
+                    deckungsbeitrag: 200000000
                 },
                 'medium': {
                     numAgents: 500,
-                    neugeschaeft: 500000000,     // 500 Mio/Monat
-                    bestand: 14000000000,        // 14 Mrd
-                    ergebnis: 200000000,         // 200 Mio/Monat
-                    deckungsbeitrag: 1250000000  // 1,25 Mrd/Monat
+                    neugeschaeft: 500000000,
+                    bestand: 14000000000,
+                    ergebnis: 200000000,
+                    deckungsbeitrag: 1250000000
                 },
                 'large': {
                     numAgents: 5000,
-                    neugeschaeft: 2500000000,    // 2,5 Mrd/Monat
-                    bestand: 70000000000,        // 70 Mrd
-                    ergebnis: 1000000000,        // 1 Mrd/Monat
-                    deckungsbeitrag: 6250000000  // 6,25 Mrd/Monat
+                    neugeschaeft: 2500000000,
+                    bestand: 70000000000,
+                    ergebnis: 1000000000,
+                    deckungsbeitrag: 6250000000
                 }
             };
 
@@ -414,19 +610,14 @@
             document.getElementById('kpi_deckungsbeitrag').value = p.deckungsbeitrag;
         }
 
-        // ✨ v15: Realistische Log-Normale Verteilung für Agenturperformance
-        // Simuliert 80/20-Regel: 20% der Agenten machen 80% des Geschäfts
         function logNormalRandom(mean, sigma) {
-            // Box-Muller für Normalverteilung
             let u = 0, v = 0;
             while(u === 0) u = Math.random();
             while(v === 0) v = Math.random();
             const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-
-            // Konvertiere zu Log-Normal
             return Math.exp(mean + sigma * normal);
         }
-        
+
         function normalRandom(mean, std) {
             let u = 0, v = 0;
             while(u === 0) u = Math.random();
@@ -434,9 +625,8 @@
             const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
             return mean + std * normal;
         }
-        
+
         function generateDailyCSV() {
-            // ✨ v17: Beide Jahre (2024 + 2025) generieren
             const years = [2024, 2025];
             const months = parseInt(document.getElementById('months').value);
             const numAgents = parseInt(document.getElementById('numAgents').value);
@@ -454,29 +644,19 @@
                 deckungsbeitrag: parseFloat(document.getElementById('kpi_deckungsbeitrag').value)
             };
 
-            // CSV Header mit Regierungsbezirk!
             let csv = 'year,month,day,vermittler_id,vermittler_name,silo,segment,product,bundesland,landkreis,neugeschaeft,bestand,storno,nps,risiko,combined,ergebnis,underwriting,deckungsbeitrag\n';
 
             let rowCount = 0;
             const agentProfiles = [];
 
-            // Namen generieren
             const agentNames = generateUniqueNames(numAgents);
-            
-            // Generate agent profiles mit Regierungsbezirk
+
             for (let i = 0; i < numAgents; i++) {
                 const segment = segments[Math.floor(Math.random() * segments.length)];
                 const silo = silos[Math.floor(Math.random() * silos.length)];
                 const bundesland = bundeslaender[Math.floor(Math.random() * bundeslaender.length)];
                 const landkreis = landkreiseByBundesland[bundesland][Math.floor(Math.random() * landkreiseByBundesland[bundesland].length)];
 
-                // ✨ v15: Realistische Performance-Verteilung (Log-Normal)
-                // mean=-0.1, sigma=0.6 ergibt:
-                // - Median ~0.9 (50% der Agenten)
-                // - 80% zwischen 0.4 und 1.8
-                // - Top 10% über 2.0
-                // - Top 1% über 4.0
-                // Simuliert realistisch, dass wenige Agenten sehr erfolgreich sind
                 const performanceFactor = logNormalRandom(-0.1, 0.6);
 
                 agentProfiles.push({
@@ -492,8 +672,7 @@
                     siloFactors: siloFactors[silo]
                 });
             }
-            
-            // ✨ v17: Generate data for both years (2024 + 2025)
+
             for (const year of years) {
                 for (let month = 1; month <= months; month++) {
                     const daysInMonth = new Date(year, month, 0).getDate();
@@ -513,13 +692,10 @@
                             const volatility = agent.landData.volatility;
                             const randomFactor = 1 + (Math.random() - 0.5) * volatility;
 
-                            const dailyFactor = agent.performanceFactor / 250 / numAgents; // WICHTIG: Durch Anzahl Vermittler teilen!
+                            const dailyFactor = agent.performanceFactor / 250 / numAgents;
 
-                            // Bestand ist ein ZUSTANDSWERT (nicht summierbar über Tage!)
-                            // Pro Vermittler ein Anteil am Gesamt-Bestand
                             const bestandAnteil = baseKPIs.bestand / numAgents;
-                            // Wachstum mit Volatilität (nicht linear!) - Jahr berücksichtigen
-                            const yearOffset = (year - 2024) * 12; // 2024: 0, 2025: 12 Monate
+                            const yearOffset = (year - 2024) * 12;
                             const bestandWachstum = (1 + (month + yearOffset) * 0.003) * (0.95 + Math.random() * 0.1);
                             const bestandValue = bestandAnteil * bestandWachstum * landBaseFactor *
                                 agent.segmentFactors.bestand * agent.siloFactors.bestand;
@@ -571,9 +747,8 @@
 
             finishGeneration(csv, rowCount, numAgents);
         }
-        
+
         function generateMonthlyCSV() {
-            // ✨ v17: Beide Jahre (2024 + 2025) generieren
             const years = [2024, 2025];
             const months = parseInt(document.getElementById('months').value);
 
@@ -592,7 +767,6 @@
             let csv = 'year,month,neugeschaeft,bestand,storno,nps,risiko,combined,ergebnis,underwriting,deckungsbeitrag\n';
             let rowCount = 0;
 
-            // ✨ v17: Loop through both years
             for (const year of years) {
                 for (let month = 1; month <= months; month++) {
                     let avgLandFactor = 0;
@@ -605,8 +779,7 @@
                     avgLandFactor /= bundeslaender.length;
                     avgSeasonFactor /= bundeslaender.length;
 
-                    // Jahr berücksichtigen
-                    const yearOffset = (year - 2024) * 12; // 2024: 0, 2025: 12 Monate
+                    const yearOffset = (year - 2024) * 12;
                     const trendFactor = 1 + (month + yearOffset - 1) * 0.01;
                     const totalFactor = avgSeasonFactor * trendFactor;
 
@@ -631,20 +804,20 @@
 
             finishGeneration(csv, rowCount, 0);
         }
-        
+
         function finishGeneration(csv, rows, agents) {
             generatedCSV = csv;
-            
+
             const sizeKB = (csv.length / 1024).toFixed(1);
             const months = parseInt(document.getElementById('months').value);
-            
+
             document.getElementById('statRows').textContent = rows.toLocaleString();
             document.getElementById('statSize').textContent = sizeKB + ' KB';
             document.getElementById('statAgents').textContent = agents.toLocaleString();
             document.getElementById('statMonths').textContent = months;
             document.getElementById('statsBox').style.display = 'block';
         }
-        
+
         function downloadCSV() {
             if (!generatedCSV) {
                 alert('Bitte generieren Sie zuerst eine CSV-Datei!');
@@ -655,7 +828,6 @@
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
 
-            // ✨ v17: Dateiname für beide Jahre
             const type = generatedCSV.includes('vermittler_id') ? 'daily' : 'monthly';
             const filename = `dashboard_data_2024_2025_${type}_regierungsbezirke.csv`;
 
