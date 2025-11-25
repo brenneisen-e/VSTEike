@@ -1096,4 +1096,293 @@ function askLandingSampleQuestion(question) {
 // Make function globally available
 window.askLandingSampleQuestion = askLandingSampleQuestion;
 
+// ========================================
+// UPLOAD MODUS
+// ========================================
+
+let uploadModeActive = false;
+
+function toggleUploadMode() {
+    const toggle = document.getElementById('uploadModeToggle');
+    const hint = document.getElementById('uploadModeHint');
+    const body = document.body;
+
+    uploadModeActive = toggle.checked;
+
+    if (uploadModeActive) {
+        body.classList.add('upload-mode-active');
+        if (hint) hint.style.display = 'block';
+        console.log('📤 Upload-Modus aktiviert');
+    } else {
+        body.classList.remove('upload-mode-active');
+        if (hint) hint.style.display = 'none';
+        console.log('📤 Upload-Modus deaktiviert');
+    }
+}
+
+// Logo Upload
+function triggerLogoUpload() {
+    if (!uploadModeActive) {
+        console.log('ℹ️ Upload-Modus nicht aktiv');
+        return;
+    }
+    document.getElementById('logoUploadInput').click();
+}
+
+function handleLogoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const logoImg = document.getElementById('uploadedLogo');
+        const placeholder = document.getElementById('logoPlaceholder');
+
+        logoImg.src = e.target.result;
+        logoImg.style.display = 'block';
+        placeholder.style.display = 'none';
+
+        // Speichern im localStorage
+        localStorage.setItem('customLogo', e.target.result);
+        console.log('✅ Logo hochgeladen und gespeichert');
+    };
+    reader.readAsDataURL(file);
+}
+
+// Agentur Profilbild Upload
+function triggerProfileUpload(vermittlerId) {
+    if (!uploadModeActive) return;
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        handleProfileUpload(e, vermittlerId);
+    };
+    input.click();
+}
+
+function handleProfileUpload(event, vermittlerId) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        // Speichern im localStorage
+        localStorage.setItem('profileImage_' + vermittlerId, e.target.result);
+
+        // Bild in Agenturansicht aktualisieren
+        const photoContainer = document.getElementById('agenturPhoto');
+        if (photoContainer) {
+            photoContainer.innerHTML = `<img src="${e.target.result}" alt="Profilbild">`;
+        }
+
+        console.log('✅ Profilbild gespeichert für:', vermittlerId);
+    };
+    reader.readAsDataURL(file);
+}
+
+// Gespeichertes Logo laden
+function loadSavedImages() {
+    const savedLogo = localStorage.getItem('customLogo');
+    if (savedLogo) {
+        const logoImg = document.getElementById('uploadedLogo');
+        const placeholder = document.getElementById('logoPlaceholder');
+        if (logoImg && placeholder) {
+            logoImg.src = savedLogo;
+            logoImg.style.display = 'block';
+            placeholder.style.display = 'none';
+        }
+    }
+}
+
+// ========================================
+// POTENTIALANALYSE
+// ========================================
+
+function openPotentialAnalyse() {
+    console.log('📊 Potentialanalyse öffnen...');
+
+    // Verstecke alle Seiten
+    document.getElementById('landingPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'none';
+    const agenturOverview = document.getElementById('agenturOverview');
+    if (agenturOverview) agenturOverview.style.display = 'none';
+
+    // Zeige Potentialanalyse
+    document.getElementById('potentialAnalysePage').style.display = 'block';
+}
+
+function closePotentialAnalyse() {
+    document.getElementById('potentialAnalysePage').style.display = 'none';
+    document.getElementById('landingPage').style.display = 'flex';
+}
+
+function showEigeneDaten() {
+    document.getElementById('eigeneDatenContainer').style.display = 'block';
+    document.getElementById('doraContainer').style.display = 'none';
+    document.getElementById('eigeneDatenBtn').classList.add('active');
+    document.getElementById('doraBtn').classList.remove('active');
+}
+
+function showDoraDaten() {
+    document.getElementById('eigeneDatenContainer').style.display = 'none';
+    document.getElementById('doraContainer').style.display = 'block';
+    document.getElementById('eigeneDatenBtn').classList.remove('active');
+    document.getElementById('doraBtn').classList.add('active');
+}
+
+// ========================================
+// CHATBOT AUTOCOMPLETE
+// ========================================
+
+const mockAgents = [
+    { id: 'VM00001', name: 'Max Mustermann' },
+    { id: 'VM00002', name: 'Maria Schmidt' },
+    { id: 'VM00003', name: 'Michael Weber' },
+    { id: 'VM00004', name: 'Martina Fischer' },
+    { id: 'VM00005', name: 'Markus Braun' }
+];
+
+let selectedSuggestionIndex = -1;
+
+function setupAutocomplete() {
+    const chatInput = document.getElementById('landingChatInput');
+    const suggestionsContainer = document.getElementById('autocompleteSuggestions');
+
+    if (!chatInput || !suggestionsContainer) return;
+
+    chatInput.addEventListener('input', function(e) {
+        const value = e.target.value.toLowerCase();
+
+        // Prüfe ob "agentur" im Text vorkommt
+        if (value.includes('agentur ')) {
+            const searchTerm = value.split('agentur ')[1];
+            if (searchTerm && searchTerm.length > 0) {
+                showSuggestions(searchTerm, suggestionsContainer);
+            } else {
+                hideSuggestions(suggestionsContainer);
+            }
+        } else {
+            hideSuggestions(suggestionsContainer);
+        }
+    });
+
+    // Keyboard navigation
+    chatInput.addEventListener('keydown', function(e) {
+        const items = suggestionsContainer.querySelectorAll('.autocomplete-item');
+
+        if (suggestionsContainer.style.display === 'none' || items.length === 0) {
+            return;
+        }
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, items.length - 1);
+            updateSuggestionSelection(items);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, 0);
+            updateSuggestionSelection(items);
+        } else if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+            e.preventDefault();
+            const selectedItem = items[selectedSuggestionIndex];
+            if (selectedItem) {
+                selectSuggestion(selectedItem.dataset.id, selectedItem.dataset.name);
+            }
+        }
+    });
+
+    // Click outside to close
+    document.addEventListener('click', function(e) {
+        if (!suggestionsContainer.contains(e.target) && e.target !== chatInput) {
+            hideSuggestions(suggestionsContainer);
+        }
+    });
+}
+
+function showSuggestions(searchTerm, container) {
+    // Hole Agenturen aus Daten oder nutze Mock
+    const agenturen = typeof getAgenturen === 'function' ? getAgenturen() : mockAgents;
+
+    // Filtere nach Suchbegriff
+    const matches = agenturen.filter(a =>
+        (a.name && a.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (a.id && a.id.toLowerCase().includes(searchTerm.toLowerCase()))
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+        hideSuggestions(container);
+        return;
+    }
+
+    container.innerHTML = matches.map((agent, index) => `
+        <div class="autocomplete-item" data-id="${agent.id}" data-name="${agent.name || agent.id}" onclick="selectSuggestion('${agent.id}', '${agent.name || agent.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="agent-name">Agenturansicht ${agent.name || 'Unbekannt'}</span>
+            <span class="agent-id">(${agent.id})</span>
+        </div>
+    `).join('');
+
+    container.style.display = 'block';
+    selectedSuggestionIndex = -1;
+}
+
+function hideSuggestions(container) {
+    container.style.display = 'none';
+    selectedSuggestionIndex = -1;
+}
+
+function updateSuggestionSelection(items) {
+    items.forEach((item, index) => {
+        item.classList.toggle('selected', index === selectedSuggestionIndex);
+    });
+}
+
+function selectSuggestion(agentId, agentName) {
+    console.log('✅ Agentur ausgewählt:', agentId, agentName);
+
+    // Verstecke Suggestions
+    const container = document.getElementById('autocompleteSuggestions');
+    if (container) container.style.display = 'none';
+
+    // Öffne Agenturansicht
+    if (typeof showAgenturOverview === 'function') {
+        showAgenturOverview(agentId);
+    } else {
+        // Fallback
+        setAgenturFilter(agentId);
+        openDashboard();
+    }
+}
+
+// ========================================
+// INIT
+// ========================================
+
+// Erweitere den DOMContentLoaded
+const originalDOMContentLoaded = window.onload;
+
+window.addEventListener('load', function() {
+    // Lade gespeicherte Bilder
+    loadSavedImages();
+
+    // Setup Autocomplete
+    setupAutocomplete();
+});
+
+// Global verfügbar machen
+window.toggleUploadMode = toggleUploadMode;
+window.triggerLogoUpload = triggerLogoUpload;
+window.handleLogoUpload = handleLogoUpload;
+window.triggerProfileUpload = triggerProfileUpload;
+window.openPotentialAnalyse = openPotentialAnalyse;
+window.closePotentialAnalyse = closePotentialAnalyse;
+window.showEigeneDaten = showEigeneDaten;
+window.showDoraDaten = showDoraDaten;
+window.selectSuggestion = selectSuggestion;
+
 console.log('✅ landing.js geladen');
