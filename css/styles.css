@@ -3109,6 +3109,29 @@ select:focus, .dropdown-button:focus {
     box-shadow: 0 4px 8px rgba(134, 188, 37, 0.15);
 }
 
+.sample-question-btn svg {
+    flex-shrink: 0;
+    color: #86BC25;
+}
+
+.sample-question-btn:hover svg {
+    color: currentColor;
+}
+
+/* Button SVG Icons allgemein */
+button svg,
+.back-button svg,
+.view-mode-toggle button svg {
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.upload-label svg {
+    vertical-align: middle;
+    margin-right: 6px;
+    color: #86BC25;
+}
+
 /* Landing Chat Input - Deloitte Focus */
 .landing-chat-input:focus {
     outline: none;

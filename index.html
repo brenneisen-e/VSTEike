@@ -228,7 +228,7 @@
             <!-- Header mit Back Button und Agentur-Info -->
             <div class="agentur-header-new">
                 <div class="agentur-header-left">
-                    <button class="back-button" onclick="backFromAgentur()">← Zurück</button>
+                    <button class="back-button" onclick="backFromAgentur()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Zurück</button>
                     <div class="agentur-header-info">
                         <div class="agentur-photo-small" id="agenturPhotoSmall" onclick="triggerAgenturPhotoUpload()">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="agentur-photo-placeholder-small">
@@ -640,7 +640,7 @@
     <div id="billingCheckPage" style="display: none;">
         <div class="billing-page">
             <div class="billing-header">
-                <button class="back-button" onclick="closeBillingCheck()">← Zurück</button>
+                <button class="back-button" onclick="closeBillingCheck()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Zurück</button>
                 <h1 class="billing-page-title">Billing Check</h1>
             </div>
             <iframe
@@ -658,7 +658,7 @@
     <div id="potentialAnalysePage" style="display: none;">
         <div class="potential-page">
             <div class="potential-header">
-                <button class="back-button" onclick="closePotentialAnalyse()">← Zurück</button>
+                <button class="back-button" onclick="closePotentialAnalyse()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Zurück</button>
                 <h1 class="potential-page-title">Potentialanalyse</h1>
                 <div class="potential-toggle-container">
                     <button class="potential-toggle-btn active" id="eigeneDatenBtn" onclick="showEigeneDaten()">
@@ -983,7 +983,7 @@
     <div id="kundenDetailPage" style="display: none;">
         <div class="kunden-page">
             <div class="kunden-header">
-                <button class="back-button" onclick="closeKundenDetail()">← Zurück</button>
+                <button class="back-button" onclick="closeKundenDetail()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Zurück</button>
                 <h1 class="kunden-page-title">Kundendetails</h1>
                 <div class="potential-toggle-container">
                     <button class="potential-toggle-btn active" id="kundenEigenBtn" onclick="toggleKundenDora()">
@@ -1137,7 +1137,8 @@
     <!-- Upload Section -->
     <div class="upload-section">
         <label class="upload-label" for="csvUpload">
-            📊 CSV-Datei hochladen
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            CSV-Datei hochladen
             <input type="file" id="csvUpload" accept=".csv">
         </label>
         <span id="fileStatus" style="margin-left: 1rem; color: #0369a1; font-weight: 600;"></span>
@@ -1147,10 +1148,19 @@
     <header class="header">
         <div class="header-content">
             <div class="header-left">
-                <button class="back-button" onclick="backToLanding()">← Zurück</button>
+                <button class="back-button" onclick="backToLanding()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Zurück
+                </button>
                 <div class="view-mode-toggle">
-                    <button class="active" data-mode="dashboard">📊 Dashboard</button>
-                    <button data-mode="table">📋 Tabelle</button>
+                    <button class="active" data-mode="dashboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        Dashboard
+                    </button>
+                    <button data-mode="table">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        Tabelle
+                    </button>
                 </div>
             </div>
             <div class="filters">
@@ -1249,7 +1259,7 @@
             <!-- ✨ v14: KI-Antwort Display unter der Karte -->
             <div class="ai-response-panel" id="aiResponsePanel" style="display: none;">
                 <div class="ai-response-header">
-                    <h3>🤖 KI-Analyse</h3>
+                    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="vertical-align: middle; margin-right: 6px;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>KI-Analyse</h3>
                     <button class="ai-response-close" id="aiResponseClose">✕</button>
                 </div>
                 <div class="ai-response-content" id="aiResponseContent">
@@ -1329,29 +1339,35 @@
         
         <div class="chat-body" id="chatBody">
             <div class="chat-welcome">
-                <div class="welcome-icon">👋</div>
+                <div class="welcome-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
                 <h3>Willkommen!</h3>
                 <p>Ich kann dir bei der Analyse deiner Dashboard-Daten helfen.</p>
 
                 <!-- ✨ v14: Probefragen als anklickbare Buttons -->
                 <div class="sample-questions">
                     <button class="sample-question-btn" onclick="askSampleQuestion('Zeige mir die Top 5 Vermittler nach Neugeschäft')">
-                        📊 Top 5 Vermittler nach Neugeschäft
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        Top 5 Vermittler nach Neugeschäft
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Welches Bundesland hat die beste Performance?')">
-                        🗺️ Beste Performance nach Bundesland
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                        Beste Performance nach Bundesland
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Filtere nach Max Mustermann')">
-                        🔍 Nach Max Mustermann filtern
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        Nach Max Mustermann filtern
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Wie entwickelt sich der NPS Score?')">
-                        📈 NPS Score Entwicklung
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        NPS Score Entwicklung
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Vergleiche Makler vs. Ausschließlichkeit')">
-                        ⚖️ Makler vs. Ausschließlichkeit
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        Makler vs. Ausschließlichkeit
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Zeige mir die Stornoquoten nach Segment')">
-                        ⚠️ Stornoquoten nach Segment
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Stornoquoten nach Segment
                     </button>
                 </div>
             </div>
