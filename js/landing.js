@@ -1183,10 +1183,9 @@ function handleLogoUpload(event) {
     reader.readAsDataURL(file);
 }
 
-// Agentur Profilbild Upload
+// Profilbild Upload (für Agentur und Kunden)
 function triggerProfileUpload(vermittlerId) {
-    if (!uploadModeActive) return;
-
+    // Kein uploadModeActive Check - Foto kann immer geändert werden
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -1205,13 +1204,22 @@ function handleProfileUpload(event, vermittlerId) {
         // Speichern im localStorage
         localStorage.setItem('profileImage_' + vermittlerId, e.target.result);
 
-        // Bild in Agenturansicht aktualisieren
-        const photoContainer = document.getElementById('agenturPhoto');
-        if (photoContainer) {
-            photoContainer.innerHTML = `<img src="${e.target.result}" alt="Profilbild">`;
+        // Je nach Kontext das richtige Element aktualisieren
+        if (vermittlerId === 'kunde') {
+            // Kunden-Foto auf der Kundendetail-Seite
+            const kundenFoto = document.querySelector('.kunden-foto');
+            if (kundenFoto) {
+                kundenFoto.innerHTML = `<img src="${e.target.result}" alt="Kundenfoto" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            }
+            console.log('✅ Kundenfoto gespeichert');
+        } else {
+            // Bild in Agenturansicht aktualisieren
+            const photoContainer = document.getElementById('agenturPhoto');
+            if (photoContainer) {
+                photoContainer.innerHTML = `<img src="${e.target.result}" alt="Profilbild">`;
+            }
+            console.log('✅ Profilbild gespeichert für:', vermittlerId);
         }
-
-        console.log('✅ Profilbild gespeichert für:', vermittlerId);
     };
     reader.readAsDataURL(file);
 }

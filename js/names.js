@@ -1,16 +1,16 @@
-// names.js - Deutsche Namen fÃ¼r Vermittler
+// names.js - Deutsche Namen für Vermittler
 
 const vornamen = [
-    // MÃ¤nnlich
+    // Männlich
     'Eike', 'Alexander', 'Andreas', 'Bernd', 'Christian', 'Daniel', 'David', 'Dirk',
     'Felix', 'Florian', 'Frank', 'Georg', 'Hans', 'Heinrich', 'Holger', 'Jan',
-    'Jens', 'Joachim', 'Johannes', 'JÃ¶rg', 'Julian', 'JÃ¼rgen', 'Karl', 'Klaus',
+    'Jens', 'Joachim', 'Johannes', 'Jörg', 'Julian', 'Jürgen', 'Karl', 'Klaus',
     'Lars', 'Lukas', 'Manfred', 'Manuel', 'Marco', 'Markus', 'Martin', 'Matthias',
     'Max', 'Maximilian', 'Michael', 'Moritz', 'Niklas', 'Oliver', 'Patrick', 'Paul',
     'Peter', 'Philipp', 'Rafael', 'Ralf', 'Robert', 'Roland', 'Sebastian', 'Stefan',
     'Steffen', 'Sven', 'Thomas', 'Thorsten', 'Tim', 'Tobias', 'Uwe', 'Werner',
-    'Wolfgang', 'Rainer', 'Dieter', 'GÃ¼nter', 'Helmut', 'Horst',
-    
+    'Wolfgang', 'Rainer', 'Dieter', 'Günter', 'Helmut', 'Horst',
+
     // Weiblich
     'Anna', 'Andrea', 'Angelika', 'Anja', 'Anke', 'Anne', 'Astrid', 'Barbara',
     'Beate', 'Birgit', 'Brigitte', 'Carmen', 'Cathrin', 'Christa', 'Christina', 'Christine',
@@ -24,23 +24,23 @@ const vornamen = [
 ];
 
 const nachnamen = [
-    'Brenneisen', 'MÃ¼ller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner',
-    'Becker', 'Schulz', 'Hoffmann', 'SchÃ¤fer', 'Koch', 'Bauer', 'Richter', 'Klein',
-    'Wolf', 'SchrÃ¶der', 'Neumann', 'Schwarz', 'Zimmermann', 'Braun', 'KrÃ¼ger', 'Hofmann',
+    'Brenneisen', 'Müller', 'Schmidt', 'Schneider', 'Fischer', 'Weber', 'Meyer', 'Wagner',
+    'Becker', 'Schulz', 'Hoffmann', 'Schäfer', 'Koch', 'Bauer', 'Richter', 'Klein',
+    'Wolf', 'Schröder', 'Neumann', 'Schwarz', 'Zimmermann', 'Braun', 'Krüger', 'Hofmann',
     'Hartmann', 'Lange', 'Schmitt', 'Werner', 'Schmitz', 'Krause', 'Meier', 'Lehmann',
-    'Schmid', 'Schulze', 'Maier', 'KÃ¶hler', 'Herrmann', 'KÃ¶nig', 'Walter', 'Mayer',
-    'Huber', 'Kaiser', 'Fuchs', 'Peters', 'Lang', 'Scholz', 'MÃ¶ller', 'WeiÃŸ',
-    'Jung', 'Hahn', 'Schubert', 'Vogel', 'Friedrich', 'Keller', 'GÃ¼nther', 'Frank',
+    'Schmid', 'Schulze', 'Maier', 'Köhler', 'Herrmann', 'König', 'Walter', 'Mayer',
+    'Huber', 'Kaiser', 'Fuchs', 'Peters', 'Lang', 'Scholz', 'Möller', 'Weiß',
+    'Jung', 'Hahn', 'Schubert', 'Vogel', 'Friedrich', 'Keller', 'Günther', 'Frank',
     'Berger', 'Winkler', 'Roth', 'Beck', 'Lorenz', 'Baumann', 'Franke', 'Albrecht',
-    'Schuster', 'Simon', 'Ludwig', 'BÃ¶hm', 'Winter', 'Kraus', 'Martin', 'Schumacher',
-    'KrÃ¤mer', 'Vogt', 'Stein', 'JÃ¤ger', 'Otto', 'Sommer', 'GroÃŸ', 'Seidel',
+    'Schuster', 'Simon', 'Ludwig', 'Böhm', 'Winter', 'Kraus', 'Martin', 'Schumacher',
+    'Krämer', 'Vogt', 'Stein', 'Jäger', 'Otto', 'Sommer', 'Groß', 'Seidel',
     'Heinrich', 'Brandt', 'Haas', 'Schreiber', 'Graf', 'Dietrich', 'Ziegler', 'Kuhn',
-    'KÃ¼hn', 'Pohl', 'Engel', 'Horn', 'Busch', 'Bergmann', 'Thomas', 'Voigt',
+    'Kühn', 'Pohl', 'Engel', 'Horn', 'Busch', 'Bergmann', 'Thomas', 'Voigt',
     'Sauer', 'Arnold', 'Wolff', 'Pfeiffer', 'Lindemann', 'Rademacher', 'Kuhlmann', 'Ebert',
-    'Ackermann', 'Reimann', 'Hansen', 'Seifert', 'Bachmann', 'Beckmann', 'Bender', 'BÃ¶hme'
+    'Ackermann', 'Reimann', 'Hansen', 'Seifert', 'Bachmann', 'Beckmann', 'Bender', 'Böhme'
 ];
 
-// Funktion um einen zufÃ¤lligen Namen zu generieren
+// Funktion um einen zufälligen Namen zu generieren
 function generateRandomName() {
     const vorname = vornamen[Math.floor(Math.random() * vornamen.length)];
     const nachname = nachnamen[Math.floor(Math.random() * nachnamen.length)];
@@ -50,21 +50,21 @@ function generateRandomName() {
 // Funktion um eine Liste eindeutiger Namen zu generieren
 function generateUniqueNames(count) {
     const names = new Set();
-    
+
     // Max Mustermann als ersten Namen hinzufügen
     names.add('Max Mustermann');
-    
-    // Weitere Namen generieren bis wir die gewÃ¼nschte Anzahl haben
+
+    // Weitere Namen generieren bis wir die gewünschte Anzahl haben
     let attempts = 0;
     const maxAttempts = count * 10; // Sicherheitsgrenze
-    
+
     while (names.size < count && attempts < maxAttempts) {
         names.add(generateRandomName());
         attempts++;
     }
-    
-    // Falls wir nicht genug eindeutige Namen generieren konnten, 
-    // fÃ¼gen wir nummerierte Namen hinzu
+
+    // Falls wir nicht genug eindeutige Namen generieren konnten,
+    // fügen wir nummerierte Namen hinzu
     if (names.size < count) {
         let counter = 1;
         while (names.size < count) {
@@ -74,6 +74,6 @@ function generateUniqueNames(count) {
             counter++;
         }
     }
-    
+
     return Array.from(names);
 }
