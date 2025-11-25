@@ -1233,32 +1233,91 @@ function handleAgenturPhotoUpload(event) {
     reader.readAsDataURL(file);
 }
 
-// Gespeichertes Logo laden
-function loadSavedImages() {
+// Gespeichertes Logo laden (mit Fallback auf assets/images-config.json)
+async function loadSavedImages() {
+    // Versuche zuerst, die Konfigurationsdatei zu laden
+    let configImages = { logo: null, profile: null };
+    try {
+        const response = await fetch('assets/images/images-config.json');
+        if (response.ok) {
+            configImages = await response.json();
+        }
+    } catch (e) {
+        console.log('ℹ️ Keine images-config.json gefunden, nutze Fallbacks');
+    }
+
+    // Logo laden: localStorage > config > default SVG
     const savedLogo = localStorage.getItem('customLogo');
-    if (savedLogo) {
-        const logoImg = document.getElementById('uploadedLogo');
-        const placeholder = document.getElementById('logoPlaceholder');
-        if (logoImg && placeholder) {
+    const logoImg = document.getElementById('uploadedLogo');
+    const logoPlaceholder = document.getElementById('logoPlaceholder');
+
+    if (logoImg && logoPlaceholder) {
+        if (savedLogo) {
             logoImg.src = savedLogo;
             logoImg.style.display = 'block';
-            placeholder.style.display = 'none';
+            logoPlaceholder.style.display = 'none';
+        } else if (configImages.logo) {
+            logoImg.src = configImages.logo;
+            logoImg.style.display = 'block';
+            logoPlaceholder.style.display = 'none';
+        } else {
+            // Fallback: Standard-Logo aus assets
+            logoImg.src = 'assets/images/default-logo.svg';
+            logoImg.style.display = 'block';
+            logoPlaceholder.style.display = 'none';
         }
     }
 
-    // Agentur Photo laden
+    // Agentur Photo laden: localStorage > config > default SVG
     const savedAgenturPhoto = localStorage.getItem('agenturPhoto');
-    if (savedAgenturPhoto) {
-        const photoImg = document.getElementById('agenturPhotoImg');
-        const placeholder = document.querySelector('.agentur-photo-placeholder');
-        if (photoImg) {
+    const photoImg = document.getElementById('agenturPhotoImg');
+    const photoPlaceholder = document.querySelector('.agentur-photo-placeholder');
+
+    if (photoImg) {
+        if (savedAgenturPhoto) {
             photoImg.src = savedAgenturPhoto;
             photoImg.style.display = 'block';
-        }
-        if (placeholder) {
-            placeholder.style.display = 'none';
+            if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+        } else if (configImages.profile) {
+            photoImg.src = configImages.profile;
+            photoImg.style.display = 'block';
+            if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+        } else {
+            // Fallback: Standard-Profilbild aus assets
+            photoImg.src = 'assets/images/default-profile.svg';
+            photoImg.style.display = 'block';
+            if (photoPlaceholder) photoPlaceholder.style.display = 'none';
         }
     }
+}
+
+// Exportiere hochgeladene Bilder für GitHub
+function exportImagesForGitHub() {
+    const images = {};
+
+    const logo = localStorage.getItem('customLogo');
+    if (logo) images.logo = logo;
+
+    const photo = localStorage.getItem('agenturPhoto');
+    if (photo) images.photo = photo;
+
+    if (Object.keys(images).length === 0) {
+        alert('Keine hochgeladenen Bilder gefunden.');
+        return;
+    }
+
+    // Download als JSON
+    const blob = new Blob([JSON.stringify(images, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'uploaded-images.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    console.log('✅ Bilder exportiert für GitHub');
 }
 
 // ========================================
@@ -1768,5 +1827,6 @@ window.openKundenDetail = openKundenDetail;
 window.closeKundenDetail = closeKundenDetail;
 window.toggleKundenDora = toggleKundenDora;
 window.initUploadMode = initUploadMode;
+window.exportImagesForGitHub = exportImagesForGitHub;
 
 console.log('✅ landing.js geladen');
