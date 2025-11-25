@@ -1311,6 +1311,23 @@ async function loadSavedImages() {
             if (photoPlaceholder) photoPlaceholder.style.display = 'none';
         }
     }
+
+    // AUCH das kleine Agentur-Foto im Header laden
+    const photoImgSmall = document.getElementById('agenturPhotoImgSmall');
+    const photoPlaceholderSmall = document.querySelector('.agentur-photo-placeholder-small');
+
+    if (photoImgSmall) {
+        if (savedAgenturPhoto) {
+            photoImgSmall.src = savedAgenturPhoto;
+            photoImgSmall.style.display = 'block';
+            if (photoPlaceholderSmall) photoPlaceholderSmall.style.display = 'none';
+        } else if (configImages.profile) {
+            photoImgSmall.src = configImages.profile;
+            photoImgSmall.style.display = 'block';
+            if (photoPlaceholderSmall) photoPlaceholderSmall.style.display = 'none';
+        }
+        // Kein SVG-Fallback hier - Placeholder bleibt sichtbar wenn kein Bild vorhanden
+    }
 }
 
 // Exportiere hochgeladene Bilder für GitHub
