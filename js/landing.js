@@ -772,11 +772,52 @@ function hideLandingChatTyping() {
     }
 }
 
+// Toggle Settings Box
+function toggleSettings() {
+    const settingsBox = document.querySelector('.settings-collapsible');
+    if (settingsBox) {
+        settingsBox.classList.toggle('open');
+    }
+}
+
+// Open Agentur View (zeigt Agentur-Auswahl oder direkt die Übersicht)
+function openAgenturView() {
+    console.log('👤 Agenturansicht öffnen...');
+
+    // Prüfe ob Daten vorhanden sind
+    const rawData = window.dailyRawData || (typeof dailyRawData !== 'undefined' ? dailyRawData : null);
+
+    if (!rawData || rawData.length === 0) {
+        // Keine Daten - zeige Hinweis
+        addLandingChatMessage('assistant', '⚠️ **Bitte lade zuerst Daten hoch.**\n\nUm die Agenturansicht zu nutzen, benötigst du CSV-Daten mit Vermittler-Informationen.\n\nKlicke auf "Settings" und dann auf "CSV Upload" oder "Test-Daten generieren".');
+        return;
+    }
+
+    // Daten vorhanden - zeige erste Agentur oder lass User wählen
+    const agenturen = typeof getAgenturen === 'function' ? getAgenturen() : [];
+
+    if (agenturen.length > 0) {
+        // Zeige erste Agentur
+        const firstAgentur = agenturen[0];
+        if (typeof showAgenturOverview === 'function') {
+            showAgenturOverview(firstAgentur.id);
+        } else {
+            // Fallback: Öffne Dashboard mit Agentur-Filter
+            setAgenturFilter(firstAgentur.id);
+            openDashboard();
+        }
+    } else {
+        addLandingChatMessage('assistant', '⚠️ Keine Agenturen in den Daten gefunden. Bitte überprüfe deine CSV-Datei.');
+    }
+}
+
 // Make functions globally available
 window.openDashboard = openDashboard;
 window.openUploadDialog = openUploadDialog;
 window.openGenerator = openGenerator;
 window.backToLanding = backToLanding;
+window.toggleSettings = toggleSettings;
+window.openAgenturView = openAgenturView;
 
 // WICHTIG: Entfernen Sie den ersten DOMContentLoaded von ganz oben!
 // Hier ist der einzige DOMContentLoaded Listener:

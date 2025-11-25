@@ -19,6 +19,11 @@
      LANDING PAGE
      ======================================== -->
 <div id="landingPage" class="landing-page">
+    <!-- Deloitte Logo oben rechts -->
+    <div class="deloitte-logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Deloitte.svg/1280px-Deloitte.svg.png" alt="Deloitte" class="deloitte-logo">
+    </div>
+
     <!-- Loading Animation -->
     <div id="loadingAnimation" class="loading-container">
         <div class="dashboard-icon-animated">
@@ -34,9 +39,11 @@
     <div id="welcomeChat" class="welcome-chat" style="display: none;">
         <div class="welcome-chat-header">
             <div class="chat-header-info">
-                <span class="chat-icon">🤖</span>
+                <div class="chat-icon-deloitte">
+                    <span class="deloitte-d">D</span>
+                </div>
                 <div>
-                    <div class="chat-title">Dashboard Assistent</div>
+                    <div class="chat-title">Sales Steering - Agent</div>
                     <div class="chat-subtitle">Willkommen zurück!</div>
                 </div>
             </div>
@@ -44,11 +51,11 @@
 
         <div class="welcome-chat-body">
             <div class="welcome-message">
-                <div class="chat-avatar">🤖</div>
+                <div class="chat-avatar-deloitte">
+                    <span class="deloitte-d">D</span>
+                </div>
                 <div class="chat-bubble">
-                    <p><strong>Hallo! 👋</strong></p>
-                    <p class="typewriter-text">Ich bin dein KI-Assistent für das Vertriebssteuerungs-Cockpit.</p>
-                    <p class="typewriter-text-2">Was möchtest du tun?</p>
+                    <p><strong>Willkommen zurück Eike, was kann ich für dich tun?</strong></p>
                 </div>
             </div>
 
@@ -66,32 +73,23 @@
                     </button>
                 </div>
 
-                <!-- ✨ Modern Sample Questions with SVG Icons -->
-                <div class="landing-sample-questions" id="landingSampleQuestions">
-                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Was kann ich hier machen?')">
-                        <svg class="question-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"></path>
-                            <circle cx="12" cy="17" r="0.5" fill="currentColor"></circle>
+                <!-- Navigation Boxen -->
+                <div class="navigation-boxes">
+                    <button class="nav-box" onclick="openAgenturView()">
+                        <svg class="nav-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        Was kann ich hier machen?
+                        <span>Agenturansicht</span>
                     </button>
-                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Zeige mir ein Beispiel Dashboard')">
-                        <svg class="question-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="nav-box" onclick="openDashboard()">
+                        <svg class="nav-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="7" height="7" rx="1"></rect>
                             <rect x="14" y="3" width="7" height="7" rx="1"></rect>
                             <rect x="14" y="14" width="7" height="7" rx="1"></rect>
                             <rect x="3" y="14" width="7" height="7" rx="1"></rect>
                         </svg>
-                        Zeige mir ein Beispiel Dashboard
-                    </button>
-                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Wie lade ich Daten hoch?')">
-                        <svg class="question-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                        Wie lade ich Daten hoch?
+                        <span>Gesamtübersicht</span>
                     </button>
                 </div>
 
@@ -100,77 +98,82 @@
                 </div>
             </div>
 
-            <!-- Main Content Area: Chat focused + Generator sidebar -->
-            <div class="landing-main-content">
-                <!-- Left: Main Action Button (full focus) -->
-                <div class="welcome-actions">
-                    <button class="action-button primary" onclick="openDashboard()">
-                        <svg class="action-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <!-- Settings Box (ausklappbar) -->
+            <div class="settings-collapsible">
+                <button class="settings-toggle" onclick="toggleSettings()">
+                    <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path>
+                    </svg>
+                    <span>Settings</span>
+                    <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="settings-content" id="settingsContent">
+                    <!-- Test-Daten generieren -->
+                    <div class="settings-item" onclick="openGenerator()">
+                        <svg class="settings-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
                         </svg>
-                        <div class="action-content">
-                            <div class="action-title">Zur Gesamtübersicht</div>
-                            <div class="action-description">Dashboard mit allen KPIs öffnen</div>
+                        <span>Test-Daten generieren</span>
+                    </div>
+
+                    <!-- CSV Upload -->
+                    <div class="settings-item">
+                        <label for="quickCsvUpload" class="settings-upload-label">
+                            <svg class="settings-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <span>CSV Upload</span>
+                            <input type="file" id="quickCsvUpload" accept=".csv" style="display: none;">
+                        </label>
+                    </div>
+                    <div id="quickUploadStatus" class="upload-status"></div>
+
+                    <!-- OpenAI API Key -->
+                    <div class="settings-api-section">
+                        <div class="settings-item-header">
+                            <svg class="settings-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                            </svg>
+                            <span>OpenAI API-Key</span>
                         </div>
-                    </button>
-                </div>
-
-                <!-- Right: Smaller Generator Box + Billing Check -->
-                <div class="sidebar-actions">
-                    <div class="sidebar-box" onclick="openGenerator()">
-                        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2v6m0 0v6m0-6h6m-6 0H6"></path>
-                            <circle cx="12" cy="18" r="3"></circle>
-                            <path d="M9 21h6"></path>
-                        </svg>
-                        <div class="sidebar-title">Test-Daten</div>
-                        <div class="sidebar-description">CSV generieren</div>
+                        <div class="api-token-input-wrapper">
+                            <input
+                                type="password"
+                                id="apiTokenInput"
+                                class="api-token-input"
+                                placeholder="sk-proj-..."
+                            />
+                            <button id="apiTokenToggle" class="api-token-toggle" title="Anzeigen/Verbergen">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                            <button id="apiTokenSave" class="api-token-save">Speichern</button>
+                        </div>
+                        <div id="apiTokenStatus" class="api-token-status"></div>
                     </div>
 
-                    <div class="sidebar-box" onclick="openBillingCheck()">
-                        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 11l3 3L22 4"></path>
-                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                    <!-- Mock-Modus Toggle -->
+                    <div class="settings-item mock-toggle">
+                        <svg class="settings-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0110 0v4"></path>
                         </svg>
-                        <div class="sidebar-title">Billing Check</div>
-                        <div class="sidebar-description">Prüfung öffnen</div>
+                        <span>Mock-Modus</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="mockModeToggle" checked>
+                            <label for="mockModeToggle"></label>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Quick Upload -->
-            <div class="quick-upload">
-                <label class="upload-box" for="quickCsvUpload">
-                    <input type="file" id="quickCsvUpload" accept=".csv" style="display: none;">
-                    <span class="upload-icon">📤</span>
-                    <span class="upload-text">Oder ziehe eine CSV-Datei hierher</span>
-                </label>
-                <div id="quickUploadStatus" class="upload-status"></div>
-            </div>
-
-            <!-- ✨ v15: API Token Eingabe ganz unten -->
-            <div class="api-token-section">
-                <div class="api-token-header">
-                    <span class="api-icon">🔑</span>
-                    <span class="api-title">OpenAI API-Key (Optional)</span>
-                </div>
-                <div class="api-token-input-wrapper">
-                    <input
-                        type="password"
-                        id="apiTokenInput"
-                        class="api-token-input"
-                        placeholder="sk-proj-..."
-                    />
-                    <button id="apiTokenToggle" class="api-token-toggle" title="Anzeigen/Verbergen">👁️</button>
-                    <button id="apiTokenSave" class="api-token-save">Speichern</button>
-                </div>
-                <div id="apiTokenStatus" class="api-token-status"></div>
-                <div class="api-token-hint">
-                    💡 Für echte KI-Analysen. Im Mock-Modus sind vorgefertigte Antworten aktiv.
-                    <a href="https://platform.openai.com/api-keys" target="_blank">API-Key erhalten</a>
                 </div>
             </div>
         </div>
@@ -461,9 +464,11 @@
     <div class="chat-widget" id="chatWidget" style="display: none;">
         <div class="chat-header">
             <div class="chat-header-info">
-                <span class="chat-icon">🤖</span>
+                <div class="chat-icon-deloitte">
+                    <span class="deloitte-d">D</span>
+                </div>
                 <div>
-                    <div class="chat-title">Dashboard Assistent</div>
+                    <div class="chat-title">Sales Steering - Agent</div>
                     <div class="chat-subtitle">KI-gestützte Datenanalyse</div>
                 </div>
             </div>
