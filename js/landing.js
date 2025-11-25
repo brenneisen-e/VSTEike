@@ -528,8 +528,14 @@ VERFÜGBARE FUNKTIONEN:
    - Gültige Werte: 'Leben', 'Kranken', 'Schaden', 'Kfz'
    
 4. setBundeslandFilter(bundeslaender) - Filtert nach Bundesländern
-   
+
 5. clearAllFilters() - Setzt alle Filter zurück
+
+6. showAgenturOverview(vermittler_id) - Zeigt detaillierte Agentur-Übersichtsseite
+   - Beispiel: showAgenturOverview('VM00001') für Eike Brenneisen
+   - Zeigt: Stammdaten, Foto, KPI-Dashboard mit Balken, Vertragshistorie
+   - Nutze diese Funktion bei Fragen wie "Übersicht Agentur Eike Brenneisen"
+   - WICHTIG: Verwende IMMER die Vermittler-ID, nicht den Namen!
 
 WICHTIG:
 - Nutze die bereitgestellten Daten aus dem Kontext
@@ -807,6 +813,20 @@ async function parseAndExecuteCommands(message) {
     console.log('🔍 Parse KI-Antwort nach Befehlen...');
 
     let hasExecutedCommands = false;
+
+    // NEU: Check for Agentur Overview Command
+    const overviewMatch = message.match(/showAgenturOverview\(['"]([^'"]+)['"]\)/);
+    if (overviewMatch) {
+        const vermittlerId = overviewMatch[1];
+        console.log('📊 Gefunden: showAgenturOverview für', vermittlerId);
+
+        if (typeof showAgenturOverview === 'function') {
+            showAgenturOverview(vermittlerId);
+            return true; // Early return
+        } else {
+            console.error('❌ showAgenturOverview Funktion nicht verfügbar!');
+        }
+    }
 
     // Regex patterns für Befehle
     const patterns = {
