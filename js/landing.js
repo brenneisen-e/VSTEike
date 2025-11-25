@@ -414,10 +414,26 @@ function openGenerator() {
     window.location.href = 'csv-generator.html';
 }
 
-// Back to landing page
+// Back to landing page (ohne Reload)
 function backToLanding() {
     console.log('🏠 Zurück zur Landing Page...');
-    window.location.reload();
+
+    const landingPage = document.getElementById('landingPage');
+    const mainApp = document.getElementById('mainApp');
+    const agenturOverview = document.getElementById('agenturOverview');
+    const potentialAnalysePage = document.getElementById('potentialAnalysePage');
+    const kundenDetailPage = document.getElementById('kundenDetailPage');
+    const billingCheckPage = document.getElementById('billingCheckPage');
+
+    // Alle Seiten verstecken
+    if (mainApp) mainApp.style.display = 'none';
+    if (agenturOverview) agenturOverview.style.display = 'none';
+    if (potentialAnalysePage) potentialAnalysePage.style.display = 'none';
+    if (kundenDetailPage) kundenDetailPage.style.display = 'none';
+    if (billingCheckPage) billingCheckPage.style.display = 'none';
+
+    // Landing Page anzeigen
+    if (landingPage) landingPage.style.display = 'flex';
 }
 
 
