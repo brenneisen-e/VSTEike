@@ -3580,6 +3580,45 @@ select:focus, .dropdown-button:focus {
     color: white;
 }
 
+/* Upload Overlay im Agentur Photo */
+.agentur-photo .upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    border-radius: 50%;
+}
+
+.upload-mode-active .agentur-photo:hover .upload-overlay {
+    opacity: 1;
+}
+
+.agentur-photo .upload-overlay svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+.agentur-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.agentur-photo-placeholder {
+    width: 80px;
+    height: 80px;
+    color: white;
+}
+
 /* ========================================
    POTENTIAL FILTER
    ======================================== */

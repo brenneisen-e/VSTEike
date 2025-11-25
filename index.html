@@ -234,12 +234,21 @@
             <div class="agentur-container">
                 <!-- Linke Spalte: Stammdaten + Foto -->
                 <div class="agentur-stammdaten">
-                    <div class="agentur-photo" id="agenturPhoto">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="agentur-photo" id="agenturPhoto" onclick="triggerAgenturPhotoUpload()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="agentur-photo-placeholder">
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
+                        <img id="agenturPhotoImg" class="agentur-photo-img" style="display: none;" alt="Agentur Foto">
+                        <div class="upload-overlay">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
                     </div>
+                    <input type="file" id="agenturPhotoInput" accept="image/*" style="display: none;" onchange="handleAgenturPhotoUpload(event)">
 
                     <div class="stammdaten-grid">
                         <div class="stammdaten-item">
@@ -428,6 +437,83 @@
                                 <td>Alter 55+, keine Pflegeabsicherung</td>
                                 <td><span class="priority medium">Mittel</span></td>
                             </tr>
+                            <tr onclick="openKundenDetail('Hans Müller', 'VM00020')" class="clickable-row">
+                                <td>Hans Müller</td>
+                                <td>VM00020</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflichtversicherung</span></td>
+                                <td>Familienvater ohne Privathaftpflicht</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Sabine Krause', 'VM00021')" class="clickable-row">
+                                <td>Sabine Krause</td>
+                                <td>VM00021</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Selbstständig, keine BU-Absicherung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Frank Schneider', 'VM00022')" class="clickable-row">
+                                <td>Frank Schneider</td>
+                                <td>VM00022</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>Neues Fahrzeug angemeldet, Versicherung läuft aus</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Monika Lehmann', 'VM00023')" class="clickable-row">
+                                <td>Monika Lehmann</td>
+                                <td>VM00023</td>
+                                <td><span class="potential-badge leben">Risikolebensversicherung</span></td>
+                                <td>Immobilienkauf erkannt, keine Absicherung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Bernd Zimmermann', 'VM00024')" class="clickable-row">
+                                <td>Bernd Zimmermann</td>
+                                <td>VM00024</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Umzug in neue Wohnung, kein Hausrat</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Claudia Bergmann', 'VM00025')" class="clickable-row">
+                                <td>Claudia Bergmann</td>
+                                <td>VM00025</td>
+                                <td><span class="potential-badge unfall">Unfallversicherung</span></td>
+                                <td>Neues Hobby: Mountainbiking, keine Unfallversicherung</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Stefan Vogel', 'VM00026')" class="clickable-row">
+                                <td>Stefan Vogel</td>
+                                <td>VM00026</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflichtversicherung</span></td>
+                                <td>Student, keine eigene Haftpflicht</td>
+                                <td><span class="priority low">Niedrig</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Petra Heinrich', 'VM00027')" class="clickable-row">
+                                <td>Petra Heinrich</td>
+                                <td>VM00027</td>
+                                <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
+                                <td>Pflegefall in der Familie, hohe Sensibilisierung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Markus Kern', 'VM00028')" class="clickable-row">
+                                <td>Markus Kern</td>
+                                <td>VM00028</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>Vertrag bei Wettbewerber läuft aus</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Andrea Fuchs', 'VM00029')" class="clickable-row">
+                                <td>Andrea Fuchs</td>
+                                <td>VM00029</td>
+                                <td><span class="potential-badge leben">Risikolebensversicherung</span></td>
+                                <td>Junges Paar, Heirat geplant</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Robert Lang', 'VM00030')" class="clickable-row">
+                                <td>Robert Lang</td>
+                                <td>VM00030</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Handwerker ohne BU-Schutz</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -497,6 +583,70 @@
                                 <td>Überdurchschnittlich hohe Prämien im Vergleich</td>
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr>
+                                <td>Uwe Schmitz</td>
+                                <td>VM00040</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>Kfz-Versicherung bei Wettbewerber, 3 Jahre ohne Schaden</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr>
+                                <td>Heike Maier</td>
+                                <td>VM00041</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Hochwertige Möbel laut Kontoauszügen, keine Hausrat</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr>
+                                <td>Jürgen Böhm</td>
+                                <td>VM00042</td>
+                                <td><span class="potential-badge leben">Kapitallebensversicherung</span></td>
+                                <td>Hohe Sparrate erkannt, keine Anlageprodukte</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr>
+                                <td>Gisela Haas</td>
+                                <td>VM00043</td>
+                                <td><span class="potential-badge kranken">Krankenzusatzversicherung</span></td>
+                                <td>Regelmäßige Zahnarztkosten, keine Zusatzversicherung</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr>
+                                <td>Torsten Keller</td>
+                                <td>VM00044</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutzversicherung</span></td>
+                                <td>Mietvertrag erkannt, kein Mietrechtsschutz</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority low">Niedrig</span></td>
+                            </tr>
+                            <tr>
+                                <td>Birgit Sommer</td>
+                                <td>VM00045</td>
+                                <td><span class="potential-badge unfall">Unfallversicherung</span></td>
+                                <td>Sportstudio-Mitgliedschaft, keine Unfallversicherung</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr>
+                                <td>Wolfgang Stein</td>
+                                <td>VM00046</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>IT-Branche, hohe Arbeitsbelastung, keine BU</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ingrid Baumann</td>
+                                <td>VM00047</td>
+                                <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
+                                <td>Pflegedienst-Zahlungen für Eltern erkannt</td>
+                                <td><span class="consent yes">Ja</span></td>
+                                <td><span class="priority high">Hoch</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -869,8 +1019,8 @@
                     <button class="sample-question-btn" onclick="askSampleQuestion('Welches Bundesland hat die beste Performance?')">
                         🗺️ Beste Performance nach Bundesland
                     </button>
-                    <button class="sample-question-btn" onclick="askSampleQuestion('Filtere nach Eike Brenneisen')">
-                        🔍 Nach Eike Brenneisen filtern
+                    <button class="sample-question-btn" onclick="askSampleQuestion('Filtere nach Max Mustermann')">
+                        🔍 Nach Max Mustermann filtern
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Wie entwickelt sich der NPS Score?')">
                         📈 NPS Score Entwicklung
