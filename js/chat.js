@@ -338,11 +338,20 @@ VERFÜGBARE FUNKTIONEN:
 
 5. clearAllFilters() - Setzt alle Filter zurück
 
-6. showTopAgenturen(anzahl, sortBy) - NEU! Zeigt Top N Vermittler in Tabellenansicht
+6. showTopAgenturen(anzahl, sortBy) - Zeigt Top N Vermittler in Tabellenansicht
    - Beispiel: showTopAgenturen(5, 'neugeschaeft') für Top 5 nach Neugeschäft
    - Verfügbare sortBy: 'neugeschaeft', 'bestand', 'ergebnis', 'deckungsbeitrag'
    - Wechselt automatisch zur Tabelle und wählt Top N Agenturen aus
    - Nutze diese Funktion bei Fragen wie "Zeige Top 5 Vermittler"
+
+7. showAgenturOverview(vermittler_id) - NEU! Zeigt detaillierte Agentur-Übersichtsseite
+   - Beispiel: showAgenturOverview('VM00001') für Eike Brenneisen
+   - Zeigt: Stammdaten, Foto, KPI-Dashboard mit Balken, Vertragshistorie
+   - Nutze diese Funktion bei Fragen wie:
+     * "Übersicht Agentur Eike Brenneisen"
+     * "Zeige mir Details zu VM00001"
+     * "Agentur-Profil von Max Mustermann"
+   - WICHTIG: Verwende IMMER die Vermittler-ID, nicht den Namen!
 
 WICHTIG beim Filtern:
 - Nenne die Funktion GENAU so in deiner Antwort: setAgenturFilter('VM00001')
@@ -548,13 +557,27 @@ ${specificAgentData}
 `;
 }
 
-// Process filter commands in response - VERBESSERT mit Auto-Analyse!
+// Process filter commands in response - VERBESSERT mit Auto-Analyse + Agentur-Übersicht!
 async function processFilterCommands(message) {
     console.log('🔍 Prüfe Filter-Befehle in Antwort...');
     console.log('📄 Message to parse:', message.substring(0, 300));  // DEBUG: Erste 300 Zeichen
 
     let filterWasSet = false;
     let filterInfo = null;
+
+    // NEU: Check for Agentur Overview Command
+    const overviewMatch = message.match(/showAgenturOverview\(['"]([^'"]+)['"]\)/);
+    if (overviewMatch) {
+        const vermittlerId = overviewMatch[1];
+        console.log('📊 Gefunden: showAgenturOverview für', vermittlerId);
+
+        if (typeof showAgenturOverview === 'function') {
+            showAgenturOverview(vermittlerId);
+            return true; // Early return, keine weiteren Filter
+        } else {
+            console.error('❌ showAgenturOverview Funktion nicht verfügbar!');
+        }
+    }
     
     // Check for Agentur filter
     if (message.includes('setAgenturFilter')) {
