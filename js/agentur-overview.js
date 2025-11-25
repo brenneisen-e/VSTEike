@@ -1,4 +1,4 @@
-// js/agentur-overview.js - Agentur-Übersicht Funktionalität
+// js/agentur-overview.js - Agentur-Übersicht Funktionalität (Fachkonzept-konform)
 
 // ========================================
 // AGENTUR OVERVIEW FUNCTIONS
@@ -16,10 +16,14 @@ function showAgenturOverview(vermittlerId) {
     const mainApp = document.getElementById('mainApp');
     const agenturOverview = document.getElementById('agenturOverview');
     const billingCheckPage = document.getElementById('billingCheckPage');
+    const potentialPage = document.getElementById('potentialAnalysePage');
+    const kundenDetail = document.getElementById('kundenDetailPage');
 
     if (landingPage) landingPage.style.display = 'none';
     if (mainApp) mainApp.style.display = 'none';
     if (billingCheckPage) billingCheckPage.style.display = 'none';
+    if (potentialPage) potentialPage.style.display = 'none';
+    if (kundenDetail) kundenDetail.style.display = 'none';
     if (agenturOverview) agenturOverview.style.display = 'block';
 
     // Lade und zeige Agentur-Daten
@@ -50,181 +54,295 @@ function loadAgenturData(vermittlerId) {
     console.log('✅ Agentur gefunden:', agentur);
     console.log('📊 Agentur Daten:', agenturData);
 
-    // Fülle Stammdaten
+    // Fülle alle Bereiche
+    fillHeader(agentur, agenturData);
+    fillCockpitKPIs(agenturData);
     fillStammdaten(agentur, agenturData);
+    fillNeugeschaeftTab(agenturData);
+    fillBestandTab(agenturData);
+    fillStornoTab(agenturData);
+    fillProvisionTab(agenturData);
+    fillQualitaetTab(agenturData);
 
-    // Fülle KPIs
-    fillKPIs(agenturData);
+    // Zeige ersten Tab
+    showAgenturTab('stammdaten');
+}
 
-    // Fülle Verträge
-    fillContracts(vermittlerId, agenturData);
+/**
+ * Tab-Wechsel Funktion
+ */
+function showAgenturTab(tabName) {
+    // Alle Tabs deaktivieren
+    document.querySelectorAll('.agentur-tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.agentur-tab-content').forEach(content => content.classList.remove('active'));
+
+    // Gewählten Tab aktivieren
+    const tabButton = document.querySelector(`.agentur-tab[onclick="showAgenturTab('${tabName}')"]`);
+    const tabContent = document.getElementById(`tab-${tabName}`);
+
+    if (tabButton) tabButton.classList.add('active');
+    if (tabContent) tabContent.classList.add('active');
+}
+
+/**
+ * Füllt den Header mit Agentur-Info
+ */
+function fillHeader(agentur, agenturData) {
+    const title = document.getElementById('agenturPageTitle');
+    const idHeader = document.getElementById('agenturIdHeader');
+    const statusHeader = document.getElementById('agenturStatusHeader');
+
+    if (title) title.textContent = agentur.name || agentur.id;
+    if (idHeader) idHeader.textContent = agentur.id;
+    if (statusHeader) statusHeader.textContent = 'Aktiv';
+
+    // Lade Profilbild wenn vorhanden
+    const savedPhoto = localStorage.getItem('agenturPhoto');
+    const photoImgSmall = document.getElementById('agenturPhotoImgSmall');
+    const placeholderSmall = document.querySelector('.agentur-photo-placeholder-small');
+
+    if (savedPhoto && photoImgSmall) {
+        photoImgSmall.src = savedPhoto;
+        photoImgSmall.style.display = 'block';
+        if (placeholderSmall) placeholderSmall.style.display = 'none';
+    }
+}
+
+/**
+ * Füllt die Cockpit-KPIs (Big Numbers)
+ */
+function fillCockpitKPIs(agenturData) {
+    const bestand = agenturData?.bestand || 0;
+    const neugeschaeft = agenturData?.neugeschaeft || 0;
+    const storno = agenturData?.storno || 0;
+
+    // Bestand
+    const cockpitBestand = document.getElementById('cockpitBestand');
+    const cockpitBestandTrend = document.getElementById('cockpitBestandTrend');
+    if (cockpitBestand) cockpitBestand.textContent = formatCurrency(bestand);
+    if (cockpitBestandTrend) {
+        const trend = (Math.random() * 10 - 2).toFixed(1);
+        cockpitBestandTrend.textContent = `${trend > 0 ? '+' : ''}${trend}%`;
+        cockpitBestandTrend.className = `cockpit-kpi-trend ${parseFloat(trend) >= 0 ? 'positive' : 'negative'}`;
+    }
+
+    // Neugeschäft
+    const cockpitNeugeschaeft = document.getElementById('cockpitNeugeschaeft');
+    const cockpitNeugeschaeftTrend = document.getElementById('cockpitNeugeschaeftTrend');
+    if (cockpitNeugeschaeft) cockpitNeugeschaeft.textContent = formatCurrency(neugeschaeft);
+    if (cockpitNeugeschaeftTrend) {
+        const trend = (Math.random() * 15 + 5).toFixed(1);
+        cockpitNeugeschaeftTrend.textContent = `+${trend}%`;
+        cockpitNeugeschaeftTrend.className = 'cockpit-kpi-trend positive';
+    }
+
+    // Storno
+    const cockpitStorno = document.getElementById('cockpitStorno');
+    const cockpitStornoTrend = document.getElementById('cockpitStornoTrend');
+    if (cockpitStorno) cockpitStorno.textContent = `${storno.toFixed(1)}%`;
+    if (cockpitStornoTrend) {
+        const trend = (Math.random() * 2 - 1).toFixed(1);
+        cockpitStornoTrend.textContent = `${trend > 0 ? '+' : ''}${trend}%`;
+        cockpitStornoTrend.className = `cockpit-kpi-trend ${parseFloat(trend) <= 0 ? 'positive' : 'negative'}`;
+    }
+
+    // Zielerfüllung
+    const zielerfuellung = Math.min(100, Math.floor(50 + Math.random() * 60));
+    const cockpitZiel = document.getElementById('cockpitZiel');
+    const cockpitZielGauge = document.getElementById('cockpitZielGauge');
+    if (cockpitZiel) cockpitZiel.textContent = `${zielerfuellung}%`;
+    if (cockpitZielGauge) {
+        const gaugeFill = cockpitZielGauge.querySelector('.gauge-fill');
+        if (gaugeFill) gaugeFill.style.width = `${zielerfuellung}%`;
+    }
 }
 
 /**
  * Füllt die Stammdaten-Sektion
  */
 function fillStammdaten(agentur, agenturData) {
-    document.getElementById('agenturPageTitle').textContent = `Agentur-Übersicht: ${agentur.name || agentur.id}`;
-    document.getElementById('agenturId').textContent = agentur.id;
-    document.getElementById('agenturName').textContent = agentur.name || '-';
+    // Basis-Stammdaten
+    setElementText('agenturId', agentur.id);
+    setElementText('agenturName', agentur.name || '-');
+    setElementText('agenturAdresse', generateAddress(agenturData?.bundesland || 'Deutschland'));
+    setElementText('agenturTelefon', generatePhone());
+    setElementText('agenturEmail', generateEmail(agentur.name));
+    setElementText('agenturTyp', 'Einfirmenvertreter');
+    setElementText('agenturEintritt', generateEintrittsdatum());
 
-    // Adresse (generiere falls nicht vorhanden)
-    const adresse = generateAddress(agenturData?.bundesland || 'Deutschland');
-    document.getElementById('agenturAdresse').textContent = adresse;
+    // Organisatorische Einordnung
+    setElementText('agenturHierarchie', 'OD Süd → RD Bayern → VD München');
+    setElementText('agenturVorgesetzter', 'Thomas Schneider (VD)');
+    setElementText('agenturRegion', agenturData?.bundesland || 'Bayern');
+    setElementText('agenturSilo', agenturData?.silo || 'Ausschließlichkeit');
+    setElementText('agenturStufe', calculateAgenturstufe(agenturData?.neugeschaeft || 0));
 
-    // Agenturstufe (basierend auf Neugeschäft)
-    const stufe = calculateAgenturstufe(agenturData?.neugeschaeft || 0);
-    document.getElementById('agenturStufe').textContent = stufe;
+    // Qualifikation & Zulassung
+    const ihkNr = 'D-' + Math.random().toString().substr(2, 8) + '-' + Math.floor(Math.random() * 99);
+    setElementText('agenturIHK', ihkNr);
+    setElementText('agenturVermittlerStatus', 'Gebundener Vermittler (§34d Abs. 7 GewO)');
+    setElementText('agenturProduktfreigaben', 'Leben, Kranken, Schaden, Kfz');
 
-    // Eintrittsdatum (generiere zufällig)
-    const eintritt = generateEintrittsdatum();
-    document.getElementById('agenturEintritt').textContent = eintritt;
+    const weiterbildung = document.getElementById('agenturWeiterbildung');
+    if (weiterbildung) {
+        const hours = Math.floor(Math.random() * 6) + 12;
+        weiterbildung.textContent = hours >= 15 ? 'Erfüllt' : `${hours}/15h`;
+        weiterbildung.className = `stammdaten-value status-badge ${hours >= 15 ? 'active' : 'warning'}`;
+    }
 
-    // Silo
-    document.getElementById('agenturSilo').textContent = agenturData?.silo || '-';
+    // Vertragliche Rahmendaten
+    setElementText('agenturProvModell', 'Staffelprovision (5-12%)');
+    setElementText('agenturBonus', 'Jahresbonus 2025 aktiv');
+    setElementText('agenturStornohaftung', '60 Monate (Leben), 36 Monate (Sach)');
+    setElementText('agenturExklusiv', '100% Exklusiv');
 }
 
 /**
- * Füllt die KPI-Balken
+ * Füllt den Neugeschäft-Tab
  */
-function fillKPIs(agenturData) {
-    const kpisContainer = document.getElementById('agenturKPIs');
-    kpisContainer.innerHTML = '';
+function fillNeugeschaeftTab(agenturData) {
+    const ng = agenturData?.neugeschaeft || 0;
+    const antraege = Math.floor(ng / 5000) + Math.floor(Math.random() * 20);
+    const policiert = Math.floor(antraege * (0.75 + Math.random() * 0.2));
+    const abschlussquote = antraege > 0 ? (policiert / antraege * 100) : 0;
+    const durchschnitt = policiert > 0 ? ng / policiert : 0;
+    const crossSelling = 20 + Math.floor(Math.random() * 30);
 
-    if (!agenturData) {
-        kpisContainer.innerHTML = '<p style="color: #64748b;">Keine Daten verfügbar</p>';
-        return;
-    }
+    setElementText('ngAntraege', antraege.toLocaleString('de-DE'));
+    setElementText('ngPoliciert', formatCurrency(ng));
+    setElementText('ngAPE', formatCurrency(ng * 0.8));
+    setElementText('ngAbschlussquote', `${abschlussquote.toFixed(1)}%`);
+    setElementText('ngDurchschnitt', formatCurrency(durchschnitt));
+    setElementText('ngCrossSelling', `${crossSelling}%`);
 
-    // Definiere KPIs mit Werten und Benchmarks
-    const kpis = [
-        {
-            label: 'Neugeschäft YTD',
-            value: agenturData.neugeschaeft || 0,
-            formatted: `€${((agenturData.neugeschaeft || 0) / 1000000).toFixed(2)} Mio`,
-            benchmark: 2000000, // 2 Mio Benchmark
-            type: 'currency'
-        },
-        {
-            label: 'Bestand',
-            value: agenturData.bestand || 0,
-            formatted: `€${((agenturData.bestand || 0) / 1000000).toFixed(2)} Mio`,
-            benchmark: 50000000, // 50 Mio Benchmark
-            type: 'currency'
-        },
-        {
-            label: 'Stornoquote',
-            value: agenturData.storno || 0,
-            formatted: `${(agenturData.storno || 0).toFixed(2)}%`,
-            benchmark: 8, // 8% Benchmark (niedrig ist besser)
-            type: 'percentage_inverse'
-        },
-        {
-            label: 'NPS Score',
-            value: agenturData.nps || 0,
-            formatted: `${(agenturData.nps || 0).toFixed(1)}`,
-            benchmark: 70, // NPS 70 Benchmark
-            type: 'score'
-        },
-        {
-            label: 'Deckungsbeitrag',
-            value: agenturData.deckungsbeitrag || 0,
-            formatted: `€${((agenturData.deckungsbeitrag || 0) / 1000).toFixed(0)}k`,
-            benchmark: 500000, // 500k Benchmark
-            type: 'currency'
-        }
-    ];
+    // Spartenverteilung
+    const spartenContainer = document.getElementById('spartenNeugeschaeft');
+    if (spartenContainer) {
+        const sparten = [
+            { name: 'Leben', value: 35 + Math.random() * 15, class: 'leben' },
+            { name: 'Kranken', value: 20 + Math.random() * 10, class: 'kranken' },
+            { name: 'Schaden', value: 25 + Math.random() * 10, class: 'schaden' },
+            { name: 'Kfz', value: 10 + Math.random() * 10, class: 'kfz' }
+        ];
 
-    kpis.forEach(kpi => {
-        const barItem = createKPIBar(kpi);
-        kpisContainer.appendChild(barItem);
-    });
-}
-
-/**
- * Erstellt einen einzelnen KPI-Balken
- */
-function createKPIBar(kpi) {
-    const div = document.createElement('div');
-    div.className = 'kpi-bar-item';
-
-    // Berechne Prozentsatz basierend auf Benchmark
-    let percentage = 0;
-    let cssClass = '';
-
-    if (kpi.type === 'percentage_inverse') {
-        // Bei Stornoquote: niedrig ist gut
-        percentage = Math.min(100, (kpi.benchmark / kpi.value) * 100);
-        cssClass = kpi.value < kpi.benchmark ? 'positive' : 'negative';
-    } else {
-        percentage = Math.min(100, (kpi.value / kpi.benchmark) * 100);
-        cssClass = kpi.value >= kpi.benchmark * 0.8 ? 'positive' : '';
-    }
-
-    div.innerHTML = `
-        <div class="kpi-bar-header">
-            <span class="kpi-bar-label">${kpi.label}</span>
-            <span class="kpi-bar-value">${kpi.formatted}</span>
-        </div>
-        <div class="kpi-bar-track">
-            <div class="kpi-bar-fill ${cssClass}" style="width: ${percentage}%">
-                ${percentage.toFixed(0)}%
+        spartenContainer.innerHTML = sparten.map(s => `
+            <div class="sparten-bar-item">
+                <div class="sparten-bar-label">${s.name}</div>
+                <div class="sparten-bar-track">
+                    <div class="sparten-bar-fill ${s.class}" style="width: ${s.value}%">${s.value.toFixed(0)}%</div>
+                </div>
             </div>
-        </div>
-    `;
-
-    return div;
+        `).join('');
+    }
 }
 
 /**
- * Füllt die Vertrags-Tabelle
+ * Füllt den Bestand-Tab
  */
-function fillContracts(vermittlerId, agenturData) {
-    const tbody = document.querySelector('#agenturContracts tbody');
-    tbody.innerHTML = '';
+function fillBestandTab(agenturData) {
+    const bestand = agenturData?.bestand || 0;
+    const vertraege = Math.floor(bestand / 2000) + Math.floor(Math.random() * 100);
+    const kunden = Math.floor(vertraege / 2.3);
+    const dichte = vertraege > 0 && kunden > 0 ? (vertraege / kunden).toFixed(1) : '0';
+    const wachstum = (Math.random() * 15 - 3).toFixed(1);
 
-    // Generiere 10 zufällige Verträge
-    const contracts = generateContracts(vermittlerId, 10);
-
-    contracts.forEach(contract => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${contract.date}</td>
-            <td>${contract.segment}</td>
-            <td>€${contract.premium.toLocaleString()}</td>
-            <td><span class="contract-status ${contract.status.toLowerCase()}">${contract.status}</span></td>
-        `;
-        tbody.appendChild(row);
-    });
+    setElementText('bestandGWP', formatCurrency(bestand));
+    setElementText('bestandVertraege', vertraege.toLocaleString('de-DE'));
+    setElementText('bestandWachstum', `${wachstum > 0 ? '+' : ''}${wachstum}%`);
+    setElementText('bestandKunden', kunden.toLocaleString('de-DE'));
+    setElementText('bestandDichte', dichte);
 }
 
 /**
- * Generiert zufällige Verträge für Demo-Zwecke
+ * Füllt den Storno-Tab
  */
-function generateContracts(vermittlerId, count) {
-    const segments = ['Leben', 'Kranken', 'Schaden', 'Kfz'];
-    const statuses = ['Aktiv', 'Aktiv', 'Aktiv', 'Aktiv', 'Storniert']; // 80% aktiv
-    const contracts = [];
+function fillStornoTab(agenturData) {
+    const stornoGesamt = agenturData?.storno || 8;
+    const stornoFrueh = (stornoGesamt * 0.4).toFixed(1);
+    const stornoSpaet = (stornoGesamt * 0.6).toFixed(1);
+    const nettoEntwicklung = (agenturData?.neugeschaeft || 0) - ((agenturData?.bestand || 0) * stornoGesamt / 100);
 
-    for (let i = 0; i < count; i++) {
-        const monthsAgo = i;
-        const date = new Date();
-        date.setMonth(date.getMonth() - monthsAgo);
+    setElementText('stornoFrueh', `${stornoFrueh}%`);
+    setElementText('stornoSpaet', `${stornoSpaet}%`);
+    setElementText('stornoNetto', formatCurrency(nettoEntwicklung));
 
-        contracts.push({
-            date: date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-            segment: segments[Math.floor(Math.random() * segments.length)],
-            premium: Math.floor(Math.random() * 5000) + 500,
-            status: statuses[Math.floor(Math.random() * statuses.length)]
-        });
+    // Storno-Gründe
+    const gruendeContainer = document.getElementById('stornoGruende');
+    if (gruendeContainer) {
+        const gruende = [
+            { name: 'Preis / zu teuer', count: Math.floor(Math.random() * 30) + 20 },
+            { name: 'Wettbewerber', count: Math.floor(Math.random() * 20) + 15 },
+            { name: 'Leistung nicht zufrieden', count: Math.floor(Math.random() * 15) + 10 },
+            { name: 'Finanzielle Gründe', count: Math.floor(Math.random() * 15) + 8 },
+            { name: 'Kein Bedarf mehr', count: Math.floor(Math.random() * 10) + 5 }
+        ];
+
+        gruendeContainer.innerHTML = gruende.map(g => `
+            <div class="storno-reason-item">
+                <span class="storno-reason-name">${g.name}</span>
+                <span class="storno-reason-count">${g.count}</span>
+            </div>
+        `).join('');
+    }
+}
+
+/**
+ * Füllt den Vergütungs-Tab
+ */
+function fillProvisionTab(agenturData) {
+    const ng = agenturData?.neugeschaeft || 0;
+    const provision = ng * 0.08; // 8% Provision
+    const haftung = ng * 0.02; // 2% Haftung
+    const bonus = Math.floor(40 + Math.random() * 50);
+    const deckung = agenturData?.deckungsbeitrag || ng * 0.15;
+
+    setElementText('provAnspruch', formatCurrency(provision));
+    setElementText('provHaftung', formatCurrency(haftung));
+    setElementText('provBonus', `${bonus}%`);
+    setElementText('provDeckung', formatCurrency(deckung));
+}
+
+/**
+ * Füllt den Qualitäts-Tab
+ */
+function fillQualitaetTab(agenturData) {
+    const nps = agenturData?.nps || 42;
+    const beschwerden = (Math.random() * 3).toFixed(1);
+    const doku = Math.floor(85 + Math.random() * 13);
+    const underwriting = agenturData?.underwriting || 86;
+
+    setElementText('qualNPS', nps.toFixed(0));
+    setElementText('qualBeschwerden', beschwerden);
+
+    const iddElement = document.getElementById('qualIDD');
+    if (iddElement) {
+        iddElement.textContent = 'Konform';
+        iddElement.className = 'kpi-detail-value status-badge active';
     }
 
-    return contracts;
+    const schulung = Math.floor(12 + Math.random() * 5);
+    setElementText('qualSchulung', `${schulung}/15h`);
+    setElementText('qualDoku', `${doku}%`);
+    setElementText('qualUnderwriting', `${underwriting.toFixed(0)}%`);
 }
 
 /**
  * Hilfs-Funktionen
  */
+
+function setElementText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+
+function formatCurrency(value) {
+    if (value >= 1000000) {
+        return `€${(value / 1000000).toFixed(2)} Mio`;
+    } else if (value >= 1000) {
+        return `€${(value / 1000).toFixed(0)}k`;
+    }
+    return `€${value.toFixed(0)}`;
+}
 
 function calculateAgenturstufe(neugeschaeft) {
     if (neugeschaeft >= 5000000) return 'Gold Plus';
@@ -241,17 +359,29 @@ function generateAddress(bundesland) {
         'Berlin': 'Unter den Linden 5, 10117 Berlin',
         'Hamburg': 'Reeperbahn 1, 20359 Hamburg',
         'Nordrhein-Westfalen': 'Königsallee 60, 40212 Düsseldorf',
-        'Hessen': 'Zeil 106, 60313 Frankfurt am Main'
+        'Hessen': 'Zeil 106, 60313 Frankfurt am Main',
+        'Sachsen': 'Prager Straße 12, 01069 Dresden',
+        'Niedersachsen': 'Georgstraße 36, 30159 Hannover'
     };
 
     return addresses[bundesland] || 'Hauptstraße 1, 10115 Berlin';
 }
 
+function generatePhone() {
+    const prefix = ['089', '030', '040', '069', '0211', '0221'];
+    return `${prefix[Math.floor(Math.random() * prefix.length)]} ${Math.floor(Math.random() * 9000000 + 1000000)}`;
+}
+
+function generateEmail(name) {
+    if (!name) return 'kontakt@agentur.de';
+    const cleanName = name.toLowerCase().replace(/\s+/g, '.').replace(/[äöü]/g, c => ({ 'ä': 'ae', 'ö': 'oe', 'ü': 'ue' })[c] || c);
+    return `${cleanName}@versicherung.de`;
+}
+
 function generateEintrittsdatum() {
-    const yearsAgo = Math.floor(Math.random() * 15) + 1; // 1-15 Jahre
+    const yearsAgo = Math.floor(Math.random() * 15) + 1;
     const date = new Date();
     date.setFullYear(date.getFullYear() - yearsAgo);
-
     return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
@@ -297,13 +427,5 @@ function closeBillingCheck() {
     if (billingCheckPage) billingCheckPage.style.display = 'none';
 }
 
-// ========================================
-// MAKE FUNCTIONS GLOBALLY AVAILABLE
-// ========================================
-
-window.showAgenturOverview = showAgenturOverview;
-window.backFromAgentur = backFromAgentur;
-window.openBillingCheck = openBillingCheck;
-window.closeBillingCheck = closeBillingCheck;
-
-console.log('✅ agentur-overview.js geladen');
+// Global verfügbar machen
+window.showAgenturTab = showAgenturTab;
