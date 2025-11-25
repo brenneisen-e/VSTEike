@@ -221,90 +221,412 @@
 </div>
 
     <!-- ========================================
-         AGENTUR OVERVIEW PAGE
+         AGENTUR OVERVIEW PAGE (Fachkonzept-konform)
          ======================================== -->
     <div id="agenturOverview" style="display: none;">
-        <div class="agentur-page">
-            <!-- Header mit Back Button -->
-            <div class="agentur-header">
-                <button class="back-button" onclick="backFromAgentur()">← Zurück</button>
-                <h1 class="agentur-page-title" id="agenturPageTitle">Agentur-Übersicht</h1>
+        <div class="agentur-page-new">
+            <!-- Header mit Back Button und Agentur-Info -->
+            <div class="agentur-header-new">
+                <div class="agentur-header-left">
+                    <button class="back-button" onclick="backFromAgentur()">← Zurück</button>
+                    <div class="agentur-header-info">
+                        <div class="agentur-photo-small" id="agenturPhotoSmall" onclick="triggerAgenturPhotoUpload()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="agentur-photo-placeholder-small">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <img id="agenturPhotoImgSmall" class="agentur-photo-img-small" style="display: none;" alt="Foto">
+                        </div>
+                        <div class="agentur-header-text">
+                            <h1 class="agentur-page-title" id="agenturPageTitle">Agentur-Übersicht</h1>
+                            <div class="agentur-subtitle">
+                                <span id="agenturIdHeader">-</span> | <span id="agenturStatusHeader">Aktiv</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="file" id="agenturPhotoInput" accept="image/*" style="display: none;" onchange="handleAgenturPhotoUpload(event)">
             </div>
 
-            <div class="agentur-container">
-                <!-- Linke Spalte: Stammdaten + Foto -->
-                <div class="agentur-stammdaten">
-                    <div class="agentur-photo" id="agenturPhoto" onclick="triggerAgenturPhotoUpload()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="agentur-photo-placeholder">
+            <!-- Ebene 1: Cockpit-Übersicht (Big Numbers) -->
+            <div class="cockpit-kpis">
+                <div class="cockpit-kpi-card">
+                    <div class="cockpit-kpi-icon bestand">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path>
+                        </svg>
+                    </div>
+                    <div class="cockpit-kpi-content">
+                        <div class="cockpit-kpi-value" id="cockpitBestand">€0</div>
+                        <div class="cockpit-kpi-label">Gesamtbestand</div>
+                        <div class="cockpit-kpi-trend positive" id="cockpitBestandTrend">+0%</div>
+                    </div>
+                </div>
+                <div class="cockpit-kpi-card">
+                    <div class="cockpit-kpi-icon neugeschaeft">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="cockpit-kpi-content">
+                        <div class="cockpit-kpi-value" id="cockpitNeugeschaeft">€0</div>
+                        <div class="cockpit-kpi-label">Neugeschäft YTD</div>
+                        <div class="cockpit-kpi-trend positive" id="cockpitNeugeschaeftTrend">+0%</div>
+                    </div>
+                </div>
+                <div class="cockpit-kpi-card">
+                    <div class="cockpit-kpi-icon storno">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="cockpit-kpi-content">
+                        <div class="cockpit-kpi-value" id="cockpitStorno">0%</div>
+                        <div class="cockpit-kpi-label">Storno-Quote</div>
+                        <div class="cockpit-kpi-trend negative" id="cockpitStornoTrend">+0%</div>
+                    </div>
+                </div>
+                <div class="cockpit-kpi-card">
+                    <div class="cockpit-kpi-icon ziel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                    </div>
+                    <div class="cockpit-kpi-content">
+                        <div class="cockpit-kpi-value" id="cockpitZiel">0%</div>
+                        <div class="cockpit-kpi-label">Zielerfüllung</div>
+                        <div class="cockpit-kpi-gauge" id="cockpitZielGauge">
+                            <div class="gauge-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hauptinhalt mit Tabs -->
+            <div class="agentur-main-content">
+                <!-- Tab Navigation -->
+                <div class="agentur-tabs">
+                    <button class="agentur-tab active" onclick="showAgenturTab('stammdaten')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <img id="agenturPhotoImg" class="agentur-photo-img" style="display: none;" alt="Agentur Foto">
-                        <div class="upload-overlay">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
-                                <polyline points="17 8 12 3 7 8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                        </div>
-                    </div>
-                    <input type="file" id="agenturPhotoInput" accept="image/*" style="display: none;" onchange="handleAgenturPhotoUpload(event)">
+                        Stammdaten
+                    </button>
+                    <button class="agentur-tab" onclick="showAgenturTab('neugeschaeft')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
+                        Neugeschäft
+                    </button>
+                    <button class="agentur-tab" onclick="showAgenturTab('bestand')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path>
+                        </svg>
+                        Bestand
+                    </button>
+                    <button class="agentur-tab" onclick="showAgenturTab('storno')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Storno
+                    </button>
+                    <button class="agentur-tab" onclick="showAgenturTab('provision')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
+                        </svg>
+                        Vergütung
+                    </button>
+                    <button class="agentur-tab" onclick="showAgenturTab('qualitaet')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Qualität
+                    </button>
+                </div>
 
-                    <div class="stammdaten-grid">
-                        <div class="stammdaten-item">
-                            <div class="stammdaten-label">Vermittler-ID</div>
-                            <div class="stammdaten-value" id="agenturId">-</div>
+                <!-- Tab Content: Stammdaten -->
+                <div class="agentur-tab-content active" id="tab-stammdaten">
+                    <div class="stammdaten-sections">
+                        <!-- Basis-Stammdaten -->
+                        <div class="stammdaten-section">
+                            <h3>Basis-Stammdaten</h3>
+                            <div class="stammdaten-grid-new">
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Agenturnummer</div>
+                                    <div class="stammdaten-value" id="agenturId">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Name / Firma</div>
+                                    <div class="stammdaten-value" id="agenturName">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Adresse</div>
+                                    <div class="stammdaten-value" id="agenturAdresse">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Telefon</div>
+                                    <div class="stammdaten-value" id="agenturTelefon">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">E-Mail</div>
+                                    <div class="stammdaten-value" id="agenturEmail">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Agenturtyp</div>
+                                    <div class="stammdaten-value" id="agenturTyp">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Status</div>
+                                    <div class="stammdaten-value status-badge active" id="agenturStatus">Aktiv</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Vertragsbeginn</div>
+                                    <div class="stammdaten-value" id="agenturEintritt">-</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stammdaten-item">
-                            <div class="stammdaten-label">Name</div>
-                            <div class="stammdaten-value" id="agenturName">-</div>
+
+                        <!-- Organisatorische Einordnung -->
+                        <div class="stammdaten-section">
+                            <h3>Organisatorische Einordnung</h3>
+                            <div class="stammdaten-grid-new">
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Vertriebshierarchie</div>
+                                    <div class="stammdaten-value" id="agenturHierarchie">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Vorgesetzter / Betreuer</div>
+                                    <div class="stammdaten-value" id="agenturVorgesetzter">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Region / Gebiet</div>
+                                    <div class="stammdaten-value" id="agenturRegion">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Vertriebskanal</div>
+                                    <div class="stammdaten-value" id="agenturSilo">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Cluster / Segment</div>
+                                    <div class="stammdaten-value" id="agenturStufe">-</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stammdaten-item">
-                            <div class="stammdaten-label">Adresse</div>
-                            <div class="stammdaten-value" id="agenturAdresse">-</div>
+
+                        <!-- Qualifikation & Zulassung -->
+                        <div class="stammdaten-section">
+                            <h3>Qualifikation & Zulassung</h3>
+                            <div class="stammdaten-grid-new">
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">IHK-Registernummer</div>
+                                    <div class="stammdaten-value" id="agenturIHK">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Vermittlerstatus</div>
+                                    <div class="stammdaten-value" id="agenturVermittlerStatus">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Produktfreigaben</div>
+                                    <div class="stammdaten-value" id="agenturProduktfreigaben">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Weiterbildungsstatus (IDD)</div>
+                                    <div class="stammdaten-value status-badge" id="agenturWeiterbildung">-</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stammdaten-item">
-                            <div class="stammdaten-label">Agenturstufe</div>
-                            <div class="stammdaten-value" id="agenturStufe">-</div>
-                        </div>
-                        <div class="stammdaten-item">
-                            <div class="stammdaten-label">Eintrittsdatum</div>
-                            <div class="stammdaten-value" id="agenturEintritt">-</div>
-                        </div>
-                        <div class="stammdaten-item">
-                            <div class="stammdaten-label">Silo</div>
-                            <div class="stammdaten-value" id="agenturSilo">-</div>
+
+                        <!-- Vertragliche Rahmendaten -->
+                        <div class="stammdaten-section">
+                            <h3>Vertragliche Rahmendaten</h3>
+                            <div class="stammdaten-grid-new">
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Provisionsmodell</div>
+                                    <div class="stammdaten-value" id="agenturProvModell">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Bonusvereinbarung</div>
+                                    <div class="stammdaten-value" id="agenturBonus">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Stornohaftungszeit</div>
+                                    <div class="stammdaten-value" id="agenturStornohaftung">-</div>
+                                </div>
+                                <div class="stammdaten-item-new">
+                                    <div class="stammdaten-label">Exklusivitätsgrad</div>
+                                    <div class="stammdaten-value" id="agenturExklusiv">-</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Rechte Spalte: KPIs + Verträge -->
-                <div class="agentur-details">
-                    <!-- KPI Dashboard -->
-                    <div class="agentur-kpis">
-                        <h2>Performance-KPIs</h2>
-                        <div class="kpi-bars" id="agenturKPIs">
-                            <!-- Wird dynamisch gefüllt -->
+                <!-- Tab Content: Neugeschäft -->
+                <div class="agentur-tab-content" id="tab-neugeschaeft">
+                    <div class="kpi-detail-grid">
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Anträge</div>
+                            <div class="kpi-detail-value" id="ngAntraege">0</div>
+                            <div class="kpi-detail-sub">Stück eingereicht</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Policiertes Neugeschäft</div>
+                            <div class="kpi-detail-value" id="ngPoliciert">€0</div>
+                            <div class="kpi-detail-sub">Tatsächlich policiert</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Jahresbeitrag (APE)</div>
+                            <div class="kpi-detail-value" id="ngAPE">€0</div>
+                            <div class="kpi-detail-sub">Annual Premium Equivalent</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Abschlussquote</div>
+                            <div class="kpi-detail-value" id="ngAbschlussquote">0%</div>
+                            <div class="kpi-detail-sub">Policiert / Eingereicht</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Ø Beitrag</div>
+                            <div class="kpi-detail-value" id="ngDurchschnitt">€0</div>
+                            <div class="kpi-detail-sub">Pro Vertrag</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Cross-Selling-Quote</div>
+                            <div class="kpi-detail-value" id="ngCrossSelling">0%</div>
+                            <div class="kpi-detail-sub">Kunden mit >1 Vertrag</div>
                         </div>
                     </div>
+                    <div class="sparten-chart">
+                        <h3>Spartenverteilung Neugeschäft</h3>
+                        <div class="sparten-bars" id="spartenNeugeschaeft"></div>
+                    </div>
+                </div>
 
-                    <!-- Letzte Vertragsabschlüsse -->
-                    <div class="agentur-contracts">
-                        <h2>Letzte Vertragsabschlüsse</h2>
-                        <div class="contracts-table-wrapper">
-                            <table class="contracts-table" id="agenturContracts">
-                                <thead>
-                                    <tr>
-                                        <th>Datum</th>
-                                        <th>Segment</th>
-                                        <th>Prämie</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Wird dynamisch gefüllt -->
-                                </tbody>
-                            </table>
+                <!-- Tab Content: Bestand -->
+                <div class="agentur-tab-content" id="tab-bestand">
+                    <div class="kpi-detail-grid">
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Bestandsbeitrag (GWP)</div>
+                            <div class="kpi-detail-value" id="bestandGWP">€0</div>
+                            <div class="kpi-detail-sub">Gesamter Bestand</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Vertragsanzahl</div>
+                            <div class="kpi-detail-value" id="bestandVertraege">0</div>
+                            <div class="kpi-detail-sub">Aktive Verträge</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Bestandswachstum</div>
+                            <div class="kpi-detail-value" id="bestandWachstum">0%</div>
+                            <div class="kpi-detail-sub">vs. Vorjahr</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Kundenzahl</div>
+                            <div class="kpi-detail-value" id="bestandKunden">0</div>
+                            <div class="kpi-detail-sub">Aktive Kunden</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Verträge pro Kunde</div>
+                            <div class="kpi-detail-value" id="bestandDichte">0</div>
+                            <div class="kpi-detail-sub">Vertragsdichte</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Storno -->
+                <div class="agentur-tab-content" id="tab-storno">
+                    <div class="kpi-detail-grid">
+                        <div class="kpi-detail-card warning">
+                            <div class="kpi-detail-header">Frühstorno-Quote</div>
+                            <div class="kpi-detail-value" id="stornoFrueh">0%</div>
+                            <div class="kpi-detail-sub">&lt; 12 Monate</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Spätstorno-Quote</div>
+                            <div class="kpi-detail-value" id="stornoSpaet">0%</div>
+                            <div class="kpi-detail-sub">&gt; 12 Monate</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Netto-Bestandsentwicklung</div>
+                            <div class="kpi-detail-value" id="stornoNetto">€0</div>
+                            <div class="kpi-detail-sub">Neugeschäft - Storno</div>
+                        </div>
+                    </div>
+                    <div class="storno-reasons">
+                        <h3>Storno-Gründe</h3>
+                        <div class="storno-reason-list" id="stornoGruende"></div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Vergütung -->
+                <div class="agentur-tab-content" id="tab-provision">
+                    <div class="kpi-detail-grid">
+                        <div class="kpi-detail-card highlight">
+                            <div class="kpi-detail-header">Provisionsanspruch</div>
+                            <div class="kpi-detail-value" id="provAnspruch">€0</div>
+                            <div class="kpi-detail-sub">Verdiente Provision</div>
+                        </div>
+                        <div class="kpi-detail-card warning">
+                            <div class="kpi-detail-header">Stornohaftung</div>
+                            <div class="kpi-detail-value" id="provHaftung">€0</div>
+                            <div class="kpi-detail-sub">Offene Haftungssumme</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Bonus-Erreichung</div>
+                            <div class="kpi-detail-value" id="provBonus">0%</div>
+                            <div class="kpi-detail-sub">Staffelziel-Fortschritt</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Deckungsbeitrag</div>
+                            <div class="kpi-detail-value" id="provDeckung">€0</div>
+                            <div class="kpi-detail-sub">YTD</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Qualität -->
+                <div class="agentur-tab-content" id="tab-qualitaet">
+                    <div class="kpi-detail-grid">
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">NPS Score</div>
+                            <div class="kpi-detail-value" id="qualNPS">0</div>
+                            <div class="kpi-detail-sub">Net Promoter Score</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Beschwerdequote</div>
+                            <div class="kpi-detail-value" id="qualBeschwerden">0</div>
+                            <div class="kpi-detail-sub">Pro 1.000 Verträge</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">IDD-Compliance</div>
+                            <div class="kpi-detail-value status-badge" id="qualIDD">-</div>
+                            <div class="kpi-detail-sub">Regulatorische Vorgaben</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Schulungsstatus</div>
+                            <div class="kpi-detail-value" id="qualSchulung">0/15h</div>
+                            <div class="kpi-detail-sub">Weiterbildung (§34d GewO)</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Dokumentationsquote</div>
+                            <div class="kpi-detail-value" id="qualDoku">0%</div>
+                            <div class="kpi-detail-sub">Vollständige Protokolle</div>
+                        </div>
+                        <div class="kpi-detail-card">
+                            <div class="kpi-detail-header">Underwriting-Quote</div>
+                            <div class="kpi-detail-value" id="qualUnderwriting">0%</div>
+                            <div class="kpi-detail-sub">Annahme-Quote</div>
                         </div>
                     </div>
                 </div>
@@ -536,7 +858,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr onclick="openKundenDetail('Klaus Meier', 'VM00010')" class="clickable-row">
                                 <td>Klaus Meier</td>
                                 <td>VM00010</td>
                                 <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
@@ -544,7 +866,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Lisa Wagner', 'VM00011')" class="clickable-row">
                                 <td>Lisa Wagner</td>
                                 <td>VM00011</td>
                                 <td><span class="potential-badge sach">Sachversicherung optimieren</span></td>
@@ -552,7 +874,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Frank Bauer', 'VM00012')" class="clickable-row">
                                 <td>Frank Bauer</td>
                                 <td>VM00012</td>
                                 <td><span class="potential-badge altersvorsorge">Private Altersvorsorge</span></td>
@@ -560,7 +882,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Maria Klein', 'VM00013')" class="clickable-row">
                                 <td>Maria Klein</td>
                                 <td>VM00013</td>
                                 <td><span class="potential-badge kranken">Krankenzusatzversicherung</span></td>
@@ -568,7 +890,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority medium">Mittel</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Stefan Richter', 'VM00014')" class="clickable-row">
                                 <td>Stefan Richter</td>
                                 <td>VM00014</td>
                                 <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
@@ -576,7 +898,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Christine Wolf', 'VM00015')" class="clickable-row">
                                 <td>Christine Wolf</td>
                                 <td>VM00015</td>
                                 <td><span class="potential-badge sach">Sachversicherung optimieren</span></td>
@@ -584,7 +906,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority medium">Mittel</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Uwe Schmitz', 'VM00040')" class="clickable-row">
                                 <td>Uwe Schmitz</td>
                                 <td>VM00040</td>
                                 <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
@@ -592,7 +914,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Heike Maier', 'VM00041')" class="clickable-row">
                                 <td>Heike Maier</td>
                                 <td>VM00041</td>
                                 <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
@@ -600,7 +922,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Jürgen Böhm', 'VM00042')" class="clickable-row">
                                 <td>Jürgen Böhm</td>
                                 <td>VM00042</td>
                                 <td><span class="potential-badge leben">Kapitallebensversicherung</span></td>
@@ -608,7 +930,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Gisela Haas', 'VM00043')" class="clickable-row">
                                 <td>Gisela Haas</td>
                                 <td>VM00043</td>
                                 <td><span class="potential-badge kranken">Krankenzusatzversicherung</span></td>
@@ -616,7 +938,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority medium">Mittel</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Torsten Keller', 'VM00044')" class="clickable-row">
                                 <td>Torsten Keller</td>
                                 <td>VM00044</td>
                                 <td><span class="potential-badge rechtsschutz">Rechtsschutzversicherung</span></td>
@@ -624,7 +946,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority low">Niedrig</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Birgit Sommer', 'VM00045')" class="clickable-row">
                                 <td>Birgit Sommer</td>
                                 <td>VM00045</td>
                                 <td><span class="potential-badge unfall">Unfallversicherung</span></td>
@@ -632,7 +954,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority medium">Mittel</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Wolfgang Stein', 'VM00046')" class="clickable-row">
                                 <td>Wolfgang Stein</td>
                                 <td>VM00046</td>
                                 <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
@@ -640,7 +962,7 @@
                                 <td><span class="consent yes">Ja</span></td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
-                            <tr>
+                            <tr onclick="openKundenDetail('Ingrid Baumann', 'VM00047')" class="clickable-row">
                                 <td>Ingrid Baumann</td>
                                 <td>VM00047</td>
                                 <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
