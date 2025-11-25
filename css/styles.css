@@ -1056,10 +1056,21 @@ select:focus, .dropdown-button:focus {
     position: relative; 
 } 
 
-.kpi-icon { 
-    width: 1.25rem; 
-    height: 1.25rem; 
-    color: #2563eb; 
+.kpi-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #86BC25; /* Deloitte Grün */
+}
+
+.kpi-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
 } 
 
 .kpi-description { 

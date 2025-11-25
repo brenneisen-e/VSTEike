@@ -33,9 +33,9 @@ class CountyMapHandler {
             .attr('height', height)
             .attr('fill', '#f8fafc'); // Hellgrauer Hintergrund (nicht weiß, damit weiße Regionen sichtbar sind)
         
-        // Lade Regierungsbezirke GeoJSON (Level 3 = Regierungsbezirke, nicht Landkreise!)
+        // Lade Regierungsbezirke GeoJSON (lokal gehostet um CSP zu umgehen)
         console.log('📥 Lade Regierungsbezirke...');
-        const geojson = await d3.json('https://raw.githubusercontent.com/isellsoap/deutschlandGeoJSON/main/3_regierungsbezirke/4_niedrig.geo.json');
+        const geojson = await d3.json('assets/geo/regierungsbezirke.geo.json');
         
         console.log(`✅ ${geojson.features.length} Regierungsbezirke geladen`);
         
@@ -74,8 +74,8 @@ class CountyMapHandler {
             .on('mouseleave', (event, d) => this.onMouseLeave(event, d))
             .on('click', (event, d) => this.onClick(event, d));
         
-        // Bundesland-Grenzen (dicker)
-        const statesGeoJSON = await d3.json('https://raw.githubusercontent.com/isellsoap/deutschlandGeoJSON/main/2_bundeslaender/4_niedrig.geo.json');
+        // Bundesland-Grenzen (lokal gehostet)
+        const statesGeoJSON = await d3.json('assets/geo/bundeslaender.geo.json');
         
         this.svg.append('g')
             .attr('id', 'states-borders')
@@ -552,12 +552,30 @@ class CountyMapHandler {
 let countyMapHandler;
 
 async function initMap() {
-    countyMapHandler = new CountyMapHandler();
-    await countyMapHandler.init();
-    
-    if (dailyRawData && dailyRawData.length > 0) {
-        const data = getFilteredData();
-        countyMapHandler.updateMapData(data);
+    console.log('🗺️ initMap() aufgerufen');
+
+    // Zeige Lade-Indikator
+    const container = document.getElementById('map');
+    if (container) {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;"><span>Karte wird geladen...</span></div>';
+    }
+
+    try {
+        countyMapHandler = new CountyMapHandler();
+        await countyMapHandler.init();
+
+        if (dailyRawData && dailyRawData.length > 0) {
+            const data = getFilteredData();
+            countyMapHandler.updateMapData(data);
+        }
+
+        console.log('✅ Karte erfolgreich initialisiert');
+    } catch (error) {
+        console.error('❌ Fehler bei Karteninitialisierung:', error);
+        // Zeige Fehlermeldung
+        if (container) {
+            container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;text-align:center;padding:1rem;"><span>Karte konnte nicht geladen werden.<br>Bitte Seite neu laden.</span></div>';
+        }
     }
 }
 
