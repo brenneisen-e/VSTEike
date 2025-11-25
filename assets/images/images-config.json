@@ -1,0 +1,9 @@
+{
+  "info": "Diese Datei enthält die Standardbilder für die Anwendung. Sie können die Base64-Strings durch eigene Bilder ersetzen und die Änderungen committen.",
+  "logo": null,
+  "profile": null,
+  "instructions": {
+    "de": "Um eigene Bilder zu verwenden: 1) Laden Sie das Bild in der App hoch, 2) Exportieren Sie die Bilder über die Konsole mit exportImagesForGitHub(), 3) Kopieren Sie die Base64-Strings in diese Datei, 4) Committen Sie die Änderungen.",
+    "en": "To use custom images: 1) Upload the image in the app, 2) Export images via console with exportImagesForGitHub(), 3) Copy the Base64 strings to this file, 4) Commit the changes."
+  }
+}
