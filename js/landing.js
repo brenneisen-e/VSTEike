@@ -1639,7 +1639,8 @@ function setupAutocomplete() {
     chatInput.addEventListener('input', function(e) {
         const value = e.target.value.toLowerCase().trim();
 
-        if (value.length < 2) {
+        // Vorschläge erst ab 3 Zeichen anzeigen
+        if (value.length < 3) {
             hideSuggestions(suggestionsContainer);
             return;
         }

@@ -70,16 +70,20 @@
 
             <!-- ✨ v18.3: Input direkt nach Willkommensnachricht -->
             <div class="landing-chat-section">
-                <div class="landing-chat-input-container">
-                    <textarea
-                        class="landing-chat-input"
-                        id="landingChatInput"
-                        placeholder="Frag mich etwas über das Dashboard..."
-                        rows="1"
-                    ></textarea>
-                    <button class="landing-chat-send" id="landingChatSend">
-                        <span>➤</span>
-                    </button>
+                <div class="landing-chat-input-wrapper">
+                    <div class="landing-chat-input-container">
+                        <textarea
+                            class="landing-chat-input"
+                            id="landingChatInput"
+                            placeholder="Frag mich etwas über das Dashboard..."
+                            rows="1"
+                        ></textarea>
+                        <button class="landing-chat-send" id="landingChatSend">
+                            <span>➤</span>
+                        </button>
+                    </div>
+                    <!-- Autocomplete Suggestions direkt unter Input -->
+                    <div class="autocomplete-suggestions" id="autocompleteSuggestions" style="display: none;"></div>
                 </div>
 
                 <!-- Navigation Boxen -->
@@ -112,9 +116,6 @@
                         <span>Potentialanalyse</span>
                     </button>
                 </div>
-
-                <!-- Autocomplete Suggestions -->
-                <div class="autocomplete-suggestions" id="autocompleteSuggestions" style="display: none;"></div>
 
                 <div class="landing-chat-messages" id="landingChatMessages">
                     <!-- Messages werden hier eingefügt -->
