@@ -1218,10 +1218,7 @@ function handleProfileUpload(event, vermittlerId) {
 
 // Agentur Photo Upload (direkt auf der Agenturübersicht-Seite)
 function triggerAgenturPhotoUpload() {
-    if (!uploadModeActive) {
-        console.log('ℹ️ Upload-Modus nicht aktiv');
-        return;
-    }
+    // Kein uploadModeActive Check - Foto kann immer geändert werden
     document.getElementById('agenturPhotoInput').click();
 }
 
@@ -1231,8 +1228,9 @@ function handleAgenturPhotoUpload(event) {
 
     const reader = new FileReader();
     reader.onload = function(e) {
-        const photoImg = document.getElementById('agenturPhotoImg');
-        const placeholder = document.querySelector('.agentur-photo-placeholder');
+        // Korrekter Element-Name: agenturPhotoImgSmall
+        const photoImg = document.getElementById('agenturPhotoImgSmall');
+        const placeholder = document.querySelector('.agentur-photo-placeholder-small');
 
         if (photoImg) {
             photoImg.src = e.target.result;
