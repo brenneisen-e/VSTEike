@@ -51,8 +51,8 @@ function generateRandomName() {
 function generateUniqueNames(count) {
     const names = new Set();
     
-    // Eike Brenneisen als ersten Namen hinzufÃ¼gen
-    names.add('Eike Brenneisen');
+    // Max Mustermann als ersten Namen hinzufügen
+    names.add('Max Mustermann');
     
     // Weitere Namen generieren bis wir die gewÃ¼nschte Anzahl haben
     let attempts = 0;

@@ -284,9 +284,9 @@ function generateMockResponse(message) {
     
     // Filter commands
     if (lowerMessage.includes('filter') || lowerMessage.includes('zeig')) {
-        if (lowerMessage.includes('eike') || lowerMessage.includes('brenneisen')) {
+        if (lowerMessage.includes('max') || lowerMessage.includes('mustermann')) {
             setAgenturFilter('VM00001');
-            return `✅ Filter gesetzt auf **Eike Brenneisen** (VM00001)\n\nDas Dashboard zeigt jetzt nur noch Daten dieser Agentur.`;
+            return `✅ Filter gesetzt auf **Max Mustermann** (VM00001)\n\nDas Dashboard zeigt jetzt nur noch Daten dieser Agentur.`;
         }
         if (lowerMessage.includes('makler')) {
             setSiloFilter('Makler');
@@ -306,7 +306,7 @@ function generateMockResponse(message) {
     }
     
     // Default response
-    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Um echte KI-Analyse zu aktivieren:\n\n1. Besorge einen API-Key von [OpenAI](https://platform.openai.com/)\n2. Öffne \`js/chat.js\`\n3. Ersetze \`DEIN_API_KEY_HIER\` mit deinem Key\n4. Setze \`USE_MOCK_MODE = false\`\n\n**Verfügbare Mock-Befehle:**\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"\n• "Welche Vermittler sind +10% besser bei KV?"\n• "Vergleiche BW vs Bayern"\n• "Welche Bundesländer haben besten NPS?"\n• "Filtere nach Eike Brenneisen"\n• "Wie viele Daten haben wir?"`;
+    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Um echte KI-Analyse zu aktivieren:\n\n1. Besorge einen API-Key von [OpenAI](https://platform.openai.com/)\n2. Öffne \`js/chat.js\`\n3. Ersetze \`DEIN_API_KEY_HIER\` mit deinem Key\n4. Setze \`USE_MOCK_MODE = false\`\n\n**Verfügbare Mock-Befehle:**\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"\n• "Welche Vermittler sind +10% besser bei KV?"\n• "Vergleiche BW vs Bayern"\n• "Welche Bundesländer haben besten NPS?"\n• "Filtere nach Max Mustermann"\n• "Wie viele Daten haben wir?"`;
 }
 
 // Send to real OpenAI API
@@ -325,7 +325,7 @@ async function sendToOpenAI(message) {
 VERFÜGBARE FUNKTIONEN:
 1. setAgenturFilter(vermittler_id) - Filtert Dashboard nach Agentur
    - Verwende IMMER die Vermittler-ID (z.B. 'VM00001'), NIEMALS den Namen!
-   - Beispiel: setAgenturFilter('VM00001') für Eike Brenneisen
+   - Beispiel: setAgenturFilter('VM00001') für Max Mustermann
    - Nach dem Filtern erhältst du automatisch die gefilterten Daten zur Analyse
 
 2. setSiloFilter(silo) - Filtert nach Silo
@@ -345,10 +345,10 @@ VERFÜGBARE FUNKTIONEN:
    - Nutze diese Funktion bei Fragen wie "Zeige Top 5 Vermittler"
 
 7. showAgenturOverview(vermittler_id) - NEU! Zeigt detaillierte Agentur-Übersichtsseite
-   - Beispiel: showAgenturOverview('VM00001') für Eike Brenneisen
+   - Beispiel: showAgenturOverview('VM00001') für Max Mustermann
    - Zeigt: Stammdaten, Foto, KPI-Dashboard mit Balken, Vertragshistorie
    - Nutze diese Funktion bei Fragen wie:
-     * "Übersicht Agentur Eike Brenneisen"
+     * "Übersicht Agentur Max Mustermann"
      * "Zeige mir Details zu VM00001"
      * "Agentur-Profil von Max Mustermann"
    - WICHTIG: Verwende IMMER die Vermittler-ID, nicht den Namen!

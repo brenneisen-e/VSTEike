@@ -519,22 +519,22 @@ async function sendLandingMessageToOpenAI(message, apiKey) {
 VERFÜGBARE FUNKTIONEN:
 1. setAgenturFilter(vermittler_id) - Filtert Dashboard nach Agentur
    - Verwende IMMER die Vermittler-ID (z.B. 'VM00001'), NIEMALS den Namen!
-   - Beispiel: setAgenturFilter('VM00001') für Eike Brenneisen
-   
+   - Beispiel: setAgenturFilter('VM00001') für Max Mustermann
+
 2. setSiloFilter(silo) - Filtert nach Silo
    - Gültige Werte: 'Ausschließlichkeit', 'Makler', 'Direktvertrieb', 'Banken'
-   
+
 3. setSegmentFilter(segments) - Filtert nach Segmenten
    - Gültige Werte: 'Leben', 'Kranken', 'Schaden', 'Kfz'
-   
+
 4. setBundeslandFilter(bundeslaender) - Filtert nach Bundesländern
 
 5. clearAllFilters() - Setzt alle Filter zurück
 
 6. showAgenturOverview(vermittler_id) - Zeigt detaillierte Agentur-Übersichtsseite
-   - Beispiel: showAgenturOverview('VM00001') für Eike Brenneisen
+   - Beispiel: showAgenturOverview('VM00001') für Max Mustermann
    - Zeigt: Stammdaten, Foto, KPI-Dashboard mit Balken, Vertragshistorie
-   - Nutze diese Funktion bei Fragen wie "Übersicht Agentur Eike Brenneisen"
+   - Nutze diese Funktion bei Fragen wie "Übersicht Agentur Max Mustermann"
    - WICHTIG: Verwende IMMER die Vermittler-ID, nicht den Namen!
 
 WICHTIG:
@@ -1200,6 +1200,39 @@ function handleProfileUpload(event, vermittlerId) {
     reader.readAsDataURL(file);
 }
 
+// Agentur Photo Upload (direkt auf der Agenturübersicht-Seite)
+function triggerAgenturPhotoUpload() {
+    if (!uploadModeActive) {
+        console.log('ℹ️ Upload-Modus nicht aktiv');
+        return;
+    }
+    document.getElementById('agenturPhotoInput').click();
+}
+
+function handleAgenturPhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const photoImg = document.getElementById('agenturPhotoImg');
+        const placeholder = document.querySelector('.agentur-photo-placeholder');
+
+        if (photoImg) {
+            photoImg.src = e.target.result;
+            photoImg.style.display = 'block';
+        }
+        if (placeholder) {
+            placeholder.style.display = 'none';
+        }
+
+        // Speichern im localStorage
+        localStorage.setItem('agenturPhoto', e.target.result);
+        console.log('✅ Agentur-Foto hochgeladen und gespeichert');
+    };
+    reader.readAsDataURL(file);
+}
+
 // Gespeichertes Logo laden
 function loadSavedImages() {
     const savedLogo = localStorage.getItem('customLogo');
@@ -1209,6 +1242,20 @@ function loadSavedImages() {
         if (logoImg && placeholder) {
             logoImg.src = savedLogo;
             logoImg.style.display = 'block';
+            placeholder.style.display = 'none';
+        }
+    }
+
+    // Agentur Photo laden
+    const savedAgenturPhoto = localStorage.getItem('agenturPhoto');
+    if (savedAgenturPhoto) {
+        const photoImg = document.getElementById('agenturPhotoImg');
+        const placeholder = document.querySelector('.agentur-photo-placeholder');
+        if (photoImg) {
+            photoImg.src = savedAgenturPhoto;
+            photoImg.style.display = 'block';
+        }
+        if (placeholder) {
             placeholder.style.display = 'none';
         }
     }
@@ -1706,6 +1753,8 @@ window.toggleUploadMode = toggleUploadMode;
 window.triggerLogoUpload = triggerLogoUpload;
 window.handleLogoUpload = handleLogoUpload;
 window.triggerProfileUpload = triggerProfileUpload;
+window.triggerAgenturPhotoUpload = triggerAgenturPhotoUpload;
+window.handleAgenturPhotoUpload = handleAgenturPhotoUpload;
 window.openPotentialAnalyse = openPotentialAnalyse;
 window.openPotentialAnalyseWithFilter = openPotentialAnalyseWithFilter;
 window.closePotentialAnalyse = closePotentialAnalyse;
