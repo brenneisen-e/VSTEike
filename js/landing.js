@@ -1661,7 +1661,7 @@ function setupAutocomplete() {
             }
         }
 
-        // 2. Prüfe auf Potential-Befehle
+        // 2. Prüfe auf Potential-Befehle (mit Leerzeichen = Produktsuche)
         const potentialPatterns = ['potentiale für ', 'potential für ', 'potentiale ', 'potential '];
         for (const pattern of potentialPatterns) {
             if (value.includes(pattern)) {
@@ -1672,6 +1672,19 @@ function setupAutocomplete() {
                 }
                 break;
             }
+        }
+
+        // 2b. Wenn "pot..." eingegeben wird (Beginn von "potential"), zeige alle Potentiale
+        if (value.startsWith('pot') && !value.includes(' ')) {
+            // Zeige alle Potential-Produkte als Vorschläge
+            const allPotentials = potentialProducts.slice(0, 5).map(p => ({
+                type: 'potential',
+                id: p.id,
+                name: p.name,
+                label: `Potentiale für ${p.name}`,
+                icon: 'chart'
+            }));
+            suggestions = suggestions.concat(allPotentials);
         }
 
         // 3. Allgemeine Suche nach Agenten (wenn Name eingegeben wird)
