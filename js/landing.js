@@ -1415,22 +1415,22 @@ function closePotentialAnalyse() {
 
 function showEigeneDaten() {
     document.getElementById('eigeneDatenContainer').style.display = 'block';
-    document.getElementById('doraContainer').style.display = 'none';
+    document.getElementById('fidaContainer').style.display = 'none';
     document.getElementById('eigeneDatenBtn').classList.add('active');
-    document.getElementById('doraBtn').classList.remove('active');
+    document.getElementById('fidaBtn').classList.remove('active');
 }
 
-function showDoraDaten() {
+function showFidaDaten() {
     document.getElementById('eigeneDatenContainer').style.display = 'none';
-    document.getElementById('doraContainer').style.display = 'block';
+    document.getElementById('fidaContainer').style.display = 'block';
     document.getElementById('eigeneDatenBtn').classList.remove('active');
-    document.getElementById('doraBtn').classList.add('active');
+    document.getElementById('fidaBtn').classList.add('active');
 }
 
 function updatePotentialFilter() {
     const filter = currentPotentialFilter;
     const eigeneDatenRows = document.querySelectorAll('#eigeneDatenTable tbody tr');
-    const doraRows = document.querySelectorAll('#doraTable tbody tr');
+    const fidaRows = document.querySelectorAll('#fidaTable tbody tr');
 
     // Zeige/Verstecke Zeilen basierend auf Filter
     eigeneDatenRows.forEach(row => {
@@ -1446,7 +1446,7 @@ function updatePotentialFilter() {
         }
     });
 
-    doraRows.forEach(row => {
+    fidaRows.forEach(row => {
         if (!filter) {
             row.style.display = '';
         } else {
@@ -1522,7 +1522,7 @@ function fillKundenDetail(kundenName, vermittlerId) {
                 { typ: 'Wohngebäudeversicherung', praemie: '€450/Jahr', status: 'Aktiv' },
                 { typ: 'Kfz-Versicherung', praemie: '€680/Jahr', status: 'Aktiv' }
             ],
-            doraVertraege: [
+            fidaVertraege: [
                 { anbieter: 'Sparkasse', typ: 'Girokonto', info: 'Hauptkonto' },
                 { anbieter: 'DWS', typ: 'Depot', info: 'Fondssparen' }
             ]
@@ -1538,7 +1538,7 @@ function fillKundenDetail(kundenName, vermittlerId) {
             vertraege: [
                 { typ: 'Haftpflichtversicherung', praemie: '€120/Jahr', status: 'Aktiv' }
             ],
-            doraVertraege: [
+            fidaVertraege: [
                 { anbieter: 'Commerzbank', typ: 'Geschäftskonto', info: 'Selbstständigkeit' },
                 { anbieter: 'Union Investment', typ: 'Riester', info: 'Altersvorsorge' }
             ]
@@ -1579,10 +1579,10 @@ function fillKundenDetail(kundenName, vermittlerId) {
         `).join('');
     }
 
-    // DORA Verträge
-    const doraBody = document.getElementById('kundenDoraVertraege');
-    if (doraBody) {
-        doraBody.innerHTML = kunde.doraVertraege.map(v => `
+    // FIDA Verträge
+    const fidaBody = document.getElementById('kundenFidaVertraege');
+    if (fidaBody) {
+        fidaBody.innerHTML = kunde.fidaVertraege.map(v => `
             <tr>
                 <td>${v.anbieter}</td>
                 <td>${v.typ}</td>
@@ -1592,25 +1592,25 @@ function fillKundenDetail(kundenName, vermittlerId) {
     }
 }
 
-function toggleKundenDora() {
+function toggleKundenFida() {
     const eigeneDaten = document.getElementById('kundenEigeneDaten');
-    const doraDaten = document.getElementById('kundenDoraDaten');
+    const fidaDaten = document.getElementById('kundenFidaDaten');
     const eigenBtn = document.getElementById('kundenEigenBtn');
-    const doraBtn = document.getElementById('kundenDoraBtn');
+    const fidaBtn = document.getElementById('kundenFidaBtn');
 
-    // DORA zeigt zusätzliche Daten - nicht ersetzend
-    if (doraDaten.style.display === 'none') {
-        // DORA aktivieren - beide anzeigen
+    // FIDA zeigt zusätzliche Daten - nicht ersetzend
+    if (fidaDaten.style.display === 'none') {
+        // FIDA aktivieren - beide anzeigen
         eigeneDaten.style.display = 'block';
-        doraDaten.style.display = 'block';
-        doraBtn.classList.add('active');
-        doraBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> DORA aktiv';
+        fidaDaten.style.display = 'block';
+        fidaBtn.classList.add('active');
+        fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA aktiv';
     } else {
-        // DORA deaktivieren - nur eigene Daten
+        // FIDA deaktivieren - nur eigene Daten
         eigeneDaten.style.display = 'block';
-        doraDaten.style.display = 'none';
-        doraBtn.classList.remove('active');
-        doraBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> DORA';
+        fidaDaten.style.display = 'none';
+        fidaBtn.classList.remove('active');
+        fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA';
     }
 }
 
@@ -2016,14 +2016,14 @@ window.openPotentialAnalyse = openPotentialAnalyse;
 window.openPotentialAnalyseWithFilter = openPotentialAnalyseWithFilter;
 window.closePotentialAnalyse = closePotentialAnalyse;
 window.showEigeneDaten = showEigeneDaten;
-window.showDoraDaten = showDoraDaten;
+window.showFidaDaten = showFidaDaten;
 window.selectSuggestion = selectSuggestion;
 window.selectAgentSuggestion = selectAgentSuggestion;
 window.selectPotentialSuggestion = selectPotentialSuggestion;
 window.filterPotentials = filterPotentials;
 window.openKundenDetail = openKundenDetail;
 window.closeKundenDetail = closeKundenDetail;
-window.toggleKundenDora = toggleKundenDora;
+window.toggleKundenFida = toggleKundenFida;
 window.initUploadMode = initUploadMode;
 window.exportImagesForGitHub = exportImagesForGitHub;
 

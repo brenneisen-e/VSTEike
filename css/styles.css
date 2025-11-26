@@ -3407,7 +3407,7 @@ button svg,
     color: white;
 }
 
-.potential-toggle-btn.dora-btn.active {
+.potential-toggle-btn.fida-btn.active {
     background: #2563eb;
     border-color: #2563eb;
 }
@@ -3431,7 +3431,7 @@ button svg,
     border-bottom: 1px solid #e2e8f0;
 }
 
-.potential-info-box.dora {
+.potential-info-box.fida {
     background: #eff6ff;
 }
 
@@ -3581,7 +3581,7 @@ button svg,
 }
 
 /* DORA Table Styling */
-.dora-table thead {
+.fida-table thead {
     background: #eff6ff;
 }
 
@@ -3769,7 +3769,7 @@ button svg,
     border-bottom: 1px solid #e2e8f0;
 }
 
-.kunden-card-header.dora {
+.kunden-card-header.fida {
     background: #eff6ff;
     display: flex;
     justify-content: space-between;
@@ -3958,7 +3958,7 @@ button svg,
     color: #166534;
 }
 
-.dora-notice {
+.fida-notice {
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -3967,19 +3967,122 @@ button svg,
     border-bottom: 1px solid #e2e8f0;
 }
 
-.dora-notice svg {
+.fida-notice svg {
     flex-shrink: 0;
     color: #92400e;
 }
 
-.dora-notice p {
+.fida-notice p {
     font-size: 13px;
     color: #92400e;
     margin: 0;
 }
 
-.dora-card .kunden-table thead {
+.fida-card .kunden-table thead {
     background: #eff6ff;
+}
+
+/* ========================================
+   VERTRIEBSIMPULS BOX
+   ======================================== */
+
+.vertriebsimpuls-card {
+    border: 2px solid #86BC25;
+    background: linear-gradient(135deg, rgba(134, 188, 37, 0.05) 0%, rgba(134, 188, 37, 0.02) 100%);
+}
+
+.kunden-card-header.vertriebsimpuls {
+    background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
+    color: white;
+}
+
+.kunden-card-header.vertriebsimpuls h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.kunden-card-header.vertriebsimpuls svg {
+    width: 20px;
+    height: 20px;
+}
+
+.vertriebsimpuls-content {
+    padding: 20px;
+}
+
+.impuls-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.impuls-item.highlight {
+    border-left: 4px solid #86BC25;
+    box-shadow: 0 2px 8px rgba(134, 188, 37, 0.15);
+}
+
+.impuls-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, rgba(134, 188, 37, 0.15) 0%, rgba(134, 188, 37, 0.05) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #86BC25;
+}
+
+.impuls-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.impuls-text {
+    flex: 1;
+}
+
+.impuls-text strong {
+    display: block;
+    font-size: 15px;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.impuls-text p {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.impuls-priority {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.impuls-priority.high {
+    background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
+    color: white;
+}
+
+.impuls-priority.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.impuls-priority.low {
+    background: #f1f5f9;
+    color: #64748b;
 }
 
 /* Responsive */
