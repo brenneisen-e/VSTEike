@@ -824,7 +824,9 @@
                 return;
             }
 
-            const blob = new Blob([generatedCSV], { type: 'text/csv;charset=utf-8;' });
+            // UTF-8 BOM für korrekte Umlaut-Darstellung in Excel
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + generatedCSV], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
 
