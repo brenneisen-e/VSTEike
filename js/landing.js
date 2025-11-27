@@ -2253,21 +2253,63 @@ function handleUserProfileUploadDropdown(event) {
     event.target.value = '';
 }
 
-// Process and save user profile image
+// Process and save user profile image (mit Komprimierung)
 function processUserProfileImage(file, mode) {
     const reader = new FileReader();
     reader.onload = function(e) {
-        const imageData = e.target.result;
+        // Komprimiere das Bild bevor es gespeichert wird
+        compressImage(e.target.result, 150, 0.8, function(compressedData) {
+            try {
+                // Save to localStorage
+                localStorage.setItem(`userProfileImage_${mode}`, compressedData);
 
-        // Save to localStorage
-        localStorage.setItem(`userProfileImage_${mode}`, imageData);
+                // Update all relevant images
+                updateAllUserProfileImages(mode, compressedData);
 
-        // Update all relevant images
-        updateAllUserProfileImages(mode, imageData);
-
-        console.log(`✅ Profilbild für ${mode} gespeichert`);
+                console.log(`✅ Profilbild für ${mode} gespeichert (komprimiert)`);
+            } catch (error) {
+                console.error('❌ Fehler beim Speichern:', error);
+                alert('Das Bild konnte nicht gespeichert werden. Bitte versuche ein kleineres Bild.');
+            }
+        });
     };
     reader.readAsDataURL(file);
+}
+
+// Komprimiert ein Bild auf eine maximale Größe
+function compressImage(dataUrl, maxSize, quality, callback) {
+    const img = new Image();
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        // Skaliere auf maxSize (Quadrat für Avatar)
+        if (width > height) {
+            if (width > maxSize) {
+                height = Math.round(height * maxSize / width);
+                width = maxSize;
+            }
+        } else {
+            if (height > maxSize) {
+                width = Math.round(width * maxSize / height);
+                height = maxSize;
+            }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Konvertiere zu komprimiertem JPEG
+        const compressedData = canvas.toDataURL('image/jpeg', quality);
+        console.log(`📷 Bild komprimiert: ${Math.round(dataUrl.length/1024)}KB → ${Math.round(compressedData.length/1024)}KB`);
+
+        callback(compressedData);
+    };
+    img.src = dataUrl;
 }
 
 // Update all profile images for a given mode
