@@ -2033,11 +2033,14 @@ function switchUserMode(mode) {
         if (checkVertrieb) checkVertrieb.style.display = 'block';
         if (checkPva) checkPva.style.display = 'none';
     } else if (mode === 'pva') {
-        if (profileName) profileName.textContent = 'Martin Richarz';
-        if (profileRole) profileRole.textContent = 'Leiter PVA';
+        if (profileName) profileName.textContent = 'Maximilian Schneider';
+        if (profileRole) profileRole.textContent = 'Sales Operations';
         if (checkVertrieb) checkVertrieb.style.display = 'none';
         if (checkPva) checkPva.style.display = 'block';
     }
+
+    // Update profile avatar based on mode
+    updateProfileAvatar(mode);
 
     // Update navigation boxes
     updateNavigationBoxes(mode);
@@ -2124,9 +2127,114 @@ function updateWelcomeMessage(mode) {
         if (mode === 'vertrieb') {
             chatBubble.textContent = 'Willkommen zurück Eike, was kann ich für dich tun?';
         } else if (mode === 'pva') {
-            chatBubble.textContent = 'Willkommen zurück Martin, was kann ich für dich tun?';
+            chatBubble.textContent = 'Willkommen zurück Max, was kann ich für dich tun?';
         }
     }
+}
+
+// Update Profile Avatar based on mode
+function updateProfileAvatar(mode) {
+    const profileAvatarImg = document.getElementById('profileAvatarImg');
+    if (!profileAvatarImg) return;
+
+    const savedImage = localStorage.getItem(`userProfileImage_${mode}`);
+    if (savedImage) {
+        profileAvatarImg.src = savedImage;
+    } else {
+        profileAvatarImg.src = 'assets/images/default-profile.svg';
+    }
+}
+
+// ========================================
+// USER PROFILE IMAGE UPLOAD
+// ========================================
+
+let currentUploadTarget = 'vertrieb'; // Which user profile to upload to
+
+// Trigger upload from main profile avatar
+function triggerUserProfileUpload(event) {
+    event.stopPropagation();
+    currentUploadTarget = currentUserMode;
+    document.getElementById('userProfileUpload').click();
+}
+
+// Trigger upload from dropdown avatar
+function triggerUserProfileUploadFor(mode, event) {
+    event.stopPropagation();
+    currentUploadTarget = mode;
+    document.getElementById('userProfileUploadDropdown').click();
+}
+
+// Handle upload from main profile
+function handleUserProfileUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        processUserProfileImage(file, currentUploadTarget);
+    }
+    event.target.value = '';
+}
+
+// Handle upload from dropdown
+function handleUserProfileUploadDropdown(event) {
+    const file = event.target.files[0];
+    if (file) {
+        processUserProfileImage(file, currentUploadTarget);
+    }
+    event.target.value = '';
+}
+
+// Process and save user profile image
+function processUserProfileImage(file, mode) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imageData = e.target.result;
+
+        // Save to localStorage
+        localStorage.setItem(`userProfileImage_${mode}`, imageData);
+
+        // Update all relevant images
+        updateAllUserProfileImages(mode, imageData);
+
+        console.log(`✅ Profilbild für ${mode} gespeichert`);
+    };
+    reader.readAsDataURL(file);
+}
+
+// Update all profile images for a given mode
+function updateAllUserProfileImages(mode, imageData) {
+    // Update dropdown option avatar
+    const optionAvatar = document.getElementById(mode === 'vertrieb' ? 'optionAvatarVertrieb' : 'optionAvatarPva');
+    if (optionAvatar) {
+        optionAvatar.src = imageData;
+    }
+
+    // If this is the current mode, also update main profile avatar
+    if (mode === currentUserMode) {
+        const profileAvatarImg = document.getElementById('profileAvatarImg');
+        if (profileAvatarImg) {
+            profileAvatarImg.src = imageData;
+        }
+    }
+}
+
+// Load saved user profile images on page load
+function loadUserProfileImages() {
+    // Load Vertrieb profile
+    const vertriebImage = localStorage.getItem('userProfileImage_vertrieb');
+    if (vertriebImage) {
+        const optionVertrieb = document.getElementById('optionAvatarVertrieb');
+        if (optionVertrieb) optionVertrieb.src = vertriebImage;
+    }
+
+    // Load PVA profile
+    const pvaImage = localStorage.getItem('userProfileImage_pva');
+    if (pvaImage) {
+        const optionPva = document.getElementById('optionAvatarPva');
+        if (optionPva) optionPva.src = pvaImage;
+    }
+
+    // Update main avatar for current mode
+    updateProfileAvatar(currentUserMode);
 }
 
 // PVA Mode Functions
@@ -2136,40 +2244,9 @@ function openOffeneVorgaenge() {
     alert('Übersicht offene Vorgänge - In Entwicklung');
 }
 
-// Abrechnungsprüfung - Opens iframe
+// Abrechnungsprüfung - Opens in new tab (iframe blocked by target site)
 function openAbrechnungspruefung() {
-    // Create iframe container if it doesn't exist
-    let iframeContainer = document.getElementById('abrechnungspruefungContainer');
-
-    if (!iframeContainer) {
-        iframeContainer = document.createElement('div');
-        iframeContainer.id = 'abrechnungspruefungContainer';
-        iframeContainer.className = 'iframe-fullscreen-container';
-        iframeContainer.innerHTML = `
-            <div class="iframe-header">
-                <button class="iframe-close-btn" onclick="closeAbrechnungspruefung()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                    Zurück
-                </button>
-                <span class="iframe-title">Abrechnungsprüfung</span>
-            </div>
-            <iframe src="https://billingcheck.pages.dev/app" class="iframe-content" frameborder="0"></iframe>
-        `;
-        document.body.appendChild(iframeContainer);
-    }
-
-    iframeContainer.style.display = 'flex';
-}
-
-// Close Abrechnungsprüfung iframe
-function closeAbrechnungspruefung() {
-    const iframeContainer = document.getElementById('abrechnungspruefungContainer');
-    if (iframeContainer) {
-        iframeContainer.style.display = 'none';
-    }
+    window.open('https://billingcheck.pages.dev/app', '_blank');
 }
 
 // Validierung Provisionsberechnung (placeholder)
@@ -2193,6 +2270,9 @@ window.addEventListener('load', function() {
 
     // Setup Autocomplete
     setupAutocomplete();
+
+    // Lade User-Profilbilder
+    loadUserProfileImages();
 });
 
 // Global verfügbar machen
@@ -2220,7 +2300,11 @@ window.toggleProfileDropdown = toggleProfileDropdown;
 window.switchUserMode = switchUserMode;
 window.openOffeneVorgaenge = openOffeneVorgaenge;
 window.openAbrechnungspruefung = openAbrechnungspruefung;
-window.closeAbrechnungspruefung = closeAbrechnungspruefung;
 window.openValidierungProvision = openValidierungProvision;
+window.triggerUserProfileUpload = triggerUserProfileUpload;
+window.triggerUserProfileUploadFor = triggerUserProfileUploadFor;
+window.handleUserProfileUpload = handleUserProfileUpload;
+window.handleUserProfileUploadDropdown = handleUserProfileUploadDropdown;
+window.loadUserProfileImages = loadUserProfileImages;
 
 console.log('✅ landing.js geladen');
