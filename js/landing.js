@@ -1475,8 +1475,16 @@ function filterPotentials(productId) {
 // KUNDENDETAIL SEITE
 // ========================================
 
+// Speichert ob FIDA in der Potentialanalyse aktiv war
+let fidaActiveInPotentialAnalyse = false;
+
 function openKundenDetail(kundenName, vermittlerId) {
     console.log('👤 Kundendetail öffnen:', kundenName, vermittlerId);
+
+    // Prüfe ob FIDA in der Potentialanalyse aktiv ist
+    const fidaBtn = document.getElementById('fidaBtn');
+    fidaActiveInPotentialAnalyse = fidaBtn && fidaBtn.classList.contains('active');
+    console.log('📊 FIDA war aktiv in Potentialanalyse:', fidaActiveInPotentialAnalyse);
 
     // Verstecke alle Seiten
     document.getElementById('landingPage').style.display = 'none';
@@ -1492,6 +1500,32 @@ function openKundenDetail(kundenName, vermittlerId) {
 
         // Fülle Kundendaten
         fillKundenDetail(kundenName, vermittlerId);
+
+        // Aktiviere FIDA in Kundendetail wenn es in Potentialanalyse aktiv war
+        initKundenFidaState();
+    }
+}
+
+// Initialisiert den FIDA-Status in der Kundendetail-Seite
+function initKundenFidaState() {
+    const fidaDaten = document.getElementById('kundenFidaDaten');
+    const fidaBtn = document.getElementById('kundenFidaBtn');
+
+    if (fidaActiveInPotentialAnalyse) {
+        // FIDA aktivieren
+        if (fidaDaten) fidaDaten.style.display = 'block';
+        if (fidaBtn) {
+            fidaBtn.classList.add('active');
+            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA aktiv';
+        }
+        console.log('✅ FIDA in Kundendetail aktiviert');
+    } else {
+        // FIDA deaktivieren (Standard)
+        if (fidaDaten) fidaDaten.style.display = 'none';
+        if (fidaBtn) {
+            fidaBtn.classList.remove('active');
+            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA';
+        }
     }
 }
 
