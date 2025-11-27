@@ -20,6 +20,48 @@
      ======================================== -->
 <div id="landingPage" class="landing-page">
 
+    <!-- User Profile Switcher (oben rechts) -->
+    <div class="user-profile-switcher" id="userProfileSwitcher">
+        <div class="profile-display" onclick="toggleProfileDropdown()">
+            <div class="profile-avatar">
+                <img src="assets/images/default-profile.svg" alt="Profilbild" id="profileAvatarImg">
+            </div>
+            <div class="profile-info">
+                <span class="profile-name" id="profileName">Eike Brenneisen</span>
+                <span class="profile-role" id="profileRole">Vertriebssteuerung</span>
+            </div>
+            <svg class="profile-dropdown-arrow" id="profileArrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="profile-option" data-mode="vertrieb" onclick="switchUserMode('vertrieb')">
+                <div class="option-avatar">
+                    <img src="assets/images/default-profile.svg" alt="Eike">
+                </div>
+                <div class="option-info">
+                    <span class="option-name">Eike Brenneisen</span>
+                    <span class="option-role">Vertriebssteuerung</span>
+                </div>
+                <svg class="option-check" id="checkVertrieb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="18" height="18">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div class="profile-option" data-mode="pva" onclick="switchUserMode('pva')">
+                <div class="option-avatar">
+                    <img src="assets/images/default-profile.svg" alt="Martin">
+                </div>
+                <div class="option-info">
+                    <span class="option-name">Martin Richarz</span>
+                    <span class="option-role">Leiter PVA</span>
+                </div>
+                <svg class="option-check" id="checkPva" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="18" height="18" style="display: none;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Animation -->
     <div id="loadingAnimation" class="loading-container">
         <div class="dashboard-icon-animated">
