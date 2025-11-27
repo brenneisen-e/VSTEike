@@ -925,33 +925,36 @@ function showTopAgenturen(topN = 5, sortBy = 'neugeschaeft') {
 // UI functions
 function addMessage(role, content) {
     const chatBody = document.getElementById('chatBody');
-    
+
     // Remove welcome message if exists
     const welcome = chatBody.querySelector('.chat-welcome');
     if (welcome) {
         welcome.remove();
     }
-    
+
     const messageDiv = document.createElement('div');
     messageDiv.className = `chat-message ${role}`;
-    
+
     const avatar = document.createElement('div');
     avatar.className = 'chat-avatar';
     avatar.innerHTML = role === 'user'
         ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>';
-    
+
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
-    
+
+    // Bereinige technische Funktionsaufrufe aus der Antwort
+    let cleanedContent = cleanTechnicalContent(content);
+
     // Format content (basic markdown support)
-    let formattedContent = content
+    let formattedContent = cleanedContent
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/`(.*?)`/g, '<code>$1</code>')
         .replace(/\n/g, '<br>');
-    
+
     bubble.innerHTML = formattedContent;
-    
+
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(bubble);
 
@@ -960,8 +963,31 @@ function addMessage(role, content) {
 
     // ✨ v14: Zeige Antwort auch im AI Response Panel
     if (role === 'assistant') {
-        showAIResponse(content);
+        showAIResponse(cleanedContent);
     }
+}
+
+// Entfernt technische Funktionsaufrufe und Code-Blöcke aus der Antwort
+function cleanTechnicalContent(content) {
+    let cleaned = content;
+
+    // Entferne Code-Blöcke mit ```plaintext, ```javascript, etc.
+    cleaned = cleaned.replace(/```(?:plaintext|javascript|js)?\s*\n?[\s\S]*?```/g, '');
+
+    // Entferne einzelne Funktionsaufrufe wie showTopAgenturen(5, 'neugeschaeft')
+    cleaned = cleaned.replace(/\b(showTopAgenturen|setAgenturFilter|setSiloFilter|setSegmentFilter|setBundeslandFilter|clearAllFilters|showAgenturOverview)\s*\([^)]*\)/g, '');
+
+    // Entferne "Ich setze dafür die entsprechende Funktion ein" etc.
+    cleaned = cleaned.replace(/Ich setze dafür die entsprechende Funktion ein[^.]*\./gi, '');
+    cleaned = cleaned.replace(/Ich werde.*?Funktion.*?ein[setz]*[^.]*\./gi, '');
+
+    // Entferne mehrfache Leerzeilen
+    cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+
+    // Entferne führende/nachfolgende Leerzeichen und Zeilenumbrüche
+    cleaned = cleaned.trim();
+
+    return cleaned;
 }
 
 function showTyping() {

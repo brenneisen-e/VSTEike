@@ -1475,8 +1475,16 @@ function filterPotentials(productId) {
 // KUNDENDETAIL SEITE
 // ========================================
 
+// Speichert ob FIDA in der Potentialanalyse aktiv war
+let fidaActiveInPotentialAnalyse = false;
+
 function openKundenDetail(kundenName, vermittlerId) {
     console.log('👤 Kundendetail öffnen:', kundenName, vermittlerId);
+
+    // Prüfe ob FIDA in der Potentialanalyse aktiv ist
+    const fidaBtn = document.getElementById('fidaBtn');
+    fidaActiveInPotentialAnalyse = fidaBtn && fidaBtn.classList.contains('active');
+    console.log('📊 FIDA war aktiv in Potentialanalyse:', fidaActiveInPotentialAnalyse);
 
     // Verstecke alle Seiten
     document.getElementById('landingPage').style.display = 'none';
@@ -1492,6 +1500,32 @@ function openKundenDetail(kundenName, vermittlerId) {
 
         // Fülle Kundendaten
         fillKundenDetail(kundenName, vermittlerId);
+
+        // Aktiviere FIDA in Kundendetail wenn es in Potentialanalyse aktiv war
+        initKundenFidaState();
+    }
+}
+
+// Initialisiert den FIDA-Status in der Kundendetail-Seite
+function initKundenFidaState() {
+    const fidaDaten = document.getElementById('kundenFidaDaten');
+    const fidaBtn = document.getElementById('kundenFidaBtn');
+
+    if (fidaActiveInPotentialAnalyse) {
+        // FIDA aktivieren
+        if (fidaDaten) fidaDaten.style.display = 'block';
+        if (fidaBtn) {
+            fidaBtn.classList.add('active');
+            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA aktiv';
+        }
+        console.log('✅ FIDA in Kundendetail aktiviert');
+    } else {
+        // FIDA deaktivieren (Standard)
+        if (fidaDaten) fidaDaten.style.display = 'none';
+        if (fidaBtn) {
+            fidaBtn.classList.remove('active');
+            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA';
+        }
     }
 }
 
@@ -2153,22 +2187,44 @@ let currentUploadTarget = 'vertrieb'; // Which user profile to upload to
 
 // Trigger upload from main profile avatar
 function triggerUserProfileUpload(event) {
-    event.stopPropagation();
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
     currentUploadTarget = currentUserMode;
-    document.getElementById('userProfileUpload').click();
+    console.log('📷 Trigger Upload für:', currentUploadTarget);
+
+    const input = document.getElementById('userProfileUpload');
+    if (input) {
+        input.click();
+    } else {
+        console.error('❌ Upload input nicht gefunden');
+    }
 }
 
 // Trigger upload from dropdown avatar
 function triggerUserProfileUploadFor(mode, event) {
-    event.stopPropagation();
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
     currentUploadTarget = mode;
-    document.getElementById('userProfileUploadDropdown').click();
+    console.log('📷 Trigger Upload für (dropdown):', currentUploadTarget);
+
+    const input = document.getElementById('userProfileUploadDropdown');
+    if (input) {
+        input.click();
+    } else {
+        console.error('❌ Dropdown Upload input nicht gefunden');
+    }
 }
 
 // Handle upload from main profile
 function handleUserProfileUpload(event) {
+    console.log('📷 Handle Upload Event');
     const file = event.target.files[0];
     if (file) {
+        console.log('📷 Datei ausgewählt:', file.name);
         processUserProfileImage(file, currentUploadTarget);
     }
     event.target.value = '';
@@ -2176,8 +2232,10 @@ function handleUserProfileUpload(event) {
 
 // Handle upload from dropdown
 function handleUserProfileUploadDropdown(event) {
+    console.log('📷 Handle Dropdown Upload Event');
     const file = event.target.files[0];
     if (file) {
+        console.log('📷 Datei ausgewählt:', file.name);
         processUserProfileImage(file, currentUploadTarget);
     }
     event.target.value = '';

@@ -20,6 +20,10 @@
      ======================================== -->
 <div id="landingPage" class="landing-page">
 
+    <!-- Hidden File Inputs für Profilbild-Upload -->
+    <input type="file" id="userProfileUpload" accept="image/*" style="display: none;" onchange="handleUserProfileUpload(event)">
+    <input type="file" id="userProfileUploadDropdown" accept="image/*" style="display: none;" onchange="handleUserProfileUploadDropdown(event)">
+
     <!-- User Profile Switcher (oben rechts) -->
     <div class="user-profile-switcher" id="userProfileSwitcher">
         <div class="profile-display">
@@ -31,7 +35,6 @@
                         <circle cx="12" cy="13" r="4"></circle>
                     </svg>
                 </div>
-                <input type="file" id="userProfileUpload" accept="image/*" style="display: none;" onchange="handleUserProfileUpload(event)">
             </div>
             <div class="profile-info-clickable" onclick="toggleProfileDropdown()">
                 <div class="profile-info">
@@ -68,7 +71,6 @@
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
-            <input type="file" id="userProfileUploadDropdown" accept="image/*" style="display: none;" onchange="handleUserProfileUploadDropdown(event)">
         </div>
     </div>
 
