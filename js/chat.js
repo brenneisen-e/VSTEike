@@ -6,8 +6,21 @@ let chatInitialized = false; // ✨ v15: Flag to prevent multiple initialization
 
 // ⚠️ CONFIGURATION - API-Key wird aus localStorage geladen
 // User kann den Key auf der Landing Page eingeben
-let OPENAI_API_KEY = localStorage.getItem('openai_api_token') || 'YOUR_OPENAI_API_KEY_HERE';
-let USE_MOCK_MODE = !OPENAI_API_KEY || OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY_HERE';
+
+// Dynamische Funktion um aktuellen API-Key zu holen
+function getOpenAIApiKey() {
+    return localStorage.getItem('openai_api_token') || 'YOUR_OPENAI_API_KEY_HERE';
+}
+
+// Dynamische Funktion um Mock-Modus zu prüfen
+function shouldUseMockMode() {
+    const key = getOpenAIApiKey();
+    return !key || key === 'YOUR_OPENAI_API_KEY_HERE';
+}
+
+// Legacy Variablen für Kompatibilität (werden nicht mehr direkt verwendet)
+let OPENAI_API_KEY = getOpenAIApiKey();
+let USE_MOCK_MODE = shouldUseMockMode();
 
 // Initialize chat widget
 function initChat() {
@@ -108,11 +121,8 @@ function initChat() {
         }, 1000);
 
         // Show API warning if needed
-        if (USE_MOCK_MODE) {
-            const existingToken = localStorage.getItem('openai_api_token');
-            if (!existingToken || existingToken === 'YOUR_OPENAI_API_KEY_HERE') {
-                addMessage('assistant', '⚠️ **Mock-Modus aktiv** - Für echte KI-Antworten gib deinen OpenAI API-Key auf der Landing Page ein.\n\nStelle trotzdem gerne Fragen - ich zeige dir wie die Integration funktioniert!');
-            }
+        if (shouldUseMockMode()) {
+            addMessage('assistant', '⚠️ **Mock-Modus aktiv** - Für echte KI-Antworten gib deinen OpenAI API-Key auf der Landing Page ein.\n\nStelle trotzdem gerne Fragen - ich zeige dir wie die Integration funktioniert!');
         }
     } else {
         console.log('ℹ️ Keine CSV Daten - Chat bleibt verborgen bis Daten geladen werden');
@@ -168,7 +178,11 @@ async function sendMessage() {
     isProcessing = true;
     
     try {
-        if (USE_MOCK_MODE) {
+        // Dynamisch prüfen ob Mock-Modus aktiv ist (erlaubt API-Key Änderung ohne Reload)
+        const useMock = shouldUseMockMode();
+        console.log('🔑 API-Key Status:', useMock ? 'MOCK-MODUS' : 'API-MODUS AKTIV');
+
+        if (useMock) {
             // Mock response for testing
             console.log('🎭 Mock-Modus - Generiere Test-Antwort');
             await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
@@ -311,7 +325,8 @@ function generateMockResponse(message) {
 
 // Send to real OpenAI API
 async function sendToOpenAI(message) {
-    console.log('🔑 Verwende OpenAI API-Key:', OPENAI_API_KEY.substring(0, 10) + '...');
+    const apiKey = getOpenAIApiKey();
+    console.log('🔑 Verwende OpenAI API-Key:', apiKey.substring(0, 10) + '...');
     
     // Prepare context about current data
     const dataContext = getDataContext();
@@ -380,7 +395,7 @@ USER FRAGE: ${message}`
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${OPENAI_API_KEY}`
+            "Authorization": `Bearer ${apiKey}`
         },
         body: JSON.stringify({
             model: "gpt-4o",
@@ -751,7 +766,7 @@ Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den ech
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Authorization": `Bearer ${OPENAI_API_KEY}`
+                            "Authorization": `Bearer ${getOpenAIApiKey()}`
                         },
                         body: JSON.stringify({
                             model: "gpt-4o",
