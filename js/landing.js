@@ -2172,14 +2172,22 @@ function updateWelcomeMessage(mode) {
 
 // Update Profile Avatar based on mode
 function updateProfileAvatar(mode) {
+    console.log('📷 updateProfileAvatar aufgerufen für Modus:', mode);
     const profileAvatarImg = document.getElementById('profileAvatarImg');
-    if (!profileAvatarImg) return;
+    if (!profileAvatarImg) {
+        console.error('❌ profileAvatarImg Element nicht gefunden!');
+        return;
+    }
 
     const savedImage = localStorage.getItem(`userProfileImage_${mode}`);
+    console.log('📷 Gespeichertes Bild vorhanden:', savedImage ? 'JA (' + savedImage.substring(0, 50) + '...)' : 'NEIN');
+
     if (savedImage) {
         profileAvatarImg.src = savedImage;
+        console.log('✅ Haupt-Avatar auf gespeichertes Bild gesetzt');
     } else {
         profileAvatarImg.src = 'assets/images/default-profile.svg';
+        console.log('ℹ️ Haupt-Avatar auf Standard-Bild gesetzt');
     }
 }
 
@@ -2264,35 +2272,55 @@ function processUserProfileImage(file, mode) {
 
 // Update all profile images for a given mode
 function updateAllUserProfileImages(mode, imageData) {
+    console.log('📷 Update Bilder für Modus:', mode);
+
     // Update dropdown option avatar
-    const optionAvatar = document.getElementById(mode === 'vertrieb' ? 'optionAvatarVertrieb' : 'optionAvatarPva');
+    const avatarId = mode === 'vertrieb' ? 'optionAvatarVertrieb' : 'optionAvatarPva';
+    const optionAvatar = document.getElementById(avatarId);
+    console.log('📷 Dropdown Avatar Element:', avatarId, optionAvatar ? 'gefunden' : 'NICHT GEFUNDEN');
+
     if (optionAvatar) {
         optionAvatar.src = imageData;
+        console.log('✅ Dropdown Avatar aktualisiert');
     }
 
-    // If this is the current mode, also update main profile avatar
+    // Update main profile avatar if this mode is currently active
     if (mode === currentUserMode) {
         const profileAvatarImg = document.getElementById('profileAvatarImg');
         if (profileAvatarImg) {
             profileAvatarImg.src = imageData;
+            console.log('✅ Haupt-Avatar aktualisiert');
         }
+    } else {
+        console.log('ℹ️ Haupt-Avatar nicht aktualisiert (anderer Modus aktiv:', currentUserMode, ')');
     }
 }
 
 // Load saved user profile images on page load
 function loadUserProfileImages() {
+    console.log('📷 loadUserProfileImages aufgerufen');
+
     // Load Vertrieb profile
     const vertriebImage = localStorage.getItem('userProfileImage_vertrieb');
+    console.log('📷 Vertrieb Bild in localStorage:', vertriebImage ? 'JA' : 'NEIN');
     if (vertriebImage) {
         const optionVertrieb = document.getElementById('optionAvatarVertrieb');
-        if (optionVertrieb) optionVertrieb.src = vertriebImage;
+        if (optionVertrieb) {
+            optionVertrieb.src = vertriebImage;
+            console.log('✅ Vertrieb Dropdown-Avatar geladen');
+        }
     }
 
     // Load PVA profile
     const pvaImage = localStorage.getItem('userProfileImage_pva');
+    console.log('📷 PVA (Anja) Bild in localStorage:', pvaImage ? 'JA' : 'NEIN');
     if (pvaImage) {
         const optionPva = document.getElementById('optionAvatarPva');
-        if (optionPva) optionPva.src = pvaImage;
+        console.log('📷 optionAvatarPva Element:', optionPva ? 'gefunden' : 'NICHT GEFUNDEN');
+        if (optionPva) {
+            optionPva.src = pvaImage;
+            console.log('✅ PVA (Anja) Dropdown-Avatar geladen');
+        }
     }
 
     // Update main avatar for current mode
