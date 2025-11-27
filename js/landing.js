@@ -1481,10 +1481,14 @@ let fidaActiveInPotentialAnalyse = false;
 function openKundenDetail(kundenName, vermittlerId) {
     console.log('👤 Kundendetail öffnen:', kundenName, vermittlerId);
 
-    // Prüfe ob FIDA in der Potentialanalyse aktiv ist
+    // Prüfe ob FIDA in der Potentialanalyse aktiv ist (mehrere Checks für Zuverlässigkeit)
     const fidaBtn = document.getElementById('fidaBtn');
-    fidaActiveInPotentialAnalyse = fidaBtn && fidaBtn.classList.contains('active');
-    console.log('📊 FIDA war aktiv in Potentialanalyse:', fidaActiveInPotentialAnalyse);
+    const fidaContainer = document.getElementById('fidaContainer');
+
+    // FIDA ist aktiv wenn Container sichtbar ist (display: block)
+    const fidaContainerDisplay = fidaContainer ? fidaContainer.style.display : 'none';
+    fidaActiveInPotentialAnalyse = (fidaContainerDisplay === 'block');
+    console.log('📊 FIDA Check - Container display:', fidaContainerDisplay, '| FIDA aktiv:', fidaActiveInPotentialAnalyse);
 
     // Verstecke alle Seiten
     document.getElementById('landingPage').style.display = 'none';
