@@ -2153,22 +2153,44 @@ let currentUploadTarget = 'vertrieb'; // Which user profile to upload to
 
 // Trigger upload from main profile avatar
 function triggerUserProfileUpload(event) {
-    event.stopPropagation();
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
     currentUploadTarget = currentUserMode;
-    document.getElementById('userProfileUpload').click();
+    console.log('📷 Trigger Upload für:', currentUploadTarget);
+
+    const input = document.getElementById('userProfileUpload');
+    if (input) {
+        input.click();
+    } else {
+        console.error('❌ Upload input nicht gefunden');
+    }
 }
 
 // Trigger upload from dropdown avatar
 function triggerUserProfileUploadFor(mode, event) {
-    event.stopPropagation();
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
     currentUploadTarget = mode;
-    document.getElementById('userProfileUploadDropdown').click();
+    console.log('📷 Trigger Upload für (dropdown):', currentUploadTarget);
+
+    const input = document.getElementById('userProfileUploadDropdown');
+    if (input) {
+        input.click();
+    } else {
+        console.error('❌ Dropdown Upload input nicht gefunden');
+    }
 }
 
 // Handle upload from main profile
 function handleUserProfileUpload(event) {
+    console.log('📷 Handle Upload Event');
     const file = event.target.files[0];
     if (file) {
+        console.log('📷 Datei ausgewählt:', file.name);
         processUserProfileImage(file, currentUploadTarget);
     }
     event.target.value = '';
@@ -2176,8 +2198,10 @@ function handleUserProfileUpload(event) {
 
 // Handle upload from dropdown
 function handleUserProfileUploadDropdown(event) {
+    console.log('📷 Handle Dropdown Upload Event');
     const file = event.target.files[0];
     if (file) {
+        console.log('📷 Datei ausgewählt:', file.name);
         processUserProfileImage(file, currentUploadTarget);
     }
     event.target.value = '';
