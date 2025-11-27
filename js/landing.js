@@ -2071,7 +2071,7 @@ function switchUserMode(mode) {
         if (checkVertrieb) checkVertrieb.style.display = 'block';
         if (checkPva) checkPva.style.display = 'none';
     } else if (mode === 'pva') {
-        if (profileName) profileName.textContent = 'Maximilian Schneider';
+        if (profileName) profileName.textContent = 'Anja Schneider';
         if (profileRole) profileRole.textContent = 'Sales Operations';
         if (checkVertrieb) checkVertrieb.style.display = 'none';
         if (checkPva) checkPva.style.display = 'block';
@@ -2165,7 +2165,7 @@ function updateWelcomeMessage(mode) {
         if (mode === 'vertrieb') {
             chatBubble.textContent = 'Willkommen zurück Eike, was kann ich für dich tun?';
         } else if (mode === 'pva') {
-            chatBubble.textContent = 'Willkommen zurück Max, was kann ich für dich tun?';
+            chatBubble.textContent = 'Willkommen zurück Anja, was kann ich für dich tun?';
         }
     }
 }
