@@ -1639,6 +1639,78 @@ function initKundenFidaState() {
     }
 }
 
+// Speichert den aktuellen Vermittlermodus (makler/ao)
+let currentVermittlerMode = 'makler';
+
+// Wechselt zwischen Makler und AO Modus
+function switchVermittlerMode(mode) {
+    currentVermittlerMode = mode;
+    console.log('🔄 Vermittlermodus gewechselt zu:', mode);
+
+    // Toggle-Buttons aktualisieren
+    const toggleBtns = document.querySelectorAll('.toggle-option');
+    toggleBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.mode === mode) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Produktvorschläge Label aktualisieren
+    const label = document.getElementById('produktvorschlaegeLabel');
+    if (label) {
+        if (mode === 'makler') {
+            label.textContent = 'Top-Produktvorschläge (Makler-Vergleich)';
+        } else {
+            label.textContent = 'ERGO Produktempfehlung (Ausschließlichkeit)';
+        }
+    }
+
+    // Produktvorschläge anzeigen/verstecken
+    const maklerProdukte = document.getElementById('maklerProdukte');
+    const aoProdukte = document.getElementById('aoProdukte');
+
+    if (maklerProdukte && aoProdukte) {
+        if (mode === 'makler') {
+            maklerProdukte.style.display = 'flex';
+            aoProdukte.style.display = 'none';
+        } else {
+            maklerProdukte.style.display = 'none';
+            aoProdukte.style.display = 'flex';
+        }
+    }
+
+    // Bei AO-Modus: Fremdprodukte in der Open Finance Tabelle anpassen
+    updateOpenFinanceTable(mode);
+}
+
+// Passt die Open Finance Tabelle je nach Modus an
+function updateOpenFinanceTable(mode) {
+    // Bei AO (ERGO) sollten die ERGO-Produkte ausgeblendet werden
+    // da diese als eigene Produkte gelten und nicht als "Fremdprodukte" angezeigt werden
+    console.log('📊 Open Finance Tabelle für Modus:', mode);
+
+    const ergoRows = document.querySelectorAll('tr[data-anbieter="ergo"]');
+    const sourceTag = document.querySelector('.fida-source-tag');
+
+    ergoRows.forEach(row => {
+        if (mode === 'ao') {
+            row.style.display = 'none';
+        } else {
+            row.style.display = '';
+        }
+    });
+
+    // Source Tag aktualisieren
+    if (sourceTag) {
+        if (mode === 'ao') {
+            sourceTag.textContent = 'Allianz, HUK24, ARAG (ohne ERGO)';
+        } else {
+            sourceTag.textContent = 'Allianz, Ergo, HUK24, ARAG';
+        }
+    }
+}
+
 function closeKundenDetail() {
     document.getElementById('kundenDetailPage').style.display = 'none';
     document.getElementById('potentialAnalysePage').style.display = 'block';

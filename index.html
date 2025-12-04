@@ -1363,6 +1363,29 @@
                     Zurück
                 </button>
                 <h1 class="kunden-page-title">Kundendetails</h1>
+
+                <!-- Makler/AO Toggle -->
+                <div class="vermittler-toggle-container">
+                    <span class="toggle-label">Vertriebskanal:</span>
+                    <div class="vermittler-toggle" id="vermittlerToggle">
+                        <button class="toggle-option active" data-mode="makler" onclick="switchVermittlerMode('makler')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 010 7.75"></path>
+                            </svg>
+                            Makler
+                        </button>
+                        <button class="toggle-option" data-mode="ao" onclick="switchVermittlerMode('ao')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
+                            </svg>
+                            AO (ERGO)
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Tab Navigation -->
@@ -1698,48 +1721,81 @@
                             <span class="fida-new-tag">NEU durch Open Finance</span>
                             <span class="fida-source-tag">Allianz, Ergo, HUK24, ARAG</span>
                         </div>
-                        <table class="kunden-table fida-table">
+                        <table class="kunden-table fida-table fida-extended-table">
                             <thead>
                                 <tr>
                                     <th>Versicherung</th>
                                     <th>Anbieter</th>
                                     <th>Deckungssumme</th>
+                                    <th>Tarifart</th>
+                                    <th>Leistungsumfang</th>
+                                    <th>Ausschlüsse</th>
+                                    <th>Selbstbehalt</th>
                                     <th>Prämie</th>
-                                    <th>Vertragsbeginn</th>
                                     <th>Kündigungsfrist</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="openFinanceVersicherungenBody">
+                                <tr data-anbieter="allianz">
                                     <td><strong>Kfz-Versicherung</strong></td>
                                     <td>Allianz</td>
                                     <td>VK €50.000 / TK €25.000</td>
+                                    <td><span class="tarif-badge premium">Premium</span></td>
+                                    <td>
+                                        <span class="leistung-tag">GAP-Deckung</span>
+                                        <span class="leistung-tag">Marderschäden</span>
+                                        <span class="leistung-tag">Auslandsschutz</span>
+                                    </td>
+                                    <td><span class="ausschluss-tag">Rennen/Rallye</span></td>
+                                    <td>€300 VK</td>
                                     <td>€720/Jahr</td>
-                                    <td>01.01.2020</td>
                                     <td style="color: #dc2626;"><strong>30.11.2025</strong></td>
                                 </tr>
-                                <tr>
+                                <tr data-anbieter="ergo" class="ergo-row">
                                     <td><strong>Berufsunfähigkeit</strong></td>
                                     <td>Ergo</td>
                                     <td style="color: #f59e0b;"><strong>€1.500/Mon.</strong></td>
+                                    <td><span class="tarif-badge basis">Basis</span></td>
+                                    <td>
+                                        <span class="leistung-tag">50% BU-Grad</span>
+                                        <span class="leistung-tag">Infektionsklausel</span>
+                                    </td>
+                                    <td>
+                                        <span class="ausschluss-tag">Psyche</span>
+                                        <span class="ausschluss-tag">Rücken</span>
+                                    </td>
+                                    <td>Keine</td>
                                     <td>€89/Monat</td>
-                                    <td>01.06.2018</td>
                                     <td>-</td>
                                 </tr>
-                                <tr>
+                                <tr data-anbieter="huk24">
                                     <td><strong>Hausratversicherung</strong></td>
                                     <td>HUK24</td>
                                     <td>€65.000</td>
+                                    <td><span class="tarif-badge standard">Standard</span></td>
+                                    <td>
+                                        <span class="leistung-tag">Fahrraddiebstahl</span>
+                                        <span class="leistung-tag">Überspannung</span>
+                                    </td>
+                                    <td><span class="ausschluss-tag">Elementar</span></td>
+                                    <td>€150</td>
                                     <td>€142/Jahr</td>
-                                    <td>15.03.2019</td>
                                     <td>14.02.2026</td>
                                 </tr>
-                                <tr>
+                                <tr data-anbieter="arag">
                                     <td><strong>Rechtsschutz</strong></td>
                                     <td>ARAG</td>
                                     <td>€500.000 (Privat+Beruf)</td>
+                                    <td><span class="tarif-badge premium">Premium</span></td>
+                                    <td>
+                                        <span class="leistung-tag">Arbeitsrecht</span>
+                                        <span class="leistung-tag">Verkehr</span>
+                                        <span class="leistung-tag">Wohnen</span>
+                                        <span class="leistung-tag">Vertragsrecht</span>
+                                    </td>
+                                    <td><span class="ausschluss-tag">Kapitalanlage</span></td>
+                                    <td>€250</td>
                                     <td>€248/Jahr</td>
-                                    <td>01.09.2021</td>
                                     <td>31.08.2026</td>
                                 </tr>
                             </tbody>
@@ -1812,6 +1868,135 @@
                                 <strong>Empfehlung:</strong> BU-Nachversicherung um €2.200/Monat anbieten.
                                 Geschätzte Mehrprämie: ca. €120-150/Monat.
                                 <strong>Argument:</strong> "Herr Mustermann, wir sehen, dass Ihre bestehende BU nur 41% Ihres Einkommens absichert – deutlich unter der empfohlenen 80%. Darf ich Ihnen ein ergänzendes Angebot machen?"
+                            </div>
+
+                            <!-- Produktvorschläge Section -->
+                            <div class="produktvorschlaege-section">
+                                <h4 class="produktvorschlaege-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    <span id="produktvorschlaegeLabel">Top-Produktvorschläge (Makler-Vergleich)</span>
+                                </h4>
+
+                                <!-- Makler-Ansicht: Multi-Insurer Ranking -->
+                                <div id="maklerProdukte" class="produkt-ranking">
+                                    <div class="produkt-card rank-1">
+                                        <div class="produkt-rank">
+                                            <span class="rank-badge gold">1</span>
+                                            <span class="rank-label">Beste Wahl</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/allianz.de" alt="Allianz" onerror="this.style.display='none'">
+                                                <strong>Allianz BU Premium</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€145/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Kein Psyche-Ausschluss</span>
+                                                <span class="highlight-tag good">Dienstunfähigkeitsklausel</span>
+                                                <span class="highlight-tag good">Nachversicherungsgarantie</span>
+                                            </div>
+                                        </div>
+                                        <div class="produkt-score">
+                                            <div class="score-value">94</div>
+                                            <div class="score-label">Score</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="produkt-card rank-2">
+                                        <div class="produkt-rank">
+                                            <span class="rank-badge silver">2</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/hdi.de" alt="HDI" onerror="this.style.display='none'">
+                                                <strong>HDI BU Plus</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€138/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Günstigster Preis</span>
+                                                <span class="highlight-tag neutral">Psyche mit Risikozuschlag</span>
+                                            </div>
+                                        </div>
+                                        <div class="produkt-score">
+                                            <div class="score-value">89</div>
+                                            <div class="score-label">Score</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="produkt-card rank-3">
+                                        <div class="produkt-rank">
+                                            <span class="rank-badge bronze">3</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/nürnberger.de" alt="Nürnberger" onerror="this.style.display='none'">
+                                                <strong>Nürnberger BU Comfort</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€152/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Weltweiter Schutz</span>
+                                                <span class="highlight-tag neutral">Standard-Bedingungen</span>
+                                            </div>
+                                        </div>
+                                        <div class="produkt-score">
+                                            <div class="score-value">85</div>
+                                            <div class="score-label">Score</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AO-Ansicht: Nur ERGO Produkt -->
+                                <div id="aoProdukte" class="produkt-ranking" style="display: none;">
+                                    <div class="produkt-card ao-single">
+                                        <div class="produkt-rank ao">
+                                            <span class="rank-badge ergo">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                                    <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
+                                                </svg>
+                                            </span>
+                                            <span class="rank-label">ERGO Exklusiv</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/ergo.de" alt="ERGO" onerror="this.style.display='none'">
+                                                <strong>ERGO BU Premium Protect</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€149/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Kein Psyche-Ausschluss</span>
+                                                <span class="highlight-tag good">Leistungsdynamik 3%</span>
+                                                <span class="highlight-tag good">Infektionsklausel</span>
+                                                <span class="highlight-tag good">Haus-/Pflegeperson-Option</span>
+                                            </div>
+                                            <div class="ao-vorteile">
+                                                <strong>AO-Vorteile:</strong>
+                                                <span>5% Vermittler-Rabatt • Schnellprüfung möglich • Sondertarif verfügbar</span>
+                                            </div>
+                                        </div>
+                                        <button class="angebot-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                            </svg>
+                                            Angebot erstellen
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
