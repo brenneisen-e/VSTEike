@@ -96,13 +96,18 @@ function fillHeader(agentur, agenturData) {
     if (idHeader) idHeader.textContent = agentur.id;
     if (statusHeader) statusHeader.textContent = 'Aktiv';
 
-    // Lade Profilbild wenn vorhanden
+    // Standard-Profilbild für Max Mustermann
+    const defaultPhoto = 'https://raw.githubusercontent.com/brenneisen-e/VSTEike/main/AdobeStock_1091012713.jpeg';
+
+    // Lade Profilbild (gespeichert oder Standard)
     const savedPhoto = localStorage.getItem('agenturPhoto');
     const photoImgSmall = document.getElementById('agenturPhotoImgSmall');
     const placeholderSmall = document.querySelector('.agentur-photo-placeholder-small');
 
-    if (savedPhoto && photoImgSmall) {
-        photoImgSmall.src = savedPhoto;
+    const photoToUse = savedPhoto || defaultPhoto;
+
+    if (photoImgSmall) {
+        photoImgSmall.src = photoToUse;
         photoImgSmall.style.display = 'block';
         if (placeholderSmall) placeholderSmall.style.display = 'none';
     }
