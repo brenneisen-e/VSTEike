@@ -6058,3 +6058,18 @@ button svg,
 .deckungsluecke-recommendation strong {
     color: #92400e;
 }
+
+/* Klickbare Tabellenzeilen */
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.clickable-row:hover {
+    background-color: #e0f2fe !important;
+    transform: scale(1.002);
+}
+
+.clickable-row:active {
+    background-color: #bae6fd !important;
+}

@@ -785,7 +785,7 @@
                                 </tr>
                             </thead>
                             <tbody id="fidaCasesTableBody">
-                                <tr data-status="termin">
+                                <tr data-status="termin" class="clickable-row" onclick="openKundenDetail('VM00001')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">MM</div>
@@ -801,7 +801,7 @@
                                     <td><span class="status-badge termin">Termin 05.12.</span></td>
                                     <td>E-Mail gesendet (28.11.)</td>
                                     <td>
-                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00001')">
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00001')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
@@ -809,7 +809,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr data-status="angeschrieben">
+                                <tr data-status="angeschrieben" class="clickable-row" onclick="openKundenDetail('VM00042')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">SK</div>
@@ -825,7 +825,7 @@
                                     <td><span class="status-badge angeschrieben">Angeschrieben</span></td>
                                     <td>Brief versendet (25.11.)</td>
                                     <td>
-                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00042')">
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00042')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
@@ -833,7 +833,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr data-status="neu">
+                                <tr data-status="neu" class="clickable-row" onclick="openKundenDetail('VM00089')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">TW</div>
@@ -849,7 +849,7 @@
                                     <td><span class="status-badge neu">Neu identifiziert</span></td>
                                     <td>FIDA-Abgleich (30.11.)</td>
                                     <td>
-                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00089')">
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00089')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
@@ -857,7 +857,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr data-status="neu">
+                                <tr data-status="neu" class="clickable-row" onclick="openKundenDetail('VM00156')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">AH</div>
@@ -873,7 +873,7 @@
                                     <td><span class="status-badge neu">Neu identifiziert</span></td>
                                     <td>FIDA-Abgleich (30.11.)</td>
                                     <td>
-                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00156')">
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00156')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
@@ -881,7 +881,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr data-status="abgeschlossen">
+                                <tr data-status="abgeschlossen" class="clickable-row" onclick="openKundenDetail('VM00078')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">MB</div>
@@ -897,7 +897,7 @@
                                     <td><span class="status-badge abgeschlossen">Abgeschlossen</span></td>
                                     <td>Vertrag policiert (27.11.)</td>
                                     <td>
-                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00078')">
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00078')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
@@ -905,7 +905,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <tr data-status="termin">
+                                <tr data-status="termin" class="clickable-row" onclick="openKundenDetail('VM00234')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">LM</div>
@@ -921,7 +921,7 @@
                                     <td><span class="status-badge termin">Termin 08.12.</span></td>
                                     <td>Telefonat (01.12.)</td>
                                     <td>
-                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00234')">
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00234')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
