@@ -885,25 +885,19 @@ window.addEventListener('DOMContentLoaded', function() {
 async function loadDefaultCSVData() {
     console.log('📊 Lade Standard-CSV-Daten...');
 
-    // URL zur CSV-Datei auf GitHub (raw)
-    const csvUrl = 'https://raw.githubusercontent.com/brenneisen-e/VSTEike/main/dashboard_data_2024_2025_daily_regierungsbezirke%20(5).csv';
+    // Lokale CSV-Datei (im data-Ordner)
+    const localCsvPath = 'data/mock-data.csv';
 
     try {
-        const response = await fetch(csvUrl);
+        const response = await fetch(localCsvPath);
 
         if (!response.ok) {
-            console.warn('⚠️ CSV konnte nicht von GitHub geladen werden, versuche lokale Datei...');
-            // Fallback: versuche lokale Datei
-            const localResponse = await fetch('dashboard_data_2024_2025_daily_regierungsbezirke (5).csv');
-            if (localResponse.ok) {
-                const csvText = await localResponse.text();
-                processCSVData(csvText);
-            }
-            return;
+            throw new Error('Lokale CSV nicht gefunden');
         }
 
         const csvText = await response.text();
         processCSVData(csvText);
+        console.log('✅ CSV aus lokalem data/-Ordner geladen');
 
     } catch (error) {
         console.warn('⚠️ Fehler beim Laden der CSV-Daten:', error);
