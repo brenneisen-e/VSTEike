@@ -427,5 +427,57 @@ function closeBillingCheck() {
     if (billingCheckPage) billingCheckPage.style.display = 'none';
 }
 
+// ========================================
+// FIDA POTENTIALE FUNCTIONS
+// ========================================
+
+/**
+ * Filtert die FIDA-Fälle Tabelle nach Status
+ * @param {string} status - Filter-Status (alle, neu, angeschrieben, termin, abgeschlossen)
+ */
+function filterFidaCases(status) {
+    console.log('🔍 Filtere FIDA-Fälle nach:', status);
+
+    // Update active filter button
+    document.querySelectorAll('.fida-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    const activeBtn = document.querySelector(`.fida-filter-btn[onclick="filterFidaCases('${status}')"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+
+    // Filter table rows
+    const tableBody = document.getElementById('fidaCasesTableBody');
+    if (!tableBody) return;
+
+    const rows = tableBody.querySelectorAll('tr');
+    rows.forEach(row => {
+        const rowStatus = row.getAttribute('data-status');
+        if (status === 'alle' || rowStatus === status) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+/**
+ * Öffnet die Kundendetailansicht für einen Kunden
+ * @param {string} kundenId - Die Kunden-ID (z.B. 'VM00001')
+ */
+function openKundenDetailFromFida(kundenId) {
+    console.log('👤 Öffne Kundendetail von FIDA für:', kundenId);
+
+    // Wenn openKundenDetail existiert, nutze sie
+    if (typeof window.openKundenDetail === 'function') {
+        window.openKundenDetail(kundenId);
+    } else {
+        console.log('openKundenDetail Funktion nicht gefunden');
+    }
+}
+
 // Global verfügbar machen
 window.showAgenturTab = showAgenturTab;
+window.filterFidaCases = filterFidaCases;
+window.openKundenDetailFromFida = openKundenDetailFromFida;

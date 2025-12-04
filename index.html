@@ -396,6 +396,14 @@
                         </svg>
                         Qualität
                     </button>
+                    <button class="agentur-tab fida-tab" onclick="showAgenturTab('potential')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+                        </svg>
+                        FIDA Potentiale
+                    </button>
                 </div>
 
                 <!-- Tab Content: Stammdaten -->
@@ -669,6 +677,322 @@
                             <div class="kpi-detail-header">Underwriting-Quote</div>
                             <div class="kpi-detail-value" id="qualUnderwriting">0%</div>
                             <div class="kpi-detail-sub">Annahme-Quote</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: FIDA Potentiale -->
+                <div class="agentur-tab-content" id="tab-potential">
+                    <!-- FIDA Übersicht KPIs -->
+                    <div class="kpi-detail-grid">
+                        <div class="kpi-detail-card fida-highlight">
+                            <div class="kpi-detail-header">FIDA-Consent-Kunden</div>
+                            <div class="kpi-detail-value" id="fidaConsentKunden">847</div>
+                            <div class="kpi-detail-sub">von 1.234 Kunden (69%)</div>
+                        </div>
+                        <div class="kpi-detail-card fida-highlight">
+                            <div class="kpi-detail-header">Identifizierte Potentiale</div>
+                            <div class="kpi-detail-value" id="fidaPotentiale">1.892</div>
+                            <div class="kpi-detail-sub">Cross-/Upselling-Chancen</div>
+                        </div>
+                        <div class="kpi-detail-card fida-highlight">
+                            <div class="kpi-detail-header">Geschätztes Prämienvolumen</div>
+                            <div class="kpi-detail-value" id="fidaPraemien">€284.500</div>
+                            <div class="kpi-detail-sub">Jährliches Potential</div>
+                        </div>
+                        <div class="kpi-detail-card fida-highlight">
+                            <div class="kpi-detail-header">Conversion-Rate</div>
+                            <div class="kpi-detail-value" id="fidaConversion">12,4%</div>
+                            <div class="kpi-detail-sub">Abgeschlossen / Bearbeitet</div>
+                        </div>
+                    </div>
+
+                    <!-- FIDA Fälle Pipeline -->
+                    <div class="fida-pipeline-section">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+                            </svg>
+                            FIDA-Fälle Pipeline
+                        </h3>
+                        <div class="fida-pipeline">
+                            <div class="pipeline-stage">
+                                <div class="pipeline-count">423</div>
+                                <div class="pipeline-label">Neu identifiziert</div>
+                                <div class="pipeline-bar" style="background: #e2e8f0;"></div>
+                            </div>
+                            <div class="pipeline-arrow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="pipeline-stage">
+                                <div class="pipeline-count">156</div>
+                                <div class="pipeline-label">Angeschrieben</div>
+                                <div class="pipeline-bar" style="background: #93c5fd;"></div>
+                            </div>
+                            <div class="pipeline-arrow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="pipeline-stage">
+                                <div class="pipeline-count">89</div>
+                                <div class="pipeline-label">Termin vereinbart</div>
+                                <div class="pipeline-bar" style="background: #fbbf24;"></div>
+                            </div>
+                            <div class="pipeline-arrow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="pipeline-stage success">
+                                <div class="pipeline-count">67</div>
+                                <div class="pipeline-label">Abgeschlossen</div>
+                                <div class="pipeline-bar" style="background: #22c55e;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FIDA Fälle Tabelle -->
+                    <div class="fida-cases-section">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            Aktuelle FIDA-Fälle
+                        </h3>
+                        <div class="fida-filter-row">
+                            <button class="fida-filter-btn active" onclick="filterFidaCases('alle')">Alle</button>
+                            <button class="fida-filter-btn" onclick="filterFidaCases('neu')">Neu</button>
+                            <button class="fida-filter-btn" onclick="filterFidaCases('angeschrieben')">Angeschrieben</button>
+                            <button class="fida-filter-btn" onclick="filterFidaCases('termin')">Termin</button>
+                            <button class="fida-filter-btn" onclick="filterFidaCases('abgeschlossen')">Abgeschlossen</button>
+                        </div>
+                        <table class="fida-cases-table">
+                            <thead>
+                                <tr>
+                                    <th>Kunde</th>
+                                    <th>Potential-Typ</th>
+                                    <th>Quelle</th>
+                                    <th>Geschätztes Volumen</th>
+                                    <th>Status</th>
+                                    <th>Letzte Aktion</th>
+                                    <th>Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fidaCasesTableBody">
+                                <tr data-status="termin">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">MM</div>
+                                            <div class="kunde-info">
+                                                <strong>Max Mustermann</strong>
+                                                <span>VM00001</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type bu">BU-Deckungslücke</span></td>
+                                    <td><span class="fida-source-badge small">Versicherung</span></td>
+                                    <td><strong>€2.400/Jahr</strong></td>
+                                    <td><span class="status-badge termin">Termin 05.12.</span></td>
+                                    <td>E-Mail gesendet (28.11.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00001')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="angeschrieben">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">SK</div>
+                                            <div class="kunde-info">
+                                                <strong>Sabine König</strong>
+                                                <span>VM00042</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type kfz">Kfz-Wechsel</span></td>
+                                    <td><span class="fida-source-badge small">Versicherung</span></td>
+                                    <td><strong>€650/Jahr</strong></td>
+                                    <td><span class="status-badge angeschrieben">Angeschrieben</span></td>
+                                    <td>Brief versendet (25.11.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00042')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="neu">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">TW</div>
+                                            <div class="kunde-info">
+                                                <strong>Thomas Weber</strong>
+                                                <span>VM00089</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type risiko">Risikoleben fehlt</span></td>
+                                    <td><span class="fida-source-badge small">Kredit</span></td>
+                                    <td><strong>€1.800/Jahr</strong></td>
+                                    <td><span class="status-badge neu">Neu identifiziert</span></td>
+                                    <td>FIDA-Abgleich (30.11.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00089')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="neu">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">AH</div>
+                                            <div class="kunde-info">
+                                                <strong>Anna Hoffmann</strong>
+                                                <span>VM00156</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type invest">Fondsrente</span></td>
+                                    <td><span class="fida-source-badge small">Investment</span></td>
+                                    <td><strong>€3.200/Jahr</strong></td>
+                                    <td><span class="status-badge neu">Neu identifiziert</span></td>
+                                    <td>FIDA-Abgleich (30.11.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00156')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="abgeschlossen">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">MB</div>
+                                            <div class="kunde-info">
+                                                <strong>Michael Braun</strong>
+                                                <span>VM00078</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type hausrat">Hausrat-Wechsel</span></td>
+                                    <td><span class="fida-source-badge small">Versicherung</span></td>
+                                    <td><strong>€420/Jahr</strong></td>
+                                    <td><span class="status-badge abgeschlossen">Abgeschlossen</span></td>
+                                    <td>Vertrag policiert (27.11.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00078')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="termin">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">LM</div>
+                                            <div class="kunde-info">
+                                                <strong>Lisa Müller</strong>
+                                                <span>VM00234</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type alters">Altersvorsorge-Lücke</span></td>
+                                    <td><span class="fida-source-badge small">Altersvorsorge</span></td>
+                                    <td><strong>€4.800/Jahr</strong></td>
+                                    <td><span class="status-badge termin">Termin 08.12.</span></td>
+                                    <td>Telefonat (01.12.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="openKundenDetail('VM00234')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Automatische Kommunikation -->
+                    <div class="auto-komm-section">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            Automatische Kundenansprache (letzte 7 Tage)
+                        </h3>
+                        <div class="auto-komm-stats">
+                            <div class="komm-stat">
+                                <div class="komm-stat-icon email">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="komm-stat-content">
+                                    <div class="komm-stat-value">42</div>
+                                    <div class="komm-stat-label">E-Mails versendet</div>
+                                </div>
+                            </div>
+                            <div class="komm-stat">
+                                <div class="komm-stat-icon brief">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="komm-stat-content">
+                                    <div class="komm-stat-value">18</div>
+                                    <div class="komm-stat-label">Briefe versendet</div>
+                                </div>
+                            </div>
+                            <div class="komm-stat">
+                                <div class="komm-stat-icon response">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                        <polyline points="9 11 12 14 22 4"></polyline>
+                                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                                    </svg>
+                                </div>
+                                <div class="komm-stat-content">
+                                    <div class="komm-stat-value">23%</div>
+                                    <div class="komm-stat-label">Rücklaufquote</div>
+                                </div>
+                            </div>
+                            <div class="komm-stat">
+                                <div class="komm-stat-icon termin">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                </div>
+                                <div class="komm-stat-content">
+                                    <div class="komm-stat-value">14</div>
+                                    <div class="komm-stat-label">Termine vereinbart</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1251,9 +1575,9 @@
                         </div>
                     </div>
 
-                    <!-- FIDA Einkommensdaten -->
-                    <div class="kunden-card">
-                        <div class="kunden-card-header fida">
+                    <!-- PSD2 Einkommensdaten (bereits verfügbar seit 2018) -->
+                    <div class="kunden-card psd2-card">
+                        <div class="kunden-card-header psd2">
                             <h2>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                     <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -1261,6 +1585,7 @@
                                 </svg>
                                 Einkommensdaten (Bankdaten)
                             </h2>
+                            <span class="psd2-source-tag">PSD2 - seit 2018</span>
                             <span class="fida-source-tag">Sparkasse Hauptkonto</span>
                         </div>
                         <div class="fida-finance-grid">
@@ -1285,17 +1610,26 @@
                                 <span class="fida-finance-detail">Fixkosten: €2.260 (Miete, Kredite, etc.)</span>
                             </div>
                         </div>
+                        <div class="data-source-info psd2">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                            Diese Daten waren bereits über PSD2 (Payment Services Directive) seit 2018 abrufbar - erforderte jedoch AISP-Lizenz.
+                        </div>
                     </div>
 
-                    <!-- FIDA Investment Portfolio -->
-                    <div class="kunden-card">
-                        <div class="kunden-card-header fida">
+                    <!-- FIDA NEU: Investment Portfolio -->
+                    <div class="kunden-card fida-new-card">
+                        <div class="kunden-card-header fida-new">
                             <h2>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                                 </svg>
                                 Investment-Portfolio (Investmentdaten)
                             </h2>
+                            <span class="fida-new-tag">NEU durch FIDA</span>
                             <span class="fida-source-tag">DWS, Union Investment</span>
                         </div>
                         <table class="kunden-table fida-table">
@@ -1354,16 +1688,17 @@
                         </div>
                     </div>
 
-                    <!-- FIDA Versicherungen bei Wettbewerbern -->
-                    <div class="kunden-card">
-                        <div class="kunden-card-header fida">
+                    <!-- FIDA NEU: Versicherungen bei Wettbewerbern -->
+                    <div class="kunden-card fida-new-card">
+                        <div class="kunden-card-header fida-new">
                             <h2>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                 </svg>
                                 Versicherungen bei Wettbewerbern
                             </h2>
-                            <span class="fida-source-tag">FIDA Versicherungsdaten</span>
+                            <span class="fida-new-tag">NEU durch FIDA</span>
+                            <span class="fida-source-tag">Allianz, Ergo, HUK24, ARAG</span>
                         </div>
                         <table class="kunden-table fida-table">
                             <thead>
@@ -1454,9 +1789,9 @@
                         </div>
                     </div>
 
-                    <!-- Kredit-Übersicht -->
-                    <div class="kunden-card">
-                        <div class="kunden-card-header fida">
+                    <!-- FIDA NEU: Kredit-Übersicht -->
+                    <div class="kunden-card fida-new-card">
+                        <div class="kunden-card-header fida-new">
                             <h2>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
@@ -1464,6 +1799,7 @@
                                 </svg>
                                 Kredite & Verbindlichkeiten
                             </h2>
+                            <span class="fida-new-tag">NEU durch FIDA</span>
                             <span class="fida-source-tag">Sparkasse, ING</span>
                         </div>
                         <table class="kunden-table fida-table">

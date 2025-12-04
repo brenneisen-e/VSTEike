@@ -3942,6 +3942,77 @@ button svg,
     font-weight: 500;
 }
 
+/* PSD2 Styling (bereits verfügbar seit 2018) */
+.psd2-card {
+    border: 2px solid #94a3b8;
+}
+
+.kunden-card-header.psd2 {
+    background: #f1f5f9;
+}
+
+.kunden-card-header.psd2 h2 {
+    color: #475569;
+}
+
+.psd2-source-tag {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+}
+
+.data-source-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-size: 12px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.data-source-info.psd2 {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.data-source-info svg {
+    flex-shrink: 0;
+}
+
+/* FIDA NEU Styling (ab 2027) */
+.fida-new-card {
+    border: 2px solid #16a34a;
+}
+
+.kunden-card-header.fida-new {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.kunden-card-header.fida-new h2 {
+    color: #166534;
+}
+
+.fida-new-tag {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+}
+
 .fida-finance-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -5462,4 +5533,408 @@ button svg,
     flex: 1;
     width: 100%;
     border: none;
+}
+
+/* ========================================
+   FIDA POTENTIALE TAB (Agentursicht)
+   ======================================== */
+
+/* FIDA Tab Button Highlight */
+.agentur-tab.fida-tab {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: white;
+    border-color: #059669;
+}
+
+.agentur-tab.fida-tab:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%);
+}
+
+/* FIDA Highlight Cards */
+.kpi-detail-card.fida-highlight {
+    border: 2px solid #10b981;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.kpi-detail-card.fida-highlight .kpi-detail-header {
+    color: #059669;
+}
+
+.kpi-detail-card.fida-highlight .kpi-detail-value {
+    color: #047857;
+}
+
+/* Section Titles */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+.section-title svg {
+    color: #64748b;
+}
+
+/* FIDA Pipeline */
+.fida-pipeline-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fida-pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 20px 0;
+}
+
+.pipeline-stage {
+    flex: 1;
+    text-align: center;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pipeline-stage:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.pipeline-stage.success {
+    background: #ecfdf5;
+}
+
+.pipeline-count {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.pipeline-stage.success .pipeline-count {
+    color: #059669;
+}
+
+.pipeline-label {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.pipeline-bar {
+    height: 6px;
+    border-radius: 3px;
+    margin-top: 8px;
+}
+
+.pipeline-arrow {
+    color: #cbd5e1;
+    flex-shrink: 0;
+}
+
+/* FIDA Cases Table Section */
+.fida-cases-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.fida-filter-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.fida-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fida-filter-btn:hover {
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.fida-filter-btn.active {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.fida-cases-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.fida-cases-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f8fafc;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.fida-cases-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    color: #334155;
+}
+
+.fida-cases-table tr:hover {
+    background: #f8fafc;
+}
+
+/* Kunde Cell */
+.kunde-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.kunde-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.kunde-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.kunde-info strong {
+    color: #1e293b;
+}
+
+.kunde-info span {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* Potential Type Badges */
+.potential-type {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.potential-type.bu {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.potential-type.kfz {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.potential-type.risiko {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.potential-type.invest {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.potential-type.hausrat {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.potential-type.alters {
+    background: #fce7f3;
+    color: #9d174d;
+}
+
+/* FIDA Source Badge Small */
+.fida-source-badge.small {
+    font-size: 11px;
+    padding: 3px 8px;
+}
+
+/* Status Badges for FIDA */
+.status-badge.neu {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.status-badge.angeschrieben {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.termin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.abgeschlossen {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Action Button */
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: #f8fafc;
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.action-btn svg {
+    color: #64748b;
+}
+
+.action-btn:hover svg {
+    color: #10b981;
+}
+
+/* Automatische Kommunikation Section */
+.auto-komm-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.auto-komm-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.komm-stat {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.komm-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.komm-stat-icon.email {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.komm-stat-icon.brief {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.komm-stat-icon.response {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.komm-stat-icon.termin {
+    background: #e0e7ff;
+    color: #4f46e5;
+}
+
+.komm-stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.komm-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.komm-stat-label {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Responsive für FIDA Potentiale */
+@media (max-width: 1200px) {
+    .fida-pipeline {
+        flex-wrap: wrap;
+    }
+
+    .pipeline-stage {
+        min-width: calc(50% - 20px);
+    }
+
+    .pipeline-arrow {
+        display: none;
+    }
+
+    .auto-komm-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .pipeline-stage {
+        min-width: 100%;
+    }
+
+    .auto-komm-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .fida-cases-table {
+        display: block;
+        overflow-x: auto;
+    }
 }
