@@ -1630,26 +1630,142 @@ function fillKundenDetail(kundenName, vermittlerId) {
     }
 }
 
-function toggleKundenFida() {
-    const eigeneDaten = document.getElementById('kundenEigeneDaten');
-    const fidaDaten = document.getElementById('kundenFidaDaten');
-    const eigenBtn = document.getElementById('kundenEigenBtn');
-    const fidaBtn = document.getElementById('kundenFidaBtn');
+// ========================================
+// KUNDEN TAB NAVIGATION
+// ========================================
 
-    // FIDA zeigt zusätzliche Daten - nicht ersetzend
-    if (fidaDaten.style.display === 'none') {
-        // FIDA aktivieren - beide anzeigen
-        eigeneDaten.style.display = 'block';
-        fidaDaten.style.display = 'block';
-        fidaBtn.classList.add('active');
-        fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA aktiv';
-    } else {
-        // FIDA deaktivieren - nur eigene Daten
-        eigeneDaten.style.display = 'block';
-        fidaDaten.style.display = 'none';
-        fidaBtn.classList.remove('active');
-        fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA';
+function switchKundenTab(tabName) {
+    // Alle Tabs deaktivieren
+    document.querySelectorAll('.kunden-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    // Alle Tab-Inhalte verstecken
+    document.querySelectorAll('.kunden-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+
+    // Aktiven Tab markieren
+    const activeTab = document.querySelector(`.kunden-tab[data-tab="${tabName}"]`);
+    if (activeTab) {
+        activeTab.classList.add('active');
     }
+
+    // Tab-Inhalt anzeigen
+    const tabContent = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+    if (tabContent) {
+        tabContent.classList.add('active');
+    }
+
+    console.log('Tab gewechselt zu:', tabName);
+}
+
+// Kommunikation ansehen
+function viewKommunikation(kommId) {
+    console.log('Kommunikation ansehen:', kommId);
+
+    // Mock-Daten für Kommunikation
+    const kommunikationen = {
+        'email-1': {
+            typ: 'E-Mail',
+            datum: '28.11.2025, 09:15',
+            betreff: 'Kfz-Versicherung: Ihr Vertrag läuft aus',
+            inhalt: `Sehr geehrter Herr Mustermann,
+
+Ihr Kfz-Vertrag bei der Allianz (Kennzeichen: M-AB 1234) läuft am 31.12.2025 aus.
+
+Basierend auf Ihrer Schadenfreiheitsklasse SF12 und Ihren Fahrzeugdaten haben wir ein attraktives Angebot für Sie:
+
+- Haftpflicht + Vollkasko: €520/Jahr (statt €680 aktuell)
+- Ersparnis: €160/Jahr
+
+Interesse? Antworten Sie einfach auf diese E-Mail oder rufen Sie uns an.
+
+Mit freundlichen Grüßen
+Ihre Versicherungsagentur`,
+            status: 'Geöffnet am 28.11.2025, 14:32'
+        },
+        'brief-1': {
+            typ: 'Brief',
+            datum: '15.11.2025',
+            betreff: 'FIDA-Datenfreigabe: Neue Potentiale erkannt',
+            inhalt: `Sehr geehrter Herr Mustermann,
+
+vielen Dank für Ihre FIDA-Datenfreigabe vom 15.03.2024.
+
+Basierend auf der Analyse Ihrer Finanzdaten haben wir folgende Optimierungsmöglichkeiten identifiziert:
+
+1. Risikolebensversicherung
+   Ihre Hypothek (€320.000) ist derzeit nicht abgesichert.
+
+2. Private Altersvorsorge
+   Bei Ihrer Sparrate von €800/Monat können wir Ihre Rentenlücke schließen.
+
+Wir würden uns freuen, diese Möglichkeiten in einem persönlichen Gespräch mit Ihnen zu besprechen.
+
+Mit freundlichen Grüßen
+Ihre Versicherungsagentur`,
+            status: 'Versendet'
+        },
+        'call-1': {
+            typ: 'Telefonat',
+            datum: '10.11.2025, 11:20',
+            betreff: 'Rückruf wegen Altersvorsorge-Angebot',
+            inhalt: `Gesprächsnotiz:
+
+Kunde rief zurück wegen Brief vom 15.11.
+
+- Interesse an fondsgebundener Rentenversicherung
+- Möchte Angebot mit verschiedenen Fonds-Optionen
+- Bevorzugt nachhaltige ETFs
+- Budget: ca. €400/Monat zusätzlich zur bestehenden Sparrate
+
+Termin vereinbart: 12.12.2025, 14:00 Uhr
+Ort: Agentur
+
+Vorbereitung:
+- 3 Angebote mit unterschiedlichen Risikoprofilen
+- ESG-Fonds-Optionen`,
+            status: 'Termin: 12.12.2025'
+        },
+        'email-2': {
+            typ: 'E-Mail',
+            datum: '01.10.2025, 08:00',
+            betreff: 'Willkommen bei FIDA - Ihre Daten sind jetzt verknüpft',
+            inhalt: `Sehr geehrter Herr Mustermann,
+
+vielen Dank für Ihre FIDA-Datenfreigabe!
+
+Ab sofort können wir Ihnen personalisierte Versicherungsempfehlungen basierend auf Ihrer Finanzsituation anbieten.
+
+Was bedeutet das für Sie?
+- Wir erkennen automatisch, wenn sich Ihre Lebensumstände ändern
+- Sie erhalten nur relevante Angebote
+- Ihre Daten sind sicher und DSGVO-konform geschützt
+
+Ihre freigegebenen Datenquellen:
+- Sparkasse (Girokonto)
+- DWS (Depot)
+- Sparkasse (Hypothekendarlehen)
+- Allianz (Kfz-Versicherung)
+
+Sie können Ihre Einwilligung jederzeit über das FIDA-Dashboard widerrufen.
+
+Mit freundlichen Grüßen
+Ihre Versicherungsagentur`,
+            status: 'Geöffnet am 01.10.2025, 19:45'
+        }
+    };
+
+    const komm = kommunikationen[kommId];
+    if (komm) {
+        alert(`${komm.typ} vom ${komm.datum}\n\nBetreff: ${komm.betreff}\n\n${komm.inhalt}\n\nStatus: ${komm.status}`);
+    }
+}
+
+// Legacy-Funktion für Kompatibilität
+function toggleKundenFida() {
+    switchKundenTab('fida');
 }
 
 // ========================================
