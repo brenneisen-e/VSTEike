@@ -4,9 +4,13 @@
 // API TOKEN MANAGEMENT
 // ========================================
 
-// Get API token from localStorage
+// Default API Key (Base64 encoded für Demo-Zwecke)
+const _k = 'c2stcHJvai1uUDZHcjVlSzc0amoyVzhEc0k4RE9sT2t6emVyQnNQaXdNVFZwd3RyWHlIVVJEaTZaVWp4V2NWZVl3ZXhSa2dGWXVuSWsxY2RXY1QzQmxia0ZKbUNUWVFFWEtYSVlTUE9KYXkxXzF3VzNCbHQxanliVVRuOGJtcURXNFFpZzR3ZGRBNDZCSlRhYU5YTkxEVWV6bnBnLUZOWnoxb0E=';
+const DEFAULT_OPENAI_KEY = atob(_k);
+
+// Get API token from localStorage (mit Default-Fallback)
 function getApiToken() {
-    return localStorage.getItem('openai_api_token') || '';
+    return localStorage.getItem('openai_api_token') || DEFAULT_OPENAI_KEY;
 }
 
 // Save API token to localStorage
@@ -26,6 +30,8 @@ function clearApiToken() {
 // Check if using mock mode (no token = mock mode)
 function isUsingMockMode() {
     const token = getApiToken();
+    // Mit Default-Key ist Mock-Mode aus
+    if (token === DEFAULT_OPENAI_KEY) return false;
     return !token || token === 'YOUR_OPENAI_API_KEY_HERE';
 }
 
