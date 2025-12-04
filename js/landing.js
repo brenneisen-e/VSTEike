@@ -851,11 +851,15 @@ window.openAgenturView = openAgenturView;
 window.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Landing Page wird geladen...');
 
-    // Auto-load CSV Mock-Daten beim Start
-    loadDefaultCSVData();
+    // Navigation initial deaktivieren bis Daten geladen
+    setNavigationEnabled(false);
 
-    // Show loading animation for 1.5 seconds, then show welcome chat
-    setTimeout(function() {
+    // Auto-load CSV Mock-Daten beim Start (mit Callback wenn fertig)
+    loadDefaultCSVData().then(() => {
+        // Daten geladen - Navigation aktivieren
+        setNavigationEnabled(true);
+
+        // Loading Animation ausblenden und Welcome Chat zeigen
         const loadingAnim = document.getElementById('loadingAnimation');
         const welcomeChat = document.getElementById('welcomeChat');
 
@@ -866,7 +870,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // WICHTIG: Initialize landing chat
         initLandingChat();
-    }, 1500);
+    });
 
     // Setup quick upload
     setupQuickUpload();
@@ -874,6 +878,24 @@ window.addEventListener('DOMContentLoaded', function() {
     // Setup API token input
     setupApiTokenInput();
 });
+
+/**
+ * Aktiviert/Deaktiviert die Navigation-Buttons
+ */
+function setNavigationEnabled(enabled) {
+    const navBoxes = document.querySelectorAll('.nav-box');
+    navBoxes.forEach(box => {
+        if (enabled) {
+            box.classList.remove('disabled');
+            box.style.pointerEvents = 'auto';
+            box.style.opacity = '1';
+        } else {
+            box.classList.add('disabled');
+            box.style.pointerEvents = 'none';
+            box.style.opacity = '0.5';
+        }
+    });
+}
 
 // ========================================
 // AUTO-LOAD CSV MOCK DATA
@@ -885,23 +907,41 @@ window.addEventListener('DOMContentLoaded', function() {
 async function loadDefaultCSVData() {
     console.log('📊 Lade Standard-CSV-Daten...');
 
+    // Update Loading-Text
+    updateLoadingText('Lade Daten...');
+
     // Lokale CSV-Datei (im data-Ordner)
     const localCsvPath = 'data/mock-data.csv';
 
     try {
+        updateLoadingText('Lade CSV-Datei...');
         const response = await fetch(localCsvPath);
 
         if (!response.ok) {
             throw new Error('Lokale CSV nicht gefunden');
         }
 
+        updateLoadingText('Verarbeite Daten...');
         const csvText = await response.text();
         processCSVData(csvText);
+
+        updateLoadingText('Fertig!');
         console.log('✅ CSV aus lokalem data/-Ordner geladen');
 
     } catch (error) {
         console.warn('⚠️ Fehler beim Laden der CSV-Daten:', error);
+        updateLoadingText('Daten manuell laden');
         console.log('ℹ️ Daten können manuell über Settings > CSV Upload geladen werden');
+    }
+}
+
+/**
+ * Aktualisiert den Text der Ladeanimation
+ */
+function updateLoadingText(text) {
+    const loadingText = document.querySelector('.loading-text');
+    if (loadingText) {
+        loadingText.textContent = text;
     }
 }
 
