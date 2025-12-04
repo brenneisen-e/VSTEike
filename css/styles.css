@@ -3929,10 +3929,201 @@ button svg,
     color: #86BC25;
 }
 
+/* ========================================
+   FIDA DETAILLIERTE DATEN
+   ======================================== */
+
+.fida-source-tag {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.fida-finance-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 20px;
+}
+
+.fida-finance-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fida-finance-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fida-finance-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.fida-finance-detail {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.fida-product-type {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.fida-insight-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #eff6ff;
+    border-top: 1px solid #e2e8f0;
+    color: #1e40af;
+    font-size: 13px;
+}
+
+.fida-insight-box.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.fida-insight-box svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Deckungslücken-Analyse */
+.deckungsluecke-card {
+    border: 2px solid #f59e0b;
+}
+
+.kunden-card-header.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.kunden-card-header.warning h2 {
+    color: #92400e;
+}
+
+.deckungsluecke-content {
+    padding: 24px;
+}
+
+.deckungsluecke-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.deckungsluecke-item {
+    text-align: center;
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.deckungsluecke-item.highlight-danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.deckungsluecke-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.deckungsluecke-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.deckungsluecke-item.highlight-danger .deckungsluecke-value {
+    color: #dc2626;
+}
+
+.deckungsluecke-divider {
+    font-size: 32px;
+    font-weight: 300;
+    color: #94a3b8;
+}
+
+.deckungsluecke-bar {
+    height: 32px;
+    background: #fee2e2;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.deckungsluecke-bar-filled {
+    height: 100%;
+    background: linear-gradient(90deg, #16a34a, #86BC25);
+    border-radius: 16px;
+    transition: width 0.5s ease;
+}
+
+.deckungsluecke-bar-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.deckungsluecke-recommendation {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+}
+
 /* Responsive */
+@media (max-width: 1200px) {
+    .fida-finance-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .fida-status-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fida-finance-grid {
+        grid-template-columns: 1fr;
     }
 
     .kunden-tabs {
@@ -3945,6 +4136,15 @@ button svg,
 
     .komm-action {
         align-self: flex-start;
+    }
+
+    .deckungsluecke-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .deckungsluecke-divider {
+        transform: rotate(90deg);
     }
 }
 
