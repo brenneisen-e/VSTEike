@@ -5938,3 +5938,123 @@ button svg,
         overflow-x: auto;
     }
 }
+
+/* ========================================
+   PSD2/FIDA SOURCE TAGS IN DECKUNGSLÜCKE
+   ======================================== */
+
+/* Combined Source Tag */
+.combined-source-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: linear-gradient(90deg, #64748b 0%, #64748b 45%, #10b981 55%, #10b981 100%);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    margin-left: auto;
+}
+
+/* Individual Source Tags */
+.source-tag {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.source-tag.psd2 {
+    background: #64748b;
+    color: white;
+}
+
+.source-tag.fida {
+    background: #10b981;
+    color: white;
+}
+
+/* Deckungslücke Item with Source */
+.deckungsluecke-item.psd2-item {
+    border-left: 3px solid #64748b;
+    padding-left: 12px;
+}
+
+.deckungsluecke-item.fida-item {
+    border-left: 3px solid #10b981;
+    padding-left: 12px;
+}
+
+.deckungsluecke-source {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.deckungsluecke-item.highlight-danger .deckungsluecke-source {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Deckungslücke Insight Section */
+.deckungsluecke-insight {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insight-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #334155;
+}
+
+.insight-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.insight-icon.psd2 {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.insight-icon.fida {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.insight-row strong {
+    font-weight: 600;
+}
+
+/* Make recommendation more prominent */
+.deckungsluecke-recommendation {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.6;
+}
+
+.deckungsluecke-recommendation strong {
+    color: #92400e;
+}

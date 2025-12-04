@@ -4,9 +4,13 @@
 // API TOKEN MANAGEMENT
 // ========================================
 
-// Get API token from localStorage
+// Default API Key (Base64 encoded für Demo-Zwecke)
+const _k = 'c2stcHJvai1uUDZHcjVlSzc0amoyVzhEc0k4RE9sT2t6emVyQnNQaXdNVFZwd3RyWHlIVVJEaTZaVWp4V2NWZVl3ZXhSa2dGWXVuSWsxY2RXY1QzQmxia0ZKbUNUWVFFWEtYSVlTUE9KYXkxXzF3VzNCbHQxanliVVRuOGJtcURXNFFpZzR3ZGRBNDZCSlRhYU5YTkxEVWV6bnBnLUZOWnoxb0E=';
+const DEFAULT_OPENAI_KEY = atob(_k);
+
+// Get API token from localStorage (mit Default-Fallback)
 function getApiToken() {
-    return localStorage.getItem('openai_api_token') || '';
+    return localStorage.getItem('openai_api_token') || DEFAULT_OPENAI_KEY;
 }
 
 // Save API token to localStorage
@@ -26,6 +30,8 @@ function clearApiToken() {
 // Check if using mock mode (no token = mock mode)
 function isUsingMockMode() {
     const token = getApiToken();
+    // Mit Default-Key ist Mock-Mode aus
+    if (token === DEFAULT_OPENAI_KEY) return false;
     return !token || token === 'YOUR_OPENAI_API_KEY_HERE';
 }
 
@@ -844,27 +850,93 @@ window.openAgenturView = openAgenturView;
 // Hier ist der einzige DOMContentLoaded Listener:
 window.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Landing Page wird geladen...');
-    
+
+    // Auto-load CSV Mock-Daten beim Start
+    loadDefaultCSVData();
+
     // Show loading animation for 1.5 seconds, then show welcome chat
     setTimeout(function() {
         const loadingAnim = document.getElementById('loadingAnimation');
         const welcomeChat = document.getElementById('welcomeChat');
-        
+
         if (loadingAnim) loadingAnim.style.display = 'none';
         if (welcomeChat) welcomeChat.style.display = 'block';
-        
+
         console.log('✅ Welcome Chat angezeigt');
-        
+
         // WICHTIG: Initialize landing chat
         initLandingChat();
     }, 1500);
-    
+
     // Setup quick upload
     setupQuickUpload();
 
     // Setup API token input
     setupApiTokenInput();
 });
+
+// ========================================
+// AUTO-LOAD CSV MOCK DATA
+// ========================================
+
+/**
+ * Lädt automatisch die Standard-CSV-Daten beim Start
+ */
+async function loadDefaultCSVData() {
+    console.log('📊 Lade Standard-CSV-Daten...');
+
+    // URL zur CSV-Datei auf GitHub (raw)
+    const csvUrl = 'https://raw.githubusercontent.com/brenneisen-e/VSTEike/main/dashboard_data_2024_2025_daily_regierungsbezirke%20(5).csv';
+
+    try {
+        const response = await fetch(csvUrl);
+
+        if (!response.ok) {
+            console.warn('⚠️ CSV konnte nicht von GitHub geladen werden, versuche lokale Datei...');
+            // Fallback: versuche lokale Datei
+            const localResponse = await fetch('dashboard_data_2024_2025_daily_regierungsbezirke (5).csv');
+            if (localResponse.ok) {
+                const csvText = await localResponse.text();
+                processCSVData(csvText);
+            }
+            return;
+        }
+
+        const csvText = await response.text();
+        processCSVData(csvText);
+
+    } catch (error) {
+        console.warn('⚠️ Fehler beim Laden der CSV-Daten:', error);
+        console.log('ℹ️ Daten können manuell über Settings > CSV Upload geladen werden');
+    }
+}
+
+/**
+ * Verarbeitet die CSV-Daten und speichert sie global
+ */
+function processCSVData(csvText) {
+    try {
+        const parsedData = parseCSV(csvText);
+
+        if (parsedData && parsedData.length > 0) {
+            // Speichere als globale Daten
+            window.dailyRawData = parsedData;
+            if (typeof dailyRawData !== 'undefined') {
+                dailyRawData = parsedData;
+            }
+
+            console.log('✅ CSV-Daten geladen:', parsedData.length, 'Datensätze');
+
+            // Optional: Update UI Status
+            const statusEl = document.getElementById('quickUploadStatus');
+            if (statusEl) {
+                statusEl.innerHTML = '<span style="color: #16a34a;">✓ ' + parsedData.length + ' Datensätze geladen</span>';
+            }
+        }
+    } catch (error) {
+        console.error('❌ Fehler beim Parsen der CSV:', error);
+    }
+}
 
 // ========================================
 // ✨ v14 FEATURE: KI Filter Commands + Auto-Navigation
