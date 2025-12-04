@@ -1626,7 +1626,7 @@ function initKundenFidaState() {
         if (fidaDaten) fidaDaten.style.display = 'block';
         if (fidaBtn) {
             fidaBtn.classList.add('active');
-            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA aktiv';
+            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Open Finance aktiv';
         }
         console.log('✅ FIDA in Kundendetail aktiviert');
     } else {
@@ -1634,7 +1634,7 @@ function initKundenFidaState() {
         if (fidaDaten) fidaDaten.style.display = 'none';
         if (fidaBtn) {
             fidaBtn.classList.remove('active');
-            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> FIDA';
+            fidaBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg> Open Finance';
         }
     }
 }
@@ -1794,10 +1794,10 @@ Ihre Versicherungsagentur`,
         'brief-1': {
             typ: 'Brief',
             datum: '15.11.2025',
-            betreff: 'FIDA-Datenfreigabe: Neue Potentiale erkannt',
+            betreff: 'Open Finance Datenfreigabe: Neue Potentiale erkannt',
             inhalt: `Sehr geehrter Herr Mustermann,
 
-vielen Dank für Ihre FIDA-Datenfreigabe vom 15.03.2024.
+vielen Dank für Ihre Open Finance Datenfreigabe vom 15.03.2024.
 
 Basierend auf der Analyse Ihrer Finanzdaten haben wir folgende Optimierungsmöglichkeiten identifiziert:
 
@@ -1837,10 +1837,10 @@ Vorbereitung:
         'email-2': {
             typ: 'E-Mail',
             datum: '01.10.2025, 08:00',
-            betreff: 'Willkommen bei FIDA - Ihre Daten sind jetzt verknüpft',
+            betreff: 'Willkommen bei Open Finance - Ihre Daten sind jetzt verknüpft',
             inhalt: `Sehr geehrter Herr Mustermann,
 
-vielen Dank für Ihre FIDA-Datenfreigabe!
+vielen Dank für Ihre Open Finance Datenfreigabe!
 
 Ab sofort können wir Ihnen personalisierte Versicherungsempfehlungen basierend auf Ihrer Finanzsituation anbieten.
 
@@ -1855,7 +1855,7 @@ Ihre freigegebenen Datenquellen:
 - Sparkasse (Hypothekendarlehen)
 - Allianz (Kfz-Versicherung)
 
-Sie können Ihre Einwilligung jederzeit über das FIDA-Dashboard widerrufen.
+Sie können Ihre Einwilligung jederzeit über das Open Finance Dashboard widerrufen.
 
 Mit freundlichen Grüßen
 Ihre Versicherungsagentur`,
