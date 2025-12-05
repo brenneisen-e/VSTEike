@@ -705,7 +705,7 @@
                         </div>
                     </div>
 
-                    <!-- FIDA Fälle Pipeline -->
+                    <!-- Open Finance Fälle Pipeline -->
                     <div class="fida-pipeline-section">
                         <h3 class="section-title">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -713,7 +713,7 @@
                                 <line x1="2" y1="12" x2="22" y2="12"></line>
                                 <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
                             </svg>
-                            FIDA-Fälle Pipeline
+                            Open Finance Fälle Pipeline
                         </h3>
                         <div class="fida-pipeline">
                             <div class="pipeline-stage">
@@ -754,14 +754,14 @@
                         </div>
                     </div>
 
-                    <!-- FIDA Fälle Tabelle -->
+                    <!-- Open Finance Fälle Tabelle -->
                     <div class="fida-cases-section">
                         <h3 class="section-title">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                 <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                             </svg>
-                            Aktuelle FIDA-Fälle
+                            Aktuelle Open Finance Fälle
                         </h3>
                         <div class="fida-filter-row">
                             <button class="fida-filter-btn active" onclick="filterFidaCases('alle')">Alle</button>
@@ -845,7 +845,7 @@
                                     <td><span class="fida-source-badge small">Kredit</span></td>
                                     <td><strong>€1.800/Jahr</strong></td>
                                     <td><span class="status-badge neu">Neu identifiziert</span></td>
-                                    <td>FIDA-Abgleich (30.11.)</td>
+                                    <td>Open Finance Abgleich (30.11.)</td>
                                     <td>
                                         <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00089')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
@@ -869,7 +869,7 @@
                                     <td><span class="fida-source-badge small">Investment</span></td>
                                     <td><strong>€3.200/Jahr</strong></td>
                                     <td><span class="status-badge neu">Neu identifiziert</span></td>
-                                    <td>FIDA-Abgleich (30.11.)</td>
+                                    <td>Open Finance Abgleich (30.11.)</td>
                                     <td>
                                         <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00156')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
@@ -1038,7 +1038,7 @@
                             <path d="M12 16v-4"></path>
                             <path d="M12 8h.01"></path>
                         </svg>
-                        FIDA
+                        Open Finance
                     </button>
                 </div>
             </div>
@@ -1204,11 +1204,11 @@
                     </table>
                 </div>
 
-                <!-- FIDA Daten Tabelle -->
+                <!-- Open Finance Daten Tabelle -->
                 <div class="potential-table-container" id="fidaContainer" style="display: none;">
                     <div class="potential-info-box fida">
-                        <h3>FIDA - Externe Datenanreicherung (Financial Data Access)</h3>
-                        <p>Potentiale basierend auf externen FIDA-Datenquellen: Versicherungsverträge bei Wettbewerbern, Kredit- und Hypothekendaten, Investmentdaten.</p>
+                        <h3>Open Finance - Externe Datenanreicherung</h3>
+                        <p>Potentiale basierend auf externen Open Finance Datenquellen: Versicherungsverträge bei Wettbewerbern, Kredit- und Hypothekendaten, Investmentdaten.</p>
                     </div>
                     <table class="potential-table fida-table" id="fidaTable">
                         <thead>
@@ -1363,6 +1363,29 @@
                     Zurück
                 </button>
                 <h1 class="kunden-page-title">Kundendetails</h1>
+
+                <!-- Makler/AO Toggle -->
+                <div class="vermittler-toggle-container">
+                    <span class="toggle-label">Vertriebskanal:</span>
+                    <div class="vermittler-toggle" id="vermittlerToggle">
+                        <button class="toggle-option active" data-mode="makler" onclick="switchVermittlerMode('makler')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 010 7.75"></path>
+                            </svg>
+                            Makler
+                        </button>
+                        <button class="toggle-option" data-mode="ao" onclick="switchVermittlerMode('ao')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
+                            </svg>
+                            AO (ERGO)
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Tab Navigation -->
@@ -1387,7 +1410,7 @@
                         <line x1="2" y1="12" x2="22" y2="12"></line>
                         <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
                     </svg>
-                    FIDA
+                    Open Finance
                 </button>
             </div>
 
@@ -1466,7 +1489,7 @@
                                 </div>
                                 <div class="impuls-text">
                                     <strong>Berufsunfähigkeitsversicherung (BU) anbieten</strong>
-                                    <p>Weder in den internen Bestandsdaten noch in den externen FIDA-Daten liegt eine BU-Absicherung vor. Bei einem Angestellten mit Familie besteht hier ein erhöhter Absicherungsbedarf.</p>
+                                    <p>Weder in den internen Bestandsdaten noch in den externen Open Finance Daten liegt eine BU-Absicherung vor. Bei einem Angestellten mit Familie besteht hier ein erhöhter Absicherungsbedarf.</p>
                                 </div>
                                 <span class="impuls-priority high">Hohe Priorität</span>
                             </div>
@@ -1504,10 +1527,10 @@
                         </table>
                     </div>
 
-                    <!-- Externe Verträge (FIDA) -->
+                    <!-- Externe Verträge (Open Finance) -->
                     <div class="kunden-card fida-card">
                         <div class="kunden-card-header fida">
-                            <h2>Externe Finanzbeziehungen (FIDA)</h2>
+                            <h2>Externe Finanzbeziehungen (Open Finance)</h2>
                         </div>
                         <table class="kunden-table fida-table">
                             <thead>
@@ -1533,16 +1556,16 @@
                     </div>
                 </div>
 
-                <!-- TAB: FIDA -->
+                <!-- TAB: Open Finance -->
                 <div id="tabFida" class="kunden-tab-content">
-                    <!-- FIDA Consent Status -->
+                    <!-- Open Finance Consent Status -->
                     <div class="kunden-card fida-status-card">
                         <div class="kunden-card-header fida">
                             <h2>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                 </svg>
-                                FIDA Consent-Status
+                                Open Finance Consent-Status
                             </h2>
                         </div>
                         <div class="fida-status-content">
@@ -1618,7 +1641,7 @@
                         </div>
                     </div>
 
-                    <!-- FIDA NEU: Investment Portfolio -->
+                    <!-- Open Finance NEU: Investment Portfolio -->
                     <div class="kunden-card fida-new-card">
                         <div class="kunden-card-header fida-new">
                             <h2>
@@ -1627,7 +1650,7 @@
                                 </svg>
                                 Investment-Portfolio (Investmentdaten)
                             </h2>
-                            <span class="fida-new-tag">NEU durch FIDA</span>
+                            <span class="fida-new-tag">NEU durch Open Finance</span>
                             <span class="fida-source-tag">DWS, Union Investment</span>
                         </div>
                         <table class="kunden-table fida-table">
@@ -1686,7 +1709,7 @@
                         </div>
                     </div>
 
-                    <!-- FIDA NEU: Versicherungen bei Wettbewerbern -->
+                    <!-- Open Finance NEU: Versicherungen bei Wettbewerbern -->
                     <div class="kunden-card fida-new-card">
                         <div class="kunden-card-header fida-new">
                             <h2>
@@ -1695,51 +1718,84 @@
                                 </svg>
                                 Versicherungen bei Wettbewerbern
                             </h2>
-                            <span class="fida-new-tag">NEU durch FIDA</span>
+                            <span class="fida-new-tag">NEU durch Open Finance</span>
                             <span class="fida-source-tag">Allianz, Ergo, HUK24, ARAG</span>
                         </div>
-                        <table class="kunden-table fida-table">
+                        <table class="kunden-table fida-table fida-extended-table">
                             <thead>
                                 <tr>
                                     <th>Versicherung</th>
                                     <th>Anbieter</th>
                                     <th>Deckungssumme</th>
+                                    <th>Tarifart</th>
+                                    <th>Leistungsumfang</th>
+                                    <th>Ausschlüsse</th>
+                                    <th>Selbstbehalt</th>
                                     <th>Prämie</th>
-                                    <th>Vertragsbeginn</th>
                                     <th>Kündigungsfrist</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="openFinanceVersicherungenBody">
+                                <tr data-anbieter="allianz">
                                     <td><strong>Kfz-Versicherung</strong></td>
                                     <td>Allianz</td>
                                     <td>VK €50.000 / TK €25.000</td>
+                                    <td><span class="tarif-badge premium">Premium</span></td>
+                                    <td>
+                                        <span class="leistung-tag">GAP-Deckung</span>
+                                        <span class="leistung-tag">Marderschäden</span>
+                                        <span class="leistung-tag">Auslandsschutz</span>
+                                    </td>
+                                    <td><span class="ausschluss-tag">Rennen/Rallye</span></td>
+                                    <td>€300 VK</td>
                                     <td>€720/Jahr</td>
-                                    <td>01.01.2020</td>
                                     <td style="color: #dc2626;"><strong>30.11.2025</strong></td>
                                 </tr>
-                                <tr>
+                                <tr data-anbieter="ergo" class="ergo-row">
                                     <td><strong>Berufsunfähigkeit</strong></td>
                                     <td>Ergo</td>
                                     <td style="color: #f59e0b;"><strong>€1.500/Mon.</strong></td>
+                                    <td><span class="tarif-badge basis">Basis</span></td>
+                                    <td>
+                                        <span class="leistung-tag">50% BU-Grad</span>
+                                        <span class="leistung-tag">Infektionsklausel</span>
+                                    </td>
+                                    <td>
+                                        <span class="ausschluss-tag">Psyche</span>
+                                        <span class="ausschluss-tag">Rücken</span>
+                                    </td>
+                                    <td>Keine</td>
                                     <td>€89/Monat</td>
-                                    <td>01.06.2018</td>
                                     <td>-</td>
                                 </tr>
-                                <tr>
+                                <tr data-anbieter="huk24">
                                     <td><strong>Hausratversicherung</strong></td>
                                     <td>HUK24</td>
                                     <td>€65.000</td>
+                                    <td><span class="tarif-badge standard">Standard</span></td>
+                                    <td>
+                                        <span class="leistung-tag">Fahrraddiebstahl</span>
+                                        <span class="leistung-tag">Überspannung</span>
+                                    </td>
+                                    <td><span class="ausschluss-tag">Elementar</span></td>
+                                    <td>€150</td>
                                     <td>€142/Jahr</td>
-                                    <td>15.03.2019</td>
                                     <td>14.02.2026</td>
                                 </tr>
-                                <tr>
+                                <tr data-anbieter="arag">
                                     <td><strong>Rechtsschutz</strong></td>
                                     <td>ARAG</td>
                                     <td>€500.000 (Privat+Beruf)</td>
+                                    <td><span class="tarif-badge premium">Premium</span></td>
+                                    <td>
+                                        <span class="leistung-tag">Arbeitsrecht</span>
+                                        <span class="leistung-tag">Verkehr</span>
+                                        <span class="leistung-tag">Wohnen</span>
+                                        <span class="leistung-tag">Vertragsrecht</span>
+                                    </td>
+                                    <td><span class="ausschluss-tag">Kapitalanlage</span></td>
+                                    <td>€250</td>
                                     <td>€248/Jahr</td>
-                                    <td>01.09.2021</td>
                                     <td>31.08.2026</td>
                                 </tr>
                             </tbody>
@@ -1757,7 +1813,7 @@
                                 </svg>
                                 BU-Deckungslücken-Analyse
                             </h2>
-                            <span class="combined-source-tag">PSD2 + FIDA kombiniert</span>
+                            <span class="combined-source-tag">PSD2 + Open Finance kombiniert</span>
                         </div>
                         <div class="deckungsluecke-content">
                             <div class="deckungsluecke-row">
@@ -1773,7 +1829,7 @@
                                 <div class="deckungsluecke-item fida-item">
                                     <span class="deckungsluecke-label">
                                         Bestehende BU (Ergo)
-                                        <span class="source-tag fida">FIDA</span>
+                                        <span class="source-tag fida">Open Finance</span>
                                     </span>
                                     <span class="deckungsluecke-value">€1.500/Monat</span>
                                     <span class="deckungsluecke-source">Quelle: Wettbewerber-Vertrag</span>
@@ -1805,7 +1861,7 @@
                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                         </svg>
                                     </span>
-                                    <span><strong>FIDA NEU:</strong> BU bei Ergo mit nur €1.500/Mon. – zu niedrig für sein Einkommen!</span>
+                                    <span><strong>Open Finance NEU:</strong> BU bei Ergo mit nur €1.500/Mon. – zu niedrig für sein Einkommen!</span>
                                 </div>
                             </div>
                             <div class="deckungsluecke-recommendation">
@@ -1813,10 +1869,139 @@
                                 Geschätzte Mehrprämie: ca. €120-150/Monat.
                                 <strong>Argument:</strong> "Herr Mustermann, wir sehen, dass Ihre bestehende BU nur 41% Ihres Einkommens absichert – deutlich unter der empfohlenen 80%. Darf ich Ihnen ein ergänzendes Angebot machen?"
                             </div>
+
+                            <!-- Produktvorschläge Section -->
+                            <div class="produktvorschlaege-section">
+                                <h4 class="produktvorschlaege-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    <span id="produktvorschlaegeLabel">Top-Produktvorschläge (Makler-Vergleich)</span>
+                                </h4>
+
+                                <!-- Makler-Ansicht: Multi-Insurer Ranking -->
+                                <div id="maklerProdukte" class="produkt-ranking">
+                                    <div class="produkt-card rank-1">
+                                        <div class="produkt-rank">
+                                            <span class="rank-badge gold">1</span>
+                                            <span class="rank-label">Beste Wahl</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/allianz.de" alt="Allianz" onerror="this.style.display='none'">
+                                                <strong>Allianz BU Premium</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€145/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Kein Psyche-Ausschluss</span>
+                                                <span class="highlight-tag good">Dienstunfähigkeitsklausel</span>
+                                                <span class="highlight-tag good">Nachversicherungsgarantie</span>
+                                            </div>
+                                        </div>
+                                        <div class="produkt-score">
+                                            <div class="score-value">94</div>
+                                            <div class="score-label">Score</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="produkt-card rank-2">
+                                        <div class="produkt-rank">
+                                            <span class="rank-badge silver">2</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/hdi.de" alt="HDI" onerror="this.style.display='none'">
+                                                <strong>HDI BU Plus</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€138/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Günstigster Preis</span>
+                                                <span class="highlight-tag neutral">Psyche mit Risikozuschlag</span>
+                                            </div>
+                                        </div>
+                                        <div class="produkt-score">
+                                            <div class="score-value">89</div>
+                                            <div class="score-label">Score</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="produkt-card rank-3">
+                                        <div class="produkt-rank">
+                                            <span class="rank-badge bronze">3</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/nürnberger.de" alt="Nürnberger" onerror="this.style.display='none'">
+                                                <strong>Nürnberger BU Comfort</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€152/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Weltweiter Schutz</span>
+                                                <span class="highlight-tag neutral">Standard-Bedingungen</span>
+                                            </div>
+                                        </div>
+                                        <div class="produkt-score">
+                                            <div class="score-value">85</div>
+                                            <div class="score-label">Score</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AO-Ansicht: Nur ERGO Produkt -->
+                                <div id="aoProdukte" class="produkt-ranking" style="display: none;">
+                                    <div class="produkt-card ao-single">
+                                        <div class="produkt-rank ao">
+                                            <span class="rank-badge ergo">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                                    <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path>
+                                                </svg>
+                                            </span>
+                                            <span class="rank-label">ERGO Exklusiv</span>
+                                        </div>
+                                        <div class="produkt-info">
+                                            <div class="produkt-anbieter">
+                                                <img src="https://logo.clearbit.com/ergo.de" alt="ERGO" onerror="this.style.display='none'">
+                                                <strong>ERGO BU Premium Protect</strong>
+                                            </div>
+                                            <div class="produkt-details">
+                                                <span class="produkt-deckung">€2.500/Mon.</span>
+                                                <span class="produkt-praemie">€149/Mon.</span>
+                                            </div>
+                                            <div class="produkt-highlights">
+                                                <span class="highlight-tag good">Kein Psyche-Ausschluss</span>
+                                                <span class="highlight-tag good">Leistungsdynamik 3%</span>
+                                                <span class="highlight-tag good">Infektionsklausel</span>
+                                                <span class="highlight-tag good">Haus-/Pflegeperson-Option</span>
+                                            </div>
+                                            <div class="ao-vorteile">
+                                                <strong>AO-Vorteile:</strong>
+                                                <span>5% Vermittler-Rabatt • Schnellprüfung möglich • Sondertarif verfügbar</span>
+                                            </div>
+                                        </div>
+                                        <button class="angebot-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                            </svg>
+                                            Angebot erstellen
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- FIDA NEU: Kredit-Übersicht -->
+                    <!-- Open Finance NEU: Kredit-Übersicht -->
                     <div class="kunden-card fida-new-card">
                         <div class="kunden-card-header fida-new">
                             <h2>
@@ -1826,7 +2011,7 @@
                                 </svg>
                                 Kredite & Verbindlichkeiten
                             </h2>
-                            <span class="fida-new-tag">NEU durch FIDA</span>
+                            <span class="fida-new-tag">NEU durch Open Finance</span>
                             <span class="fida-source-tag">Sparkasse, ING</span>
                         </div>
                         <table class="kunden-table fida-table">
@@ -1881,7 +2066,7 @@
                         </div>
                     </div>
 
-                    <!-- FIDA Potentiale Zusammenfassung -->
+                    <!-- Open Finance Potentiale Zusammenfassung -->
                     <div class="kunden-card">
                         <div class="kunden-card-header fida">
                             <h2>
@@ -1995,7 +2180,7 @@
                                         <span class="komm-type">Automatischer Brief</span>
                                         <span class="komm-date">15.11.2025</span>
                                     </div>
-                                    <div class="komm-subject">FIDA-Datenfreigabe: Neue Potentiale erkannt</div>
+                                    <div class="komm-subject">Open Finance Datenfreigabe: Neue Potentiale erkannt</div>
                                     <div class="komm-preview">Basierend auf Ihren freigegebenen Finanzdaten haben wir Optimierungsmöglichkeiten für Ihre Versicherungssituation identifiziert...</div>
                                     <div class="komm-status">
                                         <span class="komm-status-badge versendet">
@@ -2061,8 +2246,8 @@
                                         <span class="komm-type">Automatische E-Mail</span>
                                         <span class="komm-date">01.10.2025, 08:00</span>
                                     </div>
-                                    <div class="komm-subject">Willkommen bei FIDA - Ihre Daten sind jetzt verknüpft</div>
-                                    <div class="komm-preview">Vielen Dank für Ihre FIDA-Datenfreigabe. Ab sofort können wir Ihnen personalisierte Versicherungsempfehlungen basierend auf Ihrer Finanzsituation anbieten...</div>
+                                    <div class="komm-subject">Willkommen bei Open Finance - Ihre Daten sind jetzt verknüpft</div>
+                                    <div class="komm-preview">Vielen Dank für Ihre Open Finance Datenfreigabe. Ab sofort können wir Ihnen personalisierte Versicherungsempfehlungen basierend auf Ihrer Finanzsituation anbieten...</div>
                                     <div class="komm-status">
                                         <span class="komm-status-badge geoeffnet">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
