@@ -2675,9 +2675,9 @@ function openAbrechnungspruefung() {
     window.open('https://billingcheck.pages.dev/app', '_blank');
 }
 
-// Validierung Provisionsberechnung (placeholder)
+// Validierung Provisionsberechnung - Opens in new tab
 function openValidierungProvision() {
-    alert('Validierung Provisionsberechnung - In Entwicklung');
+    window.open('https://provisions-analyzer.pages.dev/', '_blank');
 }
 
 // ========================================
