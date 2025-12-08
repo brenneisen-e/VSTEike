@@ -877,6 +877,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Setup API token input
     setupApiTokenInput();
+
+    // Initialize API section as collapsed
+    initApiSection();
 });
 
 /**
@@ -1222,6 +1225,28 @@ function askLandingSampleQuestion(question) {
 
 // Make function globally available
 window.askLandingSampleQuestion = askLandingSampleQuestion;
+
+// ========================================
+// API SECTION TOGGLE
+// ========================================
+
+function toggleApiSection() {
+    const section = document.querySelector('.settings-api-section');
+    if (section) {
+        section.classList.toggle('collapsed');
+    }
+}
+
+// Initialize API section as collapsed
+function initApiSection() {
+    const section = document.querySelector('.settings-api-section');
+    if (section) {
+        section.classList.add('collapsed');
+    }
+}
+
+// Make function globally available
+window.toggleApiSection = toggleApiSection;
 
 // ========================================
 // UPLOAD MODUS
