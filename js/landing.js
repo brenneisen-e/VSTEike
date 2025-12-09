@@ -1527,7 +1527,8 @@ function showEigeneDaten() {
 }
 
 function showFidaDaten() {
-    document.getElementById('eigeneDatenContainer').style.display = 'none';
+    // Open Finance erweitert die eigenen Daten - beide anzeigen
+    document.getElementById('eigeneDatenContainer').style.display = 'block';
     document.getElementById('fidaContainer').style.display = 'block';
     document.getElementById('eigeneDatenBtn').classList.remove('active');
     document.getElementById('fidaBtn').classList.add('active');
