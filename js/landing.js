@@ -1559,35 +1559,16 @@ function showFidaDaten() {
 
 function updatePotentialFilter() {
     const filter = currentPotentialFilter;
-    const eigeneDatenRows = document.querySelectorAll('#eigeneDatenTable tbody tr');
-    const fidaRows = document.querySelectorAll('#fidaTable tbody tr');
 
-    // Zeige/Verstecke Zeilen basierend auf Filter
-    eigeneDatenRows.forEach(row => {
-        if (!filter) {
-            row.style.display = '';
-        } else {
-            const badge = row.querySelector('.potential-badge');
-            if (badge && badge.classList.contains(filter)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        }
-    });
-
-    fidaRows.forEach(row => {
-        if (!filter) {
-            row.style.display = '';
-        } else {
-            const badge = row.querySelector('.potential-badge');
-            if (badge && badge.classList.contains(filter)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        }
-    });
+    // Wenn kein Filter aktiv ist, gruppierte Ansicht zeigen
+    if (!filter) {
+        renderGroupedPotentials('eigeneDatenTable');
+        renderGroupedPotentials('fidaTable');
+    } else {
+        // Bei aktivem Filter: Flache Ansicht mit Filter
+        renderFlatPotentials('eigeneDatenTable', filter);
+        renderFlatPotentials('fidaTable', filter);
+    }
 
     // Update aktiven Filter-Button
     const filterBtns = document.querySelectorAll('.potential-filter-btn');
@@ -1596,10 +1577,185 @@ function updatePotentialFilter() {
     });
 }
 
+// Rendert die Tabelle mit Gruppierung nach Segment
+function renderGroupedPotentials(tableId) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    // Sammle alle Original-Zeilen (ohne Gruppen-Zeilen)
+    const originalRows = Array.from(tbody.querySelectorAll('tr:not(.potential-group-row)'));
+    if (originalRows.length === 0) return;
+
+    // Speichere Original-HTML falls noch nicht geschehen
+    if (!tbody.dataset.originalHtml) {
+        tbody.dataset.originalHtml = tbody.innerHTML;
+    }
+
+    // Gruppiere nach Segment
+    const groups = {};
+    const segmentNames = {
+        'hausrat': 'Hausratversicherung',
+        'kfz': 'Kfz-Versicherung',
+        'leben': 'Risikolebensversicherung',
+        'unfall': 'Unfallversicherung',
+        'rechtsschutz': 'Rechtsschutzversicherung',
+        'pflege': 'Pflegezusatzversicherung',
+        'bu': 'Berufsunfähigkeitsversicherung',
+        'sach': 'Sachversicherung',
+        'altersvorsorge': 'Private Altersvorsorge',
+        'haftpflicht': 'Haftpflichtversicherung',
+        'wohngebaeude': 'Wohngebäudeversicherung',
+        'kranken': 'Krankenversicherung'
+    };
+
+    // Parse Original-HTML und gruppiere
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = '<table><tbody>' + tbody.dataset.originalHtml + '</tbody></table>';
+    const rows = Array.from(tempDiv.querySelectorAll('tr'));
+
+    rows.forEach(row => {
+        const badge = row.querySelector('.potential-badge');
+        if (badge) {
+            // Finde Segment-Klasse
+            const classes = Array.from(badge.classList);
+            const segment = classes.find(c => c !== 'potential-badge') || 'sonstige';
+
+            if (!groups[segment]) {
+                groups[segment] = [];
+            }
+
+            // Ermittle Priorität
+            const priorityEl = row.querySelector('.priority');
+            let priority = 'medium';
+            if (priorityEl) {
+                if (priorityEl.classList.contains('high')) priority = 'high';
+                else if (priorityEl.classList.contains('low')) priority = 'low';
+            }
+
+            // Ermittle Kundenname für Sortierung
+            const firstCell = row.querySelector('td');
+            const kundenName = firstCell ? firstCell.textContent.trim() : '';
+
+            groups[segment].push({
+                html: row.outerHTML,
+                priority: priority,
+                kundenName: kundenName
+            });
+        }
+    });
+
+    // Sortiere Segmente alphabetisch nach Anzeigename
+    const sortedSegments = Object.keys(groups).sort((a, b) => {
+        const nameA = segmentNames[a] || a;
+        const nameB = segmentNames[b] || b;
+        return nameA.localeCompare(nameB);
+    });
+
+    // Baue neue Tabellen-Struktur
+    let newHtml = '';
+
+    sortedSegments.forEach(segment => {
+        const items = groups[segment];
+
+        // Sortiere Vorgänge alphabetisch nach Kundenname
+        items.sort((a, b) => a.kundenName.localeCompare(b.kundenName));
+
+        // Zähle Prioritäten
+        const highCount = items.filter(i => i.priority === 'high').length;
+        const mediumCount = items.filter(i => i.priority === 'medium').length;
+        const lowCount = items.filter(i => i.priority === 'low').length;
+
+        const segmentName = segmentNames[segment] || segment;
+
+        // Ermittle Spaltenanzahl aus Tabellen-Header
+        const colCount = table.querySelectorAll('thead th').length || 5;
+
+        // Gruppen-Zeile
+        newHtml += `
+            <tr class="potential-group-row" data-segment="${segment}" onclick="togglePotentialGroup(this)">
+                <td colspan="${colCount}">
+                    <div class="group-toggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                        <span class="potential-badge ${segment}">${segmentName}</span>
+                        <span class="group-count">${items.length}</span>
+                        <div class="group-priorities">
+                            ${highCount > 0 ? `<span class="priority-count high">${highCount} Hoch</span>` : ''}
+                            ${mediumCount > 0 ? `<span class="priority-count medium">${mediumCount} Mittel</span>` : ''}
+                            ${lowCount > 0 ? `<span class="priority-count low">${lowCount} Niedrig</span>` : ''}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        // Detail-Zeilen
+        items.forEach(item => {
+            // Füge Klasse für versteckte Zeilen hinzu
+            const rowHtml = item.html.replace('<tr', `<tr class="potential-detail-row" data-segment="${segment}"`);
+            newHtml += rowHtml;
+        });
+    });
+
+    tbody.innerHTML = newHtml;
+}
+
+// Rendert die Tabelle flach (ohne Gruppierung) mit optionalem Filter
+function renderFlatPotentials(tableId, filter) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    // Stelle Original-HTML wieder her falls vorhanden
+    if (tbody.dataset.originalHtml) {
+        tbody.innerHTML = tbody.dataset.originalHtml;
+    }
+
+    // Wende Filter an
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach(row => {
+        if (!filter) {
+            row.style.display = '';
+        } else {
+            const badge = row.querySelector('.potential-badge');
+            if (badge && badge.classList.contains(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+}
+
+// Toggle Gruppen-Zeilen ein/aus
+function togglePotentialGroup(groupRow) {
+    const segment = groupRow.dataset.segment;
+    const isExpanded = groupRow.classList.contains('expanded');
+
+    groupRow.classList.toggle('expanded');
+
+    // Finde alle Detail-Zeilen dieser Gruppe
+    const table = groupRow.closest('table');
+    const detailRows = table.querySelectorAll(`.potential-detail-row[data-segment="${segment}"]`);
+
+    detailRows.forEach(row => {
+        row.classList.toggle('visible', !isExpanded);
+    });
+}
+
 function filterPotentials(productId) {
     currentPotentialFilter = productId === 'alle' ? null : productId;
     updatePotentialFilter();
 }
+
+// Globale Funktion für Toggle
+window.togglePotentialGroup = togglePotentialGroup;
 
 // ========================================
 // KUNDENDETAIL SEITE
