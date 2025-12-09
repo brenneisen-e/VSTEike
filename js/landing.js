@@ -1577,7 +1577,7 @@ function updatePotentialFilter() {
     });
 }
 
-// Rendert die Tabelle mit Gruppierung nach Segment
+// Rendert die Tabelle mit Gruppierung nach Hauptsegmenten (Leben, Kranken, SHU, Kfz)
 function renderGroupedPotentials(tableId) {
     const table = document.getElementById(tableId);
     if (!table) return;
@@ -1594,21 +1594,32 @@ function renderGroupedPotentials(tableId) {
         tbody.dataset.originalHtml = tbody.innerHTML;
     }
 
-    // Gruppiere nach Segment
-    const groups = {};
-    const segmentNames = {
-        'hausrat': 'Hausratversicherung',
-        'kfz': 'Kfz-Versicherung',
-        'leben': 'Risikolebensversicherung',
-        'unfall': 'Unfallversicherung',
-        'rechtsschutz': 'Rechtsschutzversicherung',
-        'pflege': 'Pflegezusatzversicherung',
-        'bu': 'Berufsunfähigkeitsversicherung',
-        'sach': 'Sachversicherung',
-        'altersvorsorge': 'Private Altersvorsorge',
-        'haftpflicht': 'Haftpflichtversicherung',
-        'wohngebaeude': 'Wohngebäudeversicherung',
-        'kranken': 'Krankenversicherung'
+    // Mapping von Produkten zu Hauptsegmenten
+    const productToSegment = {
+        // Leben
+        'bu': 'leben',
+        'leben': 'leben',
+        'altersvorsorge': 'leben',
+        // Kranken
+        'pflege': 'kranken',
+        'kranken': 'kranken',
+        // SHU (Sach/Haftpflicht/Unfall)
+        'hausrat': 'shu',
+        'haftpflicht': 'shu',
+        'unfall': 'shu',
+        'rechtsschutz': 'shu',
+        'sach': 'shu',
+        'wohngebaeude': 'shu',
+        // Kfz
+        'kfz': 'kfz'
+    };
+
+    // Hauptsegment-Namen und Reihenfolge
+    const mainSegments = {
+        'leben': { name: 'Leben', order: 1 },
+        'kranken': { name: 'Kranken', order: 2 },
+        'shu': { name: 'Sach / Haftpflicht / Unfall', order: 3 },
+        'kfz': { name: 'Kfz', order: 4 }
     };
 
     // Parse Original-HTML und gruppiere
@@ -1616,15 +1627,20 @@ function renderGroupedPotentials(tableId) {
     tempDiv.innerHTML = '<table><tbody>' + tbody.dataset.originalHtml + '</tbody></table>';
     const rows = Array.from(tempDiv.querySelectorAll('tr'));
 
+    const groups = {};
+
     rows.forEach(row => {
         const badge = row.querySelector('.potential-badge');
         if (badge) {
-            // Finde Segment-Klasse
+            // Finde Produkt-Klasse
             const classes = Array.from(badge.classList);
-            const segment = classes.find(c => c !== 'potential-badge') || 'sonstige';
+            const product = classes.find(c => c !== 'potential-badge') || 'sonstige';
 
-            if (!groups[segment]) {
-                groups[segment] = [];
+            // Mappe zu Hauptsegment
+            const mainSegment = productToSegment[product] || 'shu';
+
+            if (!groups[mainSegment]) {
+                groups[mainSegment] = [];
             }
 
             // Ermittle Priorität
@@ -1639,20 +1655,24 @@ function renderGroupedPotentials(tableId) {
             const firstCell = row.querySelector('td');
             const kundenName = firstCell ? firstCell.textContent.trim() : '';
 
-            groups[segment].push({
+            groups[mainSegment].push({
                 html: row.outerHTML,
                 priority: priority,
-                kundenName: kundenName
+                kundenName: kundenName,
+                product: product
             });
         }
     });
 
-    // Sortiere Segmente alphabetisch nach Anzeigename
+    // Sortiere Segmente nach definierter Reihenfolge
     const sortedSegments = Object.keys(groups).sort((a, b) => {
-        const nameA = segmentNames[a] || a;
-        const nameB = segmentNames[b] || b;
-        return nameA.localeCompare(nameB);
+        const orderA = mainSegments[a]?.order || 99;
+        const orderB = mainSegments[b]?.order || 99;
+        return orderA - orderB;
     });
+
+    // Ermittle Spaltenanzahl aus Tabellen-Header
+    const colCount = table.querySelectorAll('thead th').length || 5;
 
     // Baue neue Tabellen-Struktur
     let newHtml = '';
@@ -1668,10 +1688,7 @@ function renderGroupedPotentials(tableId) {
         const mediumCount = items.filter(i => i.priority === 'medium').length;
         const lowCount = items.filter(i => i.priority === 'low').length;
 
-        const segmentName = segmentNames[segment] || segment;
-
-        // Ermittle Spaltenanzahl aus Tabellen-Header
-        const colCount = table.querySelectorAll('thead th').length || 5;
+        const segmentInfo = mainSegments[segment] || { name: segment };
 
         // Gruppen-Zeile
         newHtml += `
@@ -1681,7 +1698,7 @@ function renderGroupedPotentials(tableId) {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
-                        <span class="potential-badge ${segment}">${segmentName}</span>
+                        <span class="segment-badge segment-${segment}">${segmentInfo.name}</span>
                         <span class="group-count">${items.length}</span>
                         <div class="group-priorities">
                             ${highCount > 0 ? `<span class="priority-count high">${highCount} Hoch</span>` : ''}

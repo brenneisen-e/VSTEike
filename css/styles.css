@@ -3570,49 +3570,85 @@ button svg,
 }
 
 .potential-group-row .group-toggle {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    width: 100%;
 }
 
 .potential-group-row .group-toggle svg {
     transition: transform 0.3s ease;
     flex-shrink: 0;
+    color: #64748b;
 }
 
 .potential-group-row.expanded .group-toggle svg {
     transform: rotate(90deg);
 }
 
+/* Segment Badges - 4 Hauptfarben */
+.segment-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 180px;
+    text-align: center;
+}
+
+.segment-badge.segment-leben {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.segment-badge.segment-kranken {
+    background: #fce7f3;
+    color: #9d174d;
+}
+
+.segment-badge.segment-shu {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.segment-badge.segment-kfz {
+    background: #fef3c7;
+    color: #92400e;
+}
+
 .potential-group-row .group-count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #3b82f6;
+    background: #475569;
     color: white;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    min-width: 28px;
-    height: 28px;
-    padding: 0 8px;
-    border-radius: 14px;
-    margin-left: 12px;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 18px;
+    margin-left: 16px;
 }
 
 .potential-group-row .group-priorities {
     display: flex;
     gap: 8px;
     margin-left: auto;
+    align-items: center;
 }
 
 .potential-group-row .priority-count {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 4px;
+    min-width: 70px;
+    justify-content: center;
 }
 
 .potential-group-row .priority-count.high {
