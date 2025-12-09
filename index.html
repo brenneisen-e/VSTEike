@@ -3073,9 +3073,31 @@
         <div style="max-width: 1920px; margin: 0 auto; padding: 1.25rem;">
             <div class="table-controls">
                 <div class="table-view-toggle">
-                    <button class="active" data-table-view="bundeslaender">🗺️ Bundesländer</button>
-                    <button data-table-view="landkreise">🏘️ Landkreise</button>
-                    <button data-table-view="agentur">👤 Agenturen</button>
+                    <button class="active" data-table-view="bundeslaender">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Bundesländer
+                    </button>
+                    <button data-table-view="landkreise">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        Landkreise
+                    </button>
+                    <button data-table-view="agentur">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 010 7.75"></path>
+                        </svg>
+                        Agenturen
+                    </button>
                 </div>
                 <!-- NEU: Agentur-Mehrfachauswahl Panel -->
                 <div class="filter-group" id="agenturMultiSelector" style="display: none;">

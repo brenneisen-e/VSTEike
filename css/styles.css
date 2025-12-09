@@ -3541,6 +3541,107 @@ button svg,
     color: #be185d;
 }
 
+.potential-badge.haftpflicht {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.potential-badge.wohngebaeude {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+/* Potential Group Rows (collapsible) */
+.potential-group-row {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.potential-group-row:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+
+.potential-group-row td {
+    padding: 14px 16px !important;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.potential-group-row .group-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.potential-group-row .group-toggle svg {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.potential-group-row.expanded .group-toggle svg {
+    transform: rotate(90deg);
+}
+
+.potential-group-row .group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #3b82f6;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 14px;
+    margin-left: 12px;
+}
+
+.potential-group-row .group-priorities {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.potential-group-row .priority-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.potential-group-row .priority-count.high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.potential-group-row .priority-count.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.potential-group-row .priority-count.low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.potential-detail-row {
+    display: none;
+}
+
+.potential-detail-row.visible {
+    display: table-row;
+}
+
+.potential-detail-row td:first-child {
+    padding-left: 40px !important;
+}
+
 /* Priority Tags */
 .priority {
     display: inline-block;
