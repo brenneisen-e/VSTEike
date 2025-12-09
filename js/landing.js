@@ -959,7 +959,30 @@ function processCSVData(csvText) {
                 dailyRawData = parsedData;
             }
 
+            // Aggregiere zu Monatsdaten für state.uploadedData
+            if (typeof aggregateDailyToMonthly === 'function') {
+                const monthlyData = aggregateDailyToMonthly(parsedData);
+                state.uploadedData = monthlyData;
+                state.useUploadedData = true;
+            }
+
             console.log('✅ CSV-Daten geladen:', parsedData.length, 'Datensätze');
+
+            // Aktualisiere Filter-Dropdowns
+            if (typeof updateAgenturFilterDropdown === 'function') {
+                updateAgenturFilterDropdown();
+            }
+
+            // Aktualisiere KPIs und Charts
+            if (typeof updateAllKPIs === 'function') {
+                updateAllKPIs();
+            }
+
+            // Aktualisiere Karte falls vorhanden
+            if (typeof countyMapHandler !== 'undefined' && countyMapHandler && typeof getFilteredData === 'function') {
+                const data = getFilteredData();
+                countyMapHandler.updateMapData(data);
+            }
 
             // Optional: Update UI Status
             const statusEl = document.getElementById('quickUploadStatus');
