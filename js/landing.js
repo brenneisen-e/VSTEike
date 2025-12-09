@@ -1706,7 +1706,7 @@ function updateOpenFinanceTable(mode) {
         if (mode === 'ao') {
             sourceTag.textContent = 'Allianz, HUK24, ARAG (ohne ERGO)';
         } else {
-            sourceTag.textContent = 'Allianz, Ergo, HUK24, ARAG';
+            sourceTag.textContent = 'Allianz, ERGO, HUK24, ARAG';
         }
     }
 }
