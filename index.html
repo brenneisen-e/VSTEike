@@ -927,6 +927,102 @@
                                         </button>
                                     </td>
                                 </tr>
+                                <tr data-status="neu" class="clickable-row" onclick="openKundenDetail('VM00048')">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">ME</div>
+                                            <div class="kunde-info">
+                                                <strong>Matthias Engel</strong>
+                                                <span>VM00048</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type bu">BU-Deckungslücke</span></td>
+                                    <td><span class="fida-source-badge small">Bank</span></td>
+                                    <td><strong>€3.600/Jahr</strong></td>
+                                    <td><span class="status-badge neu">Neu identifiziert</span></td>
+                                    <td>Open Finance Abgleich (02.12.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00048')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="angeschrieben" class="clickable-row" onclick="openKundenDetail('VM00031')">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">CB</div>
+                                            <div class="kunde-info">
+                                                <strong>Christian Bauer</strong>
+                                                <span>VM00031</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type bu">BU-Neuabschluss</span></td>
+                                    <td><span class="fida-source-badge small">Bank</span></td>
+                                    <td><strong>€2.880/Jahr</strong></td>
+                                    <td><span class="status-badge angeschrieben">Angeschrieben</span></td>
+                                    <td>E-Mail gesendet (29.11.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00031')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="neu" class="clickable-row" onclick="openKundenDetail('VM00035')">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">MW</div>
+                                            <div class="kunde-info">
+                                                <strong>Martin Wolf</strong>
+                                                <span>VM00035</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type bu">BU-Hochrisiko</span></td>
+                                    <td><span class="fida-source-badge small">Versicherung</span></td>
+                                    <td><strong>€4.200/Jahr</strong></td>
+                                    <td><span class="status-badge neu">Neu identifiziert</span></td>
+                                    <td>Open Finance Abgleich (02.12.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00035')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-status="termin" class="clickable-row" onclick="openKundenDetail('VM00040')">
+                                    <td>
+                                        <div class="kunde-cell">
+                                            <div class="kunde-avatar">EH</div>
+                                            <div class="kunde-info">
+                                                <strong>Eva Hartmann</strong>
+                                                <span>VM00040</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="potential-type bu">BU-Nachversicherung</span></td>
+                                    <td><span class="fida-source-badge small">Bank</span></td>
+                                    <td><strong>€1.920/Jahr</strong></td>
+                                    <td><span class="status-badge termin">Termin 10.12.</span></td>
+                                    <td>Rückruf vereinbart (03.12.)</td>
+                                    <td>
+                                        <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('VM00040')">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1200,6 +1296,373 @@
                                 <td>Handwerker ohne BU-Schutz</td>
                                 <td><span class="priority high">Hoch</span></td>
                             </tr>
+                            <tr onclick="openKundenDetail('Christian Bauer', 'VM00031')" class="clickable-row">
+                                <td>Christian Bauer</td>
+                                <td>VM00031</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>IT-Spezialist, keine BU trotz hohem Einkommen</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Nina Hoffmann', 'VM00032')" class="clickable-row">
+                                <td>Nina Hoffmann</td>
+                                <td>VM00032</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Krankenschwester, körperlich belastender Beruf</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Daniel Richter', 'VM00033')" class="clickable-row">
+                                <td>Daniel Richter</td>
+                                <td>VM00033</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Lehrer, Beamter ohne private BU-Zusatzabs.</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Laura Klein', 'VM00034')" class="clickable-row">
+                                <td>Laura Klein</td>
+                                <td>VM00034</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Junger Ingenieur, günstige Einstiegsprämie möglich</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Martin Wolf', 'VM00035')" class="clickable-row">
+                                <td>Martin Wolf</td>
+                                <td>VM00035</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Dachdecker, hohes BU-Risiko, keine Absicherung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Jennifer Schmitt', 'VM00036')" class="clickable-row">
+                                <td>Jennifer Schmitt</td>
+                                <td>VM00036</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Physiotherapeutin, hohe körperliche Belastung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Andreas Maier', 'VM00037')" class="clickable-row">
+                                <td>Andreas Maier</td>
+                                <td>VM00037</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>BU-Vertrag bei ERGO unterdeckt (nur €800/Mon.)</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Katharina Neumann', 'VM00038')" class="clickable-row">
+                                <td>Katharina Neumann</td>
+                                <td>VM00038</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Familiengründung, Absicherung des Hauptverdieners</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Tobias Schwarz', 'VM00039')" class="clickable-row">
+                                <td>Tobias Schwarz</td>
+                                <td>VM00039</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Koch, hohe Unfallgefahr am Arbeitsplatz</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Eva Hartmann', 'VM00040')" class="clickable-row">
+                                <td>Eva Hartmann</td>
+                                <td>VM00040</td>
+                                <td><span class="potential-badge bu">Berufsunfähigkeitsversicherung</span></td>
+                                <td>Ärztin, BU-Nachversicherung nach Gehaltssteigerung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Hausrat-Potentiale -->
+                            <tr onclick="openKundenDetail('Florian Beck', 'VM00060')" class="clickable-row">
+                                <td>Florian Beck</td>
+                                <td>VM00060</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Neuer Mietvertrag abgeschlossen, keine Hausrat</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Susanne Roth', 'VM00061')" class="clickable-row">
+                                <td>Susanne Roth</td>
+                                <td>VM00061</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Hochwertige Elektronik erworben, unterversichert</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Jens Hartmann', 'VM00062')" class="clickable-row">
+                                <td>Jens Hartmann</td>
+                                <td>VM00062</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Veralteter Tarif ohne Elementarschutz</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Yvonne Schuster', 'VM00063')" class="clickable-row">
+                                <td>Yvonne Schuster</td>
+                                <td>VM00063</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Familienzuwachs, erhöhter Versicherungsbedarf</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Dennis Krause', 'VM00064')" class="clickable-row">
+                                <td>Dennis Krause</td>
+                                <td>VM00064</td>
+                                <td><span class="potential-badge hausrat">Hausratversicherung</span></td>
+                                <td>Teure Fahrräder, keine Fahrraddiebstahl-Deckung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Kfz-Potentiale -->
+                            <tr onclick="openKundenDetail('Marco Lange', 'VM00065')" class="clickable-row">
+                                <td>Marco Lange</td>
+                                <td>VM00065</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>Neuwagen gekauft, Vollkasko empfohlen</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Vanessa Kraft', 'VM00066')" class="clickable-row">
+                                <td>Vanessa Kraft</td>
+                                <td>VM00066</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>Fahranfänger, optimale Einstufung prüfen</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Thorsten Weiß', 'VM00067')" class="clickable-row">
+                                <td>Thorsten Weiß</td>
+                                <td>VM00067</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>Zweitwagen angemeldet, Bundle-Rabatt möglich</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Simone Ott', 'VM00068')" class="clickable-row">
+                                <td>Simone Ott</td>
+                                <td>VM00068</td>
+                                <td><span class="potential-badge kfz">Kfz-Versicherung</span></td>
+                                <td>E-Auto bestellt, spezielle Elektro-Tarife</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Haftpflicht-Potentiale -->
+                            <tr onclick="openKundenDetail('Kevin Huber', 'VM00070')" class="clickable-row">
+                                <td>Kevin Huber</td>
+                                <td>VM00070</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflichtversicherung</span></td>
+                                <td>Auszug aus Elternhaus, eigene Absicherung nötig</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Nadine Vogel', 'VM00071')" class="clickable-row">
+                                <td>Nadine Vogel</td>
+                                <td>VM00071</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflichtversicherung</span></td>
+                                <td>Hundebesitzer, keine Tierhalterhaftpflicht</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Ralf Seidel', 'VM00072')" class="clickable-row">
+                                <td>Ralf Seidel</td>
+                                <td>VM00072</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflichtversicherung</span></td>
+                                <td>Veralteter Tarif, Deckungssumme zu niedrig</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Stefanie Groß', 'VM00073')" class="clickable-row">
+                                <td>Stefanie Groß</td>
+                                <td>VM00073</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflichtversicherung</span></td>
+                                <td>Ehrenamtliche Tätigkeit, Haftungsrisiko</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <!-- Weitere Unfall-Potentiale -->
+                            <tr onclick="openKundenDetail('Benjamin Haas', 'VM00075')" class="clickable-row">
+                                <td>Benjamin Haas</td>
+                                <td>VM00075</td>
+                                <td><span class="potential-badge unfall">Unfallversicherung</span></td>
+                                <td>Extremsportler, erhöhtes Unfallrisiko</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Christina Paul', 'VM00076')" class="clickable-row">
+                                <td>Christina Paul</td>
+                                <td>VM00076</td>
+                                <td><span class="potential-badge unfall">Unfallversicherung</span></td>
+                                <td>Handwerker, berufliches Unfallrisiko</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Holger Brandt', 'VM00077')" class="clickable-row">
+                                <td>Holger Brandt</td>
+                                <td>VM00077</td>
+                                <td><span class="potential-badge unfall">Unfallversicherung</span></td>
+                                <td>Kinder im Haushalt, Familienunfallschutz</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Jasmin Lorenz', 'VM00078')" class="clickable-row">
+                                <td>Jasmin Lorenz</td>
+                                <td>VM00078</td>
+                                <td><span class="potential-badge unfall">Unfallversicherung</span></td>
+                                <td>Motorradfahrer, spezielle Unfallabsicherung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Rechtsschutz-Potentiale -->
+                            <tr onclick="openKundenDetail('Oliver Thiel', 'VM00080')" class="clickable-row">
+                                <td>Oliver Thiel</td>
+                                <td>VM00080</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutzversicherung</span></td>
+                                <td>Immobilienkauf, Vermieterrechtsschutz empfohlen</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Anja Krämer', 'VM00081')" class="clickable-row">
+                                <td>Anja Krämer</td>
+                                <td>VM00081</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutzversicherung</span></td>
+                                <td>Neuer Arbeitsvertrag, Arbeitsrechtsschutz</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Karsten Ebert', 'VM00082')" class="clickable-row">
+                                <td>Karsten Ebert</td>
+                                <td>VM00082</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutzversicherung</span></td>
+                                <td>Online-Händler, gewerblicher Rechtsschutz</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Linda Berger', 'VM00083')" class="clickable-row">
+                                <td>Linda Berger</td>
+                                <td>VM00083</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutzversicherung</span></td>
+                                <td>Streit mit Nachbarn, kein Rechtsschutz</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <!-- Weitere Pflege-Potentiale -->
+                            <tr onclick="openKundenDetail('Werner Scholz', 'VM00085')" class="clickable-row">
+                                <td>Werner Scholz</td>
+                                <td>VM00085</td>
+                                <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
+                                <td>Alter 50+, idealer Einstiegszeitpunkt</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Gabriele Fink', 'VM00086')" class="clickable-row">
+                                <td>Gabriele Fink</td>
+                                <td>VM00086</td>
+                                <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
+                                <td>Pflegefall in Familie, hohe Sensibilisierung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Dieter Arnold', 'VM00087')" class="clickable-row">
+                                <td>Dieter Arnold</td>
+                                <td>VM00087</td>
+                                <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
+                                <td>Gut situiert, Pflege-Bahr nutzen</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Renate Böhm', 'VM00088')" class="clickable-row">
+                                <td>Renate Böhm</td>
+                                <td>VM00088</td>
+                                <td><span class="potential-badge pflege">Pflegezusatzversicherung</span></td>
+                                <td>Alleinstehend, keine Angehörigen zur Pflege</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Leben-Potentiale -->
+                            <tr onclick="openKundenDetail('Matthias Horn', 'VM00090')" class="clickable-row">
+                                <td>Matthias Horn</td>
+                                <td>VM00090</td>
+                                <td><span class="potential-badge leben">Risikolebensversicherung</span></td>
+                                <td>Baufinanzierung abgeschlossen, keine RLV</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Silvia Wendt', 'VM00091')" class="clickable-row">
+                                <td>Silvia Wendt</td>
+                                <td>VM00091</td>
+                                <td><span class="potential-badge leben">Risikolebensversicherung</span></td>
+                                <td>Zwillinge geboren, Absicherung dringend</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Uwe Dietrich', 'VM00092')" class="clickable-row">
+                                <td>Uwe Dietrich</td>
+                                <td>VM00092</td>
+                                <td><span class="potential-badge leben">Risikolebensversicherung</span></td>
+                                <td>Alleinverdiener, Familie ungesichert</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Heike Lindner', 'VM00093')" class="clickable-row">
+                                <td>Heike Lindner</td>
+                                <td>VM00093</td>
+                                <td><span class="potential-badge leben">Risikolebensversicherung</span></td>
+                                <td>Geschäftspartner-Absicherung fehlt</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <!-- Weitere Altersvorsorge-Potentiale -->
+                            <tr onclick="openKundenDetail('Tim Albrecht', 'VM00095')" class="clickable-row">
+                                <td>Tim Albrecht</td>
+                                <td>VM00095</td>
+                                <td><span class="potential-badge altersvorsorge">Private Altersvorsorge</span></td>
+                                <td>Berufseinsteiger, früher Start lohnt sich</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Sonja Pohl', 'VM00096')" class="clickable-row">
+                                <td>Sonja Pohl</td>
+                                <td>VM00096</td>
+                                <td><span class="potential-badge altersvorsorge">Private Altersvorsorge</span></td>
+                                <td>Riester-Zulagen nicht ausgeschöpft</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Klaus Hahn', 'VM00097')" class="clickable-row">
+                                <td>Klaus Hahn</td>
+                                <td>VM00097</td>
+                                <td><span class="potential-badge altersvorsorge">Private Altersvorsorge</span></td>
+                                <td>bAV-Anspruch nicht genutzt</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Monika Ritter', 'VM00098')" class="clickable-row">
+                                <td>Monika Ritter</td>
+                                <td>VM00098</td>
+                                <td><span class="potential-badge altersvorsorge">Private Altersvorsorge</span></td>
+                                <td>Versorgungslücke im Alter erkannt</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Wohngebäude-Potentiale -->
+                            <tr onclick="openKundenDetail('Frank Sommer', 'VM00100')" class="clickable-row">
+                                <td>Frank Sommer</td>
+                                <td>VM00100</td>
+                                <td><span class="potential-badge wohngebaeude">Wohngebäudeversicherung</span></td>
+                                <td>Hausneubau, Versicherung benötigt</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Birgit Kellner', 'VM00101')" class="clickable-row">
+                                <td>Birgit Kellner</td>
+                                <td>VM00101</td>
+                                <td><span class="potential-badge wohngebaeude">Wohngebäudeversicherung</span></td>
+                                <td>Altbau, keine Elementarschäden-Deckung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Helmut Kruse', 'VM00102')" class="clickable-row">
+                                <td>Helmut Kruse</td>
+                                <td>VM00102</td>
+                                <td><span class="potential-badge wohngebaeude">Wohngebäudeversicherung</span></td>
+                                <td>Wertanpassung nach Renovierung nötig</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Ingrid Schreiber', 'VM00103')" class="clickable-row">
+                                <td>Ingrid Schreiber</td>
+                                <td>VM00103</td>
+                                <td><span class="potential-badge wohngebaeude">Wohngebäudeversicherung</span></td>
+                                <td>Photovoltaik installiert, Erweiterung nötig</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Sach-Potentiale -->
+                            <tr onclick="openKundenDetail('Peter Voigt', 'VM00105')" class="clickable-row">
+                                <td>Peter Voigt</td>
+                                <td>VM00105</td>
+                                <td><span class="potential-badge sach">Sachversicherung</span></td>
+                                <td>Wertvolle Kunstsammlung, keine Absicherung</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Martina Wolff', 'VM00106')" class="clickable-row">
+                                <td>Martina Wolff</td>
+                                <td>VM00106</td>
+                                <td><span class="potential-badge sach">Sachversicherung</span></td>
+                                <td>Teures E-Bike, Diebstahlschutz fehlt</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Joachim Franke', 'VM00107')" class="clickable-row">
+                                <td>Joachim Franke</td>
+                                <td>VM00107</td>
+                                <td><span class="potential-badge sach">Sachversicherung</span></td>
+                                <td>Musikinstrumente, Spezialversicherung</td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Elke Baumann', 'VM00108')" class="clickable-row">
+                                <td>Elke Baumann</td>
+                                <td>VM00108</td>
+                                <td><span class="potential-badge sach">Sachversicherung</span></td>
+                                <td>Schmucksammlung, Wertgegenstandsvers.</td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -1341,6 +1804,172 @@
                                 <td>bAV bei altem Arbeitgeber, Portierung prüfen</td>
                                 <td><span class="consent yes">Aktiv</span></td>
                                 <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Matthias Engel', 'VM00048')" class="clickable-row">
+                                <td>Matthias Engel</td>
+                                <td><span class="potential-badge bu">BU-Deckungslücke</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Netto €4.200/Mon., BU bei Allianz nur €1.200/Mon.</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Sandra Peters', 'VM00049')" class="clickable-row">
+                                <td>Sandra Peters</td>
+                                <td><span class="potential-badge bu">BU-Neuabschluss</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Beförderung erkannt (+35% Gehalt), keine BU vorhanden</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Oliver Krüger', 'VM00050')" class="clickable-row">
+                                <td>Oliver Krüger</td>
+                                <td><span class="potential-badge bu">BU-Wechsel</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>BU bei HUK mit Psyche-Ausschluss, bessere Konditionen möglich</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Melanie Franke', 'VM00051')" class="clickable-row">
+                                <td>Melanie Franke</td>
+                                <td><span class="potential-badge bu">BU-Nachversicherung</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg> Kredit</span></td>
+                                <td>Immobilienkauf €350.000, BU-Aufstockung empfohlen</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Patrick Hoffmann', 'VM00052')" class="clickable-row">
+                                <td>Patrick Hoffmann</td>
+                                <td><span class="potential-badge bu">BU-Deckungslücke</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Gehalt €5.800 netto, BU bei ERGO nur €1.800/Mon.</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Tanja Werner', 'VM00053')" class="clickable-row">
+                                <td>Tanja Werner</td>
+                                <td><span class="potential-badge bu">BU-Ergänzung</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>Selbstständig, BU deckt nur Angestelltentätigkeit ab</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Alexander Koch', 'VM00054')" class="clickable-row">
+                                <td>Alexander Koch</td>
+                                <td><span class="potential-badge bu">BU-Neuabschluss</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Familiengründung erkannt (Kindergeld), keine BU</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Hausrat Open Finance -->
+                            <tr onclick="openKundenDetail('Mario Stein', 'VM00110')" class="clickable-row">
+                                <td>Mario Stein</td>
+                                <td><span class="potential-badge hausrat">Hausrat-Wechsel</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>Hausrat bei Allianz überteuert, Wechsel €180/J. Ersparnis</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Petra Kessler', 'VM00111')" class="clickable-row">
+                                <td>Petra Kessler</td>
+                                <td><span class="potential-badge hausrat">Hausrat-Neuabschluss</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg> Kredit</span></td>
+                                <td>Wohnungskredit abgeschlossen, kein Hausratschutz erkannt</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Sebastian Rau', 'VM00112')" class="clickable-row">
+                                <td>Sebastian Rau</td>
+                                <td><span class="potential-badge hausrat">Hausrat-Upgrade</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Investment</span></td>
+                                <td>Depot €120.000, hochwertige Wertgegenstände vermutet</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <!-- Weitere Haftpflicht Open Finance -->
+                            <tr onclick="openKundenDetail('Nicole Graf', 'VM00115')" class="clickable-row">
+                                <td>Nicole Graf</td>
+                                <td><span class="potential-badge haftpflicht">Haftpflicht-Wechsel</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>Haftpflicht bei ARAG €95/J., Markt €45/J. möglich</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Hendrik Busch', 'VM00116')" class="clickable-row">
+                                <td>Hendrik Busch</td>
+                                <td><span class="potential-badge haftpflicht">Tierhalterhaftpflicht</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Hundesteuer-Abbuchung erkannt, keine Hundehalter-HP</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Unfall Open Finance -->
+                            <tr onclick="openKundenDetail('Miriam Löwe', 'VM00118')" class="clickable-row">
+                                <td>Miriam Löwe</td>
+                                <td><span class="potential-badge unfall">Unfall-Neuabschluss</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Sportverein-Beiträge erkannt, kein Unfallschutz</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Fabian Ernst', 'VM00119')" class="clickable-row">
+                                <td>Fabian Ernst</td>
+                                <td><span class="potential-badge unfall">Unfall-Upgrade</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>Unfallvers. bei HUK, Progression nur 225%</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <!-- Weitere Rechtsschutz Open Finance -->
+                            <tr onclick="openKundenDetail('Karin Vogel', 'VM00121')" class="clickable-row">
+                                <td>Karin Vogel</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutz-Neuabschluss</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg> Kredit</span></td>
+                                <td>Immobilie erworben, kein Vermieter-Rechtsschutz</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Roland Jäger', 'VM00122')" class="clickable-row">
+                                <td>Roland Jäger</td>
+                                <td><span class="potential-badge rechtsschutz">Rechtsschutz-Wechsel</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>RS bei DEVK mit Wartezeit, bessere Konditionen möglich</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <!-- Weitere Wohngebäude Open Finance -->
+                            <tr onclick="openKundenDetail('Hans-Peter Fritsch', 'VM00125')" class="clickable-row">
+                                <td>Hans-Peter Fritsch</td>
+                                <td><span class="potential-badge wohngebaeude">Wohngebäude-Wechsel</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><path d="M16 8l-4 4-4-4"></path><path d="M12 16V12"></path></svg> Versicherung</span></td>
+                                <td>WG bei VGH €1.200/J., ohne Elementar, Optimierung möglich</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Elfriede Kunz', 'VM00126')" class="clickable-row">
+                                <td>Elfriede Kunz</td>
+                                <td><span class="potential-badge wohngebaeude">Wohngebäude-Neuabschluss</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg> Kredit</span></td>
+                                <td>Baufinanzierung €320.000 abgeschlossen</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
+                            </tr>
+                            <!-- Weitere Sach Open Finance -->
+                            <tr onclick="openKundenDetail('Thomas Berger', 'VM00128')" class="clickable-row">
+                                <td>Thomas Berger</td>
+                                <td><span class="potential-badge sach">Elektronik-Versicherung</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>Elektronik-Käufe €8.500 in 6 Mon., keine Absicherung</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority medium">Mittel</span></td>
+                            </tr>
+                            <tr onclick="openKundenDetail('Carmen Hofmann', 'VM00129')" class="clickable-row">
+                                <td>Carmen Hofmann</td>
+                                <td><span class="potential-badge sach">Fahrrad-Versicherung</span></td>
+                                <td><span class="fida-source-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Bank</span></td>
+                                <td>E-Bike Finanzierung €4.500, keine Diebstahlvers.</td>
+                                <td><span class="consent yes">Aktiv</span></td>
+                                <td><span class="priority high">Hoch</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1719,7 +2348,7 @@
                                 Versicherungen bei Wettbewerbern
                             </h2>
                             <span class="fida-new-tag">NEU durch Open Finance</span>
-                            <span class="fida-source-tag">Allianz, Ergo, HUK24, ARAG</span>
+                            <span class="fida-source-tag">Allianz, ERGO, HUK24, ARAG</span>
                         </div>
                         <table class="kunden-table fida-table fida-extended-table">
                             <thead>
@@ -1753,7 +2382,7 @@
                                 </tr>
                                 <tr data-anbieter="ergo" class="ergo-row">
                                     <td><strong>Berufsunfähigkeit</strong></td>
-                                    <td>Ergo</td>
+                                    <td>ERGO</td>
                                     <td style="color: #f59e0b;"><strong>€1.500/Mon.</strong></td>
                                     <td><span class="tarif-badge basis">Basis</span></td>
                                     <td>
@@ -1828,7 +2457,7 @@
                                 <div class="deckungsluecke-divider">-</div>
                                 <div class="deckungsluecke-item fida-item">
                                     <span class="deckungsluecke-label">
-                                        Bestehende BU (Ergo)
+                                        Bestehende BU (ERGO)
                                         <span class="source-tag fida">Open Finance</span>
                                     </span>
                                     <span class="deckungsluecke-value">€1.500/Monat</span>
@@ -1861,7 +2490,7 @@
                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                         </svg>
                                     </span>
-                                    <span><strong>Open Finance NEU:</strong> BU bei Ergo mit nur €1.500/Mon. – zu niedrig für sein Einkommen!</span>
+                                    <span><strong>Open Finance NEU:</strong> BU bei ERGO mit nur €1.500/Mon. – zu niedrig für sein Einkommen!</span>
                                 </div>
                             </div>
                             <div class="deckungsluecke-recommendation">
