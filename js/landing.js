@@ -2117,6 +2117,77 @@ function fillKundenDetail(kundenName, vermittlerId) {
                 { anbieter: 'Commerzbank', typ: 'Geschäftskonto', info: 'Betriebskonto' },
                 { anbieter: 'Union Investment', typ: 'Riester', info: 'Altersvorsorge €45.000' }
             ]
+        },
+        'Matthias Engel': {
+            geburtsdatum: '14.08.1982',
+            adresse: 'Schillerstraße 78, 45127 Essen',
+            telefon: '+49 201 3456789',
+            email: 'matthias.engel@email.de',
+            beruf: 'IT-Consultant',
+            familienstand: 'Verheiratet',
+            kinder: [{ name: 'Jonas', alter: 6 }, { name: 'Lea', alter: 4 }],
+            vertraege: [
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'Allianz', details: 'BU-Rente: €1.200/Mon., Endalter 65 - UNTERDECKT', praemie: '€75/Mon.', beginn: '01.04.2015', status: 'Aktiv' },
+                { typ: 'Privathaftpflichtversicherung', versicherer: 'ERGO', details: 'Familie, €50 Mio. Deckung', praemie: '€85/Jahr', beginn: '01.01.2018', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Sparkasse Essen', typ: 'Girokonto', info: 'Gehalt €4.200 netto/Mon.' },
+                { anbieter: 'ING', typ: 'Depot', info: 'ETF-Sparplan €400/Mon.' },
+                { anbieter: 'Allianz', typ: 'BU-Versicherung', info: 'Nur €1.200/Mon. - Deckungslücke!' }
+            ]
+        },
+        'Christian Bauer': {
+            geburtsdatum: '23.01.1989',
+            adresse: 'Königsallee 15, 40212 Düsseldorf',
+            telefon: '+49 211 9876543',
+            email: 'christian.bauer@email.de',
+            beruf: 'Projektmanager',
+            familienstand: 'Ledig',
+            kinder: [],
+            vertraege: [
+                { typ: 'Rechtsschutzversicherung', versicherer: 'ERGO', details: 'Beruf & Privat, €300 SB', praemie: '€280/Jahr', beginn: '01.06.2021', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Commerzbank', typ: 'Girokonto', info: 'Gehalt €3.800 netto/Mon.' },
+                { anbieter: 'Trade Republic', typ: 'Depot', info: 'Aktien €45.000' },
+                { anbieter: 'keine', typ: 'BU-Versicherung', info: 'NICHT VORHANDEN!' }
+            ]
+        },
+        'Martin Wolf': {
+            geburtsdatum: '05.05.1987',
+            adresse: 'Handwerkerweg 9, 44135 Dortmund',
+            telefon: '+49 231 7654321',
+            email: 'martin.wolf@email.de',
+            beruf: 'Dachdecker (Meister)',
+            familienstand: 'Verheiratet',
+            kinder: [{ name: 'Felix', alter: 9 }, { name: 'Marie', alter: 7 }, { name: 'Ben', alter: 3 }],
+            vertraege: [
+                { typ: 'Unfallversicherung', versicherer: 'ERGO', details: 'Invalidität €150.000, Progression 500%', praemie: '€320/Jahr', beginn: '01.03.2017', status: 'Aktiv' },
+                { typ: 'Wohngebäudeversicherung', versicherer: 'VHV', details: 'Vers.-Summe: €380.000, inkl. Elementar', praemie: '€520/Jahr', beginn: '01.07.2016', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Volksbank Dortmund', typ: 'Girokonto', info: 'Gehalt €3.200 netto/Mon.' },
+                { anbieter: 'Bausparkasse LBS', typ: 'Bausparvertrag', info: 'Ansparphase €28.000' },
+                { anbieter: 'keine', typ: 'BU-Versicherung', info: 'NICHT VORHANDEN - Hochrisiko-Beruf!' }
+            ]
+        },
+        'Eva Hartmann': {
+            geburtsdatum: '19.11.1991',
+            adresse: 'Kunststraße 33, 50674 Köln',
+            telefon: '+49 221 1234567',
+            email: 'eva.hartmann@email.de',
+            beruf: 'Grafikdesignerin (selbstständig)',
+            familienstand: 'In Partnerschaft',
+            kinder: [{ name: 'Mila', alter: 2 }],
+            vertraege: [
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €1.000/Mon., Endalter 67 - Aufstockung empfohlen', praemie: '€68/Mon.', beginn: '01.09.2019', status: 'Aktiv' },
+                { typ: 'Betriebshaftpflicht', versicherer: 'Hiscox', details: '€2 Mio. Deckung, Freelancer-Tarif', praemie: '€290/Jahr', beginn: '01.01.2020', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'N26', typ: 'Geschäftskonto', info: 'Selbstständigen-Einkommen variabel' },
+                { anbieter: 'ING', typ: 'Tagesgeld', info: 'Rücklage €12.000' },
+                { anbieter: 'KfW', typ: 'Gründerkredit', info: 'Restschuld €15.000' }
+            ]
         }
     };
 
