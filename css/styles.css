@@ -5373,6 +5373,8 @@ button svg,
 /* Impuls Items Spacing */
 .impuls-kategorie .impuls-item {
     margin-bottom: 12px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .impuls-kategorie .impuls-item:last-of-type {
@@ -5381,6 +5383,12 @@ button svg,
 
 .impuls-kategorie .impuls-detail {
     margin-bottom: 16px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.impuls-kategorie-title {
+    margin-left: 8px;
 }
 
 .impuls-kategorie-title.whitespots {
@@ -5475,6 +5483,8 @@ button svg,
 
 .bedarfsfeld-section {
     margin-top: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .bedarfsfeld-section:first-child {
@@ -5498,6 +5508,15 @@ button svg,
     color: #64748b;
     background: none;
     padding: 0;
+}
+
+/* Makler-only columns - hidden by default (AO view) */
+.ao-view .makler-only-col {
+    display: none;
+}
+
+.makler-view .makler-only-col {
+    display: table-cell;
 }
 
 /* Impulse Tab Styling */

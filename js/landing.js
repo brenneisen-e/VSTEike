@@ -1805,6 +1805,10 @@ function openKundenDetail(kundenName, vermittlerId) {
     if (kundenDetail) {
         kundenDetail.style.display = 'block';
 
+        // Setze initiale Makler/AO-Ansicht
+        kundenDetail.classList.remove('makler-view', 'ao-view');
+        kundenDetail.classList.add(currentVermittlerMode === 'makler' ? 'makler-view' : 'ao-view');
+
         // Fülle Kundendaten
         fillKundenDetail(kundenName, vermittlerId);
 
@@ -1879,6 +1883,13 @@ function switchVermittlerMode(mode) {
 
     // Bei AO-Modus: Fremdprodukte in der Open Finance Tabelle anpassen
     updateOpenFinanceTable(mode);
+
+    // Makler/AO-Ansicht für Betreute Verträge Tabelle
+    const kundenDetailPage = document.getElementById('kundenDetailPage');
+    if (kundenDetailPage) {
+        kundenDetailPage.classList.remove('makler-view', 'ao-view');
+        kundenDetailPage.classList.add(mode === 'makler' ? 'makler-view' : 'ao-view');
+    }
 }
 
 // Passt die Open Finance Tabelle je nach Modus an
