@@ -1585,6 +1585,10 @@ function renderGroupedPotentials(tableId) {
     const tbody = table.querySelector('tbody');
     if (!tbody) return;
 
+    // Header in gruppierter Ansicht ausblenden
+    const thead = table.querySelector('thead');
+    if (thead) thead.style.display = 'none';
+
     // Sammle alle Original-Zeilen (ohne Gruppen-Zeilen)
     const originalRows = Array.from(tbody.querySelectorAll('tr:not(.potential-group-row)'));
     if (originalRows.length === 0) return;
@@ -1735,6 +1739,10 @@ function renderFlatPotentials(tableId, filter) {
 
     const tbody = table.querySelector('tbody');
     if (!tbody) return;
+
+    // Header bei gefilterter Ansicht wieder einblenden
+    const thead = table.querySelector('thead');
+    if (thead) thead.style.display = '';
 
     // Stelle Original-HTML wieder her falls vorhanden
     if (tbody.dataset.originalHtml) {

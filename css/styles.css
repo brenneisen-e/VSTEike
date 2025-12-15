@@ -6623,6 +6623,31 @@ button svg,
     color: #9d174d;
 }
 
+.potential-type.uebergreifend {
+    background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
+    color: white;
+    font-weight: 600;
+}
+
+/* Pulse Animation für neue Zeilen */
+@keyframes pulse-row {
+    0%, 100% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: rgba(134, 188, 37, 0.15);
+    }
+}
+
+.pulse-new-row {
+    animation: pulse-row 2s ease-in-out infinite;
+}
+
+.pulse-new-row:hover {
+    animation: none;
+    background-color: #f8fafc;
+}
+
 /* FIDA Source Badge Small */
 .fida-source-badge.small {
     font-size: 11px;
