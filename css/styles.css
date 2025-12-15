@@ -3637,6 +3637,8 @@ button svg,
     gap: 8px;
     margin-left: auto;
     align-items: center;
+    min-width: 180px;
+    justify-content: flex-end;
 }
 
 .potential-group-row .priority-count {
@@ -6627,6 +6629,11 @@ button svg,
     background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
     color: white;
     font-weight: 600;
+}
+
+.potential-type.kranken {
+    background: #fef9c3;
+    color: #854d0e;
 }
 
 /* Pulse Animation für neue Zeilen */
