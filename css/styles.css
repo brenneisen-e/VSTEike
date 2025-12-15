@@ -3590,12 +3590,12 @@ button svg,
 .segment-badge {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 16px;
-    border-radius: 8px;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 6px;
     font-size: 13px;
     font-weight: 600;
-    min-width: 180px;
+    width: 220px;
     background: #f8fafc !important;
     color: #475569 !important;
     border: 1px solid #e2e8f0 !important;
@@ -3623,15 +3623,16 @@ button svg,
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #475569;
+    background: #334155;
     color: white;
-    font-size: 13px;
-    font-weight: 700;
-    min-width: 36px;
-    height: 36px;
-    padding: 0 10px;
-    border-radius: 18px;
-    margin-left: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 14px;
+    margin-left: 12px;
+    flex-shrink: 0;
 }
 
 .potential-group-row .group-priorities {
