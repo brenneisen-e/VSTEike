@@ -5483,6 +5483,8 @@ button svg,
 
 .bedarfsfeld-section {
     margin-top: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .bedarfsfeld-section:first-child {
