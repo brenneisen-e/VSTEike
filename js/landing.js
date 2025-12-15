@@ -1665,12 +1665,28 @@ function renderGroupedPotentials(tableId) {
         'kfz': 'kfz'
     };
 
-    // Hauptsegment-Namen und Reihenfolge
+    // Hauptsegment-Namen, Reihenfolge und Icons
     const mainSegments = {
-        'leben': { name: 'Leben', order: 1 },
-        'kranken': { name: 'Kranken', order: 2 },
-        'shu': { name: 'Sach / Haftpflicht / Unfall', order: 3 },
-        'kfz': { name: 'Kfz', order: 4 }
+        'leben': {
+            name: 'Leben',
+            order: 1,
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
+        },
+        'kranken': {
+            name: 'Kranken',
+            order: 2,
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>'
+        },
+        'shu': {
+            name: 'Sach / Haftpflicht / Unfall',
+            order: 3,
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
+        },
+        'kfz': {
+            name: 'Kfz',
+            order: 4,
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"></path><path d="M3 17h2m14 0h2M5 17H3v-4l2-5h10l4 5v4h-2"></path></svg>'
+        }
     };
 
     // Parse Original-HTML und gruppiere
@@ -1739,7 +1755,7 @@ function renderGroupedPotentials(tableId) {
         const mediumCount = items.filter(i => i.priority === 'medium').length;
         const lowCount = items.filter(i => i.priority === 'low').length;
 
-        const segmentInfo = mainSegments[segment] || { name: segment };
+        const segmentInfo = mainSegments[segment] || { name: segment, icon: '' };
 
         // Gruppen-Zeile
         newHtml += `
@@ -1749,7 +1765,7 @@ function renderGroupedPotentials(tableId) {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
-                        <span class="segment-badge segment-${segment}">${segmentInfo.name}</span>
+                        <span class="segment-badge segment-${segment}">${segmentInfo.icon || ''}${segmentInfo.name}</span>
                         <span class="group-count">${items.length}</span>
                         <div class="group-priorities">
                             ${highCount > 0 ? `<span class="priority-count high">${highCount} Hoch</span>` : ''}

@@ -3586,35 +3586,27 @@ button svg,
     transform: rotate(90deg);
 }
 
-/* Segment Badges - 4 Hauptfarben */
+/* Segment Badges - Einfarbig mit Icons */
 .segment-badge {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
     min-width: 180px;
-    text-align: center;
+    background: #f8fafc;
+    color: #475569;
+    border: 1px solid #e2e8f0;
 }
 
-.segment-badge.segment-leben {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.segment-badge.segment-kranken {
-    background: #fce7f3;
-    color: #9d174d;
-}
-
-.segment-badge.segment-shu {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.segment-badge.segment-kfz {
-    background: #fef3c7;
-    color: #92400e;
+.segment-badge svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+    fill: none;
+    flex-shrink: 0;
 }
 
 .potential-group-row .group-count {
