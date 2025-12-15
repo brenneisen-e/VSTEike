@@ -1923,20 +1923,22 @@ function fillKundenDetail(kundenName, vermittlerId) {
 
     // Mock-Daten für Demo
     const mockKunden = {
-        'Max Mustermann': {
+        'Peter Schmidt': {
             geburtsdatum: '15.03.1985',
             adresse: 'Musterstraße 123, 12345 Musterstadt',
             telefon: '+49 123 456789',
-            email: 'max.mustermann@email.de',
+            email: 'peter.schmidt@email.de',
             beruf: 'Angestellter',
             familienstand: 'Verheiratet',
             kinder: [{ name: 'Lena', alter: 8 }, { name: 'Paul', alter: 5 }],
             vertraege: [
                 { typ: 'Wohngebäudeversicherung', praemie: '€450/Jahr', status: 'Aktiv' },
+                { typ: 'Berufsunfähigkeitsversicherung', praemie: '€89/Mon.', status: 'Aktiv' },
                 { typ: 'Kfz-Versicherung', praemie: '€680/Jahr', status: 'Aktiv' }
             ],
             fidaVertraege: [
                 { anbieter: 'Sparkasse', typ: 'Girokonto', info: 'Hauptkonto' },
+                { anbieter: 'ING DiBa', typ: 'Tagesgeld', info: 'Sparkonto' },
                 { anbieter: 'DWS', typ: 'Depot', info: 'Fondssparen' }
             ]
         },
@@ -1958,7 +1960,7 @@ function fillKundenDetail(kundenName, vermittlerId) {
         }
     };
 
-    const kunde = mockKunden[kundenName] || mockKunden['Max Mustermann'];
+    const kunde = mockKunden[kundenName] || mockKunden['Peter Schmidt'];
 
     // Stammdaten
     document.getElementById('kundenGeburtsdatum').textContent = kunde.geburtsdatum;
@@ -2033,6 +2035,24 @@ function switchKundenTab(tabName) {
     }
 
     console.log('Tab gewechselt zu:', tabName);
+}
+
+// Toggle Impuls Detail
+function toggleImpulsDetail(impulsId) {
+    const detailElement = document.getElementById(impulsId);
+    if (detailElement) {
+        const isVisible = detailElement.style.display !== 'none';
+        detailElement.style.display = isVisible ? 'none' : 'block';
+
+        // Rotate the expand icon
+        const parentItem = detailElement.previousElementSibling;
+        if (parentItem) {
+            const expandIcon = parentItem.querySelector('.impuls-expand');
+            if (expandIcon) {
+                expandIcon.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+        }
+    }
 }
 
 // Kommunikation ansehen
