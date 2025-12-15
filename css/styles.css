@@ -5318,6 +5318,7 @@ button svg,
 .impuls-actions .action-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     padding: 10px 16px;
     border-radius: 8px;
@@ -5326,6 +5327,9 @@ button svg,
     cursor: pointer;
     border: none;
     transition: all 0.2s ease;
+    width: auto;
+    height: auto;
+    white-space: nowrap;
 }
 
 .impuls-actions .action-btn.primary {
@@ -5346,6 +5350,12 @@ button svg,
 
 .impuls-actions .action-btn.secondary:hover {
     background: #f8fafc;
+}
+
+.impuls-actions .action-btn svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
 }
 
 /* Impuls Kategorien */
