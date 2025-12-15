@@ -5207,6 +5207,312 @@ button svg,
     color: #64748b;
 }
 
+/* Clickable Impuls Items */
+.impuls-item.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.impuls-item.clickable:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+}
+
+.impuls-expand {
+    flex-shrink: 0;
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+}
+
+/* Impuls Detail Section */
+.impuls-detail {
+    background: #f8fafc;
+    border-radius: 0 0 10px 10px;
+    margin-top: -10px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+}
+
+.impuls-detail-section {
+    margin-bottom: 20px;
+}
+
+.impuls-detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.impuls-detail-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Herleitung Grid */
+.herleitung-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.herleitung-item {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.herleitung-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.herleitung-value {
+    font-size: 13px;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* Comparison Table */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 13px;
+}
+
+.comparison-table th {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: #475569;
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Impuls Actions */
+.impuls-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.impuls-actions .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.impuls-actions .action-btn.primary {
+    background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
+    color: white;
+}
+
+.impuls-actions .action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(134, 188, 37, 0.3);
+}
+
+.impuls-actions .action-btn.secondary {
+    background: white;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+}
+
+.impuls-actions .action-btn.secondary:hover {
+    background: #f8fafc;
+}
+
+/* Impuls Kategorien */
+.impuls-kategorie {
+    margin-bottom: 24px;
+}
+
+.impuls-kategorie:last-child {
+    margin-bottom: 0;
+}
+
+.impuls-kategorie-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.impuls-kategorie-title.whitespots {
+    border-color: #86BC25;
+    color: #86BC25;
+}
+
+.impuls-kategorie-title.whitespots svg {
+    color: #86BC25;
+}
+
+.impuls-kategorie-title.anpassung {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.impuls-kategorie-title.anpassung svg {
+    color: #3b82f6;
+}
+
+.kategorie-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* Bedarfsfeld Cards */
+.bedarfsfeld-card {
+    margin-bottom: 16px;
+}
+
+.kunden-card-header.bedarfsfeld {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.kunden-card-header.bedarfsfeld h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.kunden-card-header.bedarfsfeld.bezahlen {
+    border-left: 4px solid #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+}
+
+.kunden-card-header.bedarfsfeld.bezahlen h2 {
+    color: #3b82f6;
+}
+
+.kunden-card-header.bedarfsfeld.sparen {
+    border-left: 4px solid #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+}
+
+.kunden-card-header.bedarfsfeld.sparen h2 {
+    color: #10b981;
+}
+
+.kunden-card-header.bedarfsfeld.absichern {
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%);
+}
+
+.kunden-card-header.bedarfsfeld.absichern h2 {
+    color: #f59e0b;
+}
+
+.kunden-card-header.bedarfsfeld.finanzieren {
+    border-left: 4px solid #8b5cf6;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+}
+
+.kunden-card-header.bedarfsfeld.finanzieren h2 {
+    color: #8b5cf6;
+}
+
+.bedarfsfeld-source {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    color: #64748b;
+}
+
+.bedarfsfeld-section {
+    margin-top: 20px;
+}
+
+.section-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Info Badge for Betreute Verträge */
+.info-badge {
+    font-size: 11px;
+    font-weight: 400;
+    color: #64748b;
+    background: none;
+    padding: 0;
+}
+
+/* Impulse Tab Styling */
+.impulse-tab {
+    position: relative;
+}
+
+.impulse-tab::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: #86BC25;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .kunden-stammdaten {
