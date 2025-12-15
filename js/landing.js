@@ -1712,8 +1712,15 @@ function renderGroupedPotentials(tableId) {
 
         // Detail-Zeilen
         items.forEach(item => {
-            // Füge Klasse für versteckte Zeilen hinzu
-            const rowHtml = item.html.replace('<tr', `<tr class="potential-detail-row" data-segment="${segment}"`);
+            // Füge Klasse für versteckte Zeilen hinzu - berücksichtige existierende class-Attribute
+            let rowHtml = item.html;
+            if (rowHtml.includes('class="')) {
+                // Existierende class erweitern
+                rowHtml = rowHtml.replace(/class="([^"]*)"/, `class="$1 potential-detail-row" data-segment="${segment}"`);
+            } else {
+                // Neue class hinzufügen
+                rowHtml = rowHtml.replace('<tr', `<tr class="potential-detail-row" data-segment="${segment}"`);
+            }
             newHtml += rowHtml;
         });
     });
