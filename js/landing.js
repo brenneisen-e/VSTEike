@@ -807,6 +807,48 @@ function toggleSettings() {
     }
 }
 
+// Benutzername speichern und aktualisieren
+function saveUserName() {
+    const input = document.getElementById('userNameInput');
+    const welcomeSpan = document.getElementById('welcomeUserName');
+
+    if (input && input.value.trim()) {
+        const newName = input.value.trim();
+
+        // Im localStorage speichern
+        localStorage.setItem('userName', newName);
+
+        // Willkommensnachricht aktualisieren
+        if (welcomeSpan) {
+            welcomeSpan.textContent = newName;
+        }
+
+        // Kurze Bestätigung anzeigen
+        const saveBtn = document.getElementById('userNameSave');
+        if (saveBtn) {
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = '✓ Gespeichert';
+            saveBtn.style.background = '#86BC25';
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.style.background = '';
+            }, 1500);
+        }
+    }
+}
+
+// Benutzername beim Laden wiederherstellen
+function loadUserName() {
+    const savedName = localStorage.getItem('userName');
+    if (savedName) {
+        const input = document.getElementById('userNameInput');
+        const welcomeSpan = document.getElementById('welcomeUserName');
+
+        if (input) input.value = savedName;
+        if (welcomeSpan) welcomeSpan.textContent = savedName;
+    }
+}
+
 // Open Agentur View (zeigt Agentur-Auswahl oder direkt die Übersicht)
 function openAgenturView() {
     console.log('👤 Agenturansicht öffnen...');
@@ -845,11 +887,16 @@ window.openGenerator = openGenerator;
 window.backToLanding = backToLanding;
 window.toggleSettings = toggleSettings;
 window.openAgenturView = openAgenturView;
+window.saveUserName = saveUserName;
+window.loadUserName = loadUserName;
 
 // WICHTIG: Entfernen Sie den ersten DOMContentLoaded von ganz oben!
 // Hier ist der einzige DOMContentLoaded Listener:
 window.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Landing Page wird geladen...');
+
+    // Benutzername aus localStorage laden
+    loadUserName();
 
     // Navigation initial deaktivieren bis Daten geladen
     setNavigationEnabled(false);
