@@ -5373,6 +5373,8 @@ button svg,
 /* Impuls Items Spacing */
 .impuls-kategorie .impuls-item {
     margin-bottom: 12px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .impuls-kategorie .impuls-item:last-of-type {
@@ -5381,6 +5383,12 @@ button svg,
 
 .impuls-kategorie .impuls-detail {
     margin-bottom: 16px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.impuls-kategorie-title {
+    margin-left: 8px;
 }
 
 .impuls-kategorie-title.whitespots {
