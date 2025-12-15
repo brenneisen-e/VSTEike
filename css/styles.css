@@ -5510,6 +5510,15 @@ button svg,
     padding: 0;
 }
 
+/* Makler-only columns - hidden by default (AO view) */
+.ao-view .makler-only-col {
+    display: none;
+}
+
+.makler-view .makler-only-col {
+    display: table-cell;
+}
+
 /* Impulse Tab Styling */
 .impulse-tab {
     position: relative;
