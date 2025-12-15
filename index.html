@@ -105,7 +105,7 @@
                     <span class="deloitte-d">D</span>
                 </div>
                 <div class="chat-bubble">
-                    <p><strong>Willkommen zurück Eike, was kann ich für dich tun?</strong></p>
+                    <p><strong>Willkommen zurück <span id="welcomeUserName">Eike</span>, was kann ich für dich tun?</strong></p>
                 </div>
             </div>
 
@@ -176,6 +176,27 @@
                     </svg>
                 </button>
                 <div class="settings-content" id="settingsContent">
+                    <!-- Benutzername ändern -->
+                    <div class="settings-api-section">
+                        <div class="settings-item-header">
+                            <svg class="settings-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>Benutzername</span>
+                        </div>
+                        <div class="api-token-input-wrapper">
+                            <input
+                                type="text"
+                                id="userNameInput"
+                                class="api-token-input"
+                                placeholder="Dein Name..."
+                                value="Eike"
+                            />
+                            <button id="userNameSave" class="api-token-save" onclick="saveUserName()">Speichern</button>
+                        </div>
+                    </div>
+
                     <!-- Test-Daten generieren -->
                     <div class="settings-item" onclick="openGenerator()">
                         <svg class="settings-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -783,7 +804,7 @@
                                 </tr>
                             </thead>
                             <tbody id="fidaCasesTableBody">
-                                <tr data-status="termin" class="clickable-row" onclick="openKundenDetail('Peter Schmidt', 'KD00001')">
+                                <tr data-status="neu" class="clickable-row pulse-new-row" onclick="openKundenDetail('Peter Schmidt', 'KD00001')">
                                     <td>
                                         <div class="kunde-cell">
                                             <div class="kunde-avatar">PS</div>
@@ -793,11 +814,11 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><span class="potential-type bu">BU-Deckungslücke</span></td>
-                                    <td><span class="fida-source-badge small">Versicherung</span></td>
-                                    <td><strong>€2.400/Jahr</strong></td>
-                                    <td><span class="status-badge termin">Termin 05.12.</span></td>
-                                    <td>E-Mail gesendet (28.11.)</td>
+                                    <td><span class="potential-type uebergreifend">Übergreifend</span></td>
+                                    <td><span class="fida-source-badge small">Open Finance</span></td>
+                                    <td><strong>€8.500/Jahr</strong></td>
+                                    <td><span class="status-badge neu">Neu identifiziert</span></td>
+                                    <td>Open Finance Abgleich (heute)</td>
                                     <td>
                                         <button class="action-btn" title="Kundenakte öffnen" onclick="event.stopPropagation(); openKundenDetail('Peter Schmidt', 'KD00001')">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
@@ -2138,7 +2159,7 @@
                             <tbody id="kundenVertraege">
                                 <tr>
                                     <td><strong>Berufsunfähigkeitsversicherung</strong></td>
-                                    <td class="makler-only-col">Alte Leipziger</td>
+                                    <td class="makler-only-col">ERGO</td>
                                     <td>BU-Rente: €1.500/Mon., Endalter 67, ohne Ausschlüsse</td>
                                     <td>€89/Mon.</td>
                                     <td>01.03.2018</td>
@@ -2149,14 +2170,6 @@
                                     <td class="makler-only-col">VHV</td>
                                     <td>Vers.-Summe: €450.000, inkl. Elementar, gleitender Neuwert</td>
                                     <td>€450/Jahr</td>
-                                    <td>15.06.2019</td>
-                                    <td><span class="status-badge aktiv">Aktiv</span></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Hausratversicherung</strong></td>
-                                    <td class="makler-only-col">VHV</td>
-                                    <td>Vers.-Summe: €65.000, inkl. Fahrrad bis €3.000</td>
-                                    <td>€142/Jahr</td>
                                     <td>15.06.2019</td>
                                     <td><span class="status-badge aktiv">Aktiv</span></td>
                                 </tr>
