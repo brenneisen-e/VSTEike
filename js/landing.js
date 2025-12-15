@@ -1952,20 +1952,108 @@ function fillKundenDetail(kundenName, vermittlerId) {
                 { anbieter: 'DWS', typ: 'Depot', info: 'Fondssparen' }
             ]
         },
+        'Sabine König': {
+            geburtsdatum: '08.11.1979',
+            adresse: 'Lindenweg 7, 60329 Frankfurt',
+            telefon: '+49 69 7654321',
+            email: 'sabine.koenig@email.de',
+            beruf: 'Lehrerin',
+            familienstand: 'Geschieden',
+            kinder: [{ name: 'Max', alter: 12 }],
+            vertraege: [
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €1.800/Mon., Endalter 67', praemie: '€95/Mon.', beginn: '01.09.2015', status: 'Aktiv' },
+                { typ: 'Unfallversicherung', versicherer: 'Helvetia', details: 'Invalidität €100.000, Progression 350%', praemie: '€180/Jahr', beginn: '01.01.2020', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Volksbank', typ: 'Girokonto', info: 'Gehaltskonto' },
+                { anbieter: 'DKB', typ: 'Tagesgeld', info: 'Notgroschen' }
+            ]
+        },
+        'Thomas Weber': {
+            geburtsdatum: '25.04.1990',
+            adresse: 'Bergstraße 22, 80331 München',
+            telefon: '+49 89 1234567',
+            email: 'thomas.weber@email.de',
+            beruf: 'Software-Entwickler',
+            familienstand: 'Ledig',
+            kinder: [],
+            vertraege: [
+                { typ: 'Privathaftpflichtversicherung', versicherer: 'ERGO', details: 'Single, €50 Mio. Deckung', praemie: '€65/Jahr', beginn: '01.03.2021', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'N26', typ: 'Girokonto', info: 'Hauptkonto' },
+                { anbieter: 'Trade Republic', typ: 'Depot', info: 'ETF-Sparplan €500/Mon.' },
+                { anbieter: 'Scalable Capital', typ: 'Depot', info: 'Einzelaktien' }
+            ]
+        },
+        'Anna Hoffmann': {
+            geburtsdatum: '03.06.1988',
+            adresse: 'Rosenstraße 15, 50667 Köln',
+            telefon: '+49 221 9876543',
+            email: 'anna.hoffmann@email.de',
+            beruf: 'Marketing-Managerin',
+            familienstand: 'Verheiratet',
+            kinder: [{ name: 'Sophie', alter: 3 }, { name: 'Emma', alter: 1 }],
+            vertraege: [
+                { typ: 'Risikolebensversicherung', versicherer: 'ERGO', details: 'Vers.-Summe: €300.000, Laufzeit bis 2045', praemie: '€25/Mon.', beginn: '01.07.2020', status: 'Aktiv' },
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'Alte Leipziger', details: 'BU-Rente: €2.000/Mon., Endalter 67', praemie: '€110/Mon.', beginn: '01.01.2019', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Commerzbank', typ: 'Girokonto', info: 'Familienkonto' },
+                { anbieter: 'Consorsbank', typ: 'Depot', info: 'Kindersparen' }
+            ]
+        },
+        'Michael Braun': {
+            geburtsdatum: '17.09.1975',
+            adresse: 'Industriestraße 88, 70173 Stuttgart',
+            telefon: '+49 711 5432167',
+            email: 'michael.braun@email.de',
+            beruf: 'Geschäftsführer',
+            familienstand: 'Verheiratet',
+            kinder: [{ name: 'Lukas', alter: 18 }, { name: 'Jana', alter: 15 }],
+            vertraege: [
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €3.500/Mon., Endalter 65', praemie: '€220/Mon.', beginn: '01.06.2010', status: 'Aktiv' },
+                { typ: 'Wohngebäudeversicherung', versicherer: 'Axa', details: 'Vers.-Summe: €750.000, inkl. Elementar', praemie: '€680/Jahr', beginn: '01.01.2012', status: 'Aktiv' },
+                { typ: 'Rechtsschutzversicherung', versicherer: 'ERGO', details: 'Premium inkl. Beruf, Verkehr, Privat', praemie: '€380/Jahr', beginn: '01.04.2018', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Deutsche Bank', typ: 'Girokonto', info: 'Geschäftskonto' },
+                { anbieter: 'Deka', typ: 'Depot', info: 'Vermögensaufbau €180.000' },
+                { anbieter: 'Bausparkasse Schwäbisch Hall', typ: 'Bausparvertrag', info: 'Zuteilungsreif' }
+            ]
+        },
+        'Lisa Müller': {
+            geburtsdatum: '29.12.1992',
+            adresse: 'Parkallee 5, 20095 Hamburg',
+            telefon: '+49 40 8765432',
+            email: 'lisa.mueller@email.de',
+            beruf: 'Ärztin (Assistenz)',
+            familienstand: 'In Partnerschaft',
+            kinder: [],
+            vertraege: [
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €2.500/Mon., Dienstunfähigkeitsklausel', praemie: '€145/Mon.', beginn: '01.08.2022', status: 'Aktiv' }
+            ],
+            fidaVertraege: [
+                { anbieter: 'Comdirect', typ: 'Girokonto', info: 'Gehaltskonto' },
+                { anbieter: 'ING', typ: 'Extra-Konto', info: 'Tagesgeld €15.000' },
+                { anbieter: 'KfW', typ: 'Studienkredit', info: 'Restschuld €18.000' }
+            ]
+        },
         'Klaus Meier': {
             geburtsdatum: '22.07.1978',
             adresse: 'Hauptstraße 45, 54321 Beispielstadt',
             telefon: '+49 987 654321',
             email: 'klaus.meier@email.de',
-            beruf: 'Selbstständig',
-            familienstand: 'Ledig',
-            kinder: [],
+            beruf: 'Selbstständig (Handwerk)',
+            familienstand: 'Verheiratet',
+            kinder: [{ name: 'Tim', alter: 10 }, { name: 'Mia', alter: 7 }],
             vertraege: [
-                { typ: 'Haftpflichtversicherung', versicherer: 'Haftpflichtkasse', details: 'Privathaftpflicht, Familie, €50 Mio. Deckung', praemie: '€120/Jahr', beginn: '01.01.2020', status: 'Aktiv' }
+                { typ: 'Betriebshaftpflicht', versicherer: 'ERGO', details: '€5 Mio. Deckung, Handwerksbetrieb', praemie: '€890/Jahr', beginn: '01.01.2015', status: 'Aktiv' },
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'Nürnberger', details: 'BU-Rente: €2.000/Mon., Handwerker-Tarif', praemie: '€135/Mon.', beginn: '01.03.2016', status: 'Aktiv' }
             ],
             fidaVertraege: [
-                { anbieter: 'Commerzbank', typ: 'Geschäftskonto', info: 'Selbstständigkeit' },
-                { anbieter: 'Union Investment', typ: 'Riester', info: 'Altersvorsorge' }
+                { anbieter: 'Commerzbank', typ: 'Geschäftskonto', info: 'Betriebskonto' },
+                { anbieter: 'Union Investment', typ: 'Riester', info: 'Altersvorsorge €45.000' }
             ]
         }
     };
