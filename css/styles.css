@@ -3596,9 +3596,19 @@ button svg,
     font-size: 13px;
     font-weight: 600;
     min-width: 180px;
-    background: #f8fafc;
-    color: #475569;
-    border: 1px solid #e2e8f0;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Überschreibe alle segment-spezifischen Farben */
+.segment-badge.segment-leben,
+.segment-badge.segment-kranken,
+.segment-badge.segment-shu,
+.segment-badge.segment-kfz {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
 }
 
 .segment-badge svg {
