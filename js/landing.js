@@ -1943,9 +1943,9 @@ function fillKundenDetail(kundenName, vermittlerId) {
             familienstand: 'Verheiratet',
             kinder: [{ name: 'Lena', alter: 8 }, { name: 'Paul', alter: 5 }],
             vertraege: [
-                { typ: 'Wohngebäudeversicherung', praemie: '€450/Jahr', status: 'Aktiv' },
-                { typ: 'Berufsunfähigkeitsversicherung', praemie: '€89/Mon.', status: 'Aktiv' },
-                { typ: 'Kfz-Versicherung', praemie: '€680/Jahr', status: 'Aktiv' }
+                { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'Alte Leipziger', details: 'BU-Rente: €1.500/Mon., Endalter 67, ohne Ausschlüsse', praemie: '€89/Mon.', beginn: '01.03.2018', status: 'Aktiv' },
+                { typ: 'Wohngebäudeversicherung', versicherer: 'VHV', details: 'Vers.-Summe: €450.000, inkl. Elementar, gleitender Neuwert', praemie: '€450/Jahr', beginn: '15.06.2019', status: 'Aktiv' },
+                { typ: 'Hausratversicherung', versicherer: 'VHV', details: 'Vers.-Summe: €65.000, inkl. Fahrrad bis €3.000', praemie: '€142/Jahr', beginn: '15.06.2019', status: 'Aktiv' }
             ],
             fidaVertraege: [
                 { anbieter: 'Sparkasse', typ: 'Girokonto', info: 'Hauptkonto' },
@@ -1962,7 +1962,7 @@ function fillKundenDetail(kundenName, vermittlerId) {
             familienstand: 'Ledig',
             kinder: [],
             vertraege: [
-                { typ: 'Haftpflichtversicherung', praemie: '€120/Jahr', status: 'Aktiv' }
+                { typ: 'Haftpflichtversicherung', versicherer: 'Haftpflichtkasse', details: 'Privathaftpflicht, Familie, €50 Mio. Deckung', praemie: '€120/Jahr', beginn: '01.01.2020', status: 'Aktiv' }
             ],
             fidaVertraege: [
                 { anbieter: 'Commerzbank', typ: 'Geschäftskonto', info: 'Selbstständigkeit' },
@@ -1998,8 +1998,11 @@ function fillKundenDetail(kundenName, vermittlerId) {
     if (vertraegeBody) {
         vertraegeBody.innerHTML = kunde.vertraege.map(v => `
             <tr>
-                <td>${v.typ}</td>
+                <td><strong>${v.typ}</strong></td>
+                <td class="makler-only-col">${v.versicherer || ''}</td>
+                <td>${v.details || ''}</td>
                 <td>${v.praemie}</td>
+                <td>${v.beginn || ''}</td>
                 <td><span class="status-badge aktiv">${v.status}</span></td>
             </tr>
         `).join('');
