@@ -1945,7 +1945,8 @@ function fillKundenDetail(kundenName, vermittlerId) {
             vertraege: [
                 { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'Alte Leipziger', details: 'BU-Rente: €1.500/Mon., Endalter 67, ohne Ausschlüsse', praemie: '€89/Mon.', beginn: '01.03.2018', status: 'Aktiv' },
                 { typ: 'Wohngebäudeversicherung', versicherer: 'VHV', details: 'Vers.-Summe: €450.000, inkl. Elementar, gleitender Neuwert', praemie: '€450/Jahr', beginn: '15.06.2019', status: 'Aktiv' },
-                { typ: 'Hausratversicherung', versicherer: 'VHV', details: 'Vers.-Summe: €65.000, inkl. Fahrrad bis €3.000', praemie: '€142/Jahr', beginn: '15.06.2019', status: 'Aktiv' }
+                { typ: 'Hausratversicherung', versicherer: 'VHV', details: 'Vers.-Summe: €65.000, inkl. Fahrrad bis €3.000', praemie: '€142/Jahr', beginn: '15.06.2019', status: 'Aktiv' },
+                { typ: 'Privathaftpflichtversicherung', versicherer: 'ERGO', details: 'Familie, €50 Mio. Deckung, inkl. Schlüsselverlust', praemie: '€95/Jahr', beginn: '01.04.2021', status: 'Aktiv' }
             ],
             fidaVertraege: [
                 { anbieter: 'Sparkasse', typ: 'Girokonto', info: 'Hauptkonto' },
