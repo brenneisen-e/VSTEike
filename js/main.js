@@ -36,7 +36,14 @@ function createKPICard(kpi) {
                 <div class="kpi-description">${kpi.description}</div>
             </div>
             <div style="display: flex; gap: 0.5rem;">
-                <button class="zoom-button" onclick="openFullscreen('${kpi.id}')" title="Vollbildansicht">🔍</button>
+                <button class="zoom-button" onclick="openFullscreen('${kpi.id}')" title="Vollbildansicht">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        <line x1="11" y1="8" x2="11" y2="14"></line>
+                        <line x1="8" y1="11" x2="14" y2="11"></line>
+                    </svg>
+                </button>
                 <div class="kpi-badge">Aktueller Monat: ${formatValue(currentValue, kpi.unit)}</div>
             </div>
         </div>
@@ -44,7 +51,12 @@ function createKPICard(kpi) {
             <div>
                 <div class="kpi-value">${formatValue(ytdValue, kpi.unit)}</div>
                 <div class="kpi-trend ${trendIsPositive ? 'positive' : 'negative'}">
-                    <span>${trendIsPositive ? '📈' : '📉'}</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        ${trendIsPositive
+                            ? '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>'
+                            : '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline>'
+                        }
+                    </svg>
                     <span>${Math.abs(trend).toFixed(1)}% vs. Vormonat</span>
                 </div>
                 <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">
@@ -52,20 +64,45 @@ function createKPICard(kpi) {
                 </div>
             </div>
             <div class="view-toggle">
-                <button class="active" data-view="month" data-kpi="${kpi.id}">📅</button>
-                <button data-view="distribution" data-kpi="${kpi.id}">📊</button>
-                <button data-view="daily" data-kpi="${kpi.id}">📈</button>
+                <button class="active" data-view="month" data-kpi="${kpi.id}" title="Monatsansicht">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </button>
+                <button data-view="distribution" data-kpi="${kpi.id}" title="Verteilung">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </button>
+                <button data-view="daily" data-kpi="${kpi.id}" title="Tagesansicht">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </button>
             </div>
         </div>
         <div class="time-range-selector" id="timeRange-${kpi.id}" style="display:none;">
-            <button class="prev-btn" onclick="navigateTime('${kpi.id}', -1)">◀</button>
+            <button class="prev-btn" onclick="navigateTime('${kpi.id}', -1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
             <div class="time-navigation">
                 <button class="active" data-range="year" data-kpi="${kpi.id}">Jahr</button>
                 <button data-range="month" data-kpi="${kpi.id}">Monat</button>
                 <button data-range="week" data-kpi="${kpi.id}">Woche</button>
                 <span class="current-period"></span>
             </div>
-            <button class="next-btn" onclick="navigateTime('${kpi.id}', 1)">▶</button>
+            <button class="next-btn" onclick="navigateTime('${kpi.id}', 1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
         </div>
         <div class="chart-container clickable" onclick="switchToDaily('${kpi.id}')">
             <canvas id="chart-${kpi.id}"></canvas>
@@ -104,7 +141,12 @@ function updateKPICard(kpi) {
     card.querySelector('.kpi-value').textContent = formatValue(ytdValue, kpi.unit);
     card.querySelector('.kpi-trend').className = `kpi-trend ${trendIsPositive ? 'positive' : 'negative'}`;
     card.querySelector('.kpi-trend').innerHTML = `
-        <span>${trendIsPositive ? '📈' : '📉'}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            ${trendIsPositive
+                ? '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>'
+                : '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline>'
+            }
+        </svg>
         <span>${Math.abs(trend).toFixed(1)}% vs. Vormonat</span>
     `;
 
@@ -439,7 +481,8 @@ waitForLibraries(function() {
 
                         const landkreisInfo = hasLandkreis ? ' mit Landkreisen' : '';
                         document.getElementById('fileStatus').textContent =
-                            `✅ ${file.name} geladen (${parsedData.length} Tagesdaten → ${monthlyData.length} Monate${landkreisInfo})`;
+                            `${file.name} geladen (${parsedData.length} Tagesdaten → ${monthlyData.length} Monate${landkreisInfo})`;
+                        document.getElementById('fileStatus').classList.add('success');
 
                         // Activate chat now that data is loaded
                         if (typeof activateChat === 'function') {
@@ -448,15 +491,17 @@ waitForLibraries(function() {
                     } else if (hasMonth && !hasDay) {
                         state.uploadedData = parsedData;
                         dailyRawData = null;
-                        
-                        document.getElementById('fileStatus').textContent = 
-                            `✅ ${file.name} geladen (${parsedData.length} Monatsdaten)`;
+
+                        document.getElementById('fileStatus').textContent =
+                            `${file.name} geladen (${parsedData.length} Monatsdaten)`;
+                        document.getElementById('fileStatus').classList.add('success');
                     } else {
                         state.uploadedData = parsedData;
                         dailyRawData = null;
-                        
-                        document.getElementById('fileStatus').textContent = 
-                            `⚠️ ${file.name} geladen (${parsedData.length} Zeilen)`;
+
+                        document.getElementById('fileStatus').textContent =
+                            `${file.name} geladen (${parsedData.length} Zeilen)`;
+                        document.getElementById('fileStatus').classList.add('warning');
                     }
                     
                     state.useUploadedData = true;
@@ -502,7 +547,8 @@ waitForLibraries(function() {
                     }
                     
                 } catch (error) {
-                    document.getElementById('fileStatus').textContent = '❌ Fehler beim Laden der Datei';
+                    document.getElementById('fileStatus').textContent = 'Fehler beim Laden der Datei';
+                    document.getElementById('fileStatus').classList.add('error');
                     console.error('CSV parsing error:', error);
                 }
             };
