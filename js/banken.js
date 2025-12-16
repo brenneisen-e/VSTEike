@@ -2,6 +2,39 @@
 // MODULE SWITCHING (Versicherung/Banken/Asset Manager)
 // ========================================
 
+// Track if Banken module has been loaded
+let bankenModuleLoaded = false;
+
+// Load Banken module from partial
+async function loadBankenModule() {
+    if (bankenModuleLoaded) return;
+
+    const container = document.getElementById('bankenModule');
+    if (!container) return;
+
+    try {
+        const response = await fetch('partials/banken-module.html');
+        if (response.ok) {
+            const html = await response.text();
+            container.innerHTML = html;
+            bankenModuleLoaded = true;
+            console.log('Banken-Modul dynamisch geladen');
+        } else {
+            throw new Error('Failed to load module');
+        }
+    } catch (error) {
+        console.warn('Banken-Modul konnte nicht geladen werden, verwende Fallback');
+        // If fetch fails (e.g., file:// protocol), the module stays with loading state
+        // In production, you could embed the HTML as fallback here
+        container.innerHTML = `
+            <div class="module-loading">
+                <p style="color: #ef4444;">Modul konnte nicht geladen werden.</p>
+                <p style="font-size: 12px;">Bitte starten Sie die Anwendung über einen Webserver.</p>
+            </div>
+        `;
+    }
+}
+
 function switchModule(moduleName) {
     // Update module tabs
     document.querySelectorAll('.module-tab').forEach(tab => {
@@ -23,6 +56,11 @@ function switchModule(moduleName) {
 
     // Store current module
     localStorage.setItem('currentModule', moduleName);
+
+    // Load Banken module dynamically when first accessed
+    if (moduleName === 'banken') {
+        loadBankenModule();
+    }
 
     console.log('Switched to module:', moduleName);
 }
