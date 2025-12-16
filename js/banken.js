@@ -221,6 +221,228 @@ function exportReport(reportType) {
     console.log('Exporting report:', reportType);
 }
 
+// ========================================
+// NEW: Section Navigation Functions
+// ========================================
+
+// Show Banken Section (Navigation Tiles)
+function showBankenSection(sectionName) {
+    // Update nav tiles
+    document.querySelectorAll('.nav-tile').forEach(tile => {
+        tile.classList.remove('active');
+    });
+
+    // Find and activate clicked tile
+    document.querySelectorAll('.nav-tile').forEach(tile => {
+        const onclickAttr = tile.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${sectionName}'`)) {
+            tile.classList.add('active');
+        }
+    });
+
+    // Update section content
+    document.querySelectorAll('.banken-section').forEach(section => {
+        section.classList.remove('active');
+    });
+
+    const targetSection = document.getElementById(`section-${sectionName}`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+
+    console.log('Showing Banken section:', sectionName);
+}
+
+// ========================================
+// NEW: Customer Detail Modal Functions
+// ========================================
+
+// Open customer detail modal
+function openCustomerDetail(customerId) {
+    const modal = document.getElementById('customerDetailModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Update modal title
+        const customerName = document.getElementById('customerName');
+        if (customerName) {
+            // In real app, would fetch customer data
+            customerName.textContent = customerId;
+        }
+        console.log('Opening customer detail:', customerId);
+    }
+}
+
+// Close customer detail modal
+function closeCustomerDetail() {
+    const modal = document.getElementById('customerDetailModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Show customer tab in modal
+function showCustomerTab(tabName) {
+    // Update modal tabs
+    document.querySelectorAll('.modal-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    document.querySelectorAll('.modal-tab').forEach(tab => {
+        const onclickAttr = tab.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${tabName}'`)) {
+            tab.classList.add('active');
+        }
+    });
+
+    // Update tab content
+    document.querySelectorAll('.customer-tab').forEach(content => {
+        content.classList.remove('active');
+    });
+
+    const targetTab = document.getElementById(`tab-${tabName}`);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    }
+
+    console.log('Customer tab:', tabName);
+}
+
+// ========================================
+// NEW: Customer Actions
+// ========================================
+
+// Start Mahnprozess
+function startMahnprozess(customerId) {
+    showNotification(`Mahnprozess für ${customerId} gestartet`, 'info');
+    console.log('Starting Mahnprozess:', customerId);
+}
+
+// Sell Case
+function sellCase(customerId) {
+    showNotification(`Fall ${customerId} zum Verkauf markiert`, 'warning');
+    console.log('Selling case:', customerId);
+}
+
+// Write Off
+function writeOff(customerId) {
+    showNotification(`Fall ${customerId} zur Abschreibung vorgemerkt`, 'error');
+    console.log('Writing off:', customerId);
+}
+
+// Schedule Call
+function scheduleCall(customerId) {
+    showNotification(`Anruf für ${customerId} geplant`, 'success');
+    console.log('Scheduling call:', customerId);
+}
+
+// Create Agreement
+function createAgreement(customerId) {
+    showNotification(`Vereinbarung für ${customerId} wird erstellt`, 'info');
+    console.log('Creating agreement:', customerId);
+}
+
+// View Agreement
+function viewAgreement(customerId) {
+    showNotification(`Vereinbarung für ${customerId} wird geladen`, 'info');
+    console.log('Viewing agreement:', customerId);
+}
+
+// ========================================
+// NEW: Task Management
+// ========================================
+
+// Filter Aufgaben
+function filterAufgaben(filter) {
+    document.querySelectorAll('.aufgaben-filter').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    event.target.classList.add('active');
+    showNotification(`Filter: ${filter}`, 'info');
+    console.log('Filtering tasks:', filter);
+}
+
+// Reschedule Task
+function rescheduleTask(taskId) {
+    showNotification(`Aufgabe ${taskId} wird verschoben`, 'info');
+    console.log('Rescheduling task:', taskId);
+}
+
+// ========================================
+// NEW: Dashboard Functions
+// ========================================
+
+// Refresh Scatter Plot
+function refreshScatterPlot() {
+    showNotification('Matrix wird aktualisiert...', 'info');
+    console.log('Refreshing scatter plot');
+}
+
+// Export Matrix
+function exportMatrix() {
+    showNotification('Matrix wird exportiert...', 'info');
+    console.log('Exporting matrix');
+}
+
+// Update Portfolio Chart
+function updatePortfolioChart(period) {
+    console.log('Updating portfolio chart for period:', period);
+}
+
+// Show All New Cases
+function showAllNewCases() {
+    showNotification('Alle neuen Fälle werden geladen...', 'info');
+}
+
+// Show All Resolved Cases
+function showAllResolvedCases() {
+    showNotification('Alle erledigten Fälle werden geladen...', 'info');
+}
+
+// Filter Customers
+function filterCustomers(filterType, value) {
+    console.log('Filtering customers by', filterType, ':', value);
+}
+
+// Search Customers
+function searchCustomers(query) {
+    console.log('Searching customers:', query);
+}
+
+// ========================================
+// NEW: NPL Actions
+// ========================================
+
+// Review for Sale
+function reviewForSale() {
+    showNotification('Fälle für Verkauf werden geprüft...', 'info');
+}
+
+// Review for Write Off
+function reviewForWriteOff() {
+    showNotification('Fälle für Abschreibung werden geprüft...', 'info');
+}
+
+// Review for Restructure
+function reviewForRestructure() {
+    showNotification('Fälle für Restrukturierung werden geprüft...', 'info');
+}
+
+// ========================================
+// NEW: Workflow Actions
+// ========================================
+
+// Add Note
+function addNote() {
+    showNotification('Notiz hinzugefügt', 'success');
+}
+
+// Write Off Case (from modal)
+function writeOffCase() {
+    showNotification('Fall zur Abschreibung vorgemerkt', 'warning');
+    closeCustomerDetail();
+}
+
 // Show notification helper
 function showNotification(message, type = 'info') {
     // Check if there's already a notification container
@@ -281,6 +503,7 @@ document.head.appendChild(animationStyles);
 window.switchModule = switchModule;
 window.initModuleSelector = initModuleSelector;
 window.showBankenTab = showBankenTab;
+window.showBankenSection = showBankenSection;
 window.filterBySegment = filterBySegment;
 window.toggleAllNpl = toggleAllNpl;
 window.bulkAction = bulkAction;
@@ -291,6 +514,41 @@ window.scheduleCallback = scheduleCallback;
 window.completeTask = completeTask;
 window.exportReport = exportReport;
 window.showNotification = showNotification;
+
+// Customer Detail Modal
+window.openCustomerDetail = openCustomerDetail;
+window.closeCustomerDetail = closeCustomerDetail;
+window.showCustomerTab = showCustomerTab;
+
+// Customer Actions
+window.startMahnprozess = startMahnprozess;
+window.sellCase = sellCase;
+window.writeOff = writeOff;
+window.scheduleCall = scheduleCall;
+window.createAgreement = createAgreement;
+window.viewAgreement = viewAgreement;
+
+// Task Management
+window.filterAufgaben = filterAufgaben;
+window.rescheduleTask = rescheduleTask;
+
+// Dashboard Functions
+window.refreshScatterPlot = refreshScatterPlot;
+window.exportMatrix = exportMatrix;
+window.updatePortfolioChart = updatePortfolioChart;
+window.showAllNewCases = showAllNewCases;
+window.showAllResolvedCases = showAllResolvedCases;
+window.filterCustomers = filterCustomers;
+window.searchCustomers = searchCustomers;
+
+// NPL Actions
+window.reviewForSale = reviewForSale;
+window.reviewForWriteOff = reviewForWriteOff;
+window.reviewForRestructure = reviewForRestructure;
+
+// Workflow Actions
+window.addNote = addNote;
+window.writeOffCase = writeOffCase;
 
 // Initialize module selector on DOM ready
 document.addEventListener('DOMContentLoaded', initModuleSelector);
