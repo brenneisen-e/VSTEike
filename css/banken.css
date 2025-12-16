@@ -31,15 +31,21 @@
 }
 
 /* ========================================
-   MODULE SELECTOR NAVIGATION - Landing Page Style
+   MODULE SELECTOR NAVIGATION - Top Center
    ======================================== */
+
+.module-selector-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 24px 24px 0 24px;
+    margin-bottom: 16px;
+}
 
 .module-selector {
     background: #ffffff;
     padding: 16px 24px;
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    margin-bottom: 20px;
 }
 
 .module-selector-inner {
