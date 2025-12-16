@@ -456,7 +456,9 @@ waitForLibraries(function() {
     });
     
     // CSV Upload
-    document.getElementById('csvUpload').addEventListener('change', function(e) {
+    const csvUploadElement = document.getElementById('csvUpload');
+    if (csvUploadElement) {
+        csvUploadElement.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -555,43 +557,56 @@ waitForLibraries(function() {
             reader.readAsText(file);
         }
     });
+    }
 
     // Year filter
-    document.getElementById('yearFilter').addEventListener('change', function() {
+    const yearFilterElement = document.getElementById('yearFilter');
+    if (yearFilterElement) {
+        yearFilterElement.addEventListener('change', function() {
         state.filters.year = this.value;
         updateAllKPIs();
         if (state.currentView === 'table') {
             renderTable();
         }
     });
+    }
 
     // Silo filter
-    document.getElementById('siloFilter').addEventListener('change', function() {
-        state.filters.silo = this.value;
-        updateAllKPIs();
-        if (state.currentView === 'table') {
-            renderTable();
-        }
-    });
+    const siloFilterElement = document.getElementById('siloFilter');
+    if (siloFilterElement) {
+        siloFilterElement.addEventListener('change', function() {
+            state.filters.silo = this.value;
+            updateAllKPIs();
+            if (state.currentView === 'table') {
+                renderTable();
+            }
+        });
+    }
 
     // Agentur filter dropdown
-    document.getElementById('agenturFilterButton').addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleDropdown('agenturFilterMenu');
-    });
+    const agenturFilterButton = document.getElementById('agenturFilterButton');
+    if (agenturFilterButton) {
+        agenturFilterButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown('agenturFilterMenu');
+        });
+    }
 
     // Segment dropdown
-    document.getElementById('segmentButton').addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleDropdown('segmentMenu');
-    });
+    const segmentButton = document.getElementById('segmentButton');
+    if (segmentButton) {
+        segmentButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown('segmentMenu');
+        });
+    }
 
     // Segment items
     document.querySelectorAll('#segmentMenu .dropdown-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.stopPropagation();
             const value = this.dataset.value;
-            
+
             if (value === 'alle') {
                 state.filters.segments = ['alle'];
             } else {
@@ -603,7 +618,7 @@ waitForLibraries(function() {
                     state.filters.segments = [...otherSegments, value];
                 }
             }
-            
+
             updateSegmentDisplay();
             updateAllKPIs();
             if (state.currentView === 'table') {
@@ -613,27 +628,33 @@ waitForLibraries(function() {
     });
 
     // Product dropdown
-    document.getElementById('productButton').addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleDropdown('productMenu');
-    });
+    const productButton = document.getElementById('productButton');
+    if (productButton) {
+        productButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown('productMenu');
+        });
+    }
 
     // Clear states/counties button - UPDATED!
-    document.getElementById('clearStates').addEventListener('click', function() {
-        if (typeof countyMapHandler !== 'undefined' && countyMapHandler) {
-            countyMapHandler.clearSelection();
-        } else {
-            state.selectedStates.clear();
-            state.selectedCounties.clear();
-            if (typeof updateMapSelection === 'function') {
-                updateMapSelection();
+    const clearStatesButton = document.getElementById('clearStates');
+    if (clearStatesButton) {
+        clearStatesButton.addEventListener('click', function() {
+            if (typeof countyMapHandler !== 'undefined' && countyMapHandler) {
+                countyMapHandler.clearSelection();
+            } else {
+                state.selectedStates.clear();
+                state.selectedCounties.clear();
+                if (typeof updateMapSelection === 'function') {
+                    updateMapSelection();
+                }
             }
-        }
-        updateAllKPIs();
-        if (state.currentView === 'table') {
-            renderTable();
-        }
-    });
+            updateAllKPIs();
+            if (state.currentView === 'table') {
+                renderTable();
+            }
+        });
+    }
 
     // Close dropdowns
     document.addEventListener('click', function() {
