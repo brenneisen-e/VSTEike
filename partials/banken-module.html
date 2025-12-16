@@ -1,4 +1,4 @@
-<!-- Banken Collections Dashboard - Clean Redesign -->
+<!-- Banken Collections Dashboard - Comprehensive Redesign -->
 <div class="banken-page">
     <!-- Header -->
     <div class="banken-header-new">
@@ -19,403 +19,1149 @@
                     </svg>
                 </div>
                 <div class="banken-header-text">
-                    <h1 class="banken-page-title">Collections Dashboard</h1>
-                    <div class="banken-subtitle">Braunschweiger Sparkasse • Stand: 16.12.2025</div>
+                    <h1 class="banken-page-title">Collections Management</h1>
+                    <div class="banken-subtitle">Braunschweiger Sparkasse | Forderungsmanagement</div>
                 </div>
+            </div>
+        </div>
+        <div class="banken-header-right">
+            <div class="last-update">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Letzter Aufruf: 15.12.2025, 14:32 Uhr
             </div>
         </div>
     </div>
 
-    <!-- KPI Cockpit Cards -->
-    <div class="banken-cockpit-kpis">
-        <div class="banken-kpi-card">
-            <div class="banken-kpi-icon total">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-            </div>
-            <div class="banken-kpi-content">
-                <div class="banken-kpi-value">€47,2 Mio</div>
-                <div class="banken-kpi-label">NPL-Volumen</div>
-                <div class="banken-kpi-sub">10.234 Fälle</div>
-            </div>
-        </div>
-        <div class="banken-kpi-card">
-            <div class="banken-kpi-icon watch">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <!-- Navigation Tiles -->
+    <div class="banken-nav-tiles">
+        <div class="nav-tile active" onclick="showBankenSection('segmentierung')">
+            <div class="nav-tile-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                     <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
+                    <circle cx="12" cy="12" r="6"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
                 </svg>
             </div>
-            <div class="banken-kpi-content">
-                <div class="banken-kpi-value">€32,1 Mio</div>
-                <div class="banken-kpi-label">Stage 2 (Watch)</div>
-                <div class="banken-kpi-sub">7.890 Fälle</div>
+            <div class="nav-tile-content">
+                <div class="nav-tile-title">Kundensegmentierung</div>
+                <div class="nav-tile-desc">Willingness & Ability Matrix</div>
             </div>
+            <div class="nav-tile-badge">10.234</div>
         </div>
-        <div class="banken-kpi-card">
-            <div class="banken-kpi-icon default">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="nav-tile" onclick="showBankenSection('npl')">
+            <div class="nav-tile-icon warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                     <line x1="12" y1="9" x2="12" y2="13"></line>
                     <line x1="12" y1="17" x2="12.01" y2="17"></line>
                 </svg>
             </div>
-            <div class="banken-kpi-content">
-                <div class="banken-kpi-value">€15,1 Mio</div>
-                <div class="banken-kpi-label">Stage 3 (Default)</div>
-                <div class="banken-kpi-sub">2.344 Fälle</div>
+            <div class="nav-tile-content">
+                <div class="nav-tile-title">NPL Dashboard</div>
+                <div class="nav-tile-desc">Stage 3 Kredite</div>
             </div>
+            <div class="nav-tile-badge danger">2.344</div>
         </div>
-        <div class="banken-kpi-card">
-            <div class="banken-kpi-icon recovery">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                    <polyline points="17 6 23 6 23 12"></polyline>
+        <div class="nav-tile" onclick="showBankenSection('stage2')">
+            <div class="nav-tile-icon info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <line x1="12" y1="20" x2="12" y2="10"></line>
+                    <line x1="18" y1="20" x2="18" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="16"></line>
                 </svg>
             </div>
-            <div class="banken-kpi-content">
-                <div class="banken-kpi-value">34%</div>
-                <div class="banken-kpi-label">Recovery Rate</div>
-                <div class="banken-kpi-trend positive">+2,3% vs. Vormonat</div>
+            <div class="nav-tile-content">
+                <div class="nav-tile-title">Stage 2 Analyse</div>
+                <div class="nav-tile-desc">GuV-Auswirkung</div>
+            </div>
+            <div class="nav-tile-badge warning">7.890</div>
+        </div>
+        <div class="nav-tile" onclick="showBankenSection('aufgaben')">
+            <div class="nav-tile-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+            </div>
+            <div class="nav-tile-content">
+                <div class="nav-tile-title">Meine Aufgaben</div>
+                <div class="nav-tile-desc">Offene Vorgänge</div>
+            </div>
+            <div class="nav-tile-badge highlight">23</div>
+        </div>
+    </div>
+
+    <!-- Section: Kundensegmentierung -->
+    <div class="banken-section active" id="section-segmentierung">
+        <!-- Intro Text -->
+        <div class="section-intro">
+            <h2>Kundensegmentierung nach Zahlungsbereitschaft & Zahlungsfähigkeit</h2>
+            <p>Die KI-gestützte Analyse klassifiziert jeden Kunden anhand von Transaktionsmustern, externen Datenquellen und historischem Verhalten. Die Punktewolke zeigt die Verteilung aller 10.234 Fälle nach <strong>Willingness to Pay</strong> (horizontale Achse) und <strong>Ability to Pay</strong> (vertikale Achse).</p>
+        </div>
+
+        <div class="segmentierung-grid">
+            <!-- Left: Scatter Plot Matrix -->
+            <div class="scatter-plot-card">
+                <div class="card-header">
+                    <h3>Willingness vs. Ability Matrix</h3>
+                    <div class="card-actions">
+                        <button class="btn-icon" onclick="refreshScatterPlot()" title="Aktualisieren">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                        </button>
+                        <button class="btn-icon" onclick="exportMatrix()" title="Exportieren">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="scatter-plot-container">
+                    <canvas id="scatterPlotCanvas"></canvas>
+                    <!-- Quadrant Labels -->
+                    <div class="quadrant-label q1">Priorität<br><small>Schnelle Vereinbarung</small></div>
+                    <div class="quadrant-label q2">Restrukturierung<br><small>Raten/Stundung</small></div>
+                    <div class="quadrant-label q3">Eskalation<br><small>Inkasso/Mahnung</small></div>
+                    <div class="quadrant-label q4">Abwicklung<br><small>Verkauf/Abschreibung</small></div>
+                </div>
+                <div class="scatter-legend">
+                    <div class="legend-item"><span class="dot green"></span> Priorität (2.340)</div>
+                    <div class="legend-item"><span class="dot yellow"></span> Restrukturierung (3.120)</div>
+                    <div class="legend-item"><span class="dot orange"></span> Eskalation (1.890)</div>
+                    <div class="legend-item"><span class="dot red"></span> Abwicklung (2.884)</div>
+                </div>
+            </div>
+
+            <!-- Right: Portfolio Evolution -->
+            <div class="portfolio-evolution-card">
+                <div class="card-header">
+                    <h3>Portfolio-Entwicklung</h3>
+                    <select class="time-select" onchange="updatePortfolioChart(this.value)">
+                        <option value="12m">Letzte 12 Monate</option>
+                        <option value="6m">Letzte 6 Monate</option>
+                        <option value="3m">Letzte 3 Monate</option>
+                    </select>
+                </div>
+                <div class="portfolio-chart-container">
+                    <canvas id="portfolioEvolutionChart"></canvas>
+                </div>
+                <div class="portfolio-stats">
+                    <div class="portfolio-stat">
+                        <span class="stat-label">Neuzugänge (Monat)</span>
+                        <span class="stat-value negative">+847</span>
+                    </div>
+                    <div class="portfolio-stat">
+                        <span class="stat-label">Abgänge (regulär)</span>
+                        <span class="stat-value positive">-523</span>
+                    </div>
+                    <div class="portfolio-stat">
+                        <span class="stat-label">Netto-Veränderung</span>
+                        <span class="stat-value negative">+324</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- News & Updates -->
+        <div class="dashboard-updates">
+            <div class="updates-card new-cases">
+                <div class="updates-header">
+                    <div class="updates-icon new">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h4>Neue Fälle seit letztem Login</h4>
+                    <span class="updates-count">47</span>
+                </div>
+                <div class="updates-list">
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8847')">
+                        <div class="update-main">
+                            <span class="update-name">Müller, Hans</span>
+                            <span class="update-amount">€4.230</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Dispositionskredit</span>
+                            <span class="update-time">vor 2 Std.</span>
+                        </div>
+                    </div>
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8846')">
+                        <div class="update-main">
+                            <span class="update-name">Schmidt GmbH</span>
+                            <span class="update-amount">€12.890</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Betriebsmittelkredit</span>
+                            <span class="update-time">vor 3 Std.</span>
+                        </div>
+                    </div>
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8845')">
+                        <div class="update-main">
+                            <span class="update-name">Weber, Anna</span>
+                            <span class="update-amount">€2.150</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Kreditkarte</span>
+                            <span class="update-time">vor 5 Std.</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-show-all" onclick="showAllNewCases()">Alle 47 anzeigen</button>
+            </div>
+
+            <div class="updates-card resolved-cases">
+                <div class="updates-header">
+                    <div class="updates-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h4>Zahlungseingänge</h4>
+                    <span class="updates-count success">31</span>
+                </div>
+                <div class="updates-list">
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-7234')">
+                        <div class="update-main">
+                            <span class="update-name">Braun, Thomas</span>
+                            <span class="update-amount positive">€1.890 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Vollständige Tilgung</span>
+                            <span class="update-time">heute, 09:14</span>
+                        </div>
+                    </div>
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6891')">
+                        <div class="update-main">
+                            <span class="update-name">Klein KG</span>
+                            <span class="update-amount positive">€3.400 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Ratenvereinbarung</span>
+                            <span class="update-time">heute, 08:45</span>
+                        </div>
+                    </div>
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6234')">
+                        <div class="update-main">
+                            <span class="update-name">Fischer, Maria</span>
+                            <span class="update-amount positive">€780 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Teilzahlung</span>
+                            <span class="update-time">gestern, 16:30</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-show-all success" onclick="showAllResolvedCases()">Alle 31 anzeigen</button>
+            </div>
+        </div>
+
+        <!-- Customer List with Actions -->
+        <div class="customer-list-section">
+            <div class="section-header">
+                <h3>Kundenliste</h3>
+                <div class="list-filters">
+                    <select class="filter-select" onchange="filterCustomers('segment', this.value)">
+                        <option value="">Alle Segmente</option>
+                        <option value="priority">Priorität</option>
+                        <option value="restructure">Restrukturierung</option>
+                        <option value="escalate">Eskalation</option>
+                        <option value="writeoff">Abwicklung</option>
+                    </select>
+                    <select class="filter-select" onchange="filterCustomers('product', this.value)">
+                        <option value="">Alle Produkte</option>
+                        <option value="dispo">Dispositionskredit</option>
+                        <option value="ratenkredit">Ratenkredit</option>
+                        <option value="kreditkarte">Kreditkarte</option>
+                        <option value="betriebsmittel">Betriebsmittelkredit</option>
+                    </select>
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" placeholder="Kunde suchen..." onkeyup="searchCustomers(this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="customer-table-wrapper">
+                <table class="customer-table">
+                    <thead>
+                        <tr>
+                            <th>Kunde</th>
+                            <th>Produkt</th>
+                            <th>Forderung</th>
+                            <th>DPD</th>
+                            <th>Segment</th>
+                            <th>KI-Score</th>
+                            <th>Status</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="openCustomerDetail('K-2024-0001')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Mueller GmbH</strong>
+                                    <small>Gewerbe | K-2024-0001</small>
+                                </div>
+                            </td>
+                            <td>Betriebsmittelkredit</td>
+                            <td class="amount">€125.000</td>
+                            <td><span class="dpd-badge high">35</span></td>
+                            <td><span class="segment-badge escalate">Eskalation</span></td>
+                            <td>
+                                <div class="ki-score">
+                                    <div class="score-bar" style="--willingness: 25%; --ability: 60%;">
+                                        <span class="score-dot"></span>
+                                    </div>
+                                    <small>W: 25% | A: 60%</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn" onclick="startMahnprozess('K-2024-0001')" title="Mahnprozess">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" onclick="sellCase('K-2024-0001')" title="Verkaufen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn danger" onclick="writeOff('K-2024-0001')" title="Abschreiben">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="openCustomerDetail('K-2024-0002')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Schmidt, Peter</strong>
+                                    <small>Privat | K-2024-0002</small>
+                                </div>
+                            </td>
+                            <td>Ratenkredit</td>
+                            <td class="amount">€8.450</td>
+                            <td><span class="dpd-badge medium">21</span></td>
+                            <td><span class="segment-badge priority">Priorität</span></td>
+                            <td>
+                                <div class="ki-score">
+                                    <div class="score-bar" style="--willingness: 85%; --ability: 70%;">
+                                        <span class="score-dot"></span>
+                                    </div>
+                                    <small>W: 85% | A: 70%</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge offen">Offen</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn primary" onclick="scheduleCall('K-2024-0002')" title="Anrufen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" onclick="createAgreement('K-2024-0002')" title="Vereinbarung">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="openCustomerDetail('K-2024-0003')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Weber KG</strong>
+                                    <small>Gewerbe | K-2024-0003</small>
+                                </div>
+                            </td>
+                            <td>Kontokorrent</td>
+                            <td class="amount">€45.780</td>
+                            <td><span class="dpd-badge low">14</span></td>
+                            <td><span class="segment-badge restructure">Restrukturierung</span></td>
+                            <td>
+                                <div class="ki-score">
+                                    <div class="score-bar" style="--willingness: 70%; --ability: 35%;">
+                                        <span class="score-dot"></span>
+                                    </div>
+                                    <small>W: 70% | A: 35%</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn" onclick="viewAgreement('K-2024-0003')" title="Vereinbarung ansehen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="openCustomerDetail('K-2024-0004')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Braun, Maria</strong>
+                                    <small>Privat | K-2024-0004</small>
+                                </div>
+                            </td>
+                            <td>Kreditkarte</td>
+                            <td class="amount">€3.210</td>
+                            <td><span class="dpd-badge high">67</span></td>
+                            <td><span class="segment-badge writeoff">Abwicklung</span></td>
+                            <td>
+                                <div class="ki-score">
+                                    <div class="score-bar" style="--willingness: 15%; --ability: 10%;">
+                                        <span class="score-dot"></span>
+                                    </div>
+                                    <small>W: 15% | A: 10%</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn" onclick="sellCase('K-2024-0004')" title="Verkaufen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn danger" onclick="writeOff('K-2024-0004')" title="Abschreiben">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-pagination">
+                <span>Zeige 1-4 von 10.234 Kunden</span>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>Zurück</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <span>...</span>
+                    <button class="pagination-btn">2559</button>
+                    <button class="pagination-btn">Weiter</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Tab Navigation -->
-    <div class="banken-main-content">
-        <div class="banken-tabs">
-            <button class="banken-tab active" onclick="showBankenTab('uebersicht')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
+    <!-- Section: NPL Dashboard (Stage 3) -->
+    <div class="banken-section" id="section-npl">
+        <div class="section-intro">
+            <h2>NPL Dashboard - Stage 3 Kredite</h2>
+            <p>Übersicht aller notleidenden Kredite (Non-Performing Loans) mit einer Ausfallwahrscheinlichkeit >90%. Diese Fälle befinden sich im fortgeschrittenen Mahnverfahren oder in der Abwicklung.</p>
+        </div>
+
+        <div class="npl-kpi-grid">
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">€15,1 Mio</div>
+                    <div class="npl-kpi-label">Gesamtvolumen Stage 3</div>
+                    <div class="npl-kpi-change negative">+€1,2 Mio vs. Vormonat</div>
+                </div>
+            </div>
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon warning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">2.344</div>
+                    <div class="npl-kpi-label">Anzahl NPL-Fälle</div>
+                    <div class="npl-kpi-change negative">+127 vs. Vormonat</div>
+                </div>
+            </div>
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon success">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">34%</div>
+                    <div class="npl-kpi-label">Recovery Rate</div>
+                    <div class="npl-kpi-change positive">+2,3% vs. Vormonat</div>
+                </div>
+            </div>
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">142 Tage</div>
+                    <div class="npl-kpi-label">Ø Days Past Due</div>
+                    <div class="npl-kpi-change neutral">-3 Tage vs. Vormonat</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="npl-charts-grid">
+            <div class="npl-chart-card">
+                <h4>NPL-Entwicklung nach Monat</h4>
+                <div class="chart-container">
+                    <canvas id="nplTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="npl-chart-card">
+                <h4>Verteilung nach Produkttyp</h4>
+                <div class="chart-container">
+                    <canvas id="nplProductChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="npl-actions-section">
+            <h4>Empfohlene Maßnahmen</h4>
+            <div class="npl-action-cards">
+                <div class="npl-action-card">
+                    <div class="action-header">
+                        <span class="action-count">847</span>
+                        <span class="action-label">Fälle</span>
+                    </div>
+                    <div class="action-body">
+                        <strong>Portfolio-Verkauf prüfen</strong>
+                        <p>Forderungen >180 DPD mit Recovery-Erwartung <20%</p>
+                    </div>
+                    <button class="action-button" onclick="reviewForSale()">Prüfen</button>
+                </div>
+                <div class="npl-action-card">
+                    <div class="action-header">
+                        <span class="action-count">234</span>
+                        <span class="action-label">Fälle</span>
+                    </div>
+                    <div class="action-body">
+                        <strong>Abschreibung empfohlen</strong>
+                        <p>Uneinbringliche Forderungen nach Inkasso-Erschöpfung</p>
+                    </div>
+                    <button class="action-button" onclick="reviewForWriteOff()">Prüfen</button>
+                </div>
+                <div class="npl-action-card highlight">
+                    <div class="action-header">
+                        <span class="action-count">156</span>
+                        <span class="action-label">Fälle</span>
+                    </div>
+                    <div class="action-body">
+                        <strong>Restrukturierung möglich</strong>
+                        <p>Kunden mit positiver Zahlungshistorie vor Default</p>
+                    </div>
+                    <button class="action-button primary" onclick="reviewForRestructure()">Prüfen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Stage 2 Analysis -->
+    <div class="banken-section" id="section-stage2">
+        <div class="section-intro">
+            <h2>Stage 2 Analyse - Auswirkung auf GuV</h2>
+            <p>Übersicht der Kredite mit signifikant erhöhtem Ausfallrisiko (Stage 2 nach IFRS 9). Diese Kredite erfordern eine erhöhte Risikovorsorge und belasten die Gewinn- und Verlustrechnung.</p>
+        </div>
+
+        <div class="stage2-overview">
+            <div class="stage2-main-card">
+                <div class="stage2-header">
+                    <h3>GuV-Auswirkung Stage 2 Portfolio</h3>
+                </div>
+                <div class="stage2-kpis">
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">Stage 2 Volumen</span>
+                        <span class="kpi-value">€32,1 Mio</span>
+                    </div>
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">Risikovorsorge (ECL)</span>
+                        <span class="kpi-value negative">€4,8 Mio</span>
+                    </div>
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">GuV-Belastung Q4</span>
+                        <span class="kpi-value negative">€1,2 Mio</span>
+                    </div>
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">Coverage Ratio</span>
+                        <span class="kpi-value">15%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stage2-migration-card">
+                <h4>Stage-Migration (letzte 30 Tage)</h4>
+                <div class="migration-flow">
+                    <div class="migration-box stage1">
+                        <span class="migration-label">Stage 1</span>
+                        <span class="migration-arrow out">-423 Fälle</span>
+                    </div>
+                    <div class="migration-center">
+                        <div class="migration-in">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            +423
+                        </div>
+                        <div class="migration-box stage2-center">
+                            <span class="migration-label">Stage 2</span>
+                            <span class="migration-value">7.890</span>
+                        </div>
+                        <div class="migration-out">
+                            -312
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="migration-box stage3">
+                        <span class="migration-label">Stage 3</span>
+                        <span class="migration-arrow in">+312 Fälle</span>
+                    </div>
+                </div>
+                <div class="migration-summary">
+                    <span class="summary-negative">Netto-Zugang Stage 2: +111 Fälle (+€2,3 Mio)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stage2-details">
+            <div class="stage2-chart-card">
+                <h4>ECL-Entwicklung</h4>
+                <div class="chart-container">
+                    <canvas id="eclTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="stage2-risk-card">
+                <h4>Top-Risikotreiber</h4>
+                <div class="risk-drivers">
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 85%;">
+                            <span class="risk-name">Arbeitslosigkeit</span>
+                            <span class="risk-value">€8,2 Mio</span>
+                        </div>
+                    </div>
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 62%;">
+                            <span class="risk-name">Branchenrisiko (Gastronomie)</span>
+                            <span class="risk-value">€5,9 Mio</span>
+                        </div>
+                    </div>
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 48%;">
+                            <span class="risk-name">Scheidung/Trennung</span>
+                            <span class="risk-value">€4,6 Mio</span>
+                        </div>
+                    </div>
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 35%;">
+                            <span class="risk-name">Überschuldung</span>
+                            <span class="risk-value">€3,4 Mio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Meine Aufgaben -->
+    <div class="banken-section" id="section-aufgaben">
+        <div class="section-intro">
+            <h2>Meine Aufgaben</h2>
+            <p>Übersicht aller offenen Aufgaben und Wiedervorlagen für Ihr Portfolio.</p>
+        </div>
+
+        <div class="aufgaben-filters">
+            <button class="aufgaben-filter active" onclick="filterAufgaben('alle')">Alle (23)</button>
+            <button class="aufgaben-filter" onclick="filterAufgaben('heute')">Heute fällig (8)</button>
+            <button class="aufgaben-filter" onclick="filterAufgaben('ueberfaellig')">Überfällig (3)</button>
+            <button class="aufgaben-filter" onclick="filterAufgaben('woche')">Diese Woche (12)</button>
+        </div>
+
+        <div class="aufgaben-list">
+            <div class="aufgabe-item priority-high">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Rückruf vereinbart: Mueller GmbH</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0001')">K-2024-0001</span>
+                        <span class="aufgabe-due overdue">Überfällig: Gestern 14:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-001')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-001')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Ratenvereinbarung prüfen: Schmidt, Peter</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0002')">K-2024-0002</span>
+                        <span class="aufgabe-due today">Heute 16:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-002')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-002')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Inkasso-Übergabe vorbereiten: Weber KG</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0003')">K-2024-0003</span>
+                        <span class="aufgabe-due">Morgen 10:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-003')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-003')">Verschieben</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Detail Modal -->
+<div class="customer-detail-modal" id="customerDetailModal" style="display: none;">
+    <div class="modal-overlay" onclick="closeCustomerDetail()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">
+                <h2 id="customerName">Mueller GmbH</h2>
+                <span class="customer-id">K-2024-0001</span>
+            </div>
+            <button class="modal-close" onclick="closeCustomerDetail()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
-                Übersicht
-            </button>
-            <button class="banken-tab" onclick="showBankenTab('watchlist')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                Watch List
-            </button>
-            <button class="banken-tab" onclick="showBankenTab('workflows')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>
-                Workflows
-            </button>
-            <button class="banken-tab" onclick="showBankenTab('analysen')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                </svg>
-                Analysen
             </button>
         </div>
 
-        <!-- Tab Content: Übersicht -->
-        <div class="banken-tab-content active" id="banken-tab-uebersicht">
-            <!-- Segmentierung Matrix - Kompakt -->
-            <div class="banken-card">
-                <div class="banken-card-header">
-                    <h3>Kundensegmentierung</h3>
-                    <span class="card-info">Willingness vs. Ability to Pay</span>
+        <div class="modal-tabs">
+            <button class="modal-tab active" onclick="showCustomerTab('stammdaten')">Stammdaten</button>
+            <button class="modal-tab" onclick="showCustomerTab('transaktionen')">Transaktionen</button>
+            <button class="modal-tab" onclick="showCustomerTab('forderungen')">Forderungen</button>
+            <button class="modal-tab" onclick="showCustomerTab('workflow')">Workflow</button>
+            <button class="modal-tab" onclick="showCustomerTab('ki-analyse')">KI-Analyse</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Tab: Stammdaten -->
+            <div class="customer-tab active" id="tab-stammdaten">
+                <div class="stammdaten-grid">
+                    <div class="stammdaten-section">
+                        <h4>Kundendaten</h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Name:</span>
+                            <span class="value">Mueller GmbH</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Typ:</span>
+                            <span class="value">Gewerbekunde</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Branche:</span>
+                            <span class="value">Gastronomie</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kunde seit:</span>
+                            <span class="value">15.03.2018</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Betreuer:</span>
+                            <span class="value">Eike Brenneisen</span>
+                        </div>
+                    </div>
+                    <div class="stammdaten-section">
+                        <h4>Kontakt</h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Adresse:</span>
+                            <span class="value">Musterstraße 123, 38100 Braunschweig</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Telefon:</span>
+                            <span class="value">+49 531 123456</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">E-Mail:</span>
+                            <span class="value">info@mueller-gmbh.de</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Geschäftsführer:</span>
+                            <span class="value">Hans Mueller</span>
+                        </div>
+                    </div>
+                    <div class="stammdaten-section">
+                        <h4>Bonität</h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Rating:</span>
+                            <span class="value rating-bad">C-</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Schufa-Score:</span>
+                            <span class="value">78</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Letzte Prüfung:</span>
+                            <span class="value">01.12.2025</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="segment-matrix-compact">
-                    <div class="segment-box priority" onclick="filterBySegment('priority')">
-                        <div class="segment-header">
-                            <span class="segment-icon priority">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                            </span>
-                            <span class="segment-name">Priorität</span>
-                        </div>
-                        <div class="segment-stats">
-                            <span class="segment-count">2.340</span>
-                            <span class="segment-volume">€8,2 Mio</span>
-                        </div>
-                        <div class="segment-action">Zahlungsvereinbarung</div>
+            </div>
+
+            <!-- Tab: Transaktionen -->
+            <div class="customer-tab" id="tab-transaktionen">
+                <div class="transaction-summary">
+                    <div class="summary-card">
+                        <span class="summary-label">Lastschriftrückgaben (12M)</span>
+                        <span class="summary-value negative">12</span>
                     </div>
-                    <div class="segment-box restructure" onclick="filterBySegment('restructure')">
-                        <div class="segment-header">
-                            <span class="segment-icon restructure">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                    <polyline points="23 4 23 10 17 10"></polyline>
-                                    <polyline points="1 20 1 14 7 14"></polyline>
-                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                                </svg>
-                            </span>
-                            <span class="segment-name">Restrukturierung</span>
-                        </div>
-                        <div class="segment-stats">
-                            <span class="segment-count">3.120</span>
-                            <span class="segment-volume">€12,4 Mio</span>
-                        </div>
-                        <div class="segment-action">Raten / Stundung</div>
+                    <div class="summary-card">
+                        <span class="summary-label">Rückgabequote</span>
+                        <span class="summary-value negative">34%</span>
                     </div>
-                    <div class="segment-box escalate" onclick="filterBySegment('escalate')">
-                        <div class="segment-header">
-                            <span class="segment-icon escalate">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                </svg>
-                            </span>
-                            <span class="segment-name">Eskalation</span>
-                        </div>
-                        <div class="segment-stats">
-                            <span class="segment-count">1.890</span>
-                            <span class="segment-volume">€7,1 Mio</span>
-                        </div>
-                        <div class="segment-action">Inkasso / Mahnwesen</div>
+                    <div class="summary-card">
+                        <span class="summary-label">Letzte Zahlung</span>
+                        <span class="summary-value">15.11.2025</span>
                     </div>
-                    <div class="segment-box writeoff" onclick="filterBySegment('writeoff')">
-                        <div class="segment-header">
-                            <span class="segment-icon writeoff">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                </div>
+                <h4>Kontoauszug (letzte 30 Tage)</h4>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Beschreibung</th>
+                            <th>Betrag</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="transaction-negative">
+                            <td>14.12.2025</td>
+                            <td>Lastschrift Ratenzahlung</td>
+                            <td class="amount negative">-€2.500</td>
+                            <td><span class="tx-status failed">Rückgabe</span></td>
+                        </tr>
+                        <tr>
+                            <td>01.12.2025</td>
+                            <td>Lastschrift Ratenzahlung</td>
+                            <td class="amount negative">-€2.500</td>
+                            <td><span class="tx-status failed">Rückgabe</span></td>
+                        </tr>
+                        <tr>
+                            <td>15.11.2025</td>
+                            <td>Überweisung Teilzahlung</td>
+                            <td class="amount positive">+€1.000</td>
+                            <td><span class="tx-status success">Gebucht</span></td>
+                        </tr>
+                        <tr>
+                            <td>01.11.2025</td>
+                            <td>Lastschrift Ratenzahlung</td>
+                            <td class="amount negative">-€2.500</td>
+                            <td><span class="tx-status failed">Rückgabe</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab: Forderungen -->
+            <div class="customer-tab" id="tab-forderungen">
+                <div class="forderungen-overview">
+                    <div class="forderung-total">
+                        <span class="label">Gesamtforderung</span>
+                        <span class="value">€125.000</span>
+                    </div>
+                    <div class="forderung-breakdown">
+                        <div class="breakdown-item">
+                            <span class="label">Hauptforderung</span>
+                            <span class="value">€110.000</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Zinsen</span>
+                            <span class="value">€8.450</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Mahngebühren</span>
+                            <span class="value">€350</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Inkassokosten</span>
+                            <span class="value">€6.200</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="forderung-timeline">
+                    <h4>Fälligkeiten</h4>
+                    <div class="timeline-item overdue">
+                        <div class="timeline-date">01.10.2025</div>
+                        <div class="timeline-content">
+                            <strong>Rate 10/2025</strong> - €2.500 (35 Tage überfällig)
+                        </div>
+                    </div>
+                    <div class="timeline-item overdue">
+                        <div class="timeline-date">01.11.2025</div>
+                        <div class="timeline-content">
+                            <strong>Rate 11/2025</strong> - €2.500 (4 Tage überfällig - Teilzahlung €1.000)
+                        </div>
+                    </div>
+                    <div class="timeline-item overdue">
+                        <div class="timeline-date">01.12.2025</div>
+                        <div class="timeline-content">
+                            <strong>Rate 12/2025</strong> - €2.500 (Lastschrift zurückgegeben)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Workflow -->
+            <div class="customer-tab" id="tab-workflow">
+                <div class="workflow-status">
+                    <span class="status-label">Aktueller Status:</span>
+                    <span class="status-value inkasso">Inkasso-Verfahren</span>
+                </div>
+                <div class="workflow-timeline">
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Erste Mahnung</div>
+                            <div class="wf-date">15.10.2025</div>
+                            <div class="wf-note">Automatisch versendet</div>
+                        </div>
+                    </div>
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Zweite Mahnung</div>
+                            <div class="wf-date">01.11.2025</div>
+                            <div class="wf-note">Automatisch versendet</div>
+                        </div>
+                    </div>
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Telefonischer Kontakt</div>
+                            <div class="wf-date">10.11.2025</div>
+                            <div class="wf-note">Kunde nicht erreichbar (3 Versuche)</div>
+                        </div>
+                    </div>
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Letzte Mahnung</div>
+                            <div class="wf-date">15.11.2025</div>
+                            <div class="wf-note">Mit Inkasso-Androhung</div>
+                        </div>
+                    </div>
+                    <div class="wf-item active">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Inkasso-Übergabe</div>
+                            <div class="wf-date">01.12.2025</div>
+                            <div class="wf-note">An Creditreform übergeben</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow-actions">
+                    <h4>Verfügbare Aktionen</h4>
+                    <div class="action-buttons">
+                        <button class="action-btn-large" onclick="addNote()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Notiz hinzufügen
+                        </button>
+                        <button class="action-btn-large" onclick="scheduleCallback()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Rückruf planen
+                        </button>
+                        <button class="action-btn-large warning" onclick="sellCase()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            Forderung verkaufen
+                        </button>
+                        <button class="action-btn-large danger" onclick="writeOffCase()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Abschreiben
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: KI-Analyse -->
+            <div class="customer-tab" id="tab-ki-analyse">
+                <div class="ki-matrix-detail">
+                    <div class="ki-score-visual">
+                        <div class="score-chart">
+                            <div class="score-point" style="left: 25%; bottom: 60%;"></div>
+                            <div class="quadrant-lines"></div>
+                        </div>
+                        <div class="score-labels">
+                            <div class="score-item">
+                                <span class="score-name">Willingness to Pay</span>
+                                <div class="score-bar-visual">
+                                    <div class="bar-fill" style="width: 25%;"></div>
+                                </div>
+                                <span class="score-percent">25%</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-name">Ability to Pay</span>
+                                <div class="score-bar-visual">
+                                    <div class="bar-fill" style="width: 60%;"></div>
+                                </div>
+                                <span class="score-percent">60%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ki-segment-result">
+                        <div class="segment-badge large escalate">Eskalation</div>
+                        <p>Basierend auf der Analyse wird dieser Kunde dem Segment <strong>Eskalation</strong> zugeordnet. Empfehlung: Intensivierung der Inkasso-Maßnahmen.</p>
+                    </div>
+                </div>
+
+                <div class="ki-factors">
+                    <h4>KI-Einflussfaktoren</h4>
+                    <div class="factor-list">
+                        <div class="factor-item negative">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="15" y1="9" x2="9" y2="15"></line>
                                     <line x1="9" y1="9" x2="15" y2="15"></line>
                                 </svg>
                             </span>
-                            <span class="segment-name">Abwicklung</span>
+                            <span class="factor-name">3 Lastschriftrückgaben in Folge</span>
+                            <span class="factor-impact">-25 Punkte</span>
                         </div>
-                        <div class="segment-stats">
-                            <span class="segment-count">2.884</span>
-                            <span class="segment-volume">€19,5 Mio</span>
+                        <div class="factor-item negative">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Branchenrisiko: Gastronomie</span>
+                            <span class="factor-impact">-15 Punkte</span>
                         </div>
-                        <div class="segment-action">Verkauf / Abschreibung</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats Row -->
-            <div class="banken-stats-row">
-                <div class="banken-stat-card">
-                    <div class="stat-icon-svg">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-value">847</span>
-                        <span class="stat-label">Offene Tickets heute</span>
-                    </div>
-                </div>
-                <div class="banken-stat-card">
-                    <div class="stat-icon-svg">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-value">67 Tage</span>
-                        <span class="stat-label">Ø Days Past Due</span>
-                    </div>
-                </div>
-                <div class="banken-stat-card">
-                    <div class="stat-icon-svg">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                            <polyline points="17 6 23 6 23 12"></polyline>
-                        </svg>
-                    </div>
-                    <div class="stat-content">
-                        <span class="stat-value">12%</span>
-                        <span class="stat-label">Inkasso-Quote</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Content: Watch List -->
-        <div class="banken-tab-content" id="banken-tab-watchlist">
-            <div class="banken-card">
-                <div class="banken-card-header">
-                    <h3>Stage 2 Watch List</h3>
-                    <span class="card-badge warning">7.890 Fälle</span>
-                </div>
-                <div class="banken-simple-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Kunde</th>
-                                <th>Volumen</th>
-                                <th>DPD</th>
-                                <th>Signal</th>
-                                <th>Aktion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Mueller GmbH</strong><br><small>Gewerbe</small></td>
-                                <td>€125.000</td>
-                                <td><span class="dpd high">35</span></td>
-                                <td><span class="signal critical">Arbeitslosigkeit GF</span></td>
-                                <td><button class="btn-small" onclick="openCase('KR-2024001')">Öffnen</button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Schmidt KG</strong><br><small>Gewerbe</small></td>
-                                <td>€89.500</td>
-                                <td><span class="dpd medium">42</span></td>
-                                <td><span class="signal warning">Umsatz -40%</span></td>
-                                <td><button class="btn-small" onclick="openCase('KR-2024087')">Öffnen</button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Weber AG</strong><br><small>Industrie</small></td>
-                                <td>€340.000</td>
-                                <td><span class="dpd low">28</span></td>
-                                <td><span class="signal info">Branchenrisiko</span></td>
-                                <td><button class="btn-small" onclick="openCase('KR-2023112')">Öffnen</button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Braun, Thomas</strong><br><small>Privat</small></td>
-                                <td>€45.800</td>
-                                <td><span class="dpd medium">38</span></td>
-                                <td><span class="signal warning">Scheidung</span></td>
-                                <td><button class="btn-small" onclick="openCase('KR-2024156')">Öffnen</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Content: Workflows -->
-        <div class="banken-tab-content" id="banken-tab-workflows">
-            <div class="banken-card">
-                <div class="banken-card-header">
-                    <h3>Aktive Workflows</h3>
-                    <span class="card-info">Tickets nach Status</span>
-                </div>
-                <div class="workflow-cards">
-                    <div class="workflow-card new">
-                        <div class="workflow-count">124</div>
-                        <div class="workflow-label">Neue Fälle</div>
-                        <div class="workflow-action">Erstkontakt ausstehend</div>
-                    </div>
-                    <div class="workflow-card progress">
-                        <div class="workflow-count">89</div>
-                        <div class="workflow-label">In Bearbeitung</div>
-                        <div class="workflow-action">Kontaktversuche laufen</div>
-                    </div>
-                    <div class="workflow-card escalated">
-                        <div class="workflow-count">34</div>
-                        <div class="workflow-label">Eskaliert</div>
-                        <div class="workflow-action">3x nicht erreicht</div>
-                    </div>
-                    <div class="workflow-card success">
-                        <div class="workflow-count">67</div>
-                        <div class="workflow-label">Vereinbarung</div>
-                        <div class="workflow-action">Ratenplan aktiv</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Workflow Rules -->
-            <div class="banken-card">
-                <div class="banken-card-header">
-                    <h3>Workflow-Regeln</h3>
-                </div>
-                <div class="workflow-rules-list">
-                    <div class="rule-item">
-                        <span class="rule-icon-svg">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                            </svg>
-                        </span>
-                        <span class="rule-text">3x nicht erreicht → <strong>Automatische Eskalation</strong></span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-icon-svg">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </span>
-                        <span class="rule-text">Ratenvereinbarung → <strong>Monitoring 90 Tage</strong></span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-icon-svg">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                <line x1="12" y1="9" x2="12" y2="13"></line>
-                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                            </svg>
-                        </span>
-                        <span class="rule-text">Zahlungsausfall nach Vereinbarung → <strong>Sofort Stage 3</strong></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Content: Analysen -->
-        <div class="banken-tab-content" id="banken-tab-analysen">
-            <div class="banken-card">
-                <div class="banken-card-header">
-                    <h3>Portfolio-Analyse</h3>
-                </div>
-                <div class="analysis-grid">
-                    <div class="analysis-item">
-                        <div class="analysis-label">Gesamtvolumen NPL</div>
-                        <div class="analysis-value">€47,2 Mio</div>
-                        <div class="analysis-bar">
-                            <div class="bar-fill" style="width: 100%; background: #3b82f6;"></div>
+                        <div class="factor-item negative">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Keine Reaktion auf Kontaktversuche</span>
+                            <span class="factor-impact">-20 Punkte</span>
                         </div>
-                    </div>
-                    <div class="analysis-item">
-                        <div class="analysis-label">Davon Stage 2</div>
-                        <div class="analysis-value">€32,1 Mio</div>
-                        <div class="analysis-bar">
-                            <div class="bar-fill" style="width: 68%; background: #f59e0b;"></div>
+                        <div class="factor-item positive">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Langjährige Kundenbeziehung (7 Jahre)</span>
+                            <span class="factor-impact">+10 Punkte</span>
                         </div>
-                    </div>
-                    <div class="analysis-item">
-                        <div class="analysis-label">Davon Stage 3</div>
-                        <div class="analysis-value">€15,1 Mio</div>
-                        <div class="analysis-bar">
-                            <div class="bar-fill" style="width: 32%; background: #ef4444;"></div>
-                        </div>
-                    </div>
-                    <div class="analysis-item">
-                        <div class="analysis-label">Erwartete Recovery</div>
-                        <div class="analysis-value">€16,0 Mio</div>
-                        <div class="analysis-bar">
-                            <div class="bar-fill" style="width: 34%; background: #10b981;"></div>
+                        <div class="factor-item positive">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Teilzahlung im November</span>
+                            <span class="factor-impact">+5 Punkte</span>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="banken-card">
-                <div class="banken-card-header">
-                    <h3>Top Warning Signals</h3>
-                </div>
-                <div class="warning-signals-list">
-                    <div class="warning-signal-item">
-                        <span class="signal-category">Mikroökonomisch</span>
-                        <span class="signal-examples">Arbeitslosigkeit, Scheidung, Krankheit</span>
-                        <span class="signal-count">1.234 Fälle</span>
-                    </div>
-                    <div class="warning-signal-item">
-                        <span class="signal-category">Makroökonomisch</span>
-                        <span class="signal-examples">Branchenrisiko, Rezession</span>
-                        <span class="signal-count">567 Fälle</span>
-                    </div>
-                    <div class="warning-signal-item">
-                        <span class="signal-category">Dokumentation</span>
-                        <span class="signal-examples">Fehlende Unterlagen</span>
-                        <span class="signal-count">890 Fälle</span>
+                <div class="ki-recommendation">
+                    <h4>KI-Empfehlung</h4>
+                    <div class="recommendation-box">
+                        <p><strong>Empfohlene Maßnahme:</strong> Aufgrund der hohen Fähigkeit zur Zahlung (60%) bei niedriger Zahlungsbereitschaft (25%) empfiehlt die KI eine <strong>verstärkte Inkasso-Strategie</strong> mit zeitnaher Eskalation zum gerichtlichen Mahnverfahren, sofern innerhalb von 14 Tagen keine Reaktion erfolgt.</p>
                     </div>
                 </div>
             </div>
