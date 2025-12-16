@@ -31,43 +31,39 @@
 }
 
 /* ========================================
-   MODULE SELECTOR NAVIGATION
+   MODULE SELECTOR NAVIGATION - Landing Page Style
    ======================================== */
 
 .module-selector {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    z-index: 1000;
-    padding: 0 24px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    background: #ffffff;
+    padding: 16px 24px;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
 }
 
 .module-selector-inner {
-    max-width: 1600px;
-    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
+    gap: 16px;
 }
 
 .module-tabs {
     display: flex;
-    gap: 4px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .module-tab {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    color: #94a3b8;
+    padding: 12px 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    color: #64748b;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -80,34 +76,45 @@
 }
 
 .module-tab:hover:not(.disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #334155;
 }
 
 .module-tab.active {
-    background: rgba(59, 130, 246, 0.2);
-    color: #60a5fa;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .module-tab.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background: #f8fafc;
 }
 
 .soon-badge {
     font-size: 10px;
     padding: 2px 6px;
-    background: rgba(251, 191, 36, 0.2);
-    color: #fbbf24;
+    background: #fef3c7;
+    color: #b45309;
     border-radius: 4px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
 .module-brand {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.brand-label {
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 500;
 }
 
 .brand-label {
@@ -120,7 +127,6 @@
 /* Module Content */
 .module-content {
     display: none;
-    padding-top: 56px;
 }
 
 .module-content.active {
