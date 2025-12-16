@@ -75,6 +75,43 @@ function initModuleSelector() {
 // BANKEN COLLECTIONS DASHBOARD FUNCTIONS
 // ========================================
 
+// Switch between Banken Dashboard tabs
+function showBankenTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.banken-tabs .banken-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    // Find and activate the clicked tab
+    const tabButtons = document.querySelectorAll('.banken-tabs .banken-tab');
+    tabButtons.forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(tabName.toLowerCase()) ||
+            btn.onclick.toString().includes(tabName)) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Activate by checking onclick attribute
+    document.querySelectorAll('.banken-tabs .banken-tab').forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${tabName}'`)) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Update tab content
+    document.querySelectorAll('.banken-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+
+    const targetContent = document.getElementById(`banken-tab-${tabName}`);
+    if (targetContent) {
+        targetContent.classList.add('active');
+    }
+
+    console.log('Banken tab switched to:', tabName);
+}
+
 // Filter by segment in 2x2 matrix
 function filterBySegment(segment) {
     // Toggle selection
@@ -243,6 +280,7 @@ document.head.appendChild(animationStyles);
 // Export module functions
 window.switchModule = switchModule;
 window.initModuleSelector = initModuleSelector;
+window.showBankenTab = showBankenTab;
 window.filterBySegment = filterBySegment;
 window.toggleAllNpl = toggleAllNpl;
 window.bulkAction = bulkAction;
