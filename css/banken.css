@@ -29,6 +29,18 @@
     font-weight: 500;
 }
 
+/* ========================================
+   MODULE CONTENT - Show/Hide Logic
+   ======================================== */
+
+.module-content {
+    display: none;
+}
+
+.module-content.active {
+    display: block;
+}
+
 .module-tab {
     display: flex;
     align-items: center;
