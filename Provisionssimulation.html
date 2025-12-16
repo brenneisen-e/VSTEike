@@ -1,0 +1,3791 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerBI Provisionssimulation Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Aptos Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3a8a 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 18px 25px;
+            cursor: pointer;
+            text-align: center;
+            border-bottom: 4px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .tab.active {
+            border-bottom-color: #2c5aa0;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            color: #1e40af;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #f8fafc;
+            color: #2c5aa0;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 25px;
+            height: calc(100vh - 180px);
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .sidebar h3 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95em;
+        }
+        
+        .form-group select, .form-group input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .form-group select:focus, .form-group input[type="number"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            overflow-y: auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .card h3 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            grid-column: 1 / -1;
+            margin-bottom: 25px;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            opacity: 0.05;
+            border-radius: 50%;
+            background: currentColor;
+            transform: translate(30px, -30px);
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+        }
+        
+        .kpi-card.alpha { 
+            border-left-color: #2563eb; 
+            background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+        }
+        .kpi-card.beta { 
+            border-left-color: #059669; 
+            background: linear-gradient(135deg, #ecfdf5 0%, #f8fafc 100%);
+        }
+        .kpi-card.delta { 
+            border-left-color: #d97706; 
+            background: linear-gradient(135deg, #fffbeb 0%, #f8fafc 100%);
+        }
+        .kpi-card.neutral { 
+            border-left-color: #6b7280; 
+            background: linear-gradient(135deg, #f9fafb 0%, #f8fafc 100%);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .kpi-title {
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .kpi-period {
+            font-size: 0.8em;
+            color: #6b7280;
+            background: rgba(107, 114, 128, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .kpi-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .trend-arrow {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        
+        .trend-percent {
+            font-size: 1em;
+            font-weight: 700;
+        }
+        
+        .kpi-details {
+            font-size: 0.85em;
+            color: #6b7280;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .segment-config {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .segment-title {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+        
+        .slider-group {
+            margin-bottom: 15px;
+        }
+        
+        .slider-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9em;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+        
+        .slider.alpha-slider::-webkit-slider-thumb {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+        
+        .slider.beta-slider::-webkit-slider-thumb {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        
+        .provision-rates-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border: 2px solid #e2e8f0;
+        }
+        
+        .provision-table {
+            font-size: 0.85em;
+        }
+        
+        .provision-table th {
+            text-align: center;
+            font-size: 0.8em;
+            padding: 8px 6px;
+        }
+        
+        .provision-table td {
+            text-align: center;
+            padding: 8px 6px;
+            vertical-align: middle;
+        }
+        
+        .provision-table td:first-child {
+            text-align: left;
+        }
+        
+        .provision-slider-cell {
+            padding: 4px !important;
+            width: 80px;
+        }
+        
+        .mini-slider {
+            width: 100%;
+            height: 4px;
+            margin-bottom: 2px;
+        }
+        
+        .mini-slider::-webkit-slider-thumb {
+            width: 12px;
+            height: 12px;
+        }
+        
+        .mini-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+        }
+        
+        .slider-value {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: #374151;
+            display: block;
+            text-align: center;
+        }
+        
+        .provision-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .legend-item {
+            font-size: 0.85em;
+            color: #4b5563;
+        }
+        
+        .legend-item strong {
+            color: #1f2937;
+        }
+        
+        .revers-table-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+            border: 2px solid #d1fae5;
+            grid-column: 1 / -1;
+        }
+        
+        .revers-config {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .segment-revers-section {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .segment-title-expandable {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .segment-title-expandable:hover {
+            background: rgba(37, 99, 235, 0.05);
+            padding: 5px 10px;
+            margin: -5px -10px 20px -10px;
+            border-radius: 8px;
+        }
+        
+        .expand-arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
+        }
+        
+        .expand-arrow.expanded {
+            transform: rotate(90deg);
+        }
+        
+        .revers-info-table {
+            display: none;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .revers-info-table.expanded {
+            display: block;
+        }
+        
+        .revers-info-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .revers-info-table th {
+            background: #f8fafc;
+            padding: 8px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .revers-info-table td {
+            padding: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .revers-info-table tr.current-revers {
+            background: rgba(37, 99, 235, 0.1);
+            font-weight: 600;
+        }
+        
+        .revers-table {
+            font-size: 0.8em;
+        }
+        
+        .revers-table th,
+        .revers-table td {
+            padding: 6px 8px;
+            text-align: center;
+        }
+        
+        .current-revers {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid #3b82f6;
+            font-weight: 600;
+        }
+        
+        .current-revers td {
+            color: #1e40af;
+        }
+        
+        .revers-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+        
+        .chart-container.small {
+            height: 200px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            background: white;
+        }
+        
+        .data-table thead th {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 2px solid #cbd5e1;
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table tbody tr {
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s ease;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        .data-table tbody tr:nth-child(even) {
+            background: rgba(248, 250, 252, 0.4);
+        }
+        
+        .data-table td {
+            padding: 12px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        .data-table .number {
+            text-align: right;
+            font-family: 'SF Mono', Consolas, monospace;
+            font-weight: 600;
+        }
+        
+        .positive { color: #059669; }
+        .negative { color: #dc2626; }
+        
+        .delta-positive {
+            background-color: rgba(5, 150, 105, 0.1) !important;
+        }
+        
+        .delta-negative {
+            background-color: rgba(220, 38, 38, 0.1) !important;
+        }
+        
+        .detail-table {
+            font-size: 0.75em;
+        }
+        
+        .detail-table th,
+        .detail-table td {
+            padding: 4px 6px;
+            text-align: right;
+        }
+        
+        .detail-table td:first-child {
+            text-align: left;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge.high { 
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+            color: #92400e; 
+        }
+        .badge.medium { 
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+            color: #1e40af; 
+        }
+        .badge.low { 
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); 
+            color: #065f46; 
+        }
+        
+        .segment-icon {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+        
+        .trend-indicator {
+            font-size: 0.85em;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .trend-indicator.positive {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+        }
+        
+        .trend-indicator.negative {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            color: #991b1b;
+        }
+        
+        .provisions-with-beta {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 25px;
+            grid-column: 1 / -1;
+            margin-bottom: 25px;
+        }
+        
+        .beta-adjustment-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .beta-adjustment-panel h3 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        
+        .expandable-header {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .expandable-header:hover {
+            background: #f0f9ff;
+        }
+        
+        .expand-icon {
+            display: inline-block;
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+        
+        .segment-cost-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .segment-cost-details.expanded {
+            max-height: 300px;
+        }
+        
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .expandable-content.expanded {
+            max-height: 500px;
+        }
+        
+        .production-stage {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+            background: #f8fafc;
+            border-left: 3px solid #e5e7eb;
+        }
+        
+        .production-stage.current {
+            background: #eff6ff;
+            border-left-color: #2563eb;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 280px 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .provisions-with-beta {
+                grid-template-columns: 1fr;
+            }
+            
+            .beta-adjustment-panel {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 PowerBI Provisionssimulation</h1>
+        <p>Strategische Analyse von Provisionsmodellen • AlphaProtect vs. BetaCare</p>
+    </div>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(event, 'vermittler')">
+            📊 Vermittlerperspektive
+        </div>
+        <div class="tab" onclick="switchTab(event, 'unternehmen')">
+            🏢 Unternehmensperspektive
+        </div>
+    </div>
+    
+    <!-- VERMITTLERPERSPEKTIVE -->
+    <div id="vermittler" class="tab-content active">
+        <div class="dashboard">
+            <div class="sidebar">
+                <h3>🎛️ Steuerung & Filter</h3>
+                
+                <div class="form-group">
+                    <label>Vermittler auswählen</label>
+                    <select id="vermittlerSelect" onchange="updateVermittlerData()">
+                        <option value="1">Max Mustermann 🟢 (Neugeschäft-Champion)</option>
+                        <option value="2">Anna Schmidt 🟢 (Wachstums-Vermittler)</option>
+                        <option value="3">Peter Klein 🟢 (Starter mit Dynamik)</option>
+                        <option value="4">Thomas Weber 🔴 (Bestandsmanager)</option>
+                        <option value="5">Sarah Müller 🔴 (Bestandspflegerin)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Betrachtungszeitraum: <span id="zeitraumValue">3 Jahre</span></label>
+                    <input type="range" id="zeitraumSlider" min="1" max="5" step="1" value="3" 
+                           class="slider" onchange="updateZeitraum(this.value)" oninput="updateZeitraum(this.value)">
+                </div>
+                
+                <hr style="margin: 25px 0; border: 1px solid #e5e7eb;">
+                
+                <!-- LEBEN SEGMENT -->
+                <div class="segment-config">
+                    <h4 class="segment-title">Leben</h4>
+                    
+                    <div class="slider-group">
+                        <label>Neugeschäft: <span id="neuLebenValue">€120.000</span></label>
+                        <input type="range" id="neuLebenSlider" min="0" max="800000" step="10000" value="120000" 
+                               class="slider" onchange="updateSliderValue('neuLeben', this.value)" oninput="updateSliderValue('neuLeben', this.value)">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label>Bestand: <span id="bestandLebenValue">€800.000</span></label>
+                        <input type="range" id="bestandLebenSlider" min="0" max="5000000" step="50000" value="800000" 
+                               class="slider" onchange="updateSliderValue('bestandLeben', this.value)" oninput="updateSliderValue('bestandLeben', this.value)">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label>Stornoquote: <span id="stornoLebenValue">10%</span></label>
+                        <input type="range" id="stornoLebenSlider" min="5" max="30" step="1" value="10" 
+                               class="slider" onchange="updateSliderValue('stornoLeben', this.value)" oninput="updateSliderValue('stornoLeben', this.value)">
+                    </div>
+                </div>
+                
+                <!-- KRANKEN SEGMENT -->
+                <div class="segment-config">
+                    <h4 class="segment-title">Kranken</h4>
+                    
+                    <div class="slider-group">
+                        <label>Neugeschäft: <span id="neuKrankenValue">€80.000</span></label>
+                        <input type="range" id="neuKrankenSlider" min="0" max="500000" step="5000" value="80000" 
+                               class="slider" onchange="updateSliderValue('neuKranken', this.value)" oninput="updateSliderValue('neuKranken', this.value)">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label>Bestand: <span id="bestandKrankenValue">€600.000</span></label>
+                        <input type="range" id="bestandKrankenSlider" min="0" max="3000000" step="50000" value="600000" 
+                               class="slider" onchange="updateSliderValue('bestandKranken', this.value)" oninput="updateSliderValue('bestandKranken', this.value)">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label>Stornoquote: <span id="stornoKrankenValue">8%</span></label>
+                        <input type="range" id="stornoKrankenSlider" min="3" max="20" step="1" value="8" 
+                               class="slider" onchange="updateSliderValue('stornoKranken', this.value)" oninput="updateSliderValue('stornoKranken', this.value)">
+                    </div>
+                </div>
+                
+                <!-- SCHADEN SEGMENT -->
+                <div class="segment-config">
+                    <h4 class="segment-title">Schaden</h4>
+                    
+                    <div class="slider-group">
+                        <label>Neugeschäft: <span id="neuSchadenValue">€200.000</span></label>
+                        <input type="range" id="neuSchadenSlider" min="0" max="1000000" step="20000" value="200000" 
+                               class="slider" onchange="updateSliderValue('neuSchaden', this.value)" oninput="updateSliderValue('neuSchaden', this.value)">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label>Bestand: <span id="bestandSchadenValue">€1.100.000</span></label>
+                        <input type="range" id="bestandSchadenSlider" min="0" max="6000000" step="100000" value="1100000" 
+                               class="slider" onchange="updateSliderValue('bestandSchaden', this.value)" oninput="updateSliderValue('bestandSchaden', this.value)">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label>Stornoquote: <span id="stornoSchadenValue">18%</span></label>
+                        <input type="range" id="stornoSchadenSlider" min="10" max="35" step="1" value="18" 
+                               class="slider" onchange="updateSliderValue('stornoSchaden', this.value)" oninput="updateSliderValue('stornoSchaden', this.value)">
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="resetToDefaults()">🔄 Zurücksetzen</button>
+            </div>
+            
+            <div class="main-content">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card alpha">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Aktueller Aufwand (AlphaProtect)</span>
+                            <span class="kpi-period">Aktuelles Modell</span>
+                        </div>
+                        <div class="kpi-main">
+                            <div class="kpi-value" id="provisionAlpha">€ 89.400</div>
+                            <div class="kpi-trend">
+                                <span class="trend-arrow" style="color: #2563eb;">●</span>
+                                <span class="trend-percent" style="color: #2563eb;">Aktuell</span>
+                            </div>
+                        </div>
+                        <div class="kpi-details">
+                            <span id="alphaDetails">Abschluss: €32.4k | Bestand: €57k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card beta">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Simulierter Neuaufwand (BetaCare)</span>
+                            <span class="kpi-period">Neues Modell</span>
+                        </div>
+                        <div class="kpi-main">
+                            <div class="kpi-value" id="provisionBeta">€ 96.750</div>
+                            <div class="kpi-trend">
+                                <span class="trend-arrow" id="betaTrendArrow">↗</span>
+                                <span class="trend-percent" id="betaTrend">+8.2%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-details">
+                            <span id="betaDetails">Abschluss: €28.1k | Bestand: €68.7k</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card delta">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Veränderung</span>
+                            <span class="kpi-period" id="deltaDescription">Verbesserung/Verschlechterung</span>
+                        </div>
+                        <div class="kpi-main">
+                            <div class="kpi-value" id="deltaValue">+€ 7.350</div>
+                            <div class="kpi-trend">
+                                <span class="trend-arrow" id="deltaArrow">📈</span>
+                                <span class="trend-percent" id="deltaPercent">+8.2%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-details">
+                            <span id="deltaDetailText">Über <span id="kpiZeitraum">3</span> Jahre</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PROVISIONSSÄTZE TABELLE mit BETACARE ANPASSUNG -->
+                <div class="provisions-with-beta">
+                    <div class="card provision-rates-card">
+                        <h3>📋 Provisionssätze nach Segmenten und Produkten</h3>
+                        <div class="table-container">
+                            <table class="data-table provision-table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" style="text-align: left; width: 200px;">Segment / Produkt</th>
+                                        <th colspan="3">AlphaProtect</th>
+                                        <th colspan="2">BetaCare</th>
+                                    </tr>
+                                    <tr>
+                                        <th>AP (%)</th>
+                                        <th>LP (%)</th>
+                                        <th>BP (%)</th>
+                                        <th>AP (%)</th>
+                                        <th>BP (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: #f8fafc;">
+                                        <td colspan="6"><strong>LEBEN</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Rentenversicherung - pAV</td>
+                                        <td class="number">2,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number">0,5%</td>
+                                        <td class="number" id="betaAPLebenTable">3,5%</td>
+                                        <td class="number" id="betaBPLebenTable">0,3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Berufsunfähigkeitsversicherung</td>
+                                        <td class="number">2,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number">0,5%</td>
+                                        <td class="number" id="betaAPLebenTableBU">3,8%</td>
+                                        <td class="number" id="betaBPLebenTableBU">0,2%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Risikolebensversicherung</td>
+                                        <td class="number">1,2%</td>
+                                        <td class="number">-</td>
+                                        <td class="number">0,5%</td>
+                                        <td class="number">2,5%</td>
+                                        <td class="number" id="betaBPLebenTableRL">0,3%</td>
+                                    </tr>
+                                    
+                                    <tr style="background: #f8fafc;">
+                                        <td colspan="6"><strong>KRANKEN</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Vollversicherung</td>
+                                        <td class="number">5MB*</td>
+                                        <td class="number">-</td>
+                                        <td class="number">1,0%</td>
+                                        <td class="number" id="betaAPKrankenTable">7,5MB*</td>
+                                        <td class="number" id="betaBPKrankenTable">0,8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Pflegepflichtversicherung</td>
+                                        <td class="number">1,5MB*</td>
+                                        <td class="number">-</td>
+                                        <td class="number">1,0%</td>
+                                        <td class="number" id="betaAPKrankenTablePflege">2,0MB*</td>
+                                        <td class="number" id="betaBPKrankenTablePflege">0,5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Zusatzversicherung</td>
+                                        <td class="number">3,5MB*</td>
+                                        <td class="number">-</td>
+                                        <td class="number">1,0%</td>
+                                        <td class="number" id="betaAPKrankenTableZusatz">4,5MB*</td>
+                                        <td class="number" id="betaBPKrankenTableZusatz">0,7%</td>
+                                    </tr>
+                                    
+                                    <tr style="background: #f8fafc;">
+                                        <td colspan="6"><strong>SCHADEN</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Haftpflichtversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">12,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableHaft">15,0%</td>
+                                        <td class="number" id="betaBPSchadenTableHaft">7,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Unfallversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">18,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableUnfall">31,0%</td>
+                                        <td class="number" id="betaBPSchadenTableUnfall">10,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Hausratversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">12,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableHausrat">10,0%</td>
+                                        <td class="number" id="betaBPSchadenTableHausrat">10,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Rechtsschutzversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">12,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableRecht">16,0%</td>
+                                        <td class="number" id="betaBPSchadenTableRecht">7,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Kraftfahrt</td>
+                                        <td class="number">-</td>
+                                        <td class="number">6,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableKfz">6,0%</td>
+                                        <td class="number" id="betaBPSchadenTableKfz">6,0%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="provision-legend">
+                            <div class="legend-item">
+                                <strong>AP:</strong> Abschlussprovision (% der Jahresprämie)
+                            </div>
+                            <div class="legend-item">
+                                <strong>LP:</strong> Laufende Provision (% p.a.)
+                            </div>
+                            <div class="legend-item">
+                                <strong>BP:</strong> Bestandsprovision (% p.a.)
+                            </div>
+                            <div class="legend-item">
+                                <strong>MB*:</strong> Monatsbeiträge (z.B. 5MB = 500% der Monatsprämie)
+                            </div>
+                            <div class="legend-item">
+                                <strong>AlphaProtect:</strong> Schaden nur LP, keine AP+BP Aufteilung
+                            </div>
+                            <div class="legend-item">
+                                <strong>BetaCare:</strong> Schaden mit AP+BP Struktur für höhere Abschlussanreize
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- BETACARE ANPASSUNG -->
+                    <div class="beta-adjustment-panel">
+                        <h3>⚙️ BetaCare Provisionsanpassung</h3>
+                        <!-- Leben Anpassung -->
+                        <div class="segment-config">
+                            <h4 class="segment-title">Leben</h4>
+                            <div class="slider-group">
+                                <label>AP Basis: <span id="betaAPLebenValue">3,5%</span></label>
+                                <input type="range" id="betaAPLebenSlider" min="2.0" max="5.0" step="0.1" value="3.5" 
+                                       class="slider beta-slider" onchange="updateBetaRate('betaAPLeben', this.value, false)" oninput="updateBetaRate('betaAPLeben', this.value, false)">
+                            </div>
+                            <div class="slider-group">
+                                <label>BP: <span id="betaBPLebenValue">0,3%</span></label>
+                                <input type="range" id="betaBPLebenSlider" min="0.1" max="0.8" step="0.05" value="0.3" 
+                                       class="slider beta-slider" onchange="updateBetaRate('betaBPLeben', this.value, false)" oninput="updateBetaRate('betaBPLeben', this.value, false)">
+                            </div>
+                        </div>
+                        
+                        <!-- Kranken Anpassung -->
+                        <div class="segment-config">
+                            <h4 class="segment-title">Kranken</h4>
+                            <div class="slider-group">
+                                <label>AP Basis: <span id="betaAPKrankenValue">7,5MB</span></label>
+                                <input type="range" id="betaAPKrankenSlider" min="5.0" max="10.0" step="0.1" value="7.5" 
+                                       class="slider beta-slider" onchange="updateBetaRate('betaAPKranken', this.value, false)" oninput="updateBetaRate('betaAPKranken', this.value, false)">
+                            </div>
+                            <div class="slider-group">
+                                <label>BP: <span id="betaBPKrankenValue">0,8%</span></label>
+                                <input type="range" id="betaBPKrankenSlider" min="0.3" max="1.5" step="0.05" value="0.8" 
+                                       class="slider beta-slider" onchange="updateBetaRate('betaBPKranken', this.value, false)" oninput="updateBetaRate('betaBPKranken', this.value, false)">
+                            </div>
+                        </div>
+                        
+                        <!-- Schaden Anpassung -->
+                        <div class="segment-config">
+                            <h4 class="segment-title">Schaden</h4>
+                            <div class="slider-group">
+                                <label>AP Basis: <span id="betaAPSchadenValue">16,0%</span></label>
+                                <input type="range" id="betaAPSchadenSlider" min="10.0" max="25.0" step="0.5" value="16.0" 
+                                       class="slider beta-slider" onchange="updateBetaRate('betaAPSchaden', this.value, false)" oninput="updateBetaRate('betaAPSchaden', this.value, false)">
+                            </div>
+                            <div class="slider-group">
+                                <label>BP: <span id="betaBPSchadenValue">8,0%</span></label>
+                                <input type="range" id="betaBPSchadenSlider" min="5.0" max="12.0" step="0.5" value="8.0" 
+                                       class="slider beta-slider" onchange="updateBetaRate('betaBPSchaden', this.value, false)" oninput="updateBetaRate('betaBPSchaden', this.value, false)">
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="resetBetaCareDefaults()">🔄 BetaCare zurücksetzen</button>
+                    </div>
+                </div>
+                
+                <!-- DETAILANALYSE NACH SEGMENTEN -->
+                <div class="card revers-table-card">
+                    <h3>🎯 Detailanalyse nach Geschäftsfeldern</h3>
+                    <div class="revers-config">
+                        <!-- Leben Detail -->
+                        <div class="segment-revers-section">
+                            <h4 class="segment-title-expandable" onclick="toggleReversInfo('leben')">
+                                <span class="expand-arrow" id="lebenExpandArrow">▶</span>
+                                Leben - Aktueller Status: <span id="reversLebenBadge" class="revers-badge">Revers 2</span>
+                            </h4>
+                            
+                            <div class="revers-info-table" id="lebenReversInfo">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Revers-Stufe</th>
+                                            <th>Produktionsgrenze</th>
+                                            <th>AP-Satz Alpha</th>
+                                            <th>AP-Satz Beta</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lebenReversTableBody">
+                                        <!-- Wird durch JavaScript befüllt -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Produkt / Revers</th>
+                                            <th colspan="2">Produktion</th>
+                                            <th colspan="3">AlphaProtect (€)</th>
+                                            <th colspan="3">BetaCare (€)</th>
+                                            <th colspan="2">Delta</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Neugesch.</th>
+                                            <th>Bestand</th>
+                                            <th>AP</th>
+                                            <th>BP</th>
+                                            <th>Gesamt</th>
+                                            <th>AP</th>
+                                            <th>BP</th>
+                                            <th>Gesamt</th>
+                                            <th>€</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lebenDetailBody">
+                                        <!-- Wird durch JavaScript befüllt -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Kranken Detail -->
+                        <div class="segment-revers-section">
+                            <h4 class="segment-title-expandable" onclick="toggleReversInfo('kranken')">
+                                <span class="expand-arrow" id="krankenExpandArrow">▶</span>
+                                Kranken - Aktueller Status: <span id="reversKrankenBadge" class="revers-badge">Revers 2</span>
+                            </h4>
+                            
+                            <div class="revers-info-table" id="krankenReversInfo">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Revers-Stufe</th>
+                                            <th>Produktionsgrenze (Monatl.)</th>
+                                            <th>AP-Satz Alpha</th>
+                                            <th>AP-Satz Beta</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="krankenReversTableBody">
+                                        <!-- Wird durch JavaScript befüllt -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Produkt / Revers</th>
+                                            <th colspan="2">Produktion</th>
+                                            <th colspan="3">AlphaProtect (€)</th>
+                                            <th colspan="3">BetaCare (€)</th>
+                                            <th colspan="2">Delta</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Neugesch.</th>
+                                            <th>Bestand</th>
+                                            <th>AP</th>
+                                            <th>BP</th>
+                                            <th>Gesamt</th>
+                                            <th>AP</th>
+                                            <th>BP</th>
+                                            <th>Gesamt</th>
+                                            <th>€</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="krankenDetailBody">
+                                        <!-- Wird durch JavaScript befüllt -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Schaden Detail -->
+                        <div class="segment-revers-section">
+                            <h4 class="segment-title-expandable" onclick="toggleReversInfo('schaden')">
+                                <span class="expand-arrow" id="schadenExpandArrow">▶</span>
+                                Schaden - Aktueller Status: <span id="reversSchadenBadge" class="revers-badge">Revers 2</span>
+                            </h4>
+                            
+                            <div class="revers-info-table" id="schadenReversInfo">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Revers-Stufe</th>
+                                            <th>Produktionsgrenze</th>
+                                            <th>LP-Satz Alpha</th>
+                                            <th>AP-Satz Beta</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="schadenReversTableBody">
+                                        <!-- Wird durch JavaScript befüllt -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Produkt / Revers</th>
+                                            <th colspan="2">Produktion</th>
+                                            <th colspan="3">AlphaProtect (€)</th>
+                                            <th colspan="3">BetaCare (€)</th>
+                                            <th colspan="2">Delta</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Neugesch.</th>
+                                            <th>Bestand</th>
+                                            <th>LP</th>
+                                            <th>-</th>
+                                            <th>Gesamt</th>
+                                            <th>AP</th>
+                                            <th>BP</th>
+                                            <th>Gesamt</th>
+                                            <th>€</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="schadenDetailBody">
+                                        <!-- Wird durch JavaScript befüllt -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Segment Comparison -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h3>📊 Segmentvergleich AlphaProtect vs. BetaCare</h3>
+                    <div class="chart-container">
+                        <canvas id="segmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- UNTERNEHMENSPERSPEKTIVE -->
+    <div id="unternehmen" class="tab-content">
+        <div class="dashboard">
+            <div class="sidebar">
+                <h3>🎛️ Unternehmenssteuerung</h3>
+                
+                <div class="form-group">
+                    <label>Vermittlergrößenklasse</label>
+                    <select id="groessenklasseSelect" onchange="updateUnternehmenData()">
+                        <option value="alle">Alle Größenklassen (100 Vermittler)</option>
+                        <option value="gross">Großvermittler (45)</option>
+                        <option value="mittel">Mittelvermittler (35)</option>
+                        <option value="klein">Kleinvermittler (20)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Vermittlercluster</label>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="font-weight: normal; display: flex; align-items: center;">
+                            <input type="checkbox" id="highPerformers" checked onchange="updateUnternehmenData()">
+                            <span style="margin-left: 8px;">High Performers (Top 20%)</span>
+                        </label>
+                        <label style="font-weight: normal; display: flex; align-items: center;">
+                            <input type="checkbox" id="middlePerformers" checked onchange="updateUnternehmenData()">
+                            <span style="margin-left: 8px;">Middle Performers (60%)</span>
+                        </label>
+                        <label style="font-weight: normal; display: flex; align-items: center;">
+                            <input type="checkbox" id="lowPerformers" checked onchange="updateUnternehmenData()">
+                            <span style="margin-left: 8px;">Low Performers (Bottom 20%)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="resetUnternehmenDefaults()">🔄 Zurücksetzen</button>
+            </div>
+            
+            <div class="main-content">
+                <!-- Unternehmens-KPIs -->
+                <div class="kpi-grid">
+                    <div class="kpi-card alpha">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Aktueller Aufwand (AlphaProtect)</span>
+                            <span class="kpi-period">AlphaProtect</span>
+                        </div>
+                        <div class="kpi-main">
+                            <div class="kpi-value" id="aktuellAufwand">€ 12.8M</div>
+                            <div class="kpi-trend">
+                                <span class="trend-arrow" style="color: #2563eb;">📊</span>
+                                <span class="trend-percent" style="color: #2563eb;" id="aktuellKostenquote">20.8%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-details">
+                            <span>Kostenquote p.a.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card beta">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Simulierter Neuaufwand (BetaCare)</span>
+                            <span class="kpi-period">BetaCare</span>
+                        </div>
+                        <div class="kpi-main">
+                            <div class="kpi-value" id="zielAufwand">€ 14.6M</div>
+                            <div class="kpi-trend">
+                                <span class="trend-arrow" id="zielTrendArrow" style="color: #dc2626;">📈</span>
+                                <span class="trend-percent" id="zielKostenquote" style="color: #dc2626;">23.2%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-details">
+                            <span>Neue Kostenquote p.a.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card delta">
+                        <div class="kpi-header">
+                            <span class="kpi-title" id="mehraufwandTitle">Mehraufwand</span>
+                            <span class="kpi-period">Delta</span>
+                        </div>
+                        <div class="kpi-main">
+                            <div class="kpi-value negative" id="mehraufwand">+€ 1.8M</div>
+                            <div class="kpi-trend">
+                                <span class="trend-arrow negative" id="mehraufwandArrow">↗</span>
+                                <span class="trend-percent negative" id="mehraufwandPercent">+14%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-details">
+                            <span id="mehraufwandDetail">Zusätzliche Kosten p.a.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SEGMENT-KOSTEN ÜBERSICHT -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h3>💰 Kostensimulation nach Geschäftssegmenten</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+                        <!-- Leben Segment Kosten -->
+                        <div class="segment-cost-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 2px solid #3b82f6; border-radius: 12px; padding: 20px;">
+                            <div class="segment-cost-header" style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleSegmentCostDetails('leben')">
+                                <h4 style="color: #1e40af; margin: 0; font-size: 1.1em; font-weight: 700;">
+                                    <span class="expand-icon" id="lebenCostExpandIcon" style="margin-right: 8px; transition: transform 0.3s ease;">▶</span>
+                                    Leben
+                                </h4>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 4px;">AlphaProtect</div>
+                                    <div style="font-size: 1.4em; font-weight: 700; color: #1e40af;" id="lebenAlphaKosten">€ 2.8M</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 4px;">BetaCare</div>
+                                    <div style="font-size: 1.4em; font-weight: 700; color: #059669;" id="lebenBetaKosten">€ 3.2M</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <span style="font-size: 0.85em; color: #6b7280;">Delta: </span>
+                                <span style="font-weight: 700;" id="lebenDeltaKosten">+€ 0.4M (+14%)</span>
+                            </div>
+                            
+                            <!-- Aufklappbare Produktdetails Leben -->
+                            <div class="segment-cost-details" id="lebenCostDetails" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s ease; margin-top: 15px;">
+                                <div style="background: rgba(255, 255, 255, 0.9); border-radius: 8px; padding: 15px;">
+                                    <table style="width: 100%; font-size: 0.8em; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="background: #f8fafc;">
+                                                <th style="text-align: left; padding: 6px; border-bottom: 1px solid #e5e7eb;">Produkt</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Alpha</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Beta</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Delta</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="lebenProductCosts">
+                                            <!-- Wird durch JavaScript befüllt -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Kranken Segment Kosten -->
+                        <div class="segment-cost-card" style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 2px solid #10b981; border-radius: 12px; padding: 20px;">
+                            <div class="segment-cost-header" style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleSegmentCostDetails('kranken')">
+                                <h4 style="color: #047857; margin: 0; font-size: 1.1em; font-weight: 700;">
+                                    <span class="expand-icon" id="krankenCostExpandIcon" style="margin-right: 8px; transition: transform 0.3s ease;">▶</span>
+                                    Kranken
+                                </h4>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 4px;">AlphaProtect</div>
+                                    <div style="font-size: 1.4em; font-weight: 700; color: #047857;" id="krankenAlphaKosten">€ 3.8M</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 4px;">BetaCare</div>
+                                    <div style="font-size: 1.4em; font-weight: 700; color: #059669;" id="krankenBetaKosten">€ 4.3M</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <span style="font-size: 0.85em; color: #6b7280;">Delta: </span>
+                                <span style="font-weight: 700;" id="krankenDeltaKosten">+€ 0.5M (+13%)</span>
+                            </div>
+                            
+                            <!-- Aufklappbare Produktdetails Kranken -->
+                            <div class="segment-cost-details" id="krankenCostDetails" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s ease; margin-top: 15px;">
+                                <div style="background: rgba(255, 255, 255, 0.9); border-radius: 8px; padding: 15px;">
+                                    <table style="width: 100%; font-size: 0.8em; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="background: #f8fafc;">
+                                                <th style="text-align: left; padding: 6px; border-bottom: 1px solid #e5e7eb;">Produkt</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Alpha</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Beta</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Delta</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="krankenProductCosts">
+                                            <!-- Wird durch JavaScript befüllt -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Schaden Segment Kosten -->
+                        <div class="segment-cost-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid #f59e0b; border-radius: 12px; padding: 20px;">
+                            <div class="segment-cost-header" style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px; cursor: pointer;" onclick="toggleSegmentCostDetails('schaden')">
+                                <h4 style="color: #92400e; margin: 0; font-size: 1.1em; font-weight: 700;">
+                                    <span class="expand-icon" id="schadenCostExpandIcon" style="margin-right: 8px; transition: transform 0.3s ease;">▶</span>
+                                    Schaden
+                                </h4>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 4px;">AlphaProtect</div>
+                                    <div style="font-size: 1.4em; font-weight: 700; color: #92400e;" id="schadenAlphaKosten">€ 6.2M</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.8em; color: #6b7280; margin-bottom: 4px;">BetaCare</div>
+                                    <div style="font-size: 1.4em; font-weight: 700; color: #059669;" id="schadenBetaKosten">€ 7.1M</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <span style="font-size: 0.85em; color: #6b7280;">Delta: </span>
+                                <span style="font-weight: 700;" id="schadenDeltaKosten">+€ 0.9M (+15%)</span>
+                            </div>
+                            
+                            <!-- Aufklappbare Produktdetails Schaden -->
+                            <div class="segment-cost-details" id="schadenCostDetails" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s ease; margin-top: 15px;">
+                                <div style="background: rgba(255, 255, 255, 0.9); border-radius: 8px; padding: 15px;">
+                                    <table style="width: 100%; font-size: 0.8em; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="background: #f8fafc;">
+                                                <th style="text-align: left; padding: 6px; border-bottom: 1px solid #e5e7eb;">Produkt</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Alpha</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Beta</th>
+                                                <th style="text-align: right; padding: 6px; border-bottom: 1px solid #e5e7eb;">Delta</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="schadenProductCosts">
+                                            <!-- Wird durch JavaScript befüllt -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PROVISIONSSÄTZE TABELLE mit BETACARE ANPASSUNG -->
+                <div class="provisions-with-beta">
+                    <div class="card provision-rates-card">
+                        <h3>📋 Provisionssätze nach Segmenten und Produkten</h3>
+                        <div class="table-container">
+                            <table class="data-table provision-table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" style="text-align: left; width: 200px;">Segment / Produkt</th>
+                                        <th colspan="3">AlphaProtect</th>
+                                        <th colspan="2">BetaCare</th>
+                                    </tr>
+                                    <tr>
+                                        <th>AP (%)</th>
+                                        <th>LP (%)</th>
+                                        <th>BP (%)</th>
+                                        <th>AP (%)</th>
+                                        <th>BP (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: #f8fafc;">
+                                        <td colspan="6"><strong>LEBEN</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Rentenversicherung - pAV</td>
+                                        <td class="number">2,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number">0,5%</td>
+                                        <td class="number" id="betaAPLebenTableU">3,5%</td>
+                                        <td class="number" id="betaBPLebenTableU">0,3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Berufsunfähigkeitsversicherung</td>
+                                        <td class="number">2,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number">0,5%</td>
+                                        <td class="number" id="betaAPLebenTableBUU">3,8%</td>
+                                        <td class="number" id="betaBPLebenTableBUU">0,2%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Risikolebensversicherung</td>
+                                        <td class="number">1,2%</td>
+                                        <td class="number">-</td>
+                                        <td class="number">0,5%</td>
+                                        <td class="number">2,5%</td>
+                                        <td class="number" id="betaBPLebenTableRLU">0,3%</td>
+                                    </tr>
+                                    
+                                    <tr style="background: #f8fafc;">
+                                        <td colspan="6"><strong>🏥 KRANKEN</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Vollversicherung</td>
+                                        <td class="number">5MB*</td>
+                                        <td class="number">-</td>
+                                        <td class="number">1,0%</td>
+                                        <td class="number" id="betaAPKrankenTableU">7,5MB*</td>
+                                        <td class="number" id="betaBPKrankenTableU">0,8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Pflegepflichtversicherung</td>
+                                        <td class="number">1,5MB*</td>
+                                        <td class="number">-</td>
+                                        <td class="number">1,0%</td>
+                                        <td class="number" id="betaAPKrankenTablePflegeU">2,0MB*</td>
+                                        <td class="number" id="betaBPKrankenTablePflegeU">0,5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Zusatzversicherung</td>
+                                        <td class="number">3,5MB*</td>
+                                        <td class="number">-</td>
+                                        <td class="number">1,0%</td>
+                                        <td class="number" id="betaAPKrankenTableZusatzU">4,5MB*</td>
+                                        <td class="number" id="betaBPKrankenTableZusatzU">0,7%</td>
+                                    </tr>
+                                    
+                                    <tr style="background: #f8fafc;">
+                                        <td colspan="6"><strong>🚗 SCHADEN</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Haftpflichtversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">12,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableHaftU">15,0%</td>
+                                        <td class="number" id="betaBPSchadenTableHaftU">7,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Unfallversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">18,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableUnfallU">31,0%</td>
+                                        <td class="number" id="betaBPSchadenTableUnfallU">10,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Hausratversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">12,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableHausratU">10,0%</td>
+                                        <td class="number" id="betaBPSchadenTableHausratU">10,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Rechtsschutzversicherung</td>
+                                        <td class="number">-</td>
+                                        <td class="number">12,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableRechtU">16,0%</td>
+                                        <td class="number" id="betaBPSchadenTableRechtU">7,0%</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left: 30px;">Kraftfahrt</td>
+                                        <td class="number">-</td>
+                                        <td class="number">6,0%</td>
+                                        <td class="number">-</td>
+                                        <td class="number" id="betaAPSchadenTableKfzU">6,0%</td>
+                                        <td class="number" id="betaBPSchadenTableKfzU">6,0%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="provision-legend">
+                            <div class="legend-item">
+                                <strong>AP:</strong> Abschlussprovision (% der Jahresprämie)
+                            </div>
+                            <div class="legend-item">
+                                <strong>LP:</strong> Laufende Provision (% p.a.)
+                            </div>
+                            <div class="legend-item">
+                                <strong>BP:</strong> Bestandsprovision (% p.a.)
+                            </div>
+                            <div class="legend-item">
+                                <strong>MB*:</strong> Monatsbeiträge (z.B. 5MB = 500% der Monatsprämie)
+                            </div>
+                            <div class="legend-item">
+                                <strong>AlphaProtect:</strong> Schaden nur LP, keine AP+BP Aufteilung
+                            </div>
+                            <div class="legend-item">
+                                <strong>BetaCare:</strong> Schaden mit AP+BP Struktur für höhere Abschlussanreize
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- BETACARE ANPASSUNG -->
+                    <div class="beta-adjustment-panel">
+                        <h3>⚙️ BetaCare Provisionsanpassung</h3>
+                        <!-- Leben Anpassung -->
+                        <div class="segment-config">
+                            <h4 class="segment-title">Leben</h4>
+                            <div class="slider-group">
+                                <label>AP Basis: <span id="betaAPLebenValueU">3,5%</span></label>
+                                <input type="range" id="betaAPLebenSliderU" min="2.0" max="5.0" step="0.1" value="3.5" 
+                                       class="slider beta-slider" onchange="updateBetaRateU('betaAPLeben', this.value, false)" oninput="updateBetaRateU('betaAPLeben', this.value, false)">
+                            </div>
+                            <div class="slider-group">
+                                <label>BP: <span id="betaBPLebenValueU">0,3%</span></label>
+                                <input type="range" id="betaBPLebenSliderU" min="0.1" max="0.8" step="0.05" value="0.3" 
+                                       class="slider beta-slider" onchange="updateBetaRateU('betaBPLeben', this.value, false)" oninput="updateBetaRateU('betaBPLeben', this.value, false)">
+                            </div>
+                        </div>
+                        
+                        <!-- Kranken Anpassung -->
+                        <div class="segment-config">
+                            <h4 class="segment-title">🏥 Kranken</h4>
+                            <div class="slider-group">
+                                <label>AP Basis: <span id="betaAPKrankenValueU">7,5MB</span></label>
+                                <input type="range" id="betaAPKrankenSliderU" min="5.0" max="10.0" step="0.1" value="7.5" 
+                                       class="slider beta-slider" onchange="updateBetaRateU('betaAPKranken', this.value, false)" oninput="updateBetaRateU('betaAPKranken', this.value, false)">
+                            </div>
+                            <div class="slider-group">
+                                <label>BP: <span id="betaBPKrankenValueU">0,8%</span></label>
+                                <input type="range" id="betaBPKrankenSliderU" min="0.3" max="1.5" step="0.05" value="0.8" 
+                                       class="slider beta-slider" onchange="updateBetaRateU('betaBPKranken', this.value, false)" oninput="updateBetaRateU('betaBPKranken', this.value, false)">
+                            </div>
+                        </div>
+                        
+                        <!-- Schaden Anpassung -->
+                        <div class="segment-config">
+                            <h4 class="segment-title">🚗 Schaden</h4>
+                            <div class="slider-group">
+                                <label>AP Basis: <span id="betaAPSchadenValueU">16,0%</span></label>
+                                <input type="range" id="betaAPSchadenSliderU" min="10.0" max="25.0" step="0.5" value="16.0" 
+                                       class="slider beta-slider" onchange="updateBetaRateU('betaAPSchaden', this.value, false)" oninput="updateBetaRateU('betaAPSchaden', this.value, false)">
+                            </div>
+                            <div class="slider-group">
+                                <label>BP: <span id="betaBPSchadenValueU">8,0%</span></label>
+                                <input type="range" id="betaBPSchadenSliderU" min="5.0" max="12.0" step="0.5" value="8.0" 
+                                       class="slider beta-slider" onchange="updateBetaRateU('betaBPSchaden', this.value, false)" oninput="updateBetaRateU('betaBPSchaden', this.value, false)">
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="resetBetaCareDefaultsU()">🔄 BetaCare zurücksetzen</button>
+                    </div>
+                </div>
+                
+                <!-- VERMITTLER VERTEILUNGSANALYSE -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h3>📊 Verteilung der Vermittler nach Provisionsveränderung</h3>
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 0.9em;">
+                            <div>
+                                <strong style="color: #dc2626;">Verlierer:</strong> <span id="loserCount">0</span> Vermittler (<span id="loserPercent">0%</span>)
+                            </div>
+                            <div>
+                                <strong style="color: #6b7280;">Neutral:</strong> <span id="neutralCount">0</span> Vermittler (<span id="neutralPercent">0%</span>)
+                            </div>
+                            <div>
+                                <strong style="color: #059669;">Gewinner:</strong> <span id="winnerCount">0</span> Vermittler (<span id="winnerPercent">0%</span>)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global Variables
+        let charts = {
+            segment: null,
+            heatmap: null,
+            treemap: null,
+            kostenquote: null
+        };
+        
+        let currentZeitraum = 3; // Default 3 Jahre
+        
+        // BetaCare custom rates
+        let betaCustomRates = {
+            apLeben: 3.5,
+            bpLeben: 0.3,
+            apKranken: 750, // 7.5MB = 750%
+            bpKranken: 0.8,
+            apSchaden: 16.0,
+            bpSchaden: 8.0
+        };
+        
+        // Mock Data - Angepasst für realistische Excel-basierte Provisionssätze
+        const vermittlerData = {
+            1: { 
+                name: "Max Mustermann", 
+                klasse: "Groß", 
+                neuLeben: 450000,      
+                neuKranken: 280000, 
+                neuSchaden: 620000, 
+                bestand: 1200000,
+                storno: 12,
+                typ: "Verlierer - Neugeschäft-fokussiert"
+            },
+            2: { 
+                name: "Anna Schmidt", 
+                klasse: "Mittel", 
+                neuLeben: 320000,      
+                neuKranken: 180000, 
+                neuSchaden: 380000, 
+                bestand: 950000,
+                storno: 14,
+                typ: "Neutral - Ausgewogener Vermittler"
+            },
+            3: { 
+                name: "Peter Klein", 
+                klasse: "Klein", 
+                neuLeben: 180000,      
+                neuKranken: 95000, 
+                neuSchaden: 220000, 
+                bestand: 420000,
+                storno: 16,
+                typ: "Neutral - Starter mit Potenzial"
+            },
+            4: { 
+                name: "Thomas Weber", 
+                klasse: "Groß", 
+                neuLeben: 85000,       // Geringes Neugeschäft
+                neuKranken: 45000, 
+                neuSchaden: 160000, 
+                bestand: 6200000,      // Sehr hoher Bestand
+                storno: 6,
+                typ: "Gewinner - Bestandsmanager"
+            },
+            5: { 
+                name: "Sarah Müller", 
+                klasse: "Mittel", 
+                neuLeben: 65000,       
+                neuKranken: 35000, 
+                neuSchaden: 110000, 
+                bestand: 4800000,      // Hoher Bestand
+                storno: 8,
+                typ: "Gewinner - Bestandspflegerin"
+            }
+        };
+        
+        // Erweiterte Vermittlerdaten für Unternehmensperspektive (100 Vermittler)
+        function generateAllVermittler() {
+            const vermittler = [];
+            
+            // 40x Max Mustermann (Neugeschäft-Champion)
+            for (let i = 0; i < 40; i++) {
+                vermittler.push({
+                    id: `max_${i}`,
+                    name: 'Max Mustermann',
+                    klasse: 'gross',
+                    neuLeben: 450000,
+                    neuKranken: 280000,
+                    neuSchaden: 620000,
+                    bestand: 1200000,
+                    storno: 12,
+                    performance: i < 8 ? 'high' : (i < 32 ? 'middle' : 'low'),
+                    typ: 'verlierer' // Neugeschäft-fokussiert = Verlierer in BetaCare
+                });
+            }
+            
+            // 30x Anna Schmidt (Wachstums-Vermittler)
+            for (let i = 0; i < 30; i++) {
+                vermittler.push({
+                    id: `anna_${i}`,
+                    name: 'Anna Schmidt',
+                    klasse: 'mittel',
+                    neuLeben: 320000,
+                    neuKranken: 180000,
+                    neuSchaden: 380000,
+                    bestand: 950000,
+                    storno: 14,
+                    performance: i < 6 ? 'high' : (i < 24 ? 'middle' : 'low'),
+                    typ: 'neutral' // Ausgewogener Vermittler
+                });
+            }
+            
+            // 20x Peter Klein (Starter mit Dynamik)
+            for (let i = 0; i < 20; i++) {
+                vermittler.push({
+                    id: `peter_${i}`,
+                    name: 'Peter Klein',
+                    klasse: 'klein',
+                    neuLeben: 180000,
+                    neuKranken: 95000,
+                    neuSchaden: 220000,
+                    bestand: 420000,
+                    storno: 16,
+                    performance: i < 4 ? 'high' : (i < 16 ? 'middle' : 'low'),
+                    typ: 'neutral' // Starter mit Potenzial
+                });
+            }
+            
+            // 5x Thomas Weber (Bestandsmanager)
+            for (let i = 0; i < 5; i++) {
+                vermittler.push({
+                    id: `thomas_${i}`,
+                    name: 'Thomas Weber',
+                    klasse: 'gross',
+                    neuLeben: 85000,
+                    neuKranken: 45000,
+                    neuSchaden: 160000,
+                    bestand: 6200000,
+                    storno: 6,
+                    performance: i < 2 ? 'high' : 'middle',
+                    typ: 'gewinner' // Bestandsmanager = Gewinner in BetaCare
+                });
+            }
+            
+            // 5x Sarah Müller (Bestandspflegerin)
+            for (let i = 0; i < 5; i++) {
+                vermittler.push({
+                    id: `sarah_${i}`,
+                    name: 'Sarah Müller',
+                    klasse: 'mittel',
+                    neuLeben: 65000,
+                    neuKranken: 35000,
+                    neuSchaden: 110000,
+                    bestand: 4800000,
+                    storno: 8,
+                    performance: i < 2 ? 'high' : 'middle',
+                    typ: 'gewinner' // Bestandspflegerin = Gewinner in BetaCare
+                });
+            }
+            
+            return vermittler;
+        }
+        
+        // Generate all vermittler once
+        const allVermittler = generateAllVermittler();
+        
+        // Global flag to prevent infinite recursion
+        let isUpdating = false;
+        let isBatchUpdate = false;
+        
+        // Toggle revers info table
+        function toggleReversInfo(segment) {
+            const infoTable = document.getElementById(segment + 'ReversInfo');
+            const arrow = document.getElementById(segment + 'ExpandArrow');
+            
+            if (infoTable.classList.contains('expanded')) {
+                infoTable.classList.remove('expanded');
+                arrow.classList.remove('expanded');
+            } else {
+                infoTable.classList.add('expanded');
+                arrow.classList.add('expanded');
+                updateReversInfoTable(segment);
+            }
+        }
+        
+        // Update revers info table
+        function updateReversInfoTable(segment) {
+            const tbody = document.getElementById(segment + 'ReversTableBody');
+            if (!tbody) return;
+            
+            let reversData = [];
+            let currentProduction = 0;
+            let currentRevers = 1;
+            
+            if (segment === 'leben') {
+                currentProduction = parseFloat(document.getElementById('neuLebenSlider').value) || 120000;
+                currentRevers = getCurrentRevers('leben', currentProduction);
+                reversData = [
+                    { level: 1, grenze: '€0 - €119.999', apAlpha: '1,5%', apBeta: (betaCustomRates.apLeben * 0.8).toFixed(1) + '%' },
+                    { level: 2, grenze: '€120.000 - €249.999', apAlpha: '2,0%', apBeta: betaCustomRates.apLeben.toFixed(1) + '%' },
+                    { level: 3, grenze: '€250.000 - €399.999', apAlpha: '2,5%', apBeta: (betaCustomRates.apLeben * 1.2).toFixed(1) + '%' },
+                    { level: 4, grenze: 'ab €400.000', apAlpha: '3,0%', apBeta: (betaCustomRates.apLeben * 1.4).toFixed(1) + '%' }
+                ];
+            } else if (segment === 'kranken') {
+                currentProduction = parseFloat(document.getElementById('neuKrankenSlider').value) || 80000;
+                const monthlyProduction = currentProduction / 12;
+                currentRevers = getCurrentRevers('kranken', currentProduction);
+                reversData = [
+                    { level: 1, grenze: '€0 - €6.666', apAlpha: '4,5MB', apBeta: (betaCustomRates.apKranken * 0.8 / 100).toFixed(1) + 'MB' },
+                    { level: 2, grenze: '€6.667 - €14.999', apAlpha: '5,0MB', apBeta: (betaCustomRates.apKranken / 100).toFixed(1) + 'MB' },
+                    { level: 3, grenze: '€15.000 - €24.999', apAlpha: '5,5MB', apBeta: (betaCustomRates.apKranken * 1.2 / 100).toFixed(1) + 'MB' },
+                    { level: 4, grenze: 'ab €25.000', apAlpha: '6,0MB', apBeta: (betaCustomRates.apKranken * 1.4 / 100).toFixed(1) + 'MB' }
+                ];
+            } else if (segment === 'schaden') {
+                currentProduction = parseFloat(document.getElementById('neuSchadenSlider').value) || 200000;
+                currentRevers = getCurrentRevers('schaden', currentProduction);
+                reversData = [
+                    { level: 1, grenze: '€0 - €199.999', apAlpha: '12,0% (LP)', apBeta: (betaCustomRates.apSchaden * 0.7).toFixed(1) + '%' },
+                    { level: 2, grenze: '€200.000 - €399.999', apAlpha: '12,0% (LP)', apBeta: betaCustomRates.apSchaden.toFixed(1) + '%' },
+                    { level: 3, grenze: '€400.000 - €599.999', apAlpha: '12,0% (LP)', apBeta: (betaCustomRates.apSchaden * 1.3).toFixed(1) + '%' },
+                    { level: 4, grenze: 'ab €600.000', apAlpha: '12,0% (LP)', apBeta: (betaCustomRates.apSchaden * 1.6).toFixed(1) + '%' }
+                ];
+            }
+            
+            let html = '';
+            reversData.forEach((data, index) => {
+                const isCurrent = data.level === currentRevers;
+                html += `
+                    <tr ${isCurrent ? 'class="current-revers"' : ''}>
+                        <td>Revers ${data.level}</td>
+                        <td>${data.grenze}</td>
+                        <td>${data.apAlpha}</td>
+                        <td>${data.apBeta}</td>
+                        <td>${isCurrent ? '✓ Aktuell' : ''}</td>
+                    </tr>
+                `;
+            });
+            
+            if (segment === 'leben') {
+                html += `
+                    <tr style="background: #f8fafc; font-weight: 600;">
+                        <td colspan="5">Ihre Produktion: €${currentProduction.toLocaleString('de-DE')} → Revers ${currentRevers}</td>
+                    </tr>
+                `;
+            } else if (segment === 'kranken') {
+                const monthlyProduction = currentProduction / 12;
+                html += `
+                    <tr style="background: #f8fafc; font-weight: 600;">
+                        <td colspan="5">Ihre Produktion: €${monthlyProduction.toLocaleString('de-DE', {maximumFractionDigits: 0})}/Monat → Revers ${currentRevers}</td>
+                    </tr>
+                `;
+            } else {
+                html += `
+                    <tr style="background: #f8fafc; font-weight: 600;">
+                        <td colspan="5">Ihre Produktion: €${currentProduction.toLocaleString('de-DE')} → Revers ${currentRevers}</td>
+                    </tr>
+                `;
+            }
+            
+            tbody.innerHTML = html;
+        }
+        
+        // Update BetaCare rates
+        function updateBetaRate(rateId, value, skipUpdate = false) {
+            const numValue = parseFloat(value);
+            
+            switch(rateId) {
+                case 'betaAPLeben':
+                    betaCustomRates.apLeben = numValue;
+                    document.getElementById('betaAPLebenValue').textContent = numValue.toFixed(1) + '%';
+                    if (!skipUpdate) {
+                        // Update table values
+                        document.getElementById('betaAPLebenTable').textContent = numValue.toFixed(1) + '%';
+                        document.getElementById('betaAPLebenTableBU').textContent = (numValue * 1.1).toFixed(1) + '%';
+                        // Also update Unternehmen table if exists
+                        if (document.getElementById('betaAPLebenTableU')) {
+                            document.getElementById('betaAPLebenTableU').textContent = numValue.toFixed(1) + '%';
+                            document.getElementById('betaAPLebenTableBUU').textContent = (numValue * 1.1).toFixed(1) + '%';
+                        }
+                    }
+                    break;
+                case 'betaBPLeben':
+                    betaCustomRates.bpLeben = numValue;
+                    document.getElementById('betaBPLebenValue').textContent = numValue.toFixed(1) + '%';
+                    if (!skipUpdate) {
+                        // Update table values
+                        document.getElementById('betaBPLebenTable').textContent = numValue.toFixed(1) + '%';
+                        document.getElementById('betaBPLebenTableBU').textContent = (numValue * 0.7).toFixed(1) + '%';
+                        document.getElementById('betaBPLebenTableRL').textContent = numValue.toFixed(1) + '%';
+                        // Also update Unternehmen table if exists
+                        if (document.getElementById('betaBPLebenTableU')) {
+                            document.getElementById('betaBPLebenTableU').textContent = numValue.toFixed(1) + '%';
+                            document.getElementById('betaBPLebenTableBUU').textContent = (numValue * 0.7).toFixed(1) + '%';
+                            document.getElementById('betaBPLebenTableRLU').textContent = numValue.toFixed(1) + '%';
+                        }
+                    }
+                    break;
+                case 'betaAPKranken':
+                    betaCustomRates.apKranken = numValue * 100; // Convert MB to percentage
+                    document.getElementById('betaAPKrankenValue').textContent = numValue.toFixed(1) + 'MB';
+                    if (!skipUpdate) {
+                        // Update table values
+                        document.getElementById('betaAPKrankenTable').textContent = numValue.toFixed(1) + 'MB*';
+                        document.getElementById('betaAPKrankenTablePflege').textContent = (numValue * 0.267).toFixed(1) + 'MB*';
+                        document.getElementById('betaAPKrankenTableZusatz').textContent = (numValue * 0.6).toFixed(1) + 'MB*';
+                        // Also update Unternehmen table if exists
+                        if (document.getElementById('betaAPKrankenTableU')) {
+                            document.getElementById('betaAPKrankenTableU').textContent = numValue.toFixed(1) + 'MB*';
+                            document.getElementById('betaAPKrankenTablePflegeU').textContent = (numValue * 0.267).toFixed(1) + 'MB*';
+                            document.getElementById('betaAPKrankenTableZusatzU').textContent = (numValue * 0.6).toFixed(1) + 'MB*';
+                        }
+                    }
+                    break;
+                case 'betaBPKranken':
+                    betaCustomRates.bpKranken = numValue;
+                    document.getElementById('betaBPKrankenValue').textContent = numValue.toFixed(1) + '%';
+                    if (!skipUpdate) {
+                        // Update table values
+                        document.getElementById('betaBPKrankenTable').textContent = numValue.toFixed(1) + '%';
+                        document.getElementById('betaBPKrankenTablePflege').textContent = (numValue * 0.625).toFixed(1) + '%';
+                        document.getElementById('betaBPKrankenTableZusatz').textContent = (numValue * 0.875).toFixed(1) + '%';
+                        // Also update Unternehmen table if exists
+                        if (document.getElementById('betaBPKrankenTableU')) {
+                            document.getElementById('betaBPKrankenTableU').textContent = numValue.toFixed(1) + '%';
+                            document.getElementById('betaBPKrankenTablePflegeU').textContent = (numValue * 0.625).toFixed(1) + '%';
+                            document.getElementById('betaBPKrankenTableZusatzU').textContent = (numValue * 0.875).toFixed(1) + '%';
+                        }
+                    }
+                    break;
+                case 'betaAPSchaden':
+                    betaCustomRates.apSchaden = numValue;
+                    document.getElementById('betaAPSchadenValue').textContent = numValue.toFixed(1) + '%';
+                    if (!skipUpdate) {
+                        // Update table values
+                        document.getElementById('betaAPSchadenTableHaft').textContent = (numValue * 0.9375).toFixed(1) + '%';
+                        document.getElementById('betaAPSchadenTableUnfall').textContent = (numValue * 1.9375).toFixed(1) + '%';
+                        document.getElementById('betaAPSchadenTableHausrat').textContent = (numValue * 0.625).toFixed(1) + '%';
+                        document.getElementById('betaAPSchadenTableRecht').textContent = numValue.toFixed(1) + '%';
+                        document.getElementById('betaAPSchadenTableKfz').textContent = (numValue * 0.375).toFixed(1) + '%';
+                        // Also update Unternehmen table if exists
+                        if (document.getElementById('betaAPSchadenTableHaftU')) {
+                            document.getElementById('betaAPSchadenTableHaftU').textContent = (numValue * 0.9375).toFixed(1) + '%';
+                            document.getElementById('betaAPSchadenTableUnfallU').textContent = (numValue * 1.9375).toFixed(1) + '%';
+                            document.getElementById('betaAPSchadenTableHausratU').textContent = (numValue * 0.625).toFixed(1) + '%';
+                            document.getElementById('betaAPSchadenTableRechtU').textContent = numValue.toFixed(1) + '%';
+                            document.getElementById('betaAPSchadenTableKfzU').textContent = (numValue * 0.375).toFixed(1) + '%';
+                        }
+                    }
+                    break;
+                case 'betaBPSchaden':
+                    betaCustomRates.bpSchaden = numValue;
+                    document.getElementById('betaBPSchadenValue').textContent = numValue.toFixed(1) + '%';
+                    if (!skipUpdate) {
+                        // Update table values
+                        document.getElementById('betaBPSchadenTableHaft').textContent = (numValue * 0.875).toFixed(1) + '%';
+                        document.getElementById('betaBPSchadenTableUnfall').textContent = (numValue * 1.25).toFixed(1) + '%';
+                        document.getElementById('betaBPSchadenTableHausrat').textContent = (numValue * 1.25).toFixed(1) + '%';
+                        document.getElementById('betaBPSchadenTableRecht').textContent = (numValue * 0.875).toFixed(1) + '%';
+                        document.getElementById('betaBPSchadenTableKfz').textContent = (numValue * 0.75).toFixed(1) + '%';
+                        // Also update Unternehmen table if exists
+                        if (document.getElementById('betaBPSchadenTableHaftU')) {
+                            document.getElementById('betaBPSchadenTableHaftU').textContent = (numValue * 0.875).toFixed(1) + '%';
+                            document.getElementById('betaBPSchadenTableUnfallU').textContent = (numValue * 1.25).toFixed(1) + '%';
+                            document.getElementById('betaBPSchadenTableHausratU').textContent = (numValue * 1.25).toFixed(1) + '%';
+                            document.getElementById('betaBPSchadenTableRechtU').textContent = (numValue * 0.875).toFixed(1) + '%';
+                            document.getElementById('betaBPSchadenTableKfzU').textContent = (numValue * 0.75).toFixed(1) + '%';
+                        }
+                    }
+                    break;
+            }
+            
+            if (!isBatchUpdate && !skipUpdate) {
+                updateVermittlerCalculationsOnly();
+            }
+        }
+        
+        // Toggle expandable sections
+        function toggleExpand(sectionId) {
+            const header = document.getElementById(sectionId + 'Header');
+            const content = document.getElementById(sectionId + 'Content');
+            const icon = header.querySelector('.expand-icon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+        
+        // Update Zeitraum
+        function updateZeitraum(value) {
+            currentZeitraum = parseInt(value);
+            document.getElementById('zeitraumValue').textContent = value + ' Jahre';
+            document.getElementById('kpiZeitraum').textContent = value;
+            updateVermittlerCalculationsOnly();
+        }
+        
+        // Update revers rates display based on actual commission structure
+        function updateReversRatesDisplay() {
+            // Leben revers rates are fixed based on the Excel data
+            const reversLebenBadge = document.getElementById('reversLebenBadge');
+            const reversKrankenBadge = document.getElementById('reversKrankenBadge');
+            const reversSchadenBadge = document.getElementById('reversSchadenBadge');
+            
+            if (reversLebenBadge || reversKrankenBadge || reversSchadenBadge) {
+                // Update badges will be done in updateReversDisplay
+            }
+        }
+        
+        // Function to get current AP rate based on revers (updated to use actual rates)
+        function getCurrentAPRate(segment, revers, isAlpha = true) {
+            if (segment === 'leben') {
+                if (isAlpha) {
+                    const rates = [1.5, 2.0, 2.5, 3.0];
+                    return rates[revers - 1] || 2.0;
+                } else {
+                    // BetaCare uses custom base rate with revers multiplier
+                    const multipliers = [0.8, 1.0, 1.2, 1.4];
+                    return betaCustomRates.apLeben * (multipliers[revers - 1] || 1.0);
+                }
+            } else if (segment === 'kranken') {
+                if (isAlpha) {
+                    const rates = [450, 500, 550, 600];
+                    return rates[revers - 1] || 500;
+                } else {
+                    // BetaCare uses custom base rate with revers multiplier
+                    const multipliers = [0.8, 1.0, 1.2, 1.4];
+                    return betaCustomRates.apKranken * (multipliers[revers - 1] || 1.0);
+                }
+            } else if (segment === 'schaden') {
+                if (isAlpha) {
+                    return 12.0; // AlphaProtect uses LP, not AP
+                } else {
+                    // BetaCare uses custom base rate with revers multiplier
+                    const multipliers = [0.7, 1.0, 1.3, 1.6];
+                    return betaCustomRates.apSchaden * (multipliers[revers - 1] || 1.0);
+                }
+            }
+            return 2.0;
+        }
+        
+        // Function to get current BP rate based on actual rates
+        function getCurrentBPRate(segment, isAlpha = true) {
+            if (isAlpha) {
+                // Fixed BP rates for AlphaProtect based on Excel data
+                const bpRates = {
+                    'leben': 0.5,
+                    'kranken': 1.0,
+                    'schaden': 0  // AlphaProtect Schaden has no BP, only LP
+                };
+                return bpRates[segment] || 1.0;
+            } else {
+                // BetaCare uses custom rates
+                const bpRates = {
+                    'leben': betaCustomRates.bpLeben,
+                    'kranken': betaCustomRates.bpKranken,
+                    'schaden': betaCustomRates.bpSchaden
+                };
+                return bpRates[segment] || 1.0;
+            }
+        }
+        
+        // Function to determine current revers level
+        function getCurrentRevers(segment, production) {
+            if (segment === 'leben') {
+                const reversLevels = [
+                    { min: 400000, level: 4 },
+                    { min: 250000, level: 3 },
+                    { min: 120000, level: 2 },
+                    { min: 0, level: 1 }
+                ];
+                for (let i = 0; i < reversLevels.length; i++) {
+                    if (production >= reversLevels[i].min) {
+                        return reversLevels[i].level;
+                    }
+                }
+            } else if (segment === 'kranken') {
+                // For Kranken, we need to convert to monthly premium
+                const monthlyPremium = production / 12;
+                const reversLevels = [
+                    { min: 25000, level: 4 },
+                    { min: 15000, level: 3 },
+                    { min: 6667, level: 2 },
+                    { min: 0, level: 1 }
+                ];
+                for (let i = 0; i < reversLevels.length; i++) {
+                    if (monthlyPremium >= reversLevels[i].min) {
+                        return reversLevels[i].level;
+                    }
+                }
+            } else if (segment === 'schaden') {
+                const reversLevels = [
+                    { min: 600000, level: 4 },
+                    { min: 400000, level: 3 },
+                    { min: 200000, level: 2 },
+                    { min: 0, level: 1 }
+                ];
+                for (let i = 0; i < reversLevels.length; i++) {
+                    if (production >= reversLevels[i].min) {
+                        return reversLevels[i].level;
+                    }
+                }
+            }
+            return 1;
+        }
+        
+        // Update revers display with null checks
+        function updateReversDisplay() {
+            const neuLebenSlider = document.getElementById('neuLebenSlider');
+            const neuKrankenSlider = document.getElementById('neuKrankenSlider');
+            const neuSchadenSlider = document.getElementById('neuSchadenSlider');
+            
+            if (!neuLebenSlider || !neuKrankenSlider || !neuSchadenSlider) {
+                return;
+            }
+            
+            const neuLeben = parseFloat(neuLebenSlider.value) || 120000;
+            const neuKranken = parseFloat(neuKrankenSlider.value) || 80000;
+            const neuSchaden = parseFloat(neuSchadenSlider.value) || 200000;
+            
+            // Determine current revers levels
+            const reversLeben = getCurrentRevers('leben', neuLeben);
+            const reversKranken = getCurrentRevers('kranken', neuKranken);
+            const reversSchaden = getCurrentRevers('schaden', neuSchaden);
+            
+            // Update badges
+            const reversLebenBadge = document.getElementById('reversLebenBadge');
+            const reversKrankenBadge = document.getElementById('reversKrankenBadge');
+            const reversSchadenBadge = document.getElementById('reversSchadenBadge');
+            
+            if (reversLebenBadge) reversLebenBadge.textContent = `Revers ${reversLeben}`;
+            if (reversKrankenBadge) reversKrankenBadge.textContent = `Revers ${reversKranken}`;
+            if (reversSchadenBadge) reversSchadenBadge.textContent = `Revers ${reversSchaden}`;
+            
+            // Update revers rates display
+            updateReversRatesDisplay();
+        }
+        
+        // Slider value updates
+        function updateSliderValue(sliderId, value, skipUpdate = false) {
+            const numValue = parseFloat(value);
+            
+            switch(sliderId) {
+                case 'neuLeben':
+                    document.getElementById('neuLebenValue').textContent = '€' + numValue.toLocaleString();
+                    break;
+                case 'bestandLeben':
+                    document.getElementById('bestandLebenValue').textContent = '€' + numValue.toLocaleString();
+                    break;
+                case 'stornoLeben':
+                    document.getElementById('stornoLebenValue').textContent = numValue + '%';
+                    break;
+                case 'neuKranken':
+                    document.getElementById('neuKrankenValue').textContent = '€' + numValue.toLocaleString();
+                    break;
+                case 'bestandKranken':
+                    document.getElementById('bestandKrankenValue').textContent = '€' + numValue.toLocaleString();
+                    break;
+                case 'stornoKranken':
+                    document.getElementById('stornoKrankenValue').textContent = numValue + '%';
+                    break;
+                case 'neuSchaden':
+                    document.getElementById('neuSchadenValue').textContent = '€' + numValue.toLocaleString();
+                    break;
+                case 'bestandSchaden':
+                    document.getElementById('bestandSchadenValue').textContent = '€' + numValue.toLocaleString();
+                    break;
+                case 'stornoSchaden':
+                    document.getElementById('stornoSchadenValue').textContent = numValue + '%';
+                    break;
+            }
+            
+            if (!skipUpdate) {
+                updateReversDisplay();
+                updateVermittlerCalculationsOnly();
+            }
+        }
+        
+        // Aktualisierte Provisionsberechnung basierend auf den Excel-Daten
+        function calculateProvisions() {
+            // Segment-spezifische Werte aus Slidern
+            const neuLeben = parseFloat(document.getElementById('neuLebenSlider')?.value) || 120000;
+            const bestandLeben = parseFloat(document.getElementById('bestandLebenSlider')?.value) || 800000;
+            const stornoLeben = parseFloat(document.getElementById('stornoLebenSlider')?.value) || 10;
+            
+            const neuKranken = parseFloat(document.getElementById('neuKrankenSlider')?.value) || 80000;
+            const bestandKranken = parseFloat(document.getElementById('bestandKrankenSlider')?.value) || 600000;
+            const stornoKranken = parseFloat(document.getElementById('stornoKrankenSlider')?.value) || 8;
+            
+            const neuSchaden = parseFloat(document.getElementById('neuSchadenSlider')?.value) || 200000;
+            const bestandSchaden = parseFloat(document.getElementById('bestandSchadenSlider')?.value) || 1100000;
+            const stornoSchaden = parseFloat(document.getElementById('stornoSchadenSlider')?.value) || 18;
+            
+            // Determine revers levels
+            const reversLeben = getCurrentRevers('leben', neuLeben);
+            const reversKranken = getCurrentRevers('kranken', neuKranken);
+            const reversSchaden = getCurrentRevers('schaden', neuSchaden);
+            
+            // ============= ALPHAPROTECT BERECHNUNG =============
+            // Leben: AP + BP
+            const alphaAPLeben = getCurrentAPRate('leben', reversLeben, true);
+            const alphaBPLeben = getCurrentBPRate('leben', true);
+            
+            // Kranken: AP + BP
+            const alphaAPKranken = getCurrentAPRate('kranken', reversKranken, true); // % of monthly premium
+            const alphaBPKranken = getCurrentBPRate('kranken', true);
+            
+            // Schaden: Nur LP (keine AP+BP) - Durchschnitt der verschiedenen Produkte
+            const alphaLPSchaden = 12.0; // Durchschnitt: Haftpflicht 12%, Unfall 18%, Hausrat 12%, Rechtsschutz 12%, KFZ 6%
+            
+            // Leben calculations
+            const alphaAbschlussLeben = neuLeben * (alphaAPLeben/100);
+            const alphaBestandLeben = bestandLeben * (alphaBPLeben/100) * currentZeitraum * (1 - stornoLeben/100);
+            
+            // Kranken calculations (AP based on monthly premium)
+            const monatspraemieKranken = neuKranken / 12;
+            const alphaAbschlussKranken = monatspraemieKranken * (alphaAPKranken/100);
+            const alphaBestandKranken = bestandKranken * (alphaBPKranken/100) * currentZeitraum * (1 - stornoKranken/100);
+            
+            // Schaden calculations (LP only for Alpha)
+            // LP wird auf Neugeschäft und anteilig auf Bestand angewendet
+            const alphaAbschlussSchaden = neuSchaden * (alphaLPSchaden/100);
+            const alphaBestandSchaden = bestandSchaden * (alphaLPSchaden/100) * currentZeitraum * (1 - stornoSchaden/100); // LP auf Bestand mit Zeitraum
+            
+            const alphaAbschlussGesamt = alphaAbschlussLeben + alphaAbschlussKranken + alphaAbschlussSchaden;
+            const alphaBestandGesamt = alphaBestandLeben + alphaBestandKranken + alphaBestandSchaden;
+            const alphaGesamt = alphaAbschlussGesamt + alphaBestandGesamt;
+            
+            // ============= BETACARE BERECHNUNG =============
+            // Leben: AP + BP (unterschiedlich zu Alpha)
+            const betaAPLeben = getCurrentAPRate('leben', reversLeben, false);
+            const betaBPLeben = getCurrentBPRate('leben', false);
+            
+            // Kranken: AP + BP (unterschiedlich zu Alpha)
+            const betaAPKranken = getCurrentAPRate('kranken', reversKranken, false);
+            const betaBPKranken = getCurrentBPRate('kranken', false);
+            
+            // Schaden: AP + BP (separate) - mit custom rates
+            const betaAPSchaden = getCurrentAPRate('schaden', reversSchaden, false);
+            const betaBPSchaden = getCurrentBPRate('schaden', false);
+            
+            // Leben calculations
+            const betaAbschlussLeben = neuLeben * (betaAPLeben/100);
+            const betaBestandLeben = bestandLeben * (betaBPLeben/100) * currentZeitraum * (1 - stornoLeben/100);
+            
+            // Kranken calculations
+            const betaAbschlussKranken = monatspraemieKranken * (betaAPKranken/100);
+            const betaBestandKranken = bestandKranken * (betaBPKranken/100) * currentZeitraum * (1 - stornoKranken/100);
+            
+            // Schaden calculations
+            const betaAbschlussSchaden = neuSchaden * (betaAPSchaden/100);
+            const betaBestandSchaden = bestandSchaden * (betaBPSchaden/100) * currentZeitraum * (1 - stornoSchaden/100);
+            
+            const betaAbschlussGesamt = betaAbschlussLeben + betaAbschlussKranken + betaAbschlussSchaden;
+            const betaBestandGesamt = betaBestandLeben + betaBestandKranken + betaBestandSchaden;
+            const betaGesamt = betaAbschlussGesamt + betaBestandGesamt;
+            
+            return {
+                alpha: {
+                    abschluss: alphaAbschlussGesamt,
+                    bestand: alphaBestandGesamt,
+                    gesamt: alphaGesamt,
+                    leben: alphaAbschlussLeben + alphaBestandLeben,
+                    kranken: alphaAbschlussKranken + alphaBestandKranken,
+                    schaden: alphaAbschlussSchaden + alphaBestandSchaden,
+                    rates: {
+                        apLeben: alphaAPLeben,
+                        apKranken: alphaAPKranken,
+                        lpSchaden: alphaLPSchaden,
+                        bpLeben: alphaBPLeben,
+                        bpKranken: alphaBPKranken
+                    },
+                    detail: {
+                        leben: {
+                            abschluss: alphaAbschlussLeben,
+                            bestand: alphaBestandLeben
+                        },
+                        kranken: {
+                            abschluss: alphaAbschlussKranken,
+                            bestand: alphaBestandKranken
+                        },
+                        schaden: {
+                            abschluss: alphaAbschlussSchaden,
+                            bestand: alphaBestandSchaden
+                        }
+                    }
+                },
+                beta: {
+                    abschluss: betaAbschlussGesamt,
+                    bestand: betaBestandGesamt,
+                    gesamt: betaGesamt,
+                    leben: betaAbschlussLeben + betaBestandLeben,
+                    kranken: betaAbschlussKranken + betaBestandKranken,
+                    schaden: betaAbschlussSchaden + betaBestandSchaden,
+                    revers: {
+                        leben: reversLeben,
+                        kranken: reversKranken,
+                        schaden: reversSchaden
+                    },
+                    rates: {
+                        apLeben: betaAPLeben,
+                        apKranken: betaAPKranken,
+                        apSchaden: betaAPSchaden,
+                        bpLeben: betaBPLeben,
+                        bpKranken: betaBPKranken,
+                        bpSchaden: betaBPSchaden
+                    },
+                    detail: {
+                        leben: {
+                            abschluss: betaAbschlussLeben,
+                            bestand: betaBestandLeben
+                        },
+                        kranken: {
+                            abschluss: betaAbschlussKranken,
+                            bestand: betaBestandKranken
+                        },
+                        schaden: {
+                            abschluss: betaAbschlussSchaden,
+                            bestand: betaBestandSchaden
+                        }
+                    }
+                },
+                delta: betaGesamt - alphaGesamt,
+                deltaPercent: ((betaGesamt - alphaGesamt) / alphaGesamt * 100),
+                segmente: {
+                    leben: { neugeschaeft: neuLeben, bestand: bestandLeben, storno: stornoLeben },
+                    kranken: { neugeschaeft: neuKranken, bestand: bestandKranken, storno: stornoKranken },
+                    schaden: { neugeschaeft: neuSchaden, bestand: bestandSchaden, storno: stornoSchaden }
+                }
+            };
+        }
+        
+        // Tab Switching
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            setTimeout(() => {
+                if (tabName === 'vermittler') {
+                    if (typeof initVermittlerCharts === 'function') {
+                        initVermittlerCharts();
+                    }
+                } else {
+                    if (typeof initUnternehmenCharts === 'function') {
+                        initUnternehmenCharts();
+                    }
+                    // Sync BetaCare values from Vermittler to Unternehmen
+                    const betaAPLebenSliderU = document.getElementById('betaAPLebenSliderU');
+                    const betaBPLebenSliderU = document.getElementById('betaBPLebenSliderU');
+                    const betaAPKrankenSliderU = document.getElementById('betaAPKrankenSliderU');
+                    const betaBPKrankenSliderU = document.getElementById('betaBPKrankenSliderU');
+                    const betaAPSchadenSliderU = document.getElementById('betaAPSchadenSliderU');
+                    const betaBPSchadenSliderU = document.getElementById('betaBPSchadenSliderU');
+                    
+                    if (betaAPLebenSliderU) betaAPLebenSliderU.value = betaCustomRates.apLeben;
+                    if (betaBPLebenSliderU) betaBPLebenSliderU.value = betaCustomRates.bpLeben;
+                    if (betaAPKrankenSliderU) betaAPKrankenSliderU.value = betaCustomRates.apKranken / 100;
+                    if (betaBPKrankenSliderU) betaBPKrankenSliderU.value = betaCustomRates.bpKranken;
+                    if (betaAPSchadenSliderU) betaAPSchadenSliderU.value = betaCustomRates.apSchaden;
+                    if (betaBPSchadenSliderU) betaBPSchadenSliderU.value = betaCustomRates.bpSchaden;
+                    
+                    // Update display values
+                    if (betaAPLebenSliderU) {
+                        document.getElementById('betaAPLebenValueU').textContent = betaCustomRates.apLeben.toFixed(1) + '%';
+                        document.getElementById('betaBPLebenValueU').textContent = betaCustomRates.bpLeben.toFixed(1) + '%';
+                        document.getElementById('betaAPKrankenValueU').textContent = (betaCustomRates.apKranken / 100).toFixed(1) + 'MB';
+                        document.getElementById('betaBPKrankenValueU').textContent = betaCustomRates.bpKranken.toFixed(1) + '%';
+                        document.getElementById('betaAPSchadenValueU').textContent = betaCustomRates.apSchaden.toFixed(1) + '%';
+                        document.getElementById('betaBPSchadenValueU').textContent = betaCustomRates.bpSchaden.toFixed(1) + '%';
+                    }
+                    
+                    updateBetaRateU('betaAPLeben', betaCustomRates.apLeben, true);
+                    updateBetaRateU('betaBPLeben', betaCustomRates.bpLeben, true);
+                    updateBetaRateU('betaAPKranken', betaCustomRates.apKranken / 100, true);
+                    updateBetaRateU('betaBPKranken', betaCustomRates.bpKranken, true);
+                    updateBetaRateU('betaAPSchaden', betaCustomRates.apSchaden, true);
+                    updateBetaRateU('betaBPSchaden', betaCustomRates.bpSchaden, true);
+                    
+                    // Trigger calculations once
+                    updateUnternehmenCalculations();
+                }
+            }, 100);
+        }
+        
+        // Load Vermittler Data
+        function loadVermittlerData(vermittlerId) {
+            const data = vermittlerData[vermittlerId];
+            if (!data) return;
+            
+            // Prevent recursive updates
+            isUpdating = true;
+            
+            // Show loading feedback
+            const vermittlerSelect = document.getElementById('vermittlerSelect');
+            if (vermittlerSelect) {
+                vermittlerSelect.style.background = 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)';
+                setTimeout(() => {
+                    vermittlerSelect.style.background = '';
+                }, 500);
+            }
+            
+            // Update slider values
+            document.getElementById('neuLebenSlider').value = data.neuLeben;
+            document.getElementById('neuKrankenSlider').value = data.neuKranken;
+            document.getElementById('neuSchadenSlider').value = data.neuSchaden;
+            
+            // Calculate segment-specific bestand values based on total bestand
+            const totalBestand = data.bestand;
+            const bestandLeben = totalBestand * 0.35; // 35% Leben
+            const bestandKranken = totalBestand * 0.25; // 25% Kranken  
+            const bestandSchaden = totalBestand * 0.40; // 40% Schaden
+            
+            document.getElementById('bestandLebenSlider').value = bestandLeben;
+            document.getElementById('bestandKrankenSlider').value = bestandKranken;
+            document.getElementById('bestandSchadenSlider').value = bestandSchaden;
+            
+            // Set storno values
+            const stornoBase = data.storno || 12;
+            document.getElementById('stornoLebenSlider').value = Math.max(5, stornoBase - 2);
+            document.getElementById('stornoKrankenSlider').value = Math.max(3, stornoBase - 4);
+            document.getElementById('stornoSchadenSlider').value = Math.min(35, stornoBase + 6);
+            
+            // Update all display values (with skipUpdate = true to prevent recursion)
+            updateSliderValue('neuLeben', data.neuLeben, true);
+            updateSliderValue('neuKranken', data.neuKranken, true);
+            updateSliderValue('neuSchaden', data.neuSchaden, true);
+            updateSliderValue('bestandLeben', bestandLeben, true);
+            updateSliderValue('bestandKranken', bestandKranken, true);
+            updateSliderValue('bestandSchaden', bestandSchaden, true);
+            updateSliderValue('stornoLeben', Math.max(5, stornoBase - 2), true);
+            updateSliderValue('stornoKranken', Math.max(3, stornoBase - 4), true);
+            updateSliderValue('stornoSchaden', Math.min(35, stornoBase + 6), true);
+            
+            // Re-enable updates and trigger final update
+            isUpdating = false;
+            updateReversDisplay();
+            updateReversRatesDisplay();
+            updateVermittlerCalculationsOnly();
+        }
+        
+        // Update Vermittler Data
+        function updateVermittlerData() {
+            if (isUpdating) return; // Prevent recursion
+            
+            // Check if vermittler selection changed
+            const vermittlerSelect = document.getElementById('vermittlerSelect');
+            if (vermittlerSelect) {
+                const selectedVermittler = vermittlerSelect.value;
+                // Only load new data if this is a vermittler change, not a slider change
+                if (vermittlerSelect.dataset.lastSelected !== selectedVermittler) {
+                    loadVermittlerData(selectedVermittler);
+                    vermittlerSelect.dataset.lastSelected = selectedVermittler;
+                    return; // Exit early, loadVermittlerData will trigger another update
+                }
+            }
+            
+            updateVermittlerCalculationsOnly();
+        }
+        
+        // Update calculations only (separated to prevent recursion)
+        function updateVermittlerCalculationsOnly() {
+            const provisions = calculateProvisions();
+            
+            // Update KPIs
+            const alphaEl = document.getElementById('provisionAlpha');
+            const betaEl = document.getElementById('provisionBeta');
+            const deltaEl = document.getElementById('deltaValue');
+            const trendEl = document.getElementById('betaTrend');
+            const deltaArrowEl = document.getElementById('deltaArrow');
+            const deltaPercentEl = document.getElementById('deltaPercent');
+            const deltaDescriptionEl = document.getElementById('deltaDescription');
+            const deltaDetailTextEl = document.getElementById('deltaDetailText');
+            const betaTrendArrowEl = document.getElementById('betaTrendArrow');
+            
+            if (alphaEl) alphaEl.textContent = '€ ' + provisions.alpha.gesamt.toLocaleString('de-DE', {maximumFractionDigits: 0});
+            if (betaEl) betaEl.textContent = '€ ' + provisions.beta.gesamt.toLocaleString('de-DE', {maximumFractionDigits: 0});
+            
+            // Delta logic - Beta minus Alpha
+            const deltaValue = provisions.beta.gesamt - provisions.alpha.gesamt;
+            const deltaPercent = provisions.alpha.gesamt > 0 ? (deltaValue / provisions.alpha.gesamt * 100) : 0;
+            const isImprovement = deltaValue > 0;
+            
+            if (deltaEl) {
+                deltaEl.textContent = (deltaValue >= 0 ? '+€ ' : '-€ ') + Math.abs(deltaValue).toLocaleString('de-DE', {maximumFractionDigits: 0});
+                deltaEl.className = 'kpi-value ' + (isImprovement ? 'positive' : 'negative');
+            }
+            
+            if (trendEl) {
+                trendEl.textContent = (deltaPercent >= 0 ? '+' : '') + deltaPercent.toFixed(1) + '%';
+                trendEl.className = 'trend-percent ' + (isImprovement ? 'positive' : 'negative');
+            }
+            
+            if (betaTrendArrowEl) {
+                betaTrendArrowEl.textContent = isImprovement ? '↗' : '↘';
+                betaTrendArrowEl.className = 'trend-arrow ' + (isImprovement ? 'positive' : 'negative');
+            }
+            
+            // Update delta display
+            if (deltaArrowEl) {
+                deltaArrowEl.textContent = isImprovement ? '📈' : '📉';
+            }
+            
+            if (deltaPercentEl) {
+                deltaPercentEl.textContent = (deltaPercent >= 0 ? '+' : '') + deltaPercent.toFixed(1) + '%';
+                deltaPercentEl.className = 'trend-percent ' + (isImprovement ? 'positive' : 'negative');
+            }
+            
+            if (deltaDescriptionEl) {
+                deltaDescriptionEl.textContent = isImprovement ? 'Verbesserung' : 'Verschlechterung';
+            }
+            
+            // Update details
+            const alphaDetails = document.getElementById('alphaDetails');
+            const betaDetails = document.getElementById('betaDetails');
+            
+            if (alphaDetails) {
+                alphaDetails.textContent = `Abschluss: €${(provisions.alpha.abschluss/1000).toFixed(1)}k | Bestand: €${(provisions.alpha.bestand/1000).toFixed(1)}k`;
+            }
+            if (betaDetails) {
+                betaDetails.textContent = `Abschluss: €${(provisions.beta.abschluss/1000).toFixed(1)}k | Bestand: €${(provisions.beta.bestand/1000).toFixed(1)}k`;
+            }
+            
+            updateDetailTables(provisions);
+            updateCharts(provisions);
+        }
+        
+        // Update Detail Tables
+        function updateDetailTables(provisions) {
+            // Leben Detail Table
+            const lebenDetailBody = document.getElementById('lebenDetailBody');
+            if (lebenDetailBody) {
+                const lebenProducts = [
+                    { name: 'Rentenversicherung', split: 0.4, apRateAlpha: provisions.alpha.rates.apLeben, apRateBeta: betaCustomRates.apLeben, bpRateAlpha: provisions.alpha.rates.bpLeben, bpRateBeta: betaCustomRates.bpLeben },
+                    { name: 'Berufsunfähigkeit', split: 0.3, apRateAlpha: provisions.alpha.rates.apLeben, apRateBeta: betaCustomRates.apLeben * 1.1, bpRateAlpha: provisions.alpha.rates.bpLeben, bpRateBeta: betaCustomRates.bpLeben * 0.7 },
+                    { name: 'Risikoleben', split: 0.3, apRateAlpha: 1.2, apRateBeta: 2.5, bpRateAlpha: provisions.alpha.rates.bpLeben, bpRateBeta: betaCustomRates.bpLeben }
+                ];
+                
+                let lebenHTML = '';
+                lebenProducts.forEach(product => {
+                    const neugeschaeft = provisions.segmente.leben.neugeschaeft * product.split;
+                    const bestand = provisions.segmente.leben.bestand * product.split;
+                    
+                    const alphaAP = neugeschaeft * (product.apRateAlpha/100);
+                    const alphaBP = bestand * (product.bpRateAlpha/100) * currentZeitraum * (1 - provisions.segmente.leben.storno/100);
+                    const alphaGesamt = alphaAP + alphaBP;
+                    
+                    const betaAP = neugeschaeft * (product.apRateBeta/100);
+                    const betaBP = bestand * (product.bpRateBeta/100) * currentZeitraum * (1 - provisions.segmente.leben.storno/100);
+                    const betaGesamt = betaAP + betaBP;
+                    
+                    const delta = betaGesamt - alphaGesamt;
+                    const deltaPercent = alphaGesamt > 0 ? (delta / alphaGesamt * 100) : 0;
+                    
+                    lebenHTML += `
+                        <tr>
+                            <td>${product.name}</td>
+                            <td class="number">${neugeschaeft.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${bestand.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaAP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaBP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaGesamt.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaAP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaBP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaGesamt.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number ${delta >= 0 ? 'positive delta-positive' : 'negative delta-negative'}">${delta >= 0 ? '+' : ''}${delta.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number ${deltaPercent >= 0 ? 'positive delta-positive' : 'negative delta-negative'}">${deltaPercent >= 0 ? '+' : ''}${deltaPercent.toFixed(1)}%</td>
+                        </tr>
+                    `;
+                });
+                
+                // Add revers info
+                const reversLevels = ['Revers 1', 'Revers 2', 'Revers 3', 'Revers 4'];
+                lebenHTML += `
+                    <tr style="background: #f8fafc; font-weight: bold;">
+                        <td colspan="11">Revers-Stufe: ${reversLevels[provisions.beta.revers.leben - 1]} (AP: ${provisions.beta.rates.apLeben}%)</td>
+                    </tr>
+                `;
+                
+                lebenDetailBody.innerHTML = lebenHTML;
+            }
+            
+            // Kranken Detail Table
+            const krankenDetailBody = document.getElementById('krankenDetailBody');
+            if (krankenDetailBody) {
+                const krankenProducts = [
+                    { name: 'Vollversicherung', split: 0.6, apRateAlpha: provisions.alpha.rates.apKranken, apRateBeta: provisions.beta.rates.apKranken, bpRateAlpha: provisions.alpha.rates.bpKranken, bpRateBeta: provisions.beta.rates.bpKranken },
+                    { name: 'Pflegepflicht', split: 0.15, apRateAlpha: 150, apRateBeta: provisions.beta.rates.apKranken * 0.267, bpRateAlpha: provisions.alpha.rates.bpKranken, bpRateBeta: provisions.beta.rates.bpKranken * 0.625 },
+                    { name: 'Zusatzversicherung', split: 0.25, apRateAlpha: 350, apRateBeta: provisions.beta.rates.apKranken * 0.6, bpRateAlpha: provisions.alpha.rates.bpKranken, bpRateBeta: provisions.beta.rates.bpKranken * 0.875 }
+                ];
+                
+                let krankenHTML = '';
+                krankenProducts.forEach(product => {
+                    const neugeschaeft = provisions.segmente.kranken.neugeschaeft * product.split;
+                    const bestand = provisions.segmente.kranken.bestand * product.split;
+                    const monatspraemie = neugeschaeft / 12;
+                    
+                    const alphaAP = monatspraemie * (product.apRateAlpha/100);
+                    const alphaBP = bestand * (product.bpRateAlpha/100) * currentZeitraum * (1 - provisions.segmente.kranken.storno/100);
+                    const alphaGesamt = alphaAP + alphaBP;
+                    
+                    const betaAP = monatspraemie * (product.apRateBeta/100);
+                    const betaBP = bestand * (product.bpRateBeta/100) * currentZeitraum * (1 - provisions.segmente.kranken.storno/100);
+                    const betaGesamt = betaAP + betaBP;
+                    
+                    const delta = betaGesamt - alphaGesamt;
+                    const deltaPercent = alphaGesamt > 0 ? (delta / alphaGesamt * 100) : 0;
+                    
+                    krankenHTML += `
+                        <tr>
+                            <td>${product.name}</td>
+                            <td class="number">${neugeschaeft.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${bestand.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaAP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaBP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaGesamt.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaAP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaBP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaGesamt.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number ${delta >= 0 ? 'positive delta-positive' : 'negative delta-negative'}">${delta >= 0 ? '+' : ''}${delta.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number ${deltaPercent >= 0 ? 'positive delta-positive' : 'negative delta-negative'}">${deltaPercent >= 0 ? '+' : ''}${deltaPercent.toFixed(1)}%</td>
+                        </tr>
+                    `;
+                });
+                
+                // Add revers info
+                const reversLevels = ['Revers 1', 'Revers 2', 'Revers 3', 'Revers 4'];
+                krankenHTML += `
+                    <tr style="background: #f8fafc; font-weight: bold;">
+                        <td colspan="11">Revers-Stufe: ${reversLevels[provisions.beta.revers.kranken - 1]} (AP: ${provisions.beta.rates.apKranken/100}MB)</td>
+                    </tr>
+                `;
+                
+                krankenDetailBody.innerHTML = krankenHTML;
+            }
+            
+            // Schaden Detail Table
+            const schadenDetailBody = document.getElementById('schadenDetailBody');
+            if (schadenDetailBody) {
+                const schadenProducts = [
+                    { name: 'Haftpflicht', split: 0.3, lpRate: 12.0, apRateBeta: provisions.beta.rates.apSchaden * 0.9375, bpRateBeta: provisions.beta.rates.bpSchaden * 0.875 },
+                    { name: 'Unfall', split: 0.2, lpRate: 18.0, apRateBeta: provisions.beta.rates.apSchaden * 1.9375, bpRateBeta: provisions.beta.rates.bpSchaden * 1.25 },
+                    { name: 'Hausrat', split: 0.15, lpRate: 12.0, apRateBeta: provisions.beta.rates.apSchaden * 0.625, bpRateBeta: provisions.beta.rates.bpSchaden * 1.25 },
+                    { name: 'Rechtsschutz', split: 0.15, lpRate: 12.0, apRateBeta: provisions.beta.rates.apSchaden, bpRateBeta: provisions.beta.rates.bpSchaden * 0.875 },
+                    { name: 'KFZ', split: 0.2, lpRate: 6.0, apRateBeta: provisions.beta.rates.apSchaden * 0.375, bpRateBeta: provisions.beta.rates.bpSchaden * 0.75 }
+                ];
+                
+                let schadenHTML = '';
+                schadenProducts.forEach(product => {
+                    const neugeschaeft = provisions.segmente.schaden.neugeschaeft * product.split;
+                    const bestand = provisions.segmente.schaden.bestand * product.split;
+                    
+                    // Alpha uses LP only
+                    const alphaLP = (neugeschaeft + bestand) * (product.lpRate/100) * currentZeitraum * (1 - provisions.segmente.schaden.storno/100);
+                    const alphaGesamt = alphaLP;
+                    
+                    // Beta uses AP + BP with custom rates
+                    const betaAP = neugeschaeft * (product.apRateBeta/100);
+                    const betaBP = bestand * (product.bpRateBeta/100) * currentZeitraum * (1 - provisions.segmente.schaden.storno/100);
+                    const betaGesamt = betaAP + betaBP;
+                    
+                    const delta = betaGesamt - alphaGesamt;
+                    const deltaPercent = alphaGesamt > 0 ? (delta / alphaGesamt * 100) : 0;
+                    
+                    schadenHTML += `
+                        <tr>
+                            <td>${product.name}</td>
+                            <td class="number">${neugeschaeft.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${bestand.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${alphaLP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">-</td>
+                            <td class="number">${alphaGesamt.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaAP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaBP.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number">${betaGesamt.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number ${delta >= 0 ? 'positive delta-positive' : 'negative delta-negative'}">${delta >= 0 ? '+' : ''}${delta.toLocaleString('de-DE', {maximumFractionDigits: 0})}</td>
+                            <td class="number ${deltaPercent >= 0 ? 'positive delta-positive' : 'negative delta-negative'}">${deltaPercent >= 0 ? '+' : ''}${deltaPercent.toFixed(1)}%</td>
+                        </tr>
+                    `;
+                });
+                
+                // Add revers info
+                const reversLevels = ['Revers 1', 'Revers 2', 'Revers 3', 'Revers 4'];
+                schadenHTML += `
+                    <tr style="background: #f8fafc; font-weight: bold;">
+                        <td colspan="11">Revers-Stufe: ${reversLevels[provisions.beta.revers.schaden - 1]} (AP: ${provisions.beta.rates.apSchaden}%)</td>
+                    </tr>
+                `;
+                
+                schadenDetailBody.innerHTML = schadenHTML;
+            }
+        }
+        
+        // Update Charts
+        function updateCharts(provisions) {
+            initVermittlerCharts();
+        }
+        
+        // Initialize Vermittler Charts
+        function initVermittlerCharts() {
+            const provisions = calculateProvisions();
+            
+            // Segment Chart
+            const segmentCtx = document.getElementById('segmentChart');
+            if (segmentCtx && Chart.getChart(segmentCtx)) {
+                Chart.getChart(segmentCtx).destroy();
+            }
+            if (segmentCtx) {
+                new Chart(segmentCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Leben', 'Kranken', 'Schaden'],
+                        datasets: [
+                            {
+                                label: 'AlphaProtect',
+                                data: [provisions.alpha.leben, provisions.alpha.kranken, provisions.alpha.schaden],
+                                backgroundColor: '#2563eb'
+                            },
+                            {
+                                label: 'BetaCare',
+                                data: [provisions.beta.leben, provisions.beta.kranken, provisions.beta.schaden],
+                                backgroundColor: '#059669'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '€' + (value/1000).toFixed(0) + 'k';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Update BetaCare rates for Unternehmen
+        function updateBetaRateU(rateId, value, skipUpdate = false) {
+            const numValue = parseFloat(value);
+            
+            switch(rateId) {
+                case 'betaAPLeben':
+                    betaCustomRates.apLeben = numValue;
+                    document.getElementById('betaAPLebenValueU').textContent = numValue.toFixed(1) + '%';
+                    // Update table values
+                    document.getElementById('betaAPLebenTableU').textContent = numValue.toFixed(1) + '%';
+                    document.getElementById('betaAPLebenTableBUU').textContent = (numValue * 1.1).toFixed(1) + '%';
+                    break;
+                case 'betaBPLeben':
+                    betaCustomRates.bpLeben = numValue;
+                    document.getElementById('betaBPLebenValueU').textContent = numValue.toFixed(1) + '%';
+                    // Update table values
+                    document.getElementById('betaBPLebenTableU').textContent = numValue.toFixed(1) + '%';
+                    document.getElementById('betaBPLebenTableBUU').textContent = (numValue * 0.7).toFixed(1) + '%';
+                    document.getElementById('betaBPLebenTableRLU').textContent = numValue.toFixed(1) + '%';
+                    break;
+                case 'betaAPKranken':
+                    betaCustomRates.apKranken = numValue * 100; // Convert MB to percentage
+                    document.getElementById('betaAPKrankenValueU').textContent = numValue.toFixed(1) + 'MB';
+                    // Update table values
+                    document.getElementById('betaAPKrankenTableU').textContent = numValue.toFixed(1) + 'MB*';
+                    document.getElementById('betaAPKrankenTablePflegeU').textContent = (numValue * 0.267).toFixed(1) + 'MB*';
+                    document.getElementById('betaAPKrankenTableZusatzU').textContent = (numValue * 0.6).toFixed(1) + 'MB*';
+                    break;
+                case 'betaBPKranken':
+                    betaCustomRates.bpKranken = numValue;
+                    document.getElementById('betaBPKrankenValueU').textContent = numValue.toFixed(1) + '%';
+                    // Update table values
+                    document.getElementById('betaBPKrankenTableU').textContent = numValue.toFixed(1) + '%';
+                    document.getElementById('betaBPKrankenTablePflegeU').textContent = (numValue * 0.625).toFixed(1) + '%';
+                    document.getElementById('betaBPKrankenTableZusatzU').textContent = (numValue * 0.875).toFixed(1) + '%';
+                    break;
+                case 'betaAPSchaden':
+                    betaCustomRates.apSchaden = numValue;
+                    document.getElementById('betaAPSchadenValueU').textContent = numValue.toFixed(1) + '%';
+                    // Update table values
+                    document.getElementById('betaAPSchadenTableHaftU').textContent = (numValue * 0.9375).toFixed(1) + '%';
+                    document.getElementById('betaAPSchadenTableUnfallU').textContent = (numValue * 1.9375).toFixed(1) + '%';
+                    document.getElementById('betaAPSchadenTableHausratU').textContent = (numValue * 0.625).toFixed(1) + '%';
+                    document.getElementById('betaAPSchadenTableRechtU').textContent = numValue.toFixed(1) + '%';
+                    document.getElementById('betaAPSchadenTableKfzU').textContent = (numValue * 0.375).toFixed(1) + '%';
+                    break;
+                case 'betaBPSchaden':
+                    betaCustomRates.bpSchaden = numValue;
+                    document.getElementById('betaBPSchadenValueU').textContent = numValue.toFixed(1) + '%';
+                    // Update table values
+                    document.getElementById('betaBPSchadenTableHaftU').textContent = (numValue * 0.875).toFixed(1) + '%';
+                    document.getElementById('betaBPSchadenTableUnfallU').textContent = (numValue * 1.25).toFixed(1) + '%';
+                    document.getElementById('betaBPSchadenTableHausratU').textContent = (numValue * 1.25).toFixed(1) + '%';
+                    document.getElementById('betaBPSchadenTableRechtU').textContent = (numValue * 0.875).toFixed(1) + '%';
+                    document.getElementById('betaBPSchadenTableKfzU').textContent = (numValue * 0.75).toFixed(1) + '%';
+                    break;
+            }
+            
+            if (!skipUpdate) {
+                updateUnternehmenCalculations();
+                // Also update segment costs when rates change
+                if (typeof updateSegmentCosts === 'function') {
+                    updateSegmentCosts();
+                }
+            }
+        }
+        
+        function resetBetaCareDefaultsU() {
+            // Reset BetaCare custom rates
+            betaCustomRates = {
+                apLeben: 3.5,
+                bpLeben: 0.3,
+                apKranken: 750,
+                bpKranken: 0.8,
+                apSchaden: 16.0,
+                bpSchaden: 8.0
+            };
+            
+            // Reset BetaCare sliders
+            document.getElementById('betaAPLebenSliderU').value = 3.5;
+            document.getElementById('betaBPLebenSliderU').value = 0.3;
+            document.getElementById('betaAPKrankenSliderU').value = 7.5;
+            document.getElementById('betaBPKrankenSliderU').value = 0.8;
+            document.getElementById('betaAPSchadenSliderU').value = 16.0;
+            document.getElementById('betaBPSchadenSliderU').value = 8.0;
+            
+            // Update all values including table with skipUpdate flag
+            updateBetaRateU('betaAPLeben', 3.5, true);
+            updateBetaRateU('betaBPLeben', 0.3, true);
+            updateBetaRateU('betaAPKranken', 7.5, true);
+            updateBetaRateU('betaBPKranken', 0.8, true);
+            updateBetaRateU('betaAPSchaden', 16.0, true);
+            updateBetaRateU('betaBPSchaden', 8.0, true);
+            
+            // Now trigger one calculation update
+            updateUnternehmenCalculations();
+        }
+        
+        // Initialize Unternehmen Charts
+        function initUnternehmenCharts() {
+            // Update calculations and distribution chart
+            updateUnternehmenCalculations();
+            
+            // Initialize segment costs
+            if (typeof updateSegmentCosts === 'function') {
+                updateSegmentCosts();
+            }
+        }
+        
+        // Update Unternehmen Data
+        function updateUnternehmenData() {
+            const groessenklasse = document.getElementById('groessenklasseSelect')?.value || 'alle';
+            const highPerformers = document.getElementById('highPerformers')?.checked;
+            const middlePerformers = document.getElementById('middlePerformers')?.checked;
+            const lowPerformers = document.getElementById('lowPerformers')?.checked;
+            
+            // Update calculations
+            updateUnternehmenCalculations();
+        }
+        
+        // Separate function for calculations only
+        function updateUnternehmenCalculations() {
+            const zeitraumUnternehmen = 1; // Fixed to 1 year for annual calculations
+            const groessenklasse = document.getElementById('groessenklasseSelect')?.value || 'alle';
+            const highPerformers = document.getElementById('highPerformers')?.checked;
+            const middlePerformers = document.getElementById('middlePerformers')?.checked;
+            const lowPerformers = document.getElementById('lowPerformers')?.checked;
+            
+            // Calculate aggregated costs based on all vermittler
+            let alphaTotal = 0;
+            let betaTotal = 0;
+            let vermittlerCount = 0;
+            let winnerCount = 0;
+            let loserCount = 0;
+            let neutralCount = 0;
+            
+            // Calculate costs for each vermittler
+            allVermittler.forEach(v => {
+                // Filter by size class
+                if (groessenklasse !== 'alle' && v.klasse !== groessenklasse) return;
+                
+                // Filter by performance
+                if (!highPerformers && v.performance === 'high') return;
+                if (!middlePerformers && v.performance === 'middle') return;
+                if (!lowPerformers && v.performance === 'low') return;
+                
+                vermittlerCount++;
+                
+                // Calculate segment distribution from total bestand
+                const bestandLeben = v.bestand * 0.35;
+                const bestandKranken = v.bestand * 0.25;
+                const bestandSchaden = v.bestand * 0.40;
+                
+                // Determine revers levels
+                const reversLeben = getCurrentRevers('leben', v.neuLeben);
+                const reversKranken = getCurrentRevers('kranken', v.neuKranken);
+                const reversSchaden = getCurrentRevers('schaden', v.neuSchaden);
+                
+                // ALPHA calculations
+                const alphaAPLeben = v.neuLeben * (getCurrentAPRate('leben', reversLeben, true) / 100);
+                const alphaAPKranken = (v.neuKranken / 12) * (getCurrentAPRate('kranken', reversKranken, true) / 100);
+                const alphaLPSchaden = v.neuSchaden * 0.12; // LP for new business
+                const alphaLPBestandSchaden = bestandSchaden * 0.12 * zeitraumUnternehmen * (1 - v.storno/100);
+                
+                const alphaBPLeben = bestandLeben * 0.005 * zeitraumUnternehmen * (1 - v.storno/100);
+                const alphaBPKranken = bestandKranken * 0.01 * zeitraumUnternehmen * (1 - v.storno/100);
+                
+                const alphaVermittler = alphaAPLeben + alphaAPKranken + alphaLPSchaden + alphaLPBestandSchaden + alphaBPLeben + alphaBPKranken;
+                
+                // BETA calculations with custom rates
+                const betaAPLeben = v.neuLeben * (getCurrentAPRate('leben', reversLeben, false) / 100);
+                const betaAPKranken = (v.neuKranken / 12) * (getCurrentAPRate('kranken', reversKranken, false) / 100);
+                const betaAPSchaden = v.neuSchaden * (getCurrentAPRate('schaden', reversSchaden, false) / 100);
+                
+                const betaBPLeben = bestandLeben * (betaCustomRates.bpLeben / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                const betaBPKranken = bestandKranken * (betaCustomRates.bpKranken / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                const betaBPSchaden = bestandSchaden * (betaCustomRates.bpSchaden / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                
+                const betaVermittler = betaAPLeben + betaAPKranken + betaAPSchaden + betaBPLeben + betaBPKranken + betaBPSchaden;
+                
+                alphaTotal += alphaVermittler;
+                betaTotal += betaVermittler;
+                
+                // Classify vermittler
+                const deltaPercent = ((betaVermittler - alphaVermittler) / alphaVermittler * 100);
+                if (deltaPercent < -5) loserCount++;
+                else if (deltaPercent > 5) winnerCount++;
+                else neutralCount++;
+            });
+            
+            // Convert to annual costs
+            const alphaAnnual = alphaTotal / zeitraumUnternehmen / 1000000; // in Millions
+            const betaAnnual = betaTotal / zeitraumUnternehmen / 1000000; // in Millions
+            const mehraufwand = betaAnnual - alphaAnnual;
+            const mehraufwandPercent = alphaAnnual > 0 ? (mehraufwand / alphaAnnual * 100) : 0;
+            
+            // Calculate cost quotas (as % of premium income)
+            const totalPremium = 62; // Mock total premium in millions
+            const alphaKostenquote = (alphaAnnual / totalPremium * 100);
+            const betaKostenquote = (betaAnnual / totalPremium * 100);
+            
+            // Determine if costs are increasing or decreasing
+            const isReduction = betaAnnual < alphaAnnual;
+            const absoluteMehraufwand = Math.abs(mehraufwand);
+            
+            // Update KPIs
+            const aktuellAufwandEl = document.getElementById('aktuellAufwand');
+            const zielAufwandEl = document.getElementById('zielAufwand');
+            const mehraufwandEl = document.getElementById('mehraufwand');
+            const mehraufwandPercentEl = document.getElementById('mehraufwandPercent');
+            const mehraufwandTitleEl = document.getElementById('mehraufwandTitle');
+            const mehraufwandDetailEl = document.getElementById('mehraufwandDetail');
+            const mehraufwandArrowEl = document.getElementById('mehraufwandArrow');
+            const zielTrendArrowEl = document.getElementById('zielTrendArrow');
+            const aktuellKostenquoteEl = document.getElementById('aktuellKostenquote');
+            const zielKostenquoteEl = document.getElementById('zielKostenquote');
+            
+            if (aktuellAufwandEl) aktuellAufwandEl.textContent = `€ ${alphaAnnual.toFixed(1)}M`;
+            if (zielAufwandEl) {
+                zielAufwandEl.textContent = `€ ${betaAnnual.toFixed(1)}M`;
+                zielAufwandEl.className = 'kpi-value ' + (isReduction ? 'positive' : 'negative');
+            }
+            if (mehraufwandEl) {
+                mehraufwandEl.textContent = `${mehraufwand >= 0 ? '+' : '-'}€ ${absoluteMehraufwand.toFixed(1)}M`;
+                mehraufwandEl.className = 'kpi-value ' + (isReduction ? 'positive' : 'negative');
+            }
+            if (mehraufwandPercentEl) {
+                mehraufwandPercentEl.textContent = `${mehraufwandPercent >= 0 ? '+' : ''}${Math.abs(mehraufwandPercent).toFixed(0)}%`;
+                mehraufwandPercentEl.className = 'trend-percent ' + (isReduction ? 'positive' : 'negative');
+            }
+            if (mehraufwandTitleEl) {
+                mehraufwandTitleEl.textContent = isReduction ? 'Einsparung' : 'Mehraufwand';
+            }
+            if (mehraufwandDetailEl) {
+                mehraufwandDetailEl.textContent = isReduction ? 'Kosteneinsparung p.a.' : 'Zusätzliche Kosten p.a.';
+            }
+            if (mehraufwandArrowEl) {
+                mehraufwandArrowEl.textContent = isReduction ? '↘' : '↗';
+                mehraufwandArrowEl.className = 'trend-arrow ' + (isReduction ? 'positive' : 'negative');
+            }
+            if (zielTrendArrowEl) {
+                zielTrendArrowEl.textContent = isReduction ? '📉' : '📈';
+                zielTrendArrowEl.style.color = isReduction ? '#059669' : '#dc2626';
+            }
+            if (aktuellKostenquoteEl) aktuellKostenquoteEl.textContent = `${alphaKostenquote.toFixed(1)}%`;
+            if (zielKostenquoteEl) {
+                zielKostenquoteEl.textContent = `${betaKostenquote.toFixed(1)}%`;
+                zielKostenquoteEl.style.color = isReduction ? '#059669' : '#dc2626';
+            }
+            
+            // Update segment costs
+            updateSegmentCosts();
+            
+            // Update distribution chart with actual vermittler data
+            updateDistributionChart(loserCount, neutralCount, winnerCount, vermittlerCount);
+        }
+        
+        // Toggle Segment Cost Details
+        function toggleSegmentCostDetails(segment) {
+            const detailsEl = document.getElementById(segment + 'CostDetails');
+            const iconEl = document.getElementById(segment + 'CostExpandIcon');
+            
+            if (detailsEl.style.maxHeight === '0px' || detailsEl.style.maxHeight === '') {
+                detailsEl.style.maxHeight = '300px';
+                iconEl.style.transform = 'rotate(90deg)';
+                updateSegmentProductCosts(segment);
+            } else {
+                detailsEl.style.maxHeight = '0px';
+                iconEl.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // Update Segment Costs
+        function updateSegmentCosts() {
+            const zeitraumUnternehmen = 1; // Fixed to 1 year for annual calculations
+            const groessenklasse = document.getElementById('groessenklasseSelect')?.value || 'alle';
+            const highPerformers = document.getElementById('highPerformers')?.checked;
+            const middlePerformers = document.getElementById('middlePerformers')?.checked;
+            const lowPerformers = document.getElementById('lowPerformers')?.checked;
+            
+            // Calculate segment costs based on actual vermittler data
+            let segmentCosts = {
+                leben: { alpha: 0, beta: 0 },
+                kranken: { alpha: 0, beta: 0 },
+                schaden: { alpha: 0, beta: 0 }
+            };
+            
+            // Calculate for each vermittler
+            allVermittler.forEach(v => {
+                // Filter by size class
+                if (groessenklasse !== 'alle' && v.klasse !== groessenklasse) return;
+                
+                // Filter by performance
+                if (!highPerformers && v.performance === 'high') return;
+                if (!middlePerformers && v.performance === 'middle') return;
+                if (!lowPerformers && v.performance === 'low') return;
+                
+                // Calculate segment distribution
+                const bestandLeben = v.bestand * 0.35;
+                const bestandKranken = v.bestand * 0.25;
+                const bestandSchaden = v.bestand * 0.40;
+                
+                // Determine revers levels
+                const reversLeben = getCurrentRevers('leben', v.neuLeben);
+                const reversKranken = getCurrentRevers('kranken', v.neuKranken);
+                const reversSchaden = getCurrentRevers('schaden', v.neuSchaden);
+                
+                // Leben segment
+                const alphaAPLeben = v.neuLeben * (getCurrentAPRate('leben', reversLeben, true) / 100);
+                const alphaBPLeben = bestandLeben * 0.005 * zeitraumUnternehmen * (1 - v.storno/100);
+                segmentCosts.leben.alpha += alphaAPLeben + alphaBPLeben;
+                
+                const betaAPLeben = v.neuLeben * (getCurrentAPRate('leben', reversLeben, false) / 100);
+                const betaBPLeben = bestandLeben * (betaCustomRates.bpLeben / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                segmentCosts.leben.beta += betaAPLeben + betaBPLeben;
+                
+                // Kranken segment
+                const alphaAPKranken = (v.neuKranken / 12) * (getCurrentAPRate('kranken', reversKranken, true) / 100);
+                const alphaBPKranken = bestandKranken * 0.01 * zeitraumUnternehmen * (1 - v.storno/100);
+                segmentCosts.kranken.alpha += alphaAPKranken + alphaBPKranken;
+                
+                const betaAPKranken = (v.neuKranken / 12) * (getCurrentAPRate('kranken', reversKranken, false) / 100);
+                const betaBPKranken = bestandKranken * (betaCustomRates.bpKranken / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                segmentCosts.kranken.beta += betaAPKranken + betaBPKranken;
+                
+                // Schaden segment
+                const alphaLPSchaden = v.neuSchaden * 0.12;
+                const alphaLPBestandSchaden = bestandSchaden * 0.12 * zeitraumUnternehmen * (1 - v.storno/100);
+                segmentCosts.schaden.alpha += alphaLPSchaden + alphaLPBestandSchaden;
+                
+                const betaAPSchaden = v.neuSchaden * (getCurrentAPRate('schaden', reversSchaden, false) / 100);
+                const betaBPSchaden = bestandSchaden * (betaCustomRates.bpSchaden / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                segmentCosts.schaden.beta += betaAPSchaden + betaBPSchaden;
+            });
+            
+            // Convert to annual millions
+            Object.keys(segmentCosts).forEach(segment => {
+                segmentCosts[segment].alpha = segmentCosts[segment].alpha / zeitraumUnternehmen / 1000000;
+                segmentCosts[segment].beta = segmentCosts[segment].beta / zeitraumUnternehmen / 1000000;
+            });
+            
+            // Update Leben
+            const lebenAlpha = segmentCosts.leben.alpha;
+            const lebenBeta = segmentCosts.leben.beta;
+            const lebenDelta = lebenBeta - lebenAlpha;
+            const lebenDeltaPercent = (lebenDelta / lebenAlpha * 100);
+            
+            document.getElementById('lebenAlphaKosten').textContent = `€ ${lebenAlpha.toFixed(1)}M`;
+            document.getElementById('lebenBetaKosten').textContent = `€ ${lebenBeta.toFixed(1)}M`;
+            document.getElementById('lebenDeltaKosten').textContent = `${lebenDelta >= 0 ? '+' : ''}€ ${Math.abs(lebenDelta).toFixed(1)}M (${lebenDelta >= 0 ? '+' : ''}${lebenDeltaPercent.toFixed(0)}%)`;
+            document.getElementById('lebenDeltaKosten').style.color = lebenDelta >= 0 ? '#dc2626' : '#059669';
+            
+            // Update Kranken
+            const krankenAlpha = segmentCosts.kranken.alpha;
+            const krankenBeta = segmentCosts.kranken.beta;
+            const krankenDelta = krankenBeta - krankenAlpha;
+            const krankenDeltaPercent = (krankenDelta / krankenAlpha * 100);
+            
+            document.getElementById('krankenAlphaKosten').textContent = `€ ${krankenAlpha.toFixed(1)}M`;
+            document.getElementById('krankenBetaKosten').textContent = `€ ${krankenBeta.toFixed(1)}M`;
+            document.getElementById('krankenDeltaKosten').textContent = `${krankenDelta >= 0 ? '+' : ''}€ ${Math.abs(krankenDelta).toFixed(1)}M (${krankenDelta >= 0 ? '+' : ''}${krankenDeltaPercent.toFixed(0)}%)`;
+            document.getElementById('krankenDeltaKosten').style.color = krankenDelta >= 0 ? '#dc2626' : '#059669';
+            
+            // Update Schaden
+            const schadenAlpha = segmentCosts.schaden.alpha;
+            const schadenBeta = segmentCosts.schaden.beta;
+            const schadenDelta = schadenBeta - schadenAlpha;
+            const schadenDeltaPercent = (schadenDelta / schadenAlpha * 100);
+            
+            document.getElementById('schadenAlphaKosten').textContent = `€ ${schadenAlpha.toFixed(1)}M`;
+            document.getElementById('schadenBetaKosten').textContent = `€ ${schadenBeta.toFixed(1)}M`;
+            document.getElementById('schadenDeltaKosten').textContent = `${schadenDelta >= 0 ? '+' : ''}€ ${Math.abs(schadenDelta).toFixed(1)}M (${schadenDelta >= 0 ? '+' : ''}${schadenDeltaPercent.toFixed(0)}%)`;
+            document.getElementById('schadenDeltaKosten').style.color = schadenDelta >= 0 ? '#dc2626' : '#059669';
+        }
+        
+        // Update Segment Product Costs
+        function updateSegmentProductCosts(segment) {
+            const tbody = document.getElementById(segment + 'ProductCosts');
+            if (!tbody) return;
+            
+            const zeitraumUnternehmen = 1; // Fixed to 1 year for annual calculations
+            const groessenklasse = document.getElementById('groessenklasseSelect')?.value || 'alle';
+            const highPerformers = document.getElementById('highPerformers')?.checked;
+            const middlePerformers = document.getElementById('middlePerformers')?.checked;
+            const lowPerformers = document.getElementById('lowPerformers')?.checked;
+            
+            let products = [];
+            let html = '';
+            
+            // Define products by segment
+            if (segment === 'leben') {
+                products = [
+                    { name: 'Rentenversicherung - pAV', split: 0.4 },
+                    { name: 'Berufsunfähigkeitsversicherung', split: 0.3 },
+                    { name: 'Risikolebensversicherung', split: 0.3 }
+                ];
+            } else if (segment === 'kranken') {
+                products = [
+                    { name: 'Vollversicherung', split: 0.6 },
+                    { name: 'Pflegepflichtversicherung', split: 0.15 },
+                    { name: 'Zusatzversicherung', split: 0.25 }
+                ];
+            } else if (segment === 'schaden') {
+                products = [
+                    { name: 'Haftpflichtversicherung', split: 0.3 },
+                    { name: 'Unfallversicherung', split: 0.2 },
+                    { name: 'Hausratversicherung', split: 0.15 },
+                    { name: 'Rechtsschutzversicherung', split: 0.15 },
+                    { name: 'Kraftfahrt', split: 0.2 }
+                ];
+            }
+            
+            // Calculate costs for each product
+            products.forEach(product => {
+                let alphaValue = 0;
+                let betaValue = 0;
+                
+                // Calculate based on actual vermittler data
+                allVermittler.forEach(v => {
+                    // Filter by size class
+                    if (groessenklasse !== 'alle' && v.klasse !== groessenklasse) return;
+                    
+                    // Filter by performance
+                    if (!highPerformers && v.performance === 'high') return;
+                    if (!middlePerformers && v.performance === 'middle') return;
+                    if (!lowPerformers && v.performance === 'low') return;
+                    
+                    if (segment === 'leben') {
+                        const neugeschaeft = v.neuLeben * product.split;
+                        const bestand = v.bestand * 0.35 * product.split;
+                        const reversLeben = getCurrentRevers('leben', v.neuLeben);
+                        
+                        alphaValue += neugeschaeft * (getCurrentAPRate('leben', reversLeben, true) / 100) + 
+                                     bestand * 0.005 * zeitraumUnternehmen * (1 - v.storno/100);
+                        betaValue += neugeschaeft * (getCurrentAPRate('leben', reversLeben, false) / 100) + 
+                                    bestand * (betaCustomRates.bpLeben / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                    } else if (segment === 'kranken') {
+                        const neugeschaeft = v.neuKranken * product.split;
+                        const bestand = v.bestand * 0.25 * product.split;
+                        const reversKranken = getCurrentRevers('kranken', v.neuKranken);
+                        
+                        alphaValue += (neugeschaeft / 12) * (getCurrentAPRate('kranken', reversKranken, true) / 100) + 
+                                     bestand * 0.01 * zeitraumUnternehmen * (1 - v.storno/100);
+                        betaValue += (neugeschaeft / 12) * (getCurrentAPRate('kranken', reversKranken, false) / 100) + 
+                                    bestand * (betaCustomRates.bpKranken / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                    } else if (segment === 'schaden') {
+                        const neugeschaeft = v.neuSchaden * product.split;
+                        const bestand = v.bestand * 0.40 * product.split;
+                        const reversSchaden = getCurrentRevers('schaden', v.neuSchaden);
+                        
+                        alphaValue += neugeschaeft * 0.12 + bestand * 0.12 * zeitraumUnternehmen * (1 - v.storno/100);
+                        betaValue += neugeschaeft * (getCurrentAPRate('schaden', reversSchaden, false) / 100) + 
+                                    bestand * (betaCustomRates.bpSchaden / 100) * zeitraumUnternehmen * (1 - v.storno/100);
+                    }
+                });
+                
+                // Convert to annual millions
+                alphaValue = alphaValue / zeitraumUnternehmen / 1000000;
+                betaValue = betaValue / zeitraumUnternehmen / 1000000;
+                
+                const delta = betaValue - alphaValue;
+                const deltaPercent = (delta / alphaValue * 100);
+                
+                html += `
+                    <tr>
+                        <td style="padding: 6px; border-bottom: 1px solid #f1f5f9;">${product.name}</td>
+                        <td style="text-align: right; padding: 6px; border-bottom: 1px solid #f1f5f9;">€${alphaValue.toFixed(1)}M</td>
+                        <td style="text-align: right; padding: 6px; border-bottom: 1px solid #f1f5f9;">€${betaValue.toFixed(1)}M</td>
+                        <td style="text-align: right; padding: 6px; border-bottom: 1px solid #f1f5f9; color: ${delta >= 0 ? '#dc2626' : '#059669'}; font-weight: 600;">
+                            ${delta >= 0 ? '+' : ''}€${Math.abs(delta).toFixed(1)}M (${delta >= 0 ? '+' : ''}${deltaPercent.toFixed(0)}%)
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        // Update Distribution Chart
+        function updateDistributionChart(loserCount, neutralCount, winnerCount, total) {
+            const ctx = document.getElementById('distributionChart');
+            if (!ctx) return;
+            
+            // Calculate detailed distribution if not provided
+            if (arguments.length === 0) {
+                const distribution = calculateVermittlerDistribution();
+                return updateDistributionChart(distribution.loserCount, distribution.neutralCount, distribution.winnerCount, distribution.total);
+            }
+            
+            // Create distribution buckets
+            const distribution = {
+                counts: [
+                    Math.round(loserCount * 0.15), // ≤-20%
+                    Math.round(loserCount * 0.35), // ≤-10%
+                    Math.round(loserCount * 0.5),  // ≤-5%
+                    neutralCount,                   // ~0%
+                    Math.round(winnerCount * 0.3), // >+5%
+                    Math.round(winnerCount * 0.4), // >+10%
+                    Math.round(winnerCount * 0.3)  // >+20%
+                ],
+                total: total || (loserCount + neutralCount + winnerCount)
+            };
+            
+            // Destroy existing chart
+            if (Chart.getChart(ctx)) {
+                Chart.getChart(ctx).destroy();
+            }
+            
+            // Create new chart
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['≤-20%', '≤-10%', '≤-5%', '~0%', '>+5%', '>+10%', '>+20%'],
+                    datasets: [{
+                        label: 'Anzahl Vermittler',
+                        data: distribution.counts,
+                        backgroundColor: [
+                            '#dc2626', // Strong negative
+                            '#ef4444', // Negative
+                            '#f87171', // Light negative
+                            '#6b7280', // Neutral
+                            '#86efac', // Light positive
+                            '#4ade80', // Positive
+                            '#059669'  // Strong positive
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: false
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed.y;
+                                    const percent = (value / distribution.total * 100).toFixed(1);
+                                    return `${value} Vermittler (${percent}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Anzahl Vermittler'
+                            },
+                            ticks: {
+                                stepSize: 10
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Provisionsveränderung'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Update summary statistics
+            document.getElementById('loserCount').textContent = loserCount;
+            document.getElementById('loserPercent').textContent = (loserCount / distribution.total * 100).toFixed(1) + '%';
+            document.getElementById('neutralCount').textContent = neutralCount;
+            document.getElementById('neutralPercent').textContent = (neutralCount / distribution.total * 100).toFixed(1) + '%';
+            document.getElementById('winnerCount').textContent = winnerCount;
+            document.getElementById('winnerPercent').textContent = (winnerCount / distribution.total * 100).toFixed(1) + '%';
+        }
+        
+        // Calculate Vermittler Distribution
+        function calculateVermittlerDistribution() {
+            const groessenklasse = document.getElementById('groessenklasseSelect')?.value || 'alle';
+            const highPerformers = document.getElementById('highPerformers')?.checked;
+            const middlePerformers = document.getElementById('middlePerformers')?.checked;
+            const lowPerformers = document.getElementById('lowPerformers')?.checked;
+            
+            let loserCount = 0;
+            let neutralCount = 0;
+            let winnerCount = 0;
+            let total = 0;
+            
+            // Calculate for each vermittler
+            allVermittler.forEach(v => {
+                // Filter by size class
+                if (groessenklasse !== 'alle' && v.klasse !== groessenklasse) return;
+                
+                // Filter by performance
+                if (!highPerformers && v.performance === 'high') return;
+                if (!middlePerformers && v.performance === 'middle') return;
+                if (!lowPerformers && v.performance === 'low') return;
+                
+                total++;
+                
+                // Use the predefined typ
+                if (v.typ === 'verlierer') {
+                    loserCount++;
+                } else if (v.typ === 'gewinner') {
+                    winnerCount++;
+                } else {
+                    neutralCount++;
+                }
+            });
+            
+            return { loserCount, neutralCount, winnerCount, total };
+        }
+        
+        // Reset functions
+        function resetToDefaults() {
+            isUpdating = true; // Prevent recursion during reset
+            isBatchUpdate = true; // Prevent multiple recalculations
+            
+            // Reset all sliders to default values
+            document.getElementById('neuLebenSlider').value = 120000;
+            document.getElementById('bestandLebenSlider').value = 800000;
+            document.getElementById('stornoLebenSlider').value = 10;
+            
+            document.getElementById('neuKrankenSlider').value = 80000;
+            document.getElementById('bestandKrankenSlider').value = 600000;
+            document.getElementById('stornoKrankenSlider').value = 8;
+            
+            document.getElementById('neuSchadenSlider').value = 200000;
+            document.getElementById('bestandSchadenSlider').value = 1100000;
+            document.getElementById('stornoSchadenSlider').value = 18;
+            
+            document.getElementById('zeitraumSlider').value = 3;
+            currentZeitraum = 3;
+            document.getElementById('zeitraumValue').textContent = '3 Jahre';
+            
+            // Reset BetaCare custom rates
+            betaCustomRates = {
+                apLeben: 3.5,
+                bpLeben: 0.3,
+                apKranken: 750,
+                bpKranken: 0.8,
+                apSchaden: 16.0,
+                bpSchaden: 8.0
+            };
+            
+            // Reset BetaCare sliders
+            document.getElementById('betaAPLebenSlider').value = 3.5;
+            document.getElementById('betaBPLebenSlider').value = 0.3;
+            document.getElementById('betaAPKrankenSlider').value = 7.5;
+            document.getElementById('betaBPKrankenSlider').value = 0.8;
+            document.getElementById('betaAPSchadenSlider').value = 16.0;
+            document.getElementById('betaBPSchadenSlider').value = 8.0;
+            
+            // Update BetaCare display values
+            document.getElementById('betaAPLebenValue').textContent = '3.5%';
+            document.getElementById('betaBPLebenValue').textContent = '0.3%';
+            document.getElementById('betaAPKrankenValue').textContent = '7.5MB';
+            document.getElementById('betaBPKrankenValue').textContent = '0.8%';
+            document.getElementById('betaAPSchadenValue').textContent = '16.0%';
+            document.getElementById('betaBPSchadenValue').textContent = '8.0%';
+            
+            // Update display values (with skipUpdate = true)
+            updateSliderValue('neuLeben', 120000, true);
+            updateSliderValue('bestandLeben', 800000, true);
+            updateSliderValue('stornoLeben', 10, true);
+            updateSliderValue('neuKranken', 80000, true);
+            updateSliderValue('bestandKranken', 600000, true);
+            updateSliderValue('stornoKranken', 8, true);
+            updateSliderValue('neuSchaden', 200000, true);
+            updateSliderValue('bestandSchaden', 1100000, true);
+            updateSliderValue('stornoSchaden', 18, true);
+            
+            // Reset vermittler selection
+            const vermittlerSelect = document.getElementById('vermittlerSelect');
+            if (vermittlerSelect) {
+                vermittlerSelect.value = '1';
+                vermittlerSelect.dataset.lastSelected = '1';
+            }
+            
+            // Re-enable updates
+            isUpdating = false;
+            isBatchUpdate = false;
+            
+            // Update table values for BetaCare
+            updateBetaRate('betaAPLeben', 3.5);
+            updateBetaRate('betaBPLeben', 0.3);
+            updateBetaRate('betaAPKranken', 7.5);
+            updateBetaRate('betaBPKranken', 0.8);
+            updateBetaRate('betaAPSchaden', 16.0);
+            updateBetaRate('betaBPSchaden', 8.0);
+            
+            // Update displays and calculations
+            updateReversDisplay();
+            updateReversRatesDisplay();
+        }
+        
+        function resetBetaCareDefaults() {
+            // Flag to prevent updates during reset
+            isBatchUpdate = true;
+            
+            // Reset BetaCare custom rates
+            betaCustomRates = {
+                apLeben: 3.5,
+                bpLeben: 0.3,
+                apKranken: 750,
+                bpKranken: 0.8,
+                apSchaden: 16.0,
+                bpSchaden: 8.0
+            };
+            
+            // Reset BetaCare sliders
+            document.getElementById('betaAPLebenSlider').value = 3.5;
+            document.getElementById('betaBPLebenSlider').value = 0.3;
+            document.getElementById('betaAPKrankenSlider').value = 7.5;
+            document.getElementById('betaBPKrankenSlider').value = 0.8;
+            document.getElementById('betaAPSchadenSlider').value = 16.0;
+            document.getElementById('betaBPSchadenSlider').value = 8.0;
+            
+            // Update display values first without triggering calculations
+            document.getElementById('betaAPLebenValue').textContent = '3.5%';
+            document.getElementById('betaBPLebenValue').textContent = '0.3%';
+            document.getElementById('betaAPKrankenValue').textContent = '7.5MB';
+            document.getElementById('betaBPKrankenValue').textContent = '0.8%';
+            document.getElementById('betaAPSchadenValue').textContent = '16.0%';
+            document.getElementById('betaBPSchadenValue').textContent = '8.0%';
+            
+            isBatchUpdate = false;
+            
+            // Update all values including table
+            updateBetaRate('betaAPLeben', 3.5);
+            updateBetaRate('betaBPLeben', 0.3);
+            updateBetaRate('betaAPKranken', 7.5);
+            updateBetaRate('betaBPKranken', 0.8);
+            updateBetaRate('betaAPSchaden', 16.0);
+            updateBetaRate('betaBPSchaden', 8.0);
+        }
+        
+        function resetUnternehmenDefaults() {
+            document.getElementById('groessenklasseSelect').value = 'alle';
+            document.getElementById('highPerformers').checked = true;
+            document.getElementById('middlePerformers').checked = true;
+            document.getElementById('lowPerformers').checked = true;
+            
+            // Update calculations
+            updateUnternehmenCalculations();
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize flag
+            isUpdating = false;
+            isBatchUpdate = true; // Prevent multiple calculations during initialization
+            
+            // Wait for DOM to be fully loaded
+            setTimeout(() => {
+                // Set default BetaCare rates
+                betaCustomRates = {
+                    apLeben: 3.5,
+                    bpLeben: 0.3,
+                    apKranken: 750,
+                    bpKranken: 0.8,
+                    apSchaden: 16.0,
+                    bpSchaden: 8.0
+                };
+                
+                // Initialize BetaCare sliders
+                const betaAPLebenSlider = document.getElementById('betaAPLebenSlider');
+                const betaBPLebenSlider = document.getElementById('betaBPLebenSlider');
+                const betaAPKrankenSlider = document.getElementById('betaAPKrankenSlider');
+                const betaBPKrankenSlider = document.getElementById('betaBPKrankenSlider');
+                const betaAPSchadenSlider = document.getElementById('betaAPSchadenSlider');
+                const betaBPSchadenSlider = document.getElementById('betaBPSchadenSlider');
+                
+                if (betaAPLebenSlider) betaAPLebenSlider.value = 3.5;
+                if (betaBPLebenSlider) betaBPLebenSlider.value = 0.3;
+                if (betaAPKrankenSlider) betaAPKrankenSlider.value = 7.5;
+                if (betaBPKrankenSlider) betaBPKrankenSlider.value = 0.8;
+                if (betaAPSchadenSlider) betaAPSchadenSlider.value = 16.0;
+                if (betaBPSchadenSlider) betaBPSchadenSlider.value = 8.0;
+                
+                // Initialize BetaCare display values for Vermittler tab
+                if (document.getElementById('betaAPLebenValue')) {
+                    document.getElementById('betaAPLebenValue').textContent = '3.5%';
+                    document.getElementById('betaBPLebenValue').textContent = '0.3%';
+                    document.getElementById('betaAPKrankenValue').textContent = '7.5MB';
+                    document.getElementById('betaBPKrankenValue').textContent = '0.8%';
+                    document.getElementById('betaAPSchadenValue').textContent = '16.0%';
+                    document.getElementById('betaBPSchadenValue').textContent = '8.0%';
+                }
+                
+                isBatchUpdate = false;
+                
+                // Update table displays for Vermittler tab
+                updateBetaRate('betaAPLeben', 3.5, true);
+                updateBetaRate('betaBPLeben', 0.3, true);
+                updateBetaRate('betaAPKranken', 7.5, true);
+                updateBetaRate('betaBPKranken', 0.8, true);
+                updateBetaRate('betaAPSchaden', 16.0, true);
+                updateBetaRate('betaBPSchaden', 8.0, true);
+                
+                // Now update tables once
+                updateBetaRate('betaAPLeben', 3.5);
+                
+                // Load first vermittler by default
+                loadVermittlerData('1');
+                
+                // Initialize Unternehmen data without recursion
+                const groessenklasse = document.getElementById('groessenklasseSelect')?.value || 'alle';
+                const highPerformers = document.getElementById('highPerformers')?.checked;
+                const middlePerformers = document.getElementById('middlePerformers')?.checked;
+                const lowPerformers = document.getElementById('lowPerformers')?.checked;
+                
+                // Update calculations
+                updateUnternehmenCalculations();
+                
+                // Set initial tracking for vermittler select
+                const vermittlerSelect = document.getElementById('vermittlerSelect');
+                if (vermittlerSelect) {
+                    vermittlerSelect.dataset.lastSelected = '1';
+                }
+                
+                // Initialize revers display and calculations
+                updateReversRatesDisplay();
+                
+                // Initialize charts
+                initVermittlerCharts();
+                
+                // Initialize Unternehmen calculations
+                updateUnternehmenCalculations();
+                
+                // Generate all vermittler data for Unternehmen perspective
+                if (typeof allVermittler === 'undefined') {
+                    window.allVermittler = generateAllVermittler();
+                }
+            }, 250);
+        });
+    </script>
+</body>
+</html>
