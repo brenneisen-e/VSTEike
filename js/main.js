@@ -665,15 +665,17 @@ waitForLibraries(function() {
 
     // View toggle buttons
     document.addEventListener('click', function(e) {
-        if (e.target.matches('.view-toggle button')) {
-            const kpiId = e.target.dataset.kpi;
-            const view = e.target.dataset.view;
+        // Handle clicks on button or its child elements (SVG icons)
+        const viewToggleBtn = e.target.closest('.view-toggle button');
+        if (viewToggleBtn) {
+            const kpiId = viewToggleBtn.dataset.kpi;
+            const view = viewToggleBtn.dataset.view;
             const kpi = kpiDefinitions.find(k => k.id === kpiId);
-            
-            e.target.parentElement.querySelectorAll('button').forEach(btn => {
+
+            viewToggleBtn.parentElement.querySelectorAll('button').forEach(btn => {
                 btn.classList.remove('active');
             });
-            e.target.classList.add('active');
+            viewToggleBtn.classList.add('active');
             
             if (state.timeNavigation[kpiId]) {
                 state.timeNavigation[kpiId].monthOffset = 0;
@@ -701,21 +703,27 @@ waitForLibraries(function() {
                 container.classList.remove('clickable');
                 container.removeAttribute('onclick');
             }
-        } else if (e.target.matches('.time-range-selector button[data-range]')) {
-            const kpiId = e.target.dataset.kpi;
-            const range = e.target.dataset.range;
+            return; // Early return to prevent else-if from running
+        }
+
+        // Handle time range selector buttons
+        const timeRangeBtn = e.target.closest('.time-range-selector button[data-range]');
+        if (timeRangeBtn) {
+            const kpiId = timeRangeBtn.dataset.kpi;
+            const range = timeRangeBtn.dataset.range;
             const kpi = kpiDefinitions.find(k => k.id === kpiId);
-            
-            e.target.parentElement.querySelectorAll('button[data-range]').forEach(btn => {
+
+            const selector = timeRangeBtn.closest('.time-range-selector');
+            selector.querySelectorAll('button[data-range]').forEach(btn => {
                 btn.classList.remove('active');
             });
-            e.target.classList.add('active');
-            
+            timeRangeBtn.classList.add('active');
+
             if (state.timeNavigation[kpiId]) {
                 state.timeNavigation[kpiId].monthOffset = 0;
                 state.timeNavigation[kpiId].weekOffset = 0;
             }
-            
+
             const data = getFilteredData();
             createChart(kpiId, data, 'daily', kpi, range, 0);
         }
