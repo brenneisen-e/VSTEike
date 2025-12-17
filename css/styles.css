@@ -1126,7 +1126,7 @@ select:focus, .dropdown-button:focus {
 /* KPI Icon - inline after title */
 .kpi-icon {
     font-size: 0.875rem;
-    margin-left: 0;
+    margin-left: -2px;
     flex-shrink: 0;
 }
 
