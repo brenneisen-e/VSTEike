@@ -139,12 +139,16 @@ function processBankenQuery(message) {
 
         let response = `📊 **Top ${count} Kunden nach Forderungshöhe:**\n\n`;
         sorted.forEach((c, i) => {
-            response += `${i + 1}. **${c.name}** (${c.id})\n`;
+            response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> (${c.id})\n`;
             response += `   💰 €${c.forderung.toLocaleString('de-DE')} | 📅 ${c.dpd} DPD | ${c.status}\n\n`;
         });
 
         const total = sorted.reduce((sum, c) => sum + c.forderung, 0);
         response += `\n📈 **Summe Top ${count}:** €${total.toLocaleString('de-DE')}`;
+
+        // Add navigation button
+        const customerIds = sorted.map(c => c.id).join(',');
+        response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')">🔍 Diese ${count} Kunden in Liste anzeigen</button>`;
 
         return response;
     }
@@ -171,8 +175,10 @@ function processBankenQuery(message) {
 
         let response = `🚨 **Eskalation-Fälle (Inkasso):** ${filtered.length}\n\n`;
         filtered.forEach(c => {
-            response += `• **${c.name}** - €${c.forderung.toLocaleString('de-DE')} (${c.dpd} DPD)\n`;
+            response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} (${c.dpd} DPD)\n`;
         });
+
+        response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('eskalation')">🔍 Eskalation-Segment in Matrix anzeigen</button>`;
 
         return response;
     }
@@ -182,8 +188,10 @@ function processBankenQuery(message) {
 
         let response = `🔄 **Restrukturierung-Fälle:** ${filtered.length}\n\n`;
         filtered.forEach(c => {
-            response += `• **${c.name}** - €${c.forderung.toLocaleString('de-DE')} | ${c.status}\n`;
+            response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} | ${c.status}\n`;
         });
+
+        response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('restrukturierung')">🔍 Restrukturierung-Segment in Matrix anzeigen</button>`;
 
         return response;
     }
@@ -197,9 +205,15 @@ function processBankenQuery(message) {
 
         let response = `⏰ **Fälle mit mehr als ${minDpd} DPD:** ${filtered.length}\n\n`;
         filtered.sort((a, b) => b.dpd - a.dpd).forEach(c => {
-            response += `• **${c.name}** - ${c.dpd} Tage überfällig\n`;
+            response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - ${c.dpd} Tage überfällig\n`;
             response += `  €${c.forderung.toLocaleString('de-DE')} | ${c.status}\n\n`;
         });
+
+        // Add navigation button for DPD bucket
+        const bucket = minDpd >= 90 ? '90+' : (minDpd >= 30 ? '31-90' : '0-30');
+        const customerIds = filtered.map(c => c.id).join(',');
+        response += `\n<button class="chat-action-btn" onclick="filterByDPDBucket('${bucket}')">🔍 DPD Bucket in Dashboard anzeigen</button>`;
+        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')">📋 ${filtered.length} Kunden in Liste anzeigen</button>`;
 
         return response;
     }
@@ -242,7 +256,7 @@ function processBankenQuery(message) {
             );
 
             if (found) {
-                return `🔍 **Gefunden: ${found.name}**
+                return `🔍 **Gefunden: <span class="chat-customer-link" onclick="openCustomerDetail('${found.id}')">${found.name}</span>**
 
 **ID:** ${found.id}
 **Forderung:** €${found.forderung.toLocaleString('de-DE')}
@@ -250,7 +264,7 @@ function processBankenQuery(message) {
 **Segment:** ${found.segment}
 **Status:** ${found.status}
 
-💡 Klicke auf den Kunden in der Tabelle für weitere Details.`;
+<button class="chat-action-btn" onclick="openCustomerDetail('${found.id}')">👤 Kundendetail öffnen</button>`;
             } else {
                 return `❌ Kein Kunde mit "${nameMatch[1]}" gefunden.\n\nVerfügbare Kunden durchsuchen Sie in der Tabelle unten.`;
             }
@@ -333,8 +347,54 @@ function hideBankenTyping() {
     if (typing) typing.remove();
 }
 
+// Show filtered customers in the list
+function showFilteredCustomers(customerIdsString) {
+    console.log('🔍 Showing filtered customers:', customerIdsString);
+
+    const customerIds = customerIdsString.split(',');
+
+    // Scroll to customer list section
+    const customerListSection = document.querySelector('.customer-list-section');
+    if (customerListSection) {
+        customerListSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Flash the section to indicate it's been updated
+        customerListSection.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+        setTimeout(() => {
+            customerListSection.style.boxShadow = '';
+        }, 2000);
+    }
+
+    // Find and highlight matching rows in the table
+    const rows = document.querySelectorAll('.customer-table tbody tr');
+    rows.forEach(row => {
+        const customerCell = row.querySelector('.customer-cell small');
+        if (customerCell) {
+            const cellText = customerCell.textContent;
+            const matches = customerIds.some(id => cellText.includes(id.trim()));
+
+            if (matches) {
+                row.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
+                row.style.transition = 'background-color 0.3s ease';
+            } else {
+                row.style.backgroundColor = '';
+            }
+        }
+    });
+
+    // Show notification
+    if (typeof showNotification === 'function') {
+        showNotification(`${customerIds.length} Kunden hervorgehoben`, 'info');
+    }
+
+    // Close the chat widget (optional - keep it open for reference)
+    // const chatWidget = document.getElementById('bankenChatWidget');
+    // if (chatWidget) chatWidget.style.display = 'none';
+}
+
 // Export functions
 window.initBankenChat = initBankenChat;
 window.sendBankenMessage = sendBankenMessage;
+window.showFilteredCustomers = showFilteredCustomers;
 
 console.log('✅ banken-chat.js geladen');

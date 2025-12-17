@@ -2851,6 +2851,24 @@ select:focus, .dropdown-button:focus {
     font-size: 12px;
 }
 
+/* External Link Tiles */
+.nav-box.nav-box-external {
+    position: relative;
+}
+
+.nav-box.nav-box-external .external-link-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #94a3b8;
+    opacity: 0.6;
+}
+
+.nav-box.nav-box-external:hover .external-link-icon {
+    opacity: 1;
+    color: #86BC25;
+}
+
 /* ========================================
    SETTINGS COLLAPSIBLE BOX
    ======================================== */

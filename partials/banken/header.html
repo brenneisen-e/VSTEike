@@ -23,6 +23,33 @@
             </div>
         </div>
     </div>
+    <div class="banken-header-center">
+        <!-- NPL Dashboard and Stage 2 Quick Access Tiles -->
+        <div class="header-quick-tiles">
+            <button class="header-tile coming-soon" onclick="showBankenSection('npl')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <div class="header-tile-text">
+                    <span class="header-tile-title">NPL Dashboard</span>
+                    <span class="header-tile-badge danger">2.344</span>
+                </div>
+            </button>
+            <button class="header-tile coming-soon" onclick="showBankenSection('stage2')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <line x1="12" y1="20" x2="12" y2="10"></line>
+                    <line x1="18" y1="20" x2="18" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="16"></line>
+                </svg>
+                <div class="header-tile-text">
+                    <span class="header-tile-title">Stage 2</span>
+                    <span class="header-tile-badge warning">7.890</span>
+                </div>
+            </button>
+        </div>
+    </div>
     <div class="banken-header-right">
         <div class="header-actions">
             <button class="header-btn primary" onclick="openDocumentScanner()">
@@ -93,9 +120,10 @@
     <div class="nav-tile active" onclick="showBankenSection('segmentierung')">
         <div class="nav-tile-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="12" r="6"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
             </svg>
         </div>
         <div class="nav-tile-content">
@@ -103,34 +131,6 @@
             <div class="nav-tile-desc">Willingness & Ability Matrix</div>
         </div>
         <div class="nav-tile-badge">10.234</div>
-    </div>
-    <div class="nav-tile coming-soon" onclick="showBankenSection('npl')">
-        <div class="nav-tile-icon warning">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                <line x1="12" y1="9" x2="12" y2="13"></line>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-        </div>
-        <div class="nav-tile-content">
-            <div class="nav-tile-title">NPL Dashboard</div>
-            <div class="nav-tile-desc">Stage 3 Kredite</div>
-        </div>
-        <div class="nav-tile-badge danger">2.344</div>
-    </div>
-    <div class="nav-tile coming-soon" onclick="showBankenSection('stage2')">
-        <div class="nav-tile-icon info">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                <line x1="12" y1="20" x2="12" y2="10"></line>
-                <line x1="18" y1="20" x2="18" y2="4"></line>
-                <line x1="6" y1="20" x2="6" y2="16"></line>
-            </svg>
-        </div>
-        <div class="nav-tile-content">
-            <div class="nav-tile-title">Stage 2 Analyse</div>
-            <div class="nav-tile-desc">GuV-Auswirkung</div>
-        </div>
-        <div class="nav-tile-badge warning">7.890</div>
     </div>
     <div class="nav-tile" onclick="showBankenSection('aufgaben')">
         <div class="nav-tile-icon">

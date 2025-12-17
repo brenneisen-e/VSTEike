@@ -327,35 +327,67 @@ function clearSegmentFilter() {
 
 // Show chart popup for KPI mini charts
 function showChartPopup(chartId, title) {
-    // Chart data for different KPIs
+    // Chart data for different KPIs - with dual Y-axes support
     const chartData = {
         'aktive-faelle': {
             color: '#3b82f6',
             data: [9800, 9950, 10050, 10100, 10180, 10234],
-            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: '',
+            axisLabel: 'Anzahl Fälle',
+            // Secondary axis data (amount in millions)
+            secondaryColor: '#f97316',
+            secondaryData: [42.5, 44.1, 45.2, 46.0, 46.8, 47.8],
+            secondarySuffix: ' Mio €',
+            secondaryLabel: 'Forderung'
         },
         'offene-forderung': {
             color: '#f97316',
             data: [42.5, 44.1, 45.2, 46.0, 46.8, 47.8],
             labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-            suffix: ' Mio €'
+            suffix: ' Mio €',
+            axisLabel: 'Forderung',
+            // Secondary: Recovery amount
+            secondaryColor: '#22c55e',
+            secondaryData: [26.4, 28.0, 29.3, 30.5, 31.4, 32.7],
+            secondarySuffix: ' Mio €',
+            secondaryLabel: 'Eingezogen'
         },
         'recovery-rate': {
             color: '#22c55e',
             data: [62.1, 63.5, 64.8, 66.2, 67.1, 68.4],
             labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-            suffix: '%'
+            suffix: '%',
+            axisLabel: 'Recovery Rate',
+            // Secondary: Absolute recovery in Mio
+            secondaryColor: '#3b82f6',
+            secondaryData: [26.4, 28.0, 29.3, 30.5, 31.4, 32.7],
+            secondarySuffix: ' Mio €',
+            secondaryLabel: 'Absolut'
         },
         'dpd': {
             color: '#8b5cf6',
             data: [52, 51, 50, 49, 48, 47],
             labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-            suffix: ' Tage'
+            suffix: ' Tage',
+            axisLabel: 'Ø DPD',
+            // Secondary: Number of >90 DPD cases
+            secondaryColor: '#ef4444',
+            secondaryData: [2500, 2450, 2400, 2380, 2360, 2344],
+            secondarySuffix: '',
+            secondaryLabel: '>90 DPD Fälle'
         },
         'aufgaben': {
             color: '#ef4444',
             data: [180, 165, 172, 158, 162, 156],
-            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: '',
+            axisLabel: 'Offene Aufgaben',
+            // Secondary: Completed tasks
+            secondaryColor: '#22c55e',
+            secondaryData: [145, 168, 152, 175, 160, 178],
+            secondarySuffix: '',
+            secondaryLabel: 'Erledigt'
         }
     };
 
@@ -391,32 +423,52 @@ function showChartPopup(chartId, title) {
     renderPopupChart(chartId, config);
 }
 
-// Render chart in popup
+// Render chart in popup with dual Y-axes support
 function renderPopupChart(chartId, config) {
     const container = document.getElementById(`popup-chart-${chartId}`);
     if (!container) return;
 
-    const width = 650;
-    const height = 280;
-    const padding = { top: 20, right: 30, bottom: 40, left: 60 };
+    const width = 720;
+    const height = 340;
+    const padding = { top: 30, right: 90, bottom: 50, left: 90 };
 
     const chartWidth = width - padding.left - padding.right;
     const chartHeight = height - padding.top - padding.bottom;
 
+    // Primary data
     const data = config.data;
     const labels = config.labels;
     const maxVal = Math.max(...data) * 1.1;
     const minVal = Math.min(...data) * 0.9;
     const range = maxVal - minVal;
 
-    // Create points
+    // Secondary data (for dual Y-axis)
+    const hasSecondary = config.secondaryData && config.secondaryData.length > 0;
+    let secondaryMaxVal, secondaryMinVal, secondaryRange;
+    if (hasSecondary) {
+        secondaryMaxVal = Math.max(...config.secondaryData) * 1.1;
+        secondaryMinVal = Math.min(...config.secondaryData) * 0.9;
+        secondaryRange = secondaryMaxVal - secondaryMinVal;
+    }
+
+    // Create primary points
     const points = data.map((val, i) => {
         const x = padding.left + (i / (data.length - 1)) * chartWidth;
         const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
         return `${x},${y}`;
     }).join(' ');
 
-    // Create area path
+    // Create secondary points
+    let secondaryPoints = '';
+    if (hasSecondary) {
+        secondaryPoints = config.secondaryData.map((val, i) => {
+            const x = padding.left + (i / (config.secondaryData.length - 1)) * chartWidth;
+            const y = padding.top + chartHeight - ((val - secondaryMinVal) / secondaryRange) * chartHeight;
+            return `${x},${y}`;
+        }).join(' ');
+    }
+
+    // Create area path for primary
     const areaPath = `M ${padding.left},${height - padding.bottom} ` +
         data.map((val, i) => {
             const x = padding.left + (i / (data.length - 1)) * chartWidth;
@@ -425,12 +477,25 @@ function renderPopupChart(chartId, config) {
         }).join(' ') +
         ` L ${width - padding.right},${height - padding.bottom} Z`;
 
-    // Generate Y-axis labels
+    // Generate primary Y-axis labels (left)
     const yLabels = [];
     for (let i = 0; i <= 4; i++) {
         const val = minVal + (range * i / 4);
         const y = padding.top + chartHeight - (i / 4) * chartHeight;
-        yLabels.push({ val: val.toFixed(config.suffix === '%' ? 1 : 0) + (config.suffix || ''), y });
+        const formattedVal = config.suffix === '%' ? val.toFixed(1) : Math.round(val).toLocaleString('de-DE');
+        yLabels.push({ val: formattedVal + (config.suffix || ''), y });
+    }
+
+    // Generate secondary Y-axis labels (right)
+    const yLabelsRight = [];
+    if (hasSecondary) {
+        for (let i = 0; i <= 4; i++) {
+            const val = secondaryMinVal + (secondaryRange * i / 4);
+            const y = padding.top + chartHeight - (i / 4) * chartHeight;
+            const formattedVal = config.secondarySuffix === '%' ? val.toFixed(1) :
+                (config.secondarySuffix.includes('Mio') ? val.toFixed(1) : Math.round(val).toLocaleString('de-DE'));
+            yLabelsRight.push({ val: formattedVal + (config.secondarySuffix || ''), y });
+        }
     }
 
     container.innerHTML = `
@@ -438,13 +503,25 @@ function renderPopupChart(chartId, config) {
             <!-- Grid lines -->
             ${yLabels.map(l => `<line x1="${padding.left}" y1="${l.y}" x2="${width - padding.right}" y2="${l.y}" stroke="#e2e8f0" stroke-dasharray="4,4"/>`).join('')}
 
-            <!-- Area fill -->
+            <!-- Area fill for primary -->
             <path d="${areaPath}" fill="${config.color}" fill-opacity="0.1"/>
 
-            <!-- Line -->
+            <!-- Primary Line -->
             <polyline fill="none" stroke="${config.color}" stroke-width="3" points="${points}" stroke-linecap="round" stroke-linejoin="round"/>
 
-            <!-- Data points -->
+            ${hasSecondary ? `
+            <!-- Secondary Line (dashed) -->
+            <polyline fill="none" stroke="${config.secondaryColor}" stroke-width="2" stroke-dasharray="6,4" points="${secondaryPoints}" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Secondary Data points -->
+            ${config.secondaryData.map((val, i) => {
+                const x = padding.left + (i / (config.secondaryData.length - 1)) * chartWidth;
+                const y = padding.top + chartHeight - ((val - secondaryMinVal) / secondaryRange) * chartHeight;
+                return `<circle cx="${x}" cy="${y}" r="4" fill="${config.secondaryColor}" stroke="white" stroke-width="2"/>`;
+            }).join('')}
+            ` : ''}
+
+            <!-- Primary Data points -->
             ${data.map((val, i) => {
                 const x = padding.left + (i / (data.length - 1)) * chartWidth;
                 const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
@@ -454,12 +531,37 @@ function renderPopupChart(chartId, config) {
             <!-- X-axis labels -->
             ${labels.map((label, i) => {
                 const x = padding.left + (i / (data.length - 1)) * chartWidth;
-                return `<text x="${x}" y="${height - 10}" text-anchor="middle" font-size="12" fill="#64748b">${label}</text>`;
+                return `<text x="${x}" y="${height - 25}" text-anchor="middle" font-size="12" fill="#64748b">${label}</text>`;
             }).join('')}
 
-            <!-- Y-axis labels -->
-            ${yLabels.map(l => `<text x="${padding.left - 10}" y="${l.y + 4}" text-anchor="end" font-size="11" fill="#64748b">${l.val}</text>`).join('')}
+            <!-- Left Y-axis labels -->
+            ${yLabels.map(l => `<text x="${padding.left - 12}" y="${l.y + 4}" text-anchor="end" font-size="11" fill="${config.color}">${l.val}</text>`).join('')}
+
+            <!-- Left Y-axis title -->
+            <text x="20" y="${padding.top + chartHeight / 2}" text-anchor="middle" font-size="11" fill="${config.color}" transform="rotate(-90, 20, ${padding.top + chartHeight / 2})">${config.axisLabel || ''}</text>
+
+            ${hasSecondary ? `
+            <!-- Right Y-axis labels -->
+            ${yLabelsRight.map(l => `<text x="${width - padding.right + 12}" y="${l.y + 4}" text-anchor="start" font-size="11" fill="${config.secondaryColor}">${l.val}</text>`).join('')}
+
+            <!-- Right Y-axis title -->
+            <text x="${width - 20}" y="${padding.top + chartHeight / 2}" text-anchor="middle" font-size="11" fill="${config.secondaryColor}" transform="rotate(90, ${width - 20}, ${padding.top + chartHeight / 2})">${config.secondaryLabel || ''}</text>
+            ` : ''}
         </svg>
+
+        <!-- Legend -->
+        <div style="display: flex; justify-content: center; gap: 24px; margin-top: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="24" height="4"><line x1="0" y1="2" x2="24" y2="2" stroke="${config.color}" stroke-width="3"/></svg>
+                <span style="font-size: 12px; color: #64748b;">${config.axisLabel || 'Primär'}</span>
+            </div>
+            ${hasSecondary ? `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="24" height="4"><line x1="0" y1="2" x2="24" y2="2" stroke="${config.secondaryColor}" stroke-width="2" stroke-dasharray="6,4"/></svg>
+                <span style="font-size: 12px; color: #64748b;">${config.secondaryLabel || 'Sekundär'}</span>
+            </div>
+            ` : ''}
+        </div>
     `;
 }
 
