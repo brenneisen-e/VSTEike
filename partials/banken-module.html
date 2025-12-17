@@ -26,4 +26,56 @@
 <!-- Component: CRM Profile View -->
 <div data-component="crm-profile-view"></div>
 
+<!-- AI Chat Widget -->
+<button class="banken-chat-toggle" id="bankenChatToggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <span class="chat-badge">KI</span>
+</button>
+
+<div class="banken-chat-widget" id="bankenChatWidget" style="display: none;">
+    <div class="banken-chat-header">
+        <div class="banken-chat-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9"></path>
+            </svg>
+            Collections Assistent
+        </div>
+        <button class="banken-chat-close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+    <div class="banken-chat-body" id="bankenChatBody">
+        <div class="banken-chat-welcome">
+            <div class="welcome-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9"></path>
+                </svg>
+            </div>
+            <h4>Collections Assistent</h4>
+            <p>Fragen Sie mich zu Kunden, Forderungen oder Portfolio-Daten.</p>
+            <div class="welcome-examples">
+                <button class="example-btn" data-question="Top 5 Kunden mit höchsten Forderungen">Top 5 Forderungen</button>
+                <button class="example-btn" data-question="Zahlungseingänge der letzten Woche">Letzte Zahlungen</button>
+                <button class="example-btn" data-question="Portfolio-Übersicht">Portfolio-Übersicht</button>
+            </div>
+        </div>
+    </div>
+    <div class="banken-chat-footer">
+        <textarea id="bankenChatInput" placeholder="Frage stellen..." rows="1"></textarea>
+        <button id="bankenChatSend">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </button>
+    </div>
+</div>
+
 </div>

@@ -70,6 +70,10 @@ async function loadBankenModule() {
             // Initialize charts after all content is loaded
             setTimeout(() => {
                 initBankenCharts();
+                // Initialize Banken Chat
+                if (typeof initBankenChat === 'function') {
+                    initBankenChat();
+                }
             }, 100);
         } else {
             throw new Error('Failed to load module');
@@ -165,30 +169,350 @@ function showBankenTab(tabName) {
 
 // Filter by segment in 2x2 matrix
 function filterBySegment(segment) {
-    // Toggle selection
-    document.querySelectorAll('.matrix-cell').forEach(cell => {
-        cell.classList.remove('selected');
-    });
-
-    const selectedCell = document.querySelector(`.matrix-cell.${segment}`);
-    if (selectedCell) {
-        selectedCell.classList.add('selected');
-    }
-
-    // Show notification
-    const segmentNames = {
-        'q1': 'Will zahlen & Kann zahlen',
-        'q2': 'Will nicht & Kann zahlen',
-        'q3': 'Will zahlen & Kann nicht',
-        'q4': 'Will nicht & Kann nicht',
-        'priority': 'Priorität - Zahlungsvereinbarung',
-        'restructure': 'Restrukturierung',
-        'escalate': 'Eskalation - Inkasso',
-        'writeoff': 'Abwicklung'
+    // Map segment parameter to badge class and display name
+    const segmentConfig = {
+        'eskalation': { badgeClass: 'escalate', name: 'Eskalation', color: '#ef4444' },
+        'prioritaet': { badgeClass: 'priority', name: 'Priorität', color: '#22c55e' },
+        'restrukturierung': { badgeClass: 'restructure', name: 'Restrukturierung', color: '#f59e0b' },
+        'abwicklung': { badgeClass: 'writeoff', name: 'Abwicklung', color: '#64748b' }
     };
 
-    showNotification(`Filter: ${segmentNames[segment] || segment}`, 'info');
-    console.log('Filtering by segment:', segment);
+    const config = segmentConfig[segment];
+    if (!config) {
+        console.warn('Unknown segment:', segment);
+        return;
+    }
+
+    // Highlight selected quadrant
+    document.querySelectorAll('.matrix-quadrant').forEach(q => {
+        q.classList.remove('selected');
+    });
+    const selectedQuadrant = document.querySelector(`.matrix-quadrant.segment-${segment}`);
+    if (selectedQuadrant) {
+        selectedQuadrant.classList.add('selected');
+    }
+
+    // Find the customer table
+    const table = document.querySelector('.banken-page .customer-table');
+    if (!table) {
+        console.warn('Customer table not found');
+        return;
+    }
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Filter rows by segment
+    let matchingRows = [];
+    let hiddenRows = [];
+
+    rows.forEach(row => {
+        const segmentBadge = row.querySelector('.segment-badge');
+        if (segmentBadge && segmentBadge.classList.contains(config.badgeClass)) {
+            matchingRows.push(row);
+            row.style.display = '';
+        } else {
+            hiddenRows.push(row);
+            row.style.display = 'none';
+        }
+    });
+
+    // Sort matching rows by volume (Forderung) - highest first
+    matchingRows.sort((a, b) => {
+        const amountA = parseAmount(a.querySelector('.amount')?.textContent || '0');
+        const amountB = parseAmount(b.querySelector('.amount')?.textContent || '0');
+        return amountB - amountA; // Descending order
+    });
+
+    // Re-append rows in sorted order (matching first, then hidden)
+    matchingRows.forEach(row => tbody.appendChild(row));
+    hiddenRows.forEach(row => tbody.appendChild(row));
+
+    // Show/update filter indicator
+    showFilterIndicator(config.name, config.color, matchingRows.length, segment);
+
+    // Scroll to table
+    const tableWrapper = document.querySelector('.banken-page .customer-table-wrapper');
+    if (tableWrapper) {
+        tableWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Update pagination text
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = `Zeige ${matchingRows.length} ${config.name}-Fälle (sortiert nach Volumen)`;
+    }
+
+    showNotification(`${matchingRows.length} Fälle im Segment "${config.name}" gefunden`, 'info');
+    console.log('Filtered by segment:', segment, '- Found:', matchingRows.length);
+}
+
+// Parse amount string to number (e.g., "€125.000" -> 125000)
+function parseAmount(amountStr) {
+    if (!amountStr) return 0;
+    // Remove currency symbol and thousands separators, handle decimal
+    const cleaned = amountStr.replace(/[€\s]/g, '').replace(/\./g, '').replace(',', '.');
+    return parseFloat(cleaned) || 0;
+}
+
+// Show filter indicator above the table
+function showFilterIndicator(segmentName, color, count, segmentKey) {
+    // Remove existing indicator
+    const existingIndicator = document.querySelector('.segment-filter-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+
+    // Create new indicator
+    const indicator = document.createElement('div');
+    indicator.className = 'segment-filter-indicator';
+    indicator.innerHTML = `
+        <div class="filter-indicator-content">
+            <span class="filter-indicator-badge" style="background: ${color};">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                ${segmentName}
+            </span>
+            <span class="filter-indicator-count">${count} Fälle · Sortiert nach Volumen (höchstes zuerst)</span>
+        </div>
+        <button class="filter-indicator-clear" onclick="clearSegmentFilter()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Filter aufheben
+        </button>
+    `;
+
+    // Insert before table wrapper
+    const tableWrapper = document.querySelector('.banken-page .customer-table-wrapper');
+    if (tableWrapper) {
+        tableWrapper.parentNode.insertBefore(indicator, tableWrapper);
+    }
+}
+
+// Clear segment filter
+function clearSegmentFilter() {
+    // Remove indicator
+    const indicator = document.querySelector('.segment-filter-indicator');
+    if (indicator) {
+        indicator.remove();
+    }
+
+    // Remove quadrant selection
+    document.querySelectorAll('.matrix-quadrant').forEach(q => {
+        q.classList.remove('selected');
+    });
+
+    // Show all rows
+    const table = document.querySelector('.banken-page .customer-table');
+    if (table) {
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+    }
+
+    // Reset pagination text
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = 'Zeige 1-4 von 10.234 Kunden';
+    }
+
+    showNotification('Filter aufgehoben', 'info');
+}
+
+// Show chart popup for KPI mini charts
+function showChartPopup(chartId, title) {
+    // Chart data for different KPIs
+    const chartData = {
+        'aktive-faelle': {
+            color: '#3b82f6',
+            data: [9800, 9950, 10050, 10100, 10180, 10234],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+        },
+        'offene-forderung': {
+            color: '#f97316',
+            data: [42.5, 44.1, 45.2, 46.0, 46.8, 47.8],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: ' Mio €'
+        },
+        'recovery-rate': {
+            color: '#22c55e',
+            data: [62.1, 63.5, 64.8, 66.2, 67.1, 68.4],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: '%'
+        },
+        'dpd': {
+            color: '#8b5cf6',
+            data: [52, 51, 50, 49, 48, 47],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: ' Tage'
+        },
+        'aufgaben': {
+            color: '#ef4444',
+            data: [180, 165, 172, 158, 162, 156],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+        }
+    };
+
+    const config = chartData[chartId] || chartData['aktive-faelle'];
+
+    // Create popup overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'chart-popup-overlay';
+    overlay.onclick = (e) => {
+        if (e.target === overlay) closeChartPopup();
+    };
+
+    // Create popup content
+    const popup = document.createElement('div');
+    popup.className = 'chart-popup';
+    popup.innerHTML = `
+        <div class="chart-popup-header">
+            <h3>${title}</h3>
+            <button class="chart-popup-close" onclick="closeChartPopup()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="chart-popup-content" id="popup-chart-${chartId}"></div>
+    `;
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    // Render chart using simple SVG
+    renderPopupChart(chartId, config);
+}
+
+// Render chart in popup
+function renderPopupChart(chartId, config) {
+    const container = document.getElementById(`popup-chart-${chartId}`);
+    if (!container) return;
+
+    const width = 650;
+    const height = 280;
+    const padding = { top: 20, right: 30, bottom: 40, left: 60 };
+
+    const chartWidth = width - padding.left - padding.right;
+    const chartHeight = height - padding.top - padding.bottom;
+
+    const data = config.data;
+    const labels = config.labels;
+    const maxVal = Math.max(...data) * 1.1;
+    const minVal = Math.min(...data) * 0.9;
+    const range = maxVal - minVal;
+
+    // Create points
+    const points = data.map((val, i) => {
+        const x = padding.left + (i / (data.length - 1)) * chartWidth;
+        const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
+        return `${x},${y}`;
+    }).join(' ');
+
+    // Create area path
+    const areaPath = `M ${padding.left},${height - padding.bottom} ` +
+        data.map((val, i) => {
+            const x = padding.left + (i / (data.length - 1)) * chartWidth;
+            const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
+            return `L ${x},${y}`;
+        }).join(' ') +
+        ` L ${width - padding.right},${height - padding.bottom} Z`;
+
+    // Generate Y-axis labels
+    const yLabels = [];
+    for (let i = 0; i <= 4; i++) {
+        const val = minVal + (range * i / 4);
+        const y = padding.top + chartHeight - (i / 4) * chartHeight;
+        yLabels.push({ val: val.toFixed(config.suffix === '%' ? 1 : 0) + (config.suffix || ''), y });
+    }
+
+    container.innerHTML = `
+        <svg width="${width}" height="${height}" style="display: block; margin: 0 auto;">
+            <!-- Grid lines -->
+            ${yLabels.map(l => `<line x1="${padding.left}" y1="${l.y}" x2="${width - padding.right}" y2="${l.y}" stroke="#e2e8f0" stroke-dasharray="4,4"/>`).join('')}
+
+            <!-- Area fill -->
+            <path d="${areaPath}" fill="${config.color}" fill-opacity="0.1"/>
+
+            <!-- Line -->
+            <polyline fill="none" stroke="${config.color}" stroke-width="3" points="${points}" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Data points -->
+            ${data.map((val, i) => {
+                const x = padding.left + (i / (data.length - 1)) * chartWidth;
+                const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
+                return `<circle cx="${x}" cy="${y}" r="6" fill="white" stroke="${config.color}" stroke-width="3"/>`;
+            }).join('')}
+
+            <!-- X-axis labels -->
+            ${labels.map((label, i) => {
+                const x = padding.left + (i / (data.length - 1)) * chartWidth;
+                return `<text x="${x}" y="${height - 10}" text-anchor="middle" font-size="12" fill="#64748b">${label}</text>`;
+            }).join('')}
+
+            <!-- Y-axis labels -->
+            ${yLabels.map(l => `<text x="${padding.left - 10}" y="${l.y + 4}" text-anchor="end" font-size="11" fill="#64748b">${l.val}</text>`).join('')}
+        </svg>
+    `;
+}
+
+// Close chart popup
+function closeChartPopup() {
+    const overlay = document.querySelector('.chart-popup-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// Filter by DPD bucket
+function filterByDPDBucket(bucket) {
+    const bucketConfig = {
+        '0-30': { label: '0-30 Tage', minDpd: 0, maxDpd: 30 },
+        '31-90': { label: '31-90 Tage', minDpd: 31, maxDpd: 90 },
+        '90+': { label: '> 90 Tage', minDpd: 91, maxDpd: 999 }
+    };
+
+    const config = bucketConfig[bucket];
+    if (!config) return;
+
+    showNotification(`Filter: DPD ${config.label}`, 'info');
+    console.log('Filtering by DPD bucket:', bucket);
+
+    // Filter table rows by DPD value
+    const table = document.querySelector('.banken-page .customer-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    let matchCount = 0;
+
+    rows.forEach(row => {
+        const dpdBadge = row.querySelector('.dpd-badge');
+        if (dpdBadge) {
+            const dpd = parseInt(dpdBadge.textContent) || 0;
+            if (dpd >= config.minDpd && dpd <= config.maxDpd) {
+                row.style.display = '';
+                matchCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+
+    // Update pagination
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = `Zeige ${matchCount} Fälle mit DPD ${config.label}`;
+    }
 }
 
 // Toggle all NPL checkboxes
@@ -427,13 +751,35 @@ function viewAgreement(customerId) {
 
 // Filter Aufgaben
 function filterAufgaben(filter) {
+    // Update active button
     document.querySelectorAll('.aufgaben-filter').forEach(btn => {
         btn.classList.remove('active');
+        if (btn.dataset.filter === filter) {
+            btn.classList.add('active');
+        }
     });
 
-    event.target.classList.add('active');
-    showNotification(`Filter: ${filter}`, 'info');
-    console.log('Filtering tasks:', filter);
+    // Filter task items
+    const items = document.querySelectorAll('.aufgabe-item');
+    items.forEach(item => {
+        const status = item.dataset.status;
+        if (filter === 'alle') {
+            item.style.display = '';
+        } else if (filter === status) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    // Update pagination info
+    const visibleCount = document.querySelectorAll('.aufgabe-item:not([style*="display: none"])').length;
+    const paginationInfo = document.querySelector('.pagination-info');
+    if (paginationInfo) {
+        paginationInfo.textContent = `Zeige 1-${visibleCount} von ${visibleCount} Aufgaben`;
+    }
+
+    console.log('Filtering tasks:', filter, 'visible:', visibleCount);
 }
 
 // Reschedule Task
@@ -799,6 +1145,10 @@ window.initModuleSelector = initModuleSelector;
 window.showBankenTab = showBankenTab;
 window.showBankenSection = showBankenSection;
 window.filterBySegment = filterBySegment;
+window.clearSegmentFilter = clearSegmentFilter;
+window.showChartPopup = showChartPopup;
+window.closeChartPopup = closeChartPopup;
+window.filterByDPDBucket = filterByDPDBucket;
 window.toggleAllNpl = toggleAllNpl;
 window.bulkAction = bulkAction;
 window.openCase = openCase;

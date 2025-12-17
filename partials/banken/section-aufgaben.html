@@ -6,14 +6,15 @@
         </div>
 
         <div class="aufgaben-filters">
-            <button class="aufgaben-filter active" onclick="filterAufgaben('alle')">Alle (23)</button>
-            <button class="aufgaben-filter" onclick="filterAufgaben('heute')">Heute fällig (8)</button>
-            <button class="aufgaben-filter" onclick="filterAufgaben('ueberfaellig')">Überfällig (3)</button>
-            <button class="aufgaben-filter" onclick="filterAufgaben('woche')">Diese Woche (12)</button>
+            <button class="aufgaben-filter active" data-filter="alle" onclick="filterAufgaben('alle')">Alle (23)</button>
+            <button class="aufgaben-filter" data-filter="heute" onclick="filterAufgaben('heute')">Heute fällig (8)</button>
+            <button class="aufgaben-filter" data-filter="ueberfaellig" onclick="filterAufgaben('ueberfaellig')">Überfällig (7)</button>
+            <button class="aufgaben-filter" data-filter="woche" onclick="filterAufgaben('woche')">Diese Woche (8)</button>
         </div>
 
-        <div class="aufgaben-list">
-            <div class="aufgabe-item priority-high">
+        <div class="aufgaben-list" id="aufgabenList">
+            <!-- Überfällige Aufgaben (23 Stück) -->
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
                 <div class="aufgabe-priority">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -33,7 +34,129 @@
                     <button class="btn-reschedule" onclick="rescheduleTask('T-001')">Verschieben</button>
                 </div>
             </div>
-            <div class="aufgabe-item priority-medium">
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Mahnung versenden: Bauer Industrie AG</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0015')">K-2024-0015</span>
+                        <span class="aufgabe-due overdue">Überfällig: Vor 2 Tagen</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-015')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-015')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Zahlungseingang prüfen: Fischer & Söhne</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0022')">K-2024-0022</span>
+                        <span class="aufgabe-due overdue">Überfällig: Vor 3 Tagen</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-022')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-022')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Eskalation: Konto sperren - Huber Trading</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0008')">K-2024-0008</span>
+                        <span class="aufgabe-due overdue">Überfällig: Vor 5 Tagen</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-008')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-008')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Ratenzahlungsvereinbarung nachfassen: Klein GmbH</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0031')">K-2024-0031</span>
+                        <span class="aufgabe-due overdue">Überfällig: Gestern 09:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-031')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-031')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Inkasso-Prüfung: Meier Technik</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0044')">K-2024-0044</span>
+                        <span class="aufgabe-due overdue">Überfällig: Vor 4 Tagen</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-044')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-044')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-high" data-status="ueberfaellig">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Dokumentation vervollständigen: Nowak Services</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0052')">K-2024-0052</span>
+                        <span class="aufgabe-due overdue">Überfällig: Vor 2 Tagen</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-052')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-052')">Verschieben</button>
+                </div>
+            </div>
+
+            <!-- Heute fällig (8 Stück) -->
+            <div class="aufgabe-item priority-medium" data-status="heute">
                 <div class="aufgabe-priority">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -52,7 +175,142 @@
                     <button class="btn-reschedule" onclick="rescheduleTask('T-002')">Verschieben</button>
                 </div>
             </div>
-            <div class="aufgabe-item priority-normal">
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Kundenanruf: Neumann Logistics</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0067')">K-2024-0067</span>
+                        <span class="aufgabe-due today">Heute 10:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-067')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-067')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Zahlungszusage bestätigen: Hoffmann & Partner</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0078')">K-2024-0078</span>
+                        <span class="aufgabe-due today">Heute 11:30</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-078')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-078')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Teilzahlung verbuchen: Lang Elektronik</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0085')">K-2024-0085</span>
+                        <span class="aufgabe-due today">Heute 14:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-085')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-085')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">2. Mahnung versenden: Braun Consulting</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0091')">K-2024-0091</span>
+                        <span class="aufgabe-due today">Heute 15:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-091')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-091')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Bonitätsprüfung: Krause Import</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0103')">K-2024-0103</span>
+                        <span class="aufgabe-due today">Heute 17:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-103')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-103')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Vertragsdaten aktualisieren: Wolf GmbH</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0112')">K-2024-0112</span>
+                        <span class="aufgabe-due today">Heute 12:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-112')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-112')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-medium" data-status="heute">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Stundungsantrag prüfen: Richter AG</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0119')">K-2024-0119</span>
+                        <span class="aufgabe-due today">Heute 13:30</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-119')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-119')">Verschieben</button>
+                </div>
+            </div>
+
+            <!-- Diese Woche (8 weitere) -->
+            <div class="aufgabe-item priority-normal" data-status="woche">
                 <div class="aufgabe-priority">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -73,6 +331,158 @@
                     <button class="btn-reschedule" onclick="rescheduleTask('T-003')">Verschieben</button>
                 </div>
             </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Folgetermin: Schulz Maschinenbau</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0127')">K-2024-0127</span>
+                        <span class="aufgabe-due">Morgen 14:30</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-127')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-127')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Zahlungsplan erstellen: Frank Handels</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0134')">K-2024-0134</span>
+                        <span class="aufgabe-due">Übermorgen 09:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-134')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-134')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Kreditlimit anpassen: Zimmer Transport</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0142')">K-2024-0142</span>
+                        <span class="aufgabe-due">Do 11:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-142')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-142')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Jahresabschluss prüfen: Berger Bau</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0155')">K-2024-0155</span>
+                        <span class="aufgabe-due">Fr 10:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-155')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-155')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Sicherheiten bewerten: König Metall</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0168')">K-2024-0168</span>
+                        <span class="aufgabe-due">Fr 14:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-168')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-168')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Ratenpause genehmigen: Lorenz Design</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0176')">K-2024-0176</span>
+                        <span class="aufgabe-due">Fr 16:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-176')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-176')">Verschieben</button>
+                </div>
+            </div>
+            <div class="aufgabe-item priority-normal" data-status="woche">
+                <div class="aufgabe-priority">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="aufgabe-content">
+                    <div class="aufgabe-title">Vertragsänderung: Schröder IT</div>
+                    <div class="aufgabe-meta">
+                        <span class="aufgabe-customer" onclick="openCustomerDetail('K-2024-0188')">K-2024-0188</span>
+                        <span class="aufgabe-due">Sa 09:00</span>
+                    </div>
+                </div>
+                <div class="aufgabe-actions">
+                    <button class="btn-complete" onclick="completeTask('T-188')">Erledigt</button>
+                    <button class="btn-reschedule" onclick="rescheduleTask('T-188')">Verschieben</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="aufgaben-pagination">
+            <span class="pagination-info">Zeige 1-23 von 23 Aufgaben</span>
         </div>
     </div>
 </div>

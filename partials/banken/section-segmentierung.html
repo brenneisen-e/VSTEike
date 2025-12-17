@@ -6,7 +6,7 @@
             <p>Die KI-gestützte Analyse klassifiziert jeden Kunden anhand von Transaktionsmustern, externen Datenquellen und historischem Verhalten. Die Punktewolke zeigt die Verteilung aller 10.234 Fälle nach <strong>Willingness to Pay</strong> (horizontale Achse) und <strong>Ability to Pay</strong> (vertikale Achse).</p>
         </div>
 
-        <!-- Portfolio KPI Boxes - 5 Cards -->
+        <!-- Portfolio KPI Boxes - 5 Cards with Mini Charts -->
         <div class="portfolio-kpi-grid five-columns">
             <div class="portfolio-kpi-box clickable" onclick="filterByAll()">
                 <div class="kpi-icon blue">
@@ -17,14 +17,22 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                 </div>
-                <div class="kpi-content">
-                    <div class="kpi-label">Aktive Fälle</div>
-                    <div class="kpi-value">10.234</div>
-                    <div class="kpi-change negative">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="18 15 12 9 6 15"></polyline>
+                <div class="kpi-content-wrapper">
+                    <div class="kpi-content">
+                        <div class="kpi-label">Aktive Fälle</div>
+                        <div class="kpi-value">10.234</div>
+                        <div class="kpi-change negative">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                            +127 zur Vorwoche
+                        </div>
+                    </div>
+                    <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('aktive-faelle', 'Aktive Fälle - Zeitverlauf')">
+                        <svg viewBox="0 0 60 30">
+                            <polyline fill="none" stroke="#3b82f6" stroke-width="2" points="2,25 12,20 22,22 32,15 42,18 52,10 58,12"/>
+                            <circle cx="58" cy="12" r="3" fill="#3b82f6"/>
                         </svg>
-                        +127 zur Vorwoche
                     </div>
                 </div>
             </div>
@@ -35,14 +43,22 @@
                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                     </svg>
                 </div>
-                <div class="kpi-content">
-                    <div class="kpi-label">Offene Forderung</div>
-                    <div class="kpi-value">€ 47,8 Mio</div>
-                    <div class="kpi-change negative">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="18 15 12 9 6 15"></polyline>
+                <div class="kpi-content-wrapper">
+                    <div class="kpi-content">
+                        <div class="kpi-label">Offene Forderung</div>
+                        <div class="kpi-value">€ 47,8 Mio</div>
+                        <div class="kpi-change negative">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                            +€ 1,2 Mio
+                        </div>
+                    </div>
+                    <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('offene-forderung', 'Offene Forderung - Zeitverlauf')">
+                        <svg viewBox="0 0 60 30">
+                            <polyline fill="none" stroke="#f97316" stroke-width="2" points="2,20 12,18 22,22 32,19 42,15 52,17 58,14"/>
+                            <circle cx="58" cy="14" r="3" fill="#f97316"/>
                         </svg>
-                        +€ 1,2 Mio
                     </div>
                 </div>
             </div>
@@ -53,14 +69,22 @@
                         <polyline points="17 6 23 6 23 12"></polyline>
                     </svg>
                 </div>
-                <div class="kpi-content">
-                    <div class="kpi-label">Recovery Rate</div>
-                    <div class="kpi-value highlight-green">68,4%</div>
-                    <div class="kpi-change positive">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="18 15 12 9 6 15"></polyline>
+                <div class="kpi-content-wrapper">
+                    <div class="kpi-content">
+                        <div class="kpi-label">Recovery Rate</div>
+                        <div class="kpi-value highlight-green">68,4%</div>
+                        <div class="kpi-change positive">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                            +2,3% vs. Vormonat
+                        </div>
+                    </div>
+                    <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('recovery-rate', 'Recovery Rate - Zeitverlauf')">
+                        <svg viewBox="0 0 60 30">
+                            <polyline fill="none" stroke="#22c55e" stroke-width="2" points="2,22 12,20 22,18 32,16 42,14 52,12 58,8"/>
+                            <circle cx="58" cy="8" r="3" fill="#22c55e"/>
                         </svg>
-                        +2,3% vs. Vormonat
                     </div>
                 </div>
             </div>
@@ -71,14 +95,22 @@
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
                 </div>
-                <div class="kpi-content">
-                    <div class="kpi-label">Ø DPD</div>
-                    <div class="kpi-value">47</div>
-                    <div class="kpi-change positive">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="6 9 12 15 18 9"></polyline>
+                <div class="kpi-content-wrapper">
+                    <div class="kpi-content">
+                        <div class="kpi-label">Ø DPD</div>
+                        <div class="kpi-value">47</div>
+                        <div class="kpi-change positive">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            -3 Tage vs. Vorwoche
+                        </div>
+                    </div>
+                    <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('dpd', 'Ø DPD - Zeitverlauf')">
+                        <svg viewBox="0 0 60 30">
+                            <polyline fill="none" stroke="#8b5cf6" stroke-width="2" points="2,10 12,12 22,15 32,14 42,16 52,18 58,20"/>
+                            <circle cx="58" cy="20" r="3" fill="#8b5cf6"/>
                         </svg>
-                        -3 Tage vs. Vorwoche
                     </div>
                 </div>
             </div>
@@ -89,16 +121,24 @@
                         <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                     </svg>
                 </div>
-                <div class="kpi-content">
-                    <div class="kpi-label">Meine Aufgaben</div>
-                    <div class="kpi-value">156</div>
-                    <div class="kpi-change neutral pulse-text">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                <div class="kpi-content-wrapper">
+                    <div class="kpi-content">
+                        <div class="kpi-label">Meine Aufgaben</div>
+                        <div class="kpi-value">156</div>
+                        <div class="kpi-change neutral pulse-text">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            23 überfällig
+                        </div>
+                    </div>
+                    <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('aufgaben', 'Meine Aufgaben - Zeitverlauf')">
+                        <svg viewBox="0 0 60 30">
+                            <polyline fill="none" stroke="#ef4444" stroke-width="2" points="2,18 12,15 22,20 32,12 42,16 52,14 58,10"/>
+                            <circle cx="58" cy="10" r="3" fill="#ef4444"/>
                         </svg>
-                        23 überfällig
                     </div>
                 </div>
             </div>
@@ -118,7 +158,7 @@
             <div class="action-bar-center">
                 <div class="inline-stats">
                     <div class="inline-stat" onclick="showNewCases()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="16"></line>
                             <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -127,22 +167,44 @@
                         <span class="stat-value blue">47</span>
                     </div>
                     <div class="inline-stat" onclick="showPayments()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                             <polyline points="22 4 12 14.01 9 11.01"></polyline>
                         </svg>
-                        <span class="stat-label">Zahlungen</span>
+                        <span class="stat-label">Zahlungseingänge</span>
                         <span class="stat-value green">31</span>
                     </div>
                     <div class="inline-stat" onclick="showPromises()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.91.37 4.15 1.02"></path>
                         </svg>
-                        <span class="stat-label">Versprechen</span>
+                        <span class="stat-label">Zahlungszusagen</span>
                         <span class="stat-value purple">18</span>
+                    </div>
+                    <!-- Inline DPD Buckets -->
+                    <div class="dpd-buckets-inline">
+                        <div class="dpd-bucket-inline" onclick="filterByDPDBucket('0-30')">
+                            <span class="bucket-dot green"></span>
+                            <div class="bucket-info">
+                                <span class="bucket-label">0-30 DPD</span>
+                                <span class="bucket-count">5.010</span>
+                            </div>
+                        </div>
+                        <div class="dpd-bucket-inline" onclick="filterByDPDBucket('31-90')">
+                            <span class="bucket-dot amber"></span>
+                            <div class="bucket-info">
+                                <span class="bucket-label">31-90 DPD</span>
+                                <span class="bucket-count">2.880</span>
+                            </div>
+                        </div>
+                        <div class="dpd-bucket-inline" onclick="filterByDPDBucket('90+')">
+                            <span class="bucket-dot red"></span>
+                            <div class="bucket-info">
+                                <span class="bucket-label">&gt;90 DPD</span>
+                                <span class="bucket-count">2.344</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

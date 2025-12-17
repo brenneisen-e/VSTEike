@@ -1014,10 +1014,10 @@ function closeRisikoscoring() {
         rsModule.style.display = 'none';
     }
 
-    // Show landing page
+    // Show landing page (use flex for proper centering)
     const landingPage = document.getElementById('landingPage');
     if (landingPage) {
-        landingPage.style.display = 'block';
+        landingPage.style.display = 'flex';
     }
 }
 
@@ -1094,10 +1094,10 @@ function closeBestandsuebertragung() {
         bestandModule.style.display = 'none';
     }
 
-    // Show landing page
+    // Show landing page (use flex for proper centering)
     const landingPage = document.getElementById('landingPage');
     if (landingPage) {
-        landingPage.style.display = 'block';
+        landingPage.style.display = 'flex';
     }
 }
 

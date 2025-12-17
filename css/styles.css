@@ -960,14 +960,14 @@ select:focus, .dropdown-button:focus {
     margin-bottom: 0.5rem; 
 } 
 
-.kpi-title { 
-    font-size: 1.125rem; 
-    font-weight: bold; 
-    color: #1e293b; 
-    display: flex; 
-    align-items: center; 
-    gap: 0.5rem; 
-    flex: 1; 
+.kpi-title {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
 } 
 
 .zoom-button { 
@@ -1077,10 +1077,14 @@ select:focus, .dropdown-button:focus {
     stroke-width: 2;
 } 
 
-.kpi-description { 
-    font-size: 0.75rem; 
-    color: #64748b; 
-    margin-top: 0.125rem; 
+.kpi-description {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 } 
 
 .kpi-badge { 
@@ -2767,6 +2771,7 @@ select:focus, .dropdown-button:focus {
 
 .navigation-boxes {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
     margin: 24px 0;
 }
@@ -2803,6 +2808,47 @@ select:focus, .dropdown-button:focus {
     font-size: 14px;
     font-weight: 600;
     color: #1e293b;
+}
+
+/* Sales Operations Sub-Section */
+.sales-ops-section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.sales-ops-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sales-ops-heading svg {
+    color: #86BC25;
+}
+
+.sales-ops-boxes {
+    margin: 0;
+}
+
+.nav-box.nav-box-small {
+    padding: 16px 12px;
+    gap: 8px;
+}
+
+.nav-box.nav-box-small .nav-box-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-box.nav-box-small span {
+    font-size: 12px;
 }
 
 /* ========================================
