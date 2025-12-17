@@ -304,6 +304,21 @@ function showBankenSection(sectionName) {
     console.log('Showing Banken section:', sectionName);
 }
 
+// Show overdue cases - navigates to Aufgaben section
+function showOverdueCases() {
+    showBankenSection('aufgaben');
+    showNotification('23 überfällige Fälle werden angezeigt', 'warning');
+    console.log('Showing overdue cases');
+}
+
+// Dismiss alert banner
+function dismissAlert(alertId) {
+    const alert = document.getElementById(alertId);
+    if (alert) {
+        alert.style.display = 'none';
+    }
+}
+
 // ========================================
 // NEW: Customer Detail Modal Functions
 // ========================================
