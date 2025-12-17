@@ -370,7 +370,10 @@ function showCustomerTab(tabName) {
         content.classList.remove('active');
     });
 
-    const targetTab = document.getElementById(`tab-${tabName}`);
+    // Use modal.querySelector instead of document.getElementById to avoid
+    // conflicts with duplicate IDs (e.g., tab-stammdaten exists in both
+    // index.html for Agentur and modal-customer-detail.html)
+    const targetTab = modal.querySelector(`#tab-${tabName}`);
     if (targetTab) {
         targetTab.classList.add('active');
     }
