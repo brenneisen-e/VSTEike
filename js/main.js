@@ -31,8 +31,7 @@ function createKPICard(kpi) {
             <div class="kpi-header-text">
                 <div class="kpi-title-row">
                     <div class="kpi-title-wrapper">
-                        <span class="kpi-title">${kpi.title}</span>
-                        <span class="kpi-icon">${kpi.icon}</span>
+                        <span class="kpi-title">${kpi.title}</span><span class="kpi-icon">${kpi.icon}</span>
                     </div>
                     <div class="kpi-header-actions">
                         <div class="kpi-badge">Aktueller Monat: ${formatValue(currentValue, kpi.unit)}</div>
