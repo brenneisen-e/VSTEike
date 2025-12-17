@@ -165,30 +165,160 @@ function showBankenTab(tabName) {
 
 // Filter by segment in 2x2 matrix
 function filterBySegment(segment) {
-    // Toggle selection
-    document.querySelectorAll('.matrix-cell').forEach(cell => {
-        cell.classList.remove('selected');
-    });
-
-    const selectedCell = document.querySelector(`.matrix-cell.${segment}`);
-    if (selectedCell) {
-        selectedCell.classList.add('selected');
-    }
-
-    // Show notification
-    const segmentNames = {
-        'q1': 'Will zahlen & Kann zahlen',
-        'q2': 'Will nicht & Kann zahlen',
-        'q3': 'Will zahlen & Kann nicht',
-        'q4': 'Will nicht & Kann nicht',
-        'priority': 'Priorität - Zahlungsvereinbarung',
-        'restructure': 'Restrukturierung',
-        'escalate': 'Eskalation - Inkasso',
-        'writeoff': 'Abwicklung'
+    // Map segment parameter to badge class and display name
+    const segmentConfig = {
+        'eskalation': { badgeClass: 'escalate', name: 'Eskalation', color: '#ef4444' },
+        'prioritaet': { badgeClass: 'priority', name: 'Priorität', color: '#22c55e' },
+        'restrukturierung': { badgeClass: 'restructure', name: 'Restrukturierung', color: '#f59e0b' },
+        'abwicklung': { badgeClass: 'writeoff', name: 'Abwicklung', color: '#64748b' }
     };
 
-    showNotification(`Filter: ${segmentNames[segment] || segment}`, 'info');
-    console.log('Filtering by segment:', segment);
+    const config = segmentConfig[segment];
+    if (!config) {
+        console.warn('Unknown segment:', segment);
+        return;
+    }
+
+    // Highlight selected quadrant
+    document.querySelectorAll('.matrix-quadrant').forEach(q => {
+        q.classList.remove('selected');
+    });
+    const selectedQuadrant = document.querySelector(`.matrix-quadrant.segment-${segment}`);
+    if (selectedQuadrant) {
+        selectedQuadrant.classList.add('selected');
+    }
+
+    // Find the customer table
+    const table = document.querySelector('.banken-page .customer-table');
+    if (!table) {
+        console.warn('Customer table not found');
+        return;
+    }
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Filter rows by segment
+    let matchingRows = [];
+    let hiddenRows = [];
+
+    rows.forEach(row => {
+        const segmentBadge = row.querySelector('.segment-badge');
+        if (segmentBadge && segmentBadge.classList.contains(config.badgeClass)) {
+            matchingRows.push(row);
+            row.style.display = '';
+        } else {
+            hiddenRows.push(row);
+            row.style.display = 'none';
+        }
+    });
+
+    // Sort matching rows by volume (Forderung) - highest first
+    matchingRows.sort((a, b) => {
+        const amountA = parseAmount(a.querySelector('.amount')?.textContent || '0');
+        const amountB = parseAmount(b.querySelector('.amount')?.textContent || '0');
+        return amountB - amountA; // Descending order
+    });
+
+    // Re-append rows in sorted order (matching first, then hidden)
+    matchingRows.forEach(row => tbody.appendChild(row));
+    hiddenRows.forEach(row => tbody.appendChild(row));
+
+    // Show/update filter indicator
+    showFilterIndicator(config.name, config.color, matchingRows.length, segment);
+
+    // Scroll to table
+    const tableWrapper = document.querySelector('.banken-page .customer-table-wrapper');
+    if (tableWrapper) {
+        tableWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Update pagination text
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = `Zeige ${matchingRows.length} ${config.name}-Fälle (sortiert nach Volumen)`;
+    }
+
+    showNotification(`${matchingRows.length} Fälle im Segment "${config.name}" gefunden`, 'info');
+    console.log('Filtered by segment:', segment, '- Found:', matchingRows.length);
+}
+
+// Parse amount string to number (e.g., "€125.000" -> 125000)
+function parseAmount(amountStr) {
+    if (!amountStr) return 0;
+    // Remove currency symbol and thousands separators, handle decimal
+    const cleaned = amountStr.replace(/[€\s]/g, '').replace(/\./g, '').replace(',', '.');
+    return parseFloat(cleaned) || 0;
+}
+
+// Show filter indicator above the table
+function showFilterIndicator(segmentName, color, count, segmentKey) {
+    // Remove existing indicator
+    const existingIndicator = document.querySelector('.segment-filter-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+
+    // Create new indicator
+    const indicator = document.createElement('div');
+    indicator.className = 'segment-filter-indicator';
+    indicator.innerHTML = `
+        <div class="filter-indicator-content">
+            <span class="filter-indicator-badge" style="background: ${color};">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                ${segmentName}
+            </span>
+            <span class="filter-indicator-count">${count} Fälle · Sortiert nach Volumen (höchstes zuerst)</span>
+        </div>
+        <button class="filter-indicator-clear" onclick="clearSegmentFilter()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Filter aufheben
+        </button>
+    `;
+
+    // Insert before table wrapper
+    const tableWrapper = document.querySelector('.banken-page .customer-table-wrapper');
+    if (tableWrapper) {
+        tableWrapper.parentNode.insertBefore(indicator, tableWrapper);
+    }
+}
+
+// Clear segment filter
+function clearSegmentFilter() {
+    // Remove indicator
+    const indicator = document.querySelector('.segment-filter-indicator');
+    if (indicator) {
+        indicator.remove();
+    }
+
+    // Remove quadrant selection
+    document.querySelectorAll('.matrix-quadrant').forEach(q => {
+        q.classList.remove('selected');
+    });
+
+    // Show all rows
+    const table = document.querySelector('.banken-page .customer-table');
+    if (table) {
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+    }
+
+    // Reset pagination text
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = 'Zeige 1-4 von 10.234 Kunden';
+    }
+
+    showNotification('Filter aufgehoben', 'info');
 }
 
 // Toggle all NPL checkboxes
@@ -799,6 +929,7 @@ window.initModuleSelector = initModuleSelector;
 window.showBankenTab = showBankenTab;
 window.showBankenSection = showBankenSection;
 window.filterBySegment = filterBySegment;
+window.clearSegmentFilter = clearSegmentFilter;
 window.toggleAllNpl = toggleAllNpl;
 window.bulkAction = bulkAction;
 window.openCase = openCase;
