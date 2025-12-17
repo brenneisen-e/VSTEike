@@ -910,8 +910,8 @@ select:focus, .dropdown-button:focus {
     background: white;
     border-radius: 1rem;
     padding: 1.25rem;
-    padding-top: 1.25rem;
-    margin-top: 0.875rem;
+    padding-top: 1rem;
+    margin-top: 0.625rem;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid #e2e8f0;
     display: flex;
@@ -920,7 +920,7 @@ select:focus, .dropdown-button:focus {
     overflow: visible;
     transition: all 0.3s;
     animation: fadeIn 0.3s ease-out;
-    height: calc(100% - 0.875rem);
+    height: calc(100% - 0.625rem);
 } 
 
 @keyframes fadeIn { 
@@ -1120,7 +1120,7 @@ select:focus, .dropdown-button:focus {
 
 .kpi-icon-header {
     position: absolute;
-    top: -0.875rem;
+    top: -0.625rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
@@ -1130,20 +1130,20 @@ select:focus, .dropdown-button:focus {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    width: 1.25rem;
+    height: 1.25rem;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
     border-radius: 50%;
-    font-size: 0.875rem;
+    font-size: 0.625rem;
     flex-shrink: 0;
     border: 2px solid white;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .kpi-icon svg {
-    width: 14px;
-    height: 14px;
-    stroke: #16a34a;
+    width: 10px;
+    height: 10px;
+    stroke: #3b82f6;
     fill: none;
     stroke-width: 2;
 }
