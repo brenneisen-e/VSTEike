@@ -70,6 +70,10 @@ async function loadBankenModule() {
             // Initialize charts after all content is loaded
             setTimeout(() => {
                 initBankenCharts();
+                // Initialize Banken Chat
+                if (typeof initBankenChat === 'function') {
+                    initBankenChat();
+                }
             }, 100);
         } else {
             throw new Error('Failed to load module');
