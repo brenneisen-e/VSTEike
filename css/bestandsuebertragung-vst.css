@@ -250,25 +250,25 @@ body {
    ======================================== */
 .bestand-page .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    margin-bottom: var(--spacing-lg);
 }
 
 .bestand-page .kpi-card {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
+    gap: 10px;
+    padding: 12px 14px;
     background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .bestand-page .kpi-icon {
-    font-size: 2rem;
-    width: 60px;
-    height: 60px;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -334,22 +334,23 @@ body {
 }
 
 .bestand-page .kpi-value {
-    font-size: 2rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--gray-800);
     line-height: 1;
 }
 
 .bestand-page .kpi-label {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--gray-500);
-    margin-top: var(--spacing-xs);
+    margin-top: 2px;
+    line-height: 1.2;
 }
 
 .bestand-page .kpi-percent {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: var(--gray-400);
-    margin-top: var(--spacing-xs);
+    margin-top: 2px;
 }
 
 /* ========================================
@@ -2263,7 +2264,7 @@ body {
    ======================================== */
 @media (max-width: 1200px) {
     .kpi-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .dashboard-grid {
@@ -2272,6 +2273,12 @@ body {
 
     .dashboard-card.dashboard-wide {
         grid-column: span 2;
+    }
+}
+
+@media (max-width: 1100px) {
+    .bestand-page .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
@@ -2303,7 +2310,8 @@ body {
         padding: var(--spacing-md);
     }
 
-    .kpi-grid {
+    .kpi-grid,
+    .bestand-page .kpi-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 

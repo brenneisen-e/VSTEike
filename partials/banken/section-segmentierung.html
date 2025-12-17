@@ -31,9 +31,9 @@
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('aktive-faelle', 'Aktive Fälle - Zeitverlauf')">
-                        <svg viewBox="0 0 60 30">
-                            <polyline fill="none" stroke="#3b82f6" stroke-width="2" points="2,25 12,20 22,22 32,15 42,18 52,10 58,12"/>
-                            <circle cx="58" cy="12" r="3" fill="#3b82f6"/>
+                        <svg viewBox="0 0 64 34">
+                            <polyline fill="none" stroke="#3b82f6" stroke-width="2" points="2,27 12,22 22,24 32,17 42,20 52,12 58,14"/>
+                            <circle cx="58" cy="14" r="3" fill="#3b82f6"/>
                         </svg>
                     </div>
                 </div>
@@ -59,9 +59,9 @@
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('offene-forderung', 'Offene Forderung - Zeitverlauf')">
-                        <svg viewBox="0 0 60 30">
-                            <polyline fill="none" stroke="#f97316" stroke-width="2" points="2,20 12,18 22,22 32,19 42,15 52,17 58,14"/>
-                            <circle cx="58" cy="14" r="3" fill="#f97316"/>
+                        <svg viewBox="0 0 64 34">
+                            <polyline fill="none" stroke="#f97316" stroke-width="2" points="2,22 12,20 22,24 32,21 42,17 52,19 58,16"/>
+                            <circle cx="58" cy="16" r="3" fill="#f97316"/>
                         </svg>
                     </div>
                 </div>
@@ -87,14 +87,14 @@
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('recovery-rate', 'Recovery Rate - Zeitverlauf')">
-                        <svg viewBox="0 0 60 30">
-                            <polyline fill="none" stroke="#22c55e" stroke-width="2" points="2,22 12,20 22,18 32,16 42,14 52,12 58,8"/>
-                            <circle cx="58" cy="8" r="3" fill="#22c55e"/>
+                        <svg viewBox="0 0 64 34">
+                            <polyline fill="none" stroke="#22c55e" stroke-width="2" points="2,26 12,24 22,22 32,20 42,18 52,14 58,10"/>
+                            <circle cx="58" cy="10" r="3" fill="#22c55e"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="portfolio-kpi-box clickable" onclick="filterByDPD()">
+            <div class="portfolio-kpi-box clickable dpd-expanded" onclick="filterByDPD()">
                 <div class="kpi-icon purple">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -110,19 +110,24 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
-                                -3 Tage vs. Vorwoche
+                                -3 Tage
                             </div>
+                        </div>
+                        <div class="dpd-buckets-compact">
+                            <span class="dpd-bucket-tag green" onclick="event.stopPropagation(); filterByDPDBucket('0-30')">0-30: 5.010</span>
+                            <span class="dpd-bucket-tag amber" onclick="event.stopPropagation(); filterByDPDBucket('31-90')">31-90: 2.880</span>
+                            <span class="dpd-bucket-tag red" onclick="event.stopPropagation(); filterByDPDBucket('90+')">&gt;90: 2.344</span>
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('dpd', 'Ø DPD - Zeitverlauf')">
-                        <svg viewBox="0 0 60 30">
-                            <polyline fill="none" stroke="#8b5cf6" stroke-width="2" points="2,10 12,12 22,15 32,14 42,16 52,18 58,20"/>
-                            <circle cx="58" cy="20" r="3" fill="#8b5cf6"/>
+                        <svg viewBox="0 0 64 34">
+                            <polyline fill="none" stroke="#8b5cf6" stroke-width="2" points="2,10 12,12 22,15 32,14 42,16 52,20 58,22"/>
+                            <circle cx="58" cy="22" r="3" fill="#8b5cf6"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="portfolio-kpi-box clickable" onclick="showBankenSection('aufgaben')">
+            <div class="portfolio-kpi-box clickable aufgaben-expanded" onclick="showBankenSection('aufgaben')">
                 <div class="kpi-icon red">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                         <path d="M9 11l3 3L22 4"></path>
@@ -143,11 +148,17 @@
                                 23 überfällig
                             </div>
                         </div>
+                        <button class="kpi-action-btn" onclick="event.stopPropagation(); showBankenSection('aufgaben')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                            Jetzt bearbeiten
+                        </button>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('aufgaben', 'Meine Aufgaben - Zeitverlauf')">
-                        <svg viewBox="0 0 60 30">
-                            <polyline fill="none" stroke="#ef4444" stroke-width="2" points="2,18 12,15 22,20 32,12 42,16 52,14 58,10"/>
-                            <circle cx="58" cy="10" r="3" fill="#ef4444"/>
+                        <svg viewBox="0 0 64 34">
+                            <polyline fill="none" stroke="#ef4444" stroke-width="2" points="2,20 12,17 22,22 32,14 42,18 52,16 58,12"/>
+                            <circle cx="58" cy="12" r="3" fill="#ef4444"/>
                         </svg>
                     </div>
                 </div>
@@ -192,30 +203,6 @@
                         <span class="stat-label">Zahlungszusagen</span>
                         <span class="stat-value purple">18</span>
                     </div>
-                    <!-- Inline DPD Buckets -->
-                    <div class="dpd-buckets-inline">
-                        <div class="dpd-bucket-inline" onclick="filterByDPDBucket('0-30')">
-                            <span class="bucket-dot green"></span>
-                            <div class="bucket-info">
-                                <span class="bucket-label">0-30 DPD</span>
-                                <span class="bucket-count">5.010</span>
-                            </div>
-                        </div>
-                        <div class="dpd-bucket-inline" onclick="filterByDPDBucket('31-90')">
-                            <span class="bucket-dot amber"></span>
-                            <div class="bucket-info">
-                                <span class="bucket-label">31-90 DPD</span>
-                                <span class="bucket-count">2.880</span>
-                            </div>
-                        </div>
-                        <div class="dpd-bucket-inline" onclick="filterByDPDBucket('90+')">
-                            <span class="bucket-dot red"></span>
-                            <div class="bucket-info">
-                                <span class="bucket-label">&gt;90 DPD</span>
-                                <span class="bucket-count">2.344</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="action-bar-right">
@@ -252,7 +239,7 @@
                 <!-- Matrix Quadrants Grid -->
                 <div class="matrix-quadrants">
                     <!-- Top Left: Eskalation (High Ability, Low Willingness) -->
-                    <div class="matrix-quadrant segment-eskalation" onclick="filterBySegment('eskalation')">
+                    <div class="matrix-quadrant segment-eskalation" onclick="openSegmentFullscreen('eskalation')">
                         <div class="quadrant-header">
                             <div>
                                 <span class="quadrant-subtitle">Hohe Fähigkeit • Geringe Bereitschaft</span>
@@ -271,7 +258,7 @@
                     </div>
 
                     <!-- Top Right: Priorität (High Ability, High Willingness) -->
-                    <div class="matrix-quadrant segment-prioritaet" onclick="filterBySegment('prioritaet')">
+                    <div class="matrix-quadrant segment-prioritaet" onclick="openSegmentFullscreen('prioritaet')">
                         <div class="quadrant-header">
                             <div>
                                 <span class="quadrant-subtitle">Hohe Fähigkeit • Hohe Bereitschaft</span>
@@ -290,7 +277,7 @@
                     </div>
 
                     <!-- Bottom Left: Abwicklung (Low Ability, Low Willingness) -->
-                    <div class="matrix-quadrant segment-abwicklung" onclick="filterBySegment('abwicklung')">
+                    <div class="matrix-quadrant segment-abwicklung" onclick="openSegmentFullscreen('abwicklung')">
                         <div class="quadrant-header">
                             <div>
                                 <span class="quadrant-subtitle">Geringe Fähigkeit • Geringe Bereitschaft</span>
@@ -309,7 +296,7 @@
                     </div>
 
                     <!-- Bottom Right: Restrukturierung (Low Ability, High Willingness) -->
-                    <div class="matrix-quadrant segment-restrukturierung" onclick="filterBySegment('restrukturierung')">
+                    <div class="matrix-quadrant segment-restrukturierung" onclick="openSegmentFullscreen('restrukturierung')">
                         <div class="quadrant-header">
                             <div>
                                 <span class="quadrant-subtitle">Geringe Fähigkeit • Hohe Bereitschaft</span>
@@ -336,74 +323,6 @@
                 </div>
             </div>
 
-            <!-- Right Sidebar - Compact -->
-            <div class="dashboard-sidebar compact">
-                <!-- DPD Buckets -->
-                <div class="sidebar-card">
-                    <h4>Verzugsbuckets (DPD)</h4>
-                    <div class="dpd-buckets">
-                        <div class="dpd-bucket bucket-green" onclick="filterByDPDBucket('0-30')">
-                            <div class="bucket-left">
-                                <span class="bucket-dot green"></span>
-                                <span class="bucket-label">0-30 Tage</span>
-                            </div>
-                            <div class="bucket-right">
-                                <span class="bucket-count">5.010</span>
-                                <span class="bucket-volume">€ 18,2 Mio</span>
-                            </div>
-                        </div>
-                        <div class="dpd-bucket bucket-amber" onclick="filterByDPDBucket('31-90')">
-                            <div class="bucket-left">
-                                <span class="bucket-dot amber"></span>
-                                <span class="bucket-label">31-90 Tage</span>
-                            </div>
-                            <div class="bucket-right">
-                                <span class="bucket-count">2.880</span>
-                                <span class="bucket-volume">€ 15,4 Mio</span>
-                            </div>
-                        </div>
-                        <div class="dpd-bucket bucket-red" onclick="filterByDPDBucket('90+')">
-                            <div class="bucket-left">
-                                <span class="bucket-dot red"></span>
-                                <span class="bucket-label">&gt; 90 Tage</span>
-                            </div>
-                            <div class="bucket-right">
-                                <span class="bucket-count">2.344</span>
-                                <span class="bucket-volume">€ 14,2 Mio</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Portfolio Evolution - Full Width -->
-        <div class="portfolio-evolution-card full-width">
-            <div class="card-header">
-                <h3>Portfolio-Entwicklung</h3>
-                <select class="time-select" onchange="updatePortfolioChart(this.value)">
-                    <option value="12m">Letzte 12 Monate</option>
-                    <option value="6m">Letzte 6 Monate</option>
-                    <option value="3m">Letzte 3 Monate</option>
-                </select>
-            </div>
-            <div class="portfolio-chart-container">
-                <canvas id="portfolioEvolutionChart"></canvas>
-            </div>
-            <div class="portfolio-stats">
-                <div class="portfolio-stat">
-                    <span class="stat-label">Neuzugänge (Monat)</span>
-                    <span class="stat-value negative">+847</span>
-                </div>
-                <div class="portfolio-stat">
-                    <span class="stat-label">Abgänge (regulär)</span>
-                    <span class="stat-value positive">-523</span>
-                </div>
-                <div class="portfolio-stat">
-                    <span class="stat-label">Netto-Veränderung</span>
-                    <span class="stat-value negative">+324</span>
-                </div>
-            </div>
         </div>
 
         <!-- News & Updates -->

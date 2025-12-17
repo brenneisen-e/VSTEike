@@ -249,6 +249,98 @@ function filterBySegment(segment) {
     console.log('Filtered by segment:', segment, '- Found:', matchingRows.length);
 }
 
+// Open segment in fullscreen customer list view
+function openSegmentFullscreen(segment) {
+    const segmentConfig = {
+        'eskalation': { badgeClass: 'escalate', name: 'Eskalation', color: '#ef4444', icon: '⚠️' },
+        'prioritaet': { badgeClass: 'priority', name: 'Priorität', color: '#22c55e', icon: '✅' },
+        'restrukturierung': { badgeClass: 'restructure', name: 'Restrukturierung', color: '#f59e0b', icon: '🔄' },
+        'abwicklung': { badgeClass: 'writeoff', name: 'Abwicklung', color: '#64748b', icon: '📦' }
+    };
+
+    const config = segmentConfig[segment];
+    if (!config) return;
+
+    // Create fullscreen modal
+    let modal = document.getElementById('segmentFullscreenModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'segmentFullscreenModal';
+        modal.className = 'segment-fullscreen-modal';
+        document.body.appendChild(modal);
+    }
+
+    // Get filtered customer data from the existing table
+    const table = document.querySelector('.banken-page .customer-table');
+    let tableContent = '';
+
+    if (table) {
+        const tbody = table.querySelector('tbody');
+        const rows = tbody ? Array.from(tbody.querySelectorAll('tr')) : [];
+
+        const filteredRows = rows.filter(row => {
+            const segmentBadge = row.querySelector('.segment-badge');
+            return segmentBadge && segmentBadge.classList.contains(config.badgeClass);
+        });
+
+        // Sort by amount descending
+        filteredRows.sort((a, b) => {
+            const amountA = parseAmount(a.querySelector('.amount')?.textContent || '0');
+            const amountB = parseAmount(b.querySelector('.amount')?.textContent || '0');
+            return amountB - amountA;
+        });
+
+        if (filteredRows.length > 0) {
+            tableContent = `
+                <table class="customer-table fullscreen-table">
+                    <thead>${table.querySelector('thead').innerHTML}</thead>
+                    <tbody>${filteredRows.map(r => r.outerHTML).join('')}</tbody>
+                </table>
+            `;
+        }
+    }
+
+    modal.innerHTML = `
+        <div class="segment-fullscreen-content">
+            <div class="segment-fullscreen-header">
+                <div class="segment-fullscreen-title">
+                    <span class="segment-badge-large" style="background: ${config.color};">${config.name}</span>
+                    <span class="segment-fullscreen-subtitle">Detaillierte Kundenübersicht</span>
+                </div>
+                <button class="segment-fullscreen-close" onclick="closeSegmentFullscreen()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="segment-fullscreen-body">
+                ${tableContent || '<p class="empty-state">Keine Kunden in diesem Segment gefunden.</p>'}
+            </div>
+        </div>
+    `;
+
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
+
+    // ESC to close
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            closeSegmentFullscreen();
+            document.removeEventListener('keydown', escHandler);
+        }
+    };
+    document.addEventListener('keydown', escHandler);
+}
+
+function closeSegmentFullscreen() {
+    const modal = document.getElementById('segmentFullscreenModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+    }
+}
+
 // Parse amount string to number (e.g., "€125.000" -> 125000)
 function parseAmount(amountStr) {
     if (!amountStr) return 0;
@@ -1247,6 +1339,8 @@ window.initModuleSelector = initModuleSelector;
 window.showBankenTab = showBankenTab;
 window.showBankenSection = showBankenSection;
 window.filterBySegment = filterBySegment;
+window.openSegmentFullscreen = openSegmentFullscreen;
+window.closeSegmentFullscreen = closeSegmentFullscreen;
 window.clearSegmentFilter = clearSegmentFilter;
 window.showChartPopup = showChartPopup;
 window.closeChartPopup = closeChartPopup;
