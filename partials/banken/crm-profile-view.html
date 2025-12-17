@@ -307,21 +307,372 @@
                 <div class="crm-section-header">
                     <h2>Konten & Verträge</h2>
                 </div>
-                <p>Alle Konten und Verträge des Kunden...</p>
+
+                <!-- Multi-Credit Product Display -->
+                <div class="credit-products-grid">
+                    <!-- Kreditkarte -->
+                    <div class="credit-product-card" id="credit-kreditkarte">
+                        <div class="credit-header">
+                            <div class="credit-icon kreditkarte">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="credit-title">
+                                <span class="credit-name">Kreditkarte Gold</span>
+                                <span class="credit-number">**** 8472</span>
+                            </div>
+                            <span class="credit-status danger">Überfällig</span>
+                        </div>
+                        <div class="credit-amounts">
+                            <div class="credit-amount-row">
+                                <span>Kreditrahmen:</span>
+                                <span>€ 15.000,00</span>
+                            </div>
+                            <div class="credit-amount-row highlight">
+                                <span>Offen:</span>
+                                <span class="danger">€ 12.450,00</span>
+                            </div>
+                            <div class="credit-amount-row">
+                                <span>DPD:</span>
+                                <span>45 Tage</span>
+                            </div>
+                        </div>
+                        <div class="credit-chart" id="chart-kreditkarte">
+                            <div class="chart-title">Restschuld-Verlauf</div>
+                            <div class="mini-chart">
+                                <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+                                    <polyline points="0,40 30,38 60,42 90,35 120,45 150,50 180,55 200,52" fill="none" stroke="#ef4444" stroke-width="2"/>
+                                    <polyline points="0,40 30,38 60,42 90,35 120,45 150,50 180,55 200,52" fill="url(#redGradient)" stroke="none" opacity="0.2"/>
+                                    <defs>
+                                        <linearGradient id="redGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#ef4444"/>
+                                            <stop offset="100%" style="stop-color:transparent"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konsumkredit 1 -->
+                    <div class="credit-product-card" id="credit-konsum1">
+                        <div class="credit-header">
+                            <div class="credit-icon ratenkredit">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div class="credit-title">
+                                <span class="credit-name">Ratenkredit PKW</span>
+                                <span class="credit-number">RK-2023-4521</span>
+                            </div>
+                            <span class="credit-status warning">Rückstand</span>
+                        </div>
+                        <div class="credit-amounts">
+                            <div class="credit-amount-row">
+                                <span>Ursprung:</span>
+                                <span>€ 35.000,00</span>
+                            </div>
+                            <div class="credit-amount-row highlight">
+                                <span>Restschuld:</span>
+                                <span class="warning">€ 28.750,00</span>
+                            </div>
+                            <div class="credit-amount-row">
+                                <span>Rate/Monat:</span>
+                                <span>€ 650,00</span>
+                            </div>
+                        </div>
+                        <div class="credit-chart" id="chart-konsum1">
+                            <div class="chart-title">Restschuld-Verlauf</div>
+                            <div class="mini-chart">
+                                <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+                                    <polyline points="0,10 30,15 60,18 90,22 120,28 150,30 180,32 200,35" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konsumkredit 2 -->
+                    <div class="credit-product-card" id="credit-konsum2">
+                        <div class="credit-header">
+                            <div class="credit-icon ratenkredit">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div class="credit-title">
+                                <span class="credit-name">Ratenkredit Möbel</span>
+                                <span class="credit-number">RK-2024-0892</span>
+                            </div>
+                            <span class="credit-status danger">Überfällig</span>
+                        </div>
+                        <div class="credit-amounts">
+                            <div class="credit-amount-row">
+                                <span>Ursprung:</span>
+                                <span>€ 12.000,00</span>
+                            </div>
+                            <div class="credit-amount-row highlight">
+                                <span>Restschuld:</span>
+                                <span class="danger">€ 9.800,00</span>
+                            </div>
+                            <div class="credit-amount-row">
+                                <span>Rate/Monat:</span>
+                                <span>€ 280,00</span>
+                            </div>
+                        </div>
+                        <div class="credit-chart" id="chart-konsum2">
+                            <div class="chart-title">Restschuld-Verlauf</div>
+                            <div class="mini-chart">
+                                <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+                                    <polyline points="0,5 30,12 60,15 90,18 120,22 150,28 180,35 200,42" fill="none" stroke="#ef4444" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dispositionskredit -->
+                    <div class="credit-product-card" id="credit-dispo">
+                        <div class="credit-header">
+                            <div class="credit-icon dispo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                    <line x1="6" y1="14" x2="6" y2="14.01"></line>
+                                    <line x1="10" y1="14" x2="14" y2="14"></line>
+                                </svg>
+                            </div>
+                            <div class="credit-title">
+                                <span class="credit-name">Dispo Girokonto</span>
+                                <span class="credit-number">DE89 3704 ****</span>
+                            </div>
+                            <span class="credit-status danger">Überzogen</span>
+                        </div>
+                        <div class="credit-amounts">
+                            <div class="credit-amount-row">
+                                <span>Dispo-Limit:</span>
+                                <span>€ 10.000,00</span>
+                            </div>
+                            <div class="credit-amount-row highlight">
+                                <span>Aktuelle Nutzung:</span>
+                                <span class="danger">€ 14.500,00</span>
+                            </div>
+                            <div class="credit-amount-row">
+                                <span>Überziehung:</span>
+                                <span class="danger">€ 4.500,00</span>
+                            </div>
+                        </div>
+                        <div class="credit-chart" id="chart-dispo">
+                            <div class="chart-title">Kontostand-Verlauf</div>
+                            <div class="mini-chart">
+                                <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+                                    <line x1="0" y1="30" x2="200" y2="30" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+                                    <polyline points="0,25 30,28 60,32 90,38 120,42 150,48 180,52 200,55" fill="none" stroke="#ef4444" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Jul</span><span>Aug</span><span>Sep</span><span>Okt</span><span>Nov</span><span>Dez</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Baufinanzierung -->
+                    <div class="credit-product-card large" id="credit-baufi">
+                        <div class="credit-header">
+                            <div class="credit-icon baufi">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <div class="credit-title">
+                                <span class="credit-name">Baufinanzierung</span>
+                                <span class="credit-number">BF-2020-1847</span>
+                            </div>
+                            <span class="credit-status warning">Rückstand</span>
+                        </div>
+                        <div class="credit-amounts">
+                            <div class="credit-amount-row">
+                                <span>Darlehenssumme:</span>
+                                <span>€ 320.000,00</span>
+                            </div>
+                            <div class="credit-amount-row highlight">
+                                <span>Restschuld:</span>
+                                <span class="warning">€ 285.000,00</span>
+                            </div>
+                            <div class="credit-amount-row">
+                                <span>Rate/Monat:</span>
+                                <span>€ 1.450,00</span>
+                            </div>
+                            <div class="credit-amount-row">
+                                <span>Rückstand:</span>
+                                <span class="danger">2 Raten (€ 2.900,00)</span>
+                            </div>
+                        </div>
+                        <div class="credit-chart large" id="chart-baufi">
+                            <div class="chart-title">Tilgungsverlauf (5 Jahre)</div>
+                            <div class="mini-chart large">
+                                <svg viewBox="0 0 400 80" preserveAspectRatio="none">
+                                    <line x1="0" y1="75" x2="400" y2="75" stroke="#e2e8f0" stroke-width="1"/>
+                                    <polyline points="0,10 80,18 160,26 240,34 320,42 400,50" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                                    <polyline points="0,10 80,15 160,20 240,25 320,30 400,35" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="4"/>
+                                    <text x="360" y="55" font-size="8" fill="#64748b">Ist</text>
+                                    <text x="360" y="38" font-size="8" fill="#22c55e">Soll</text>
+                                </svg>
+                            </div>
+                            <div class="chart-labels">
+                                <span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gesamtübersicht -->
+                <div class="credit-total-summary">
+                    <div class="total-item">
+                        <span class="total-label">Gesamtforderung</span>
+                        <span class="total-value danger">€ 350.500,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="total-label">Davon überfällig</span>
+                        <span class="total-value danger">€ 125.000,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="total-label">Monatliche Belastung</span>
+                        <span class="total-value">€ 2.380,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="total-label">Anzahl Produkte</span>
+                        <span class="total-value">5 Kredite</span>
+                    </div>
+                </div>
             </div>
 
             <div class="crm-section" id="crm-transaktionen">
                 <div class="crm-section-header">
-                    <h2>Transaktionen</h2>
+                    <h2>Transaktionen & Forderungen</h2>
                 </div>
-                <p>Vollständiger Kontoauszug mit Lastschriftrückgaben...</p>
+
+                <!-- Combined Transactions and Claims View -->
+                <div class="transactions-claims-grid">
+                    <div class="transactions-panel">
+                        <h3>Letzte Kontobewegungen</h3>
+                        <div class="transaction-list">
+                            <div class="transaction-item incoming">
+                                <div class="transaction-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                                        <polyline points="5 12 12 5 19 12"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="transaction-info">
+                                    <span class="transaction-desc">Teilzahlung</span>
+                                    <span class="transaction-date">15.12.2025</span>
+                                </div>
+                                <span class="transaction-amount positive">+€ 500,00</span>
+                            </div>
+                            <div class="transaction-item outgoing">
+                                <div class="transaction-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <polyline points="19 12 12 19 5 12"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="transaction-info">
+                                    <span class="transaction-desc">Zinsen Dezember</span>
+                                    <span class="transaction-date">01.12.2025</span>
+                                </div>
+                                <span class="transaction-amount negative">-€ 245,80</span>
+                            </div>
+                            <div class="transaction-item failed">
+                                <div class="transaction-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <div class="transaction-info">
+                                    <span class="transaction-desc">Lastschrift Rücklauf</span>
+                                    <span class="transaction-date">28.11.2025</span>
+                                </div>
+                                <span class="transaction-amount negative">€ 650,00</span>
+                            </div>
+                            <div class="transaction-item incoming">
+                                <div class="transaction-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                                        <polyline points="5 12 12 5 19 12"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="transaction-info">
+                                    <span class="transaction-desc">Teilzahlung</span>
+                                    <span class="transaction-date">15.11.2025</span>
+                                </div>
+                                <span class="transaction-amount positive">+€ 1.000,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="claims-panel">
+                        <h3>Offene Forderungen nach Produkt</h3>
+                        <div class="claims-breakdown">
+                            <div class="claim-bar">
+                                <div class="claim-label">Kreditkarte</div>
+                                <div class="claim-bar-container">
+                                    <div class="claim-bar-fill danger" style="width: 10%;"></div>
+                                </div>
+                                <div class="claim-value">€ 12.450</div>
+                            </div>
+                            <div class="claim-bar">
+                                <div class="claim-label">Ratenkredit PKW</div>
+                                <div class="claim-bar-container">
+                                    <div class="claim-bar-fill warning" style="width: 23%;"></div>
+                                </div>
+                                <div class="claim-value">€ 28.750</div>
+                            </div>
+                            <div class="claim-bar">
+                                <div class="claim-label">Ratenkredit Möbel</div>
+                                <div class="claim-bar-container">
+                                    <div class="claim-bar-fill danger" style="width: 8%;"></div>
+                                </div>
+                                <div class="claim-value">€ 9.800</div>
+                            </div>
+                            <div class="claim-bar">
+                                <div class="claim-label">Dispo</div>
+                                <div class="claim-bar-container">
+                                    <div class="claim-bar-fill danger" style="width: 12%;"></div>
+                                </div>
+                                <div class="claim-value">€ 14.500</div>
+                            </div>
+                            <div class="claim-bar">
+                                <div class="claim-label">Baufinanzierung</div>
+                                <div class="claim-bar-container">
+                                    <div class="claim-bar-fill primary" style="width: 100%;"></div>
+                                </div>
+                                <div class="claim-value">€ 285.000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="crm-section" id="crm-forderungen">
                 <div class="crm-section-header">
-                    <h2>Forderungen</h2>
+                    <h2>Forderungsdetails</h2>
                 </div>
-                <p>Detaillierte Aufstellung aller offenen Forderungen...</p>
+                <p>Weiterleitung zu Transaktionen & Forderungen...</p>
             </div>
 
             <div class="crm-section" id="crm-kommunikation">
@@ -333,9 +684,244 @@
 
             <div class="crm-section" id="crm-dokumente">
                 <div class="crm-section-header">
-                    <h2>Dokumente</h2>
+                    <h2>Dokumente & Schreiben</h2>
+                    <button class="btn-secondary" onclick="uploadDocument()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Hochladen
+                    </button>
                 </div>
-                <p>Alle archivierten Dokumente...</p>
+
+                <!-- Expandable Document List -->
+                <div class="document-list">
+                    <!-- Mahnung 3 -->
+                    <div class="document-item expandable" id="doc-001">
+                        <div class="document-header" onclick="toggleDocument('doc-001')">
+                            <div class="document-icon danger">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">3. Mahnung - Letzte außergerichtliche Aufforderung</span>
+                                <span class="document-meta">01.12.2025 • Ausgehend • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge danger">Versendet</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="letter-preview">
+                                    <div class="letter-header">
+                                        <strong>Musterbank AG</strong><br>
+                                        Inkasso-Abteilung<br>
+                                        Bankstraße 123<br>
+                                        60311 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-recipient">
+                                        <strong>Mueller GmbH</strong><br>
+                                        Herr Max Mueller<br>
+                                        Industriestraße 45<br>
+                                        60487 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-date">Frankfurt, 01.12.2025</div>
+                                    <div class="letter-subject"><strong>3. Mahnung - Letzte außergerichtliche Aufforderung</strong></div>
+                                    <div class="letter-body">
+                                        <p>Sehr geehrter Herr Mueller,</p>
+                                        <p>trotz unserer bisherigen Mahnungen und Zahlungsaufforderungen ist Ihre Verbindlichkeit in Höhe von <strong>€ 125.000,00</strong> weiterhin nicht beglichen.</p>
+                                        <p>Wir fordern Sie hiermit letztmalig auf, den offenen Betrag bis zum <strong>15.12.2025</strong> auf das unten genannte Konto zu überweisen.</p>
+                                        <p>Sollte bis zu diesem Datum kein Zahlungseingang erfolgen, sehen wir uns gezwungen, ohne weitere Ankündigung gerichtliche Schritte einzuleiten und die Forderung an ein Inkassounternehmen zu übergeben.</p>
+                                        <p>Mit freundlichen Grüßen<br>Ihre Musterbank AG</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-001')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Herunterladen
+                                </button>
+                                <button class="doc-btn" onclick="printDocument('doc-001')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                        <rect x="6" y="14" width="12" height="8"></rect>
+                                    </svg>
+                                    Drucken
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mahnung 2 -->
+                    <div class="document-item expandable" id="doc-002">
+                        <div class="document-header" onclick="toggleDocument('doc-002')">
+                            <div class="document-icon warning">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">2. Mahnung - Zahlungserinnerung</span>
+                                <span class="document-meta">01.11.2025 • Ausgehend • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge warning">Versendet</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="letter-preview">
+                                    <div class="letter-header">
+                                        <strong>Musterbank AG</strong><br>
+                                        Forderungsmanagement<br>
+                                        Bankstraße 123<br>
+                                        60311 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-recipient">
+                                        <strong>Mueller GmbH</strong><br>
+                                        Herr Max Mueller<br>
+                                        Industriestraße 45<br>
+                                        60487 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-date">Frankfurt, 01.11.2025</div>
+                                    <div class="letter-subject"><strong>2. Mahnung - Zahlungserinnerung</strong></div>
+                                    <div class="letter-body">
+                                        <p>Sehr geehrter Herr Mueller,</p>
+                                        <p>leider haben wir bis heute keinen Zahlungseingang zu unserer 1. Mahnung vom 01.10.2025 feststellen können.</p>
+                                        <p>Ihre offene Forderung beträgt weiterhin <strong>€ 125.000,00</strong>.</p>
+                                        <p>Bitte überweisen Sie den Betrag bis zum <strong>15.11.2025</strong>.</p>
+                                        <p>Mit freundlichen Grüßen<br>Ihre Musterbank AG</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-002')">Herunterladen</button>
+                                <button class="doc-btn" onclick="printDocument('doc-002')">Drucken</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mahnung 1 -->
+                    <div class="document-item expandable" id="doc-003">
+                        <div class="document-header" onclick="toggleDocument('doc-003')">
+                            <div class="document-icon info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">1. Mahnung - Zahlungserinnerung</span>
+                                <span class="document-meta">01.10.2025 • Ausgehend • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge info">Versendet</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="letter-preview">
+                                    <div class="letter-header">
+                                        <strong>Musterbank AG</strong><br>
+                                        Kundenservice<br>
+                                        Bankstraße 123<br>
+                                        60311 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-recipient">
+                                        <strong>Mueller GmbH</strong><br>
+                                        Herr Max Mueller<br>
+                                        Industriestraße 45<br>
+                                        60487 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-date">Frankfurt, 01.10.2025</div>
+                                    <div class="letter-subject"><strong>1. Mahnung - Freundliche Zahlungserinnerung</strong></div>
+                                    <div class="letter-body">
+                                        <p>Sehr geehrter Herr Mueller,</p>
+                                        <p>bei der Durchsicht unserer Konten haben wir festgestellt, dass folgende Zahlung noch aussteht:</p>
+                                        <p><strong>Offener Betrag: € 125.000,00</strong></p>
+                                        <p>Bitte überweisen Sie den Betrag bis zum <strong>15.10.2025</strong>.</p>
+                                        <p>Mit freundlichen Grüßen<br>Ihre Musterbank AG</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-003')">Herunterladen</button>
+                                <button class="doc-btn" onclick="printDocument('doc-003')">Drucken</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kreditvertrag -->
+                    <div class="document-item expandable" id="doc-004">
+                        <div class="document-header" onclick="toggleDocument('doc-004')">
+                            <div class="document-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">Kreditvertrag Nr. BK-2024-001234</span>
+                                <span class="document-meta">15.01.2024 • Vertrag • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge">Archiviert</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="contract-summary">
+                                    <h4>Vertragsdetails</h4>
+                                    <table class="contract-table">
+                                        <tr><td>Vertragsnummer:</td><td>BK-2024-001234</td></tr>
+                                        <tr><td>Kreditart:</td><td>Betriebsmittelkredit</td></tr>
+                                        <tr><td>Kreditsumme:</td><td>€ 200.000,00</td></tr>
+                                        <tr><td>Zinssatz:</td><td>4,75% p.a.</td></tr>
+                                        <tr><td>Laufzeit:</td><td>60 Monate</td></tr>
+                                        <tr><td>Monatliche Rate:</td><td>€ 3.750,00</td></tr>
+                                        <tr><td>Vertragsbeginn:</td><td>01.02.2024</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-004')">Herunterladen</button>
+                                <button class="doc-btn" onclick="printDocument('doc-004')">Drucken</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="crm-section" id="crm-workflow">

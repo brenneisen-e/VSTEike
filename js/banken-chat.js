@@ -151,6 +151,10 @@ function processBankenQuery(message) {
         const customerIds = sorted.map(c => c.id).join(',');
         response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Diese ${count} Kunden in Liste anzeigen</button>`;
 
+        // Add export buttons
+        const exportData = { type: 'customers', items: sorted };
+        response += getExportButtons(exportData, `Top_${count}_Kunden`);
+
         return response;
     }
 
@@ -166,6 +170,10 @@ function processBankenQuery(message) {
 
         const total = demoPayments.reduce((sum, p) => sum + p.betrag, 0);
         response += `\n<span class="chat-icon check"></span> **Gesamt:** €${total.toLocaleString('de-DE')} (${demoPayments.length} Zahlungen)`;
+
+        // Add export buttons
+        const exportData = { type: 'payments', items: demoPayments };
+        response += getExportButtons(exportData, 'Zahlungseingaenge');
 
         return response;
     }
@@ -231,6 +239,15 @@ function processBankenQuery(message) {
             abwicklung: demoCustomerData.filter(c => c.segment === 'abwicklung').length
         };
 
+        // Add export buttons
+        const exportData = {
+            type: 'portfolio',
+            total: total,
+            count: demoCustomerData.length,
+            avgDpd: avgDpd,
+            segments: segments
+        };
+
         return `<span class="chat-icon chart"></span> **Portfolio-Übersicht:**
 
 **Gesamtforderung:** €${total.toLocaleString('de-DE')}
@@ -243,7 +260,7 @@ function processBankenQuery(message) {
 <span class="chat-icon dot amber"></span> Restrukturierung: ${segments.restrukturierung} Fälle
 <span class="chat-icon dot gray"></span> Abwicklung: ${segments.abwicklung} Fälle
 
-**Letzte Zahlungen:** €${demoPayments.reduce((s, p) => s + p.betrag, 0).toLocaleString('de-DE')} (7 Tage)`;
+**Letzte Zahlungen:** €${demoPayments.reduce((s, p) => s + p.betrag, 0).toLocaleString('de-DE')} (7 Tage)` + getExportButtons(exportData, 'Portfolio_Uebersicht');
     }
 
     // Search for specific customer
@@ -418,9 +435,204 @@ function showFilteredCustomers(customerIdsString) {
     }, 10000);
 }
 
+// Export chat response as Excel (CSV)
+function exportChatToExcel(data, filename) {
+    let csvContent = '';
+
+    // Determine data type and format accordingly
+    if (data.type === 'customers') {
+        // Header row
+        csvContent = 'ID;Name;Forderung;DPD;Segment;Status\n';
+        data.items.forEach(item => {
+            csvContent += `${item.id};${item.name};${item.forderung};${item.dpd};${item.segment};${item.status}\n`;
+        });
+    } else if (data.type === 'payments') {
+        csvContent = 'ID;Kunde;Betrag;Datum;Art\n';
+        data.items.forEach(item => {
+            csvContent += `${item.id};${item.kunde};${item.betrag};${item.datum};${item.art}\n`;
+        });
+    } else if (data.type === 'portfolio') {
+        csvContent = 'Kennzahl;Wert\n';
+        csvContent += `Gesamtforderung;${data.total}\n`;
+        csvContent += `Aktive Fälle;${data.count}\n`;
+        csvContent += `Ø DPD;${data.avgDpd}\n`;
+        csvContent += `Eskalation;${data.segments.eskalation}\n`;
+        csvContent += `Priorität;${data.segments.prioritaet}\n`;
+        csvContent += `Restrukturierung;${data.segments.restrukturierung}\n`;
+        csvContent += `Abwicklung;${data.segments.abwicklung}\n`;
+    }
+
+    // Add BOM for Excel UTF-8 compatibility
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${filename}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    if (typeof showNotification === 'function') {
+        showNotification('Excel-Export erfolgreich', 'success');
+    }
+}
+
+// Export chat response as PDF
+function exportChatToPdf(data, filename) {
+    // Create printable content
+    const printWindow = window.open('', '_blank');
+
+    let htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${filename}</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+                h1 { color: #1e293b; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th { background: #f1f5f9; color: #475569; text-align: left; padding: 12px; border: 1px solid #e2e8f0; }
+                td { padding: 10px 12px; border: 1px solid #e2e8f0; }
+                tr:nth-child(even) { background: #f8fafc; }
+                .summary { background: #f0f9ff; padding: 16px; border-radius: 8px; margin: 20px 0; }
+                .summary h3 { margin: 0 0 10px 0; color: #0369a1; }
+                .footer { margin-top: 30px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+                @media print { body { padding: 20px; } }
+            </style>
+        </head>
+        <body>
+            <h1>Collections Dashboard - ${filename}</h1>
+            <p>Erstellt am: ${new Date().toLocaleDateString('de-DE')} um ${new Date().toLocaleTimeString('de-DE')}</p>
+    `;
+
+    if (data.type === 'customers') {
+        const total = data.items.reduce((sum, c) => sum + c.forderung, 0);
+        htmlContent += `
+            <div class="summary">
+                <h3>Zusammenfassung</h3>
+                <p><strong>${data.items.length}</strong> Kunden · <strong>€${total.toLocaleString('de-DE')}</strong> Gesamtforderung</p>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Name</th><th>Forderung</th><th>DPD</th><th>Segment</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+        `;
+        data.items.forEach(item => {
+            htmlContent += `<tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>€${item.forderung.toLocaleString('de-DE')}</td>
+                <td>${item.dpd}</td>
+                <td>${item.segment}</td>
+                <td>${item.status}</td>
+            </tr>`;
+        });
+        htmlContent += '</tbody></table>';
+    } else if (data.type === 'payments') {
+        const total = data.items.reduce((sum, p) => sum + p.betrag, 0);
+        htmlContent += `
+            <div class="summary">
+                <h3>Zahlungsübersicht</h3>
+                <p><strong>${data.items.length}</strong> Zahlungen · <strong>€${total.toLocaleString('de-DE')}</strong> Gesamtbetrag</p>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Kunde</th><th>Betrag</th><th>Datum</th><th>Art</th></tr>
+                </thead>
+                <tbody>
+        `;
+        data.items.forEach(item => {
+            htmlContent += `<tr>
+                <td>${item.id}</td>
+                <td>${item.kunde}</td>
+                <td>€${item.betrag.toLocaleString('de-DE')}</td>
+                <td>${item.datum}</td>
+                <td>${item.art}</td>
+            </tr>`;
+        });
+        htmlContent += '</tbody></table>';
+    } else if (data.type === 'portfolio') {
+        htmlContent += `
+            <div class="summary">
+                <h3>Portfolio-Übersicht</h3>
+                <table style="width: auto;">
+                    <tr><td><strong>Gesamtforderung:</strong></td><td>€${data.total.toLocaleString('de-DE')}</td></tr>
+                    <tr><td><strong>Aktive Fälle:</strong></td><td>${data.count}</td></tr>
+                    <tr><td><strong>Ø DPD:</strong></td><td>${data.avgDpd} Tage</td></tr>
+                </table>
+            </div>
+            <h3>Segmentverteilung</h3>
+            <table>
+                <thead><tr><th>Segment</th><th>Anzahl Fälle</th></tr></thead>
+                <tbody>
+                    <tr><td>Eskalation</td><td>${data.segments.eskalation}</td></tr>
+                    <tr><td>Priorität</td><td>${data.segments.prioritaet}</td></tr>
+                    <tr><td>Restrukturierung</td><td>${data.segments.restrukturierung}</td></tr>
+                    <tr><td>Abwicklung</td><td>${data.segments.abwicklung}</td></tr>
+                </tbody>
+            </table>
+        `;
+    }
+
+    htmlContent += `
+            <div class="footer">
+                Dieser Bericht wurde automatisch vom Collections Dashboard generiert.
+            </div>
+        </body>
+        </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+
+    // Wait for content to load then print
+    printWindow.onload = function() {
+        printWindow.print();
+    };
+
+    if (typeof showNotification === 'function') {
+        showNotification('PDF-Export wird geöffnet', 'success');
+    }
+}
+
+// Store last query result for export
+let lastChatQueryResult = null;
+
+// Update the processBankenQuery to store results for export
+function getExportButtons(data, title) {
+    lastChatQueryResult = { data, title };
+    return `
+        <div class="chat-export-buttons">
+            <button class="chat-export-btn excel" onclick="exportChatToExcel(lastChatQueryResult.data, '${title}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                Excel
+            </button>
+            <button class="chat-export-btn pdf" onclick="exportChatToPdf(lastChatQueryResult.data, '${title}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                PDF
+            </button>
+        </div>
+    `;
+}
+
 // Export functions
 window.initBankenChat = initBankenChat;
 window.sendBankenMessage = sendBankenMessage;
 window.showFilteredCustomers = showFilteredCustomers;
+window.exportChatToExcel = exportChatToExcel;
+window.exportChatToPdf = exportChatToPdf;
+window.lastChatQueryResult = null;
 
 console.log('✅ banken-chat.js geladen');
