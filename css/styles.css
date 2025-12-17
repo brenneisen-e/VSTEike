@@ -910,15 +910,17 @@ select:focus, .dropdown-button:focus {
     background: white;
     border-radius: 1rem;
     padding: 1.25rem;
+    padding-top: 1.5rem;
+    margin-top: 1.25rem;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     transition: all 0.3s;
     animation: fadeIn 0.3s ease-out;
-    height: 100%; /* Nutzt volle Grid-Cell Höhe */
+    height: calc(100% - 1.25rem);
 } 
 
 @keyframes fadeIn { 
@@ -1078,21 +1080,32 @@ select:focus, .dropdown-button:focus {
     position: relative; 
 } 
 
+.kpi-icon-header {
+    position: absolute;
+    top: -1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
 .kpi-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
-    color: #86BC25; /* Deloitte Grün */
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-radius: 50%;
+    font-size: 1.25rem;
     flex-shrink: 0;
-    margin-top: 2px; /* Align with title baseline */
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .kpi-icon svg {
     width: 18px;
     height: 18px;
-    stroke: currentColor;
+    stroke: #16a34a;
     fill: none;
     stroke-width: 2;
 }
