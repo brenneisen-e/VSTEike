@@ -884,21 +884,24 @@ select:focus, .dropdown-button:focus {
     opacity: 1; 
 } 
 
-.kpi-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: flex-start; 
-    margin-bottom: 0.5rem; 
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+    min-width: 0;
 } 
 
-.kpi-title { 
-    font-size: 1.125rem; 
-    font-weight: bold; 
-    color: #1e293b; 
-    display: flex; 
-    align-items: center; 
-    gap: 0.5rem; 
-    flex: 1; 
+.kpi-title {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
 } 
 
 .zoom-button { 
@@ -991,10 +994,16 @@ select:focus, .dropdown-button:focus {
     position: relative; 
 } 
 
-.kpi-icon { 
-    width: 1.25rem; 
-    height: 1.25rem; 
-    color: #2563eb; 
+.kpi-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: #dcfce7;
+    border-radius: 50%;
+    font-size: 0.875rem;
+    flex-shrink: 0;
 } 
 
 .kpi-description { 
@@ -1003,14 +1012,16 @@ select:focus, .dropdown-button:focus {
     margin-top: 0.125rem; 
 } 
 
-.kpi-badge { 
-    background: #dcfce7; 
-    color: #166534; 
-    border: 1px solid #bbf7d0; 
-    padding: 0.25rem 0.5rem; 
-    border-radius: 0.375rem; 
-    font-size: 0.75rem; 
-    font-weight: 500; 
+.kpi-badge {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
 } 
 
 .kpi-metrics { 
