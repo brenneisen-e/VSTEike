@@ -1280,5 +1280,9 @@ const App = (function() {
     };
 })();
 
-// Anwendung starten wenn DOM bereit
+// Anwendung starten wenn DOM bereit (für standalone Nutzung)
 document.addEventListener('DOMContentLoaded', App.init);
+
+// Globale Exports für VST Integration
+window.BestandApp = App;
+window.initBestandApp = App.init;
