@@ -280,32 +280,54 @@ function updateNavigationButtons(kpiId) {
 }
 
 // Fullscreen functions
+let currentFullscreenKpiId = null;
+
 function openFullscreen(kpiId) {
     const kpi = kpiDefinitions.find(k => k.id === kpiId);
     if (!kpi) return;
 
+    currentFullscreenKpiId = kpiId;
+
     const modal = document.getElementById('fullscreenModal');
     const title = document.getElementById('fullscreenTitle');
-    
+    const viewToggle = document.getElementById('fullscreenViewToggle');
+
+    // Get current view from card
     const card = document.getElementById(`kpi-${kpiId}`);
-    const activeView = card.querySelector('.view-toggle button.active').dataset.view;
-    
+    const activeViewBtn = card.querySelector('.view-toggle button.active');
+    const activeView = activeViewBtn ? activeViewBtn.dataset.view : 'month';
+
     title.textContent = kpi.title;
     modal.classList.add('show');
 
-    setTimeout(() => {
-        const canvas = document.getElementById('fullscreenChart');
-        const ctx = canvas.getContext('2d');
-        
-        const data = getFilteredData();
-        
-        if (state.fullscreenChart) {
-            state.fullscreenChart.destroy();
-        }
+    // Set active button in fullscreen toggle
+    viewToggle.querySelectorAll('button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === activeView);
+    });
 
-        // Create fullscreen chart
-        const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-        state.fullscreenChart = new Chart(ctx, {
+    setTimeout(() => {
+        renderFullscreenChart(kpiId, activeView);
+    }, 100);
+}
+
+function renderFullscreenChart(kpiId, viewType) {
+    const kpi = kpiDefinitions.find(k => k.id === kpiId);
+    if (!kpi) return;
+
+    const canvas = document.getElementById('fullscreenChart');
+    const ctx = canvas.getContext('2d');
+    const data = getFilteredData();
+
+    if (state.fullscreenChart) {
+        state.fullscreenChart.destroy();
+    }
+
+    const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+
+    let chartConfig;
+
+    if (viewType === 'month') {
+        chartConfig = {
             type: 'line',
             data: {
                 labels: data.map(d => months[d.month - 1]),
@@ -322,22 +344,94 @@ function openFullscreen(kpiId) {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: true }
-                }
+                plugins: { legend: { display: true } }
             }
-        });
-    }, 100);
+        };
+    } else if (viewType === 'distribution') {
+        chartConfig = {
+            type: 'bar',
+            data: {
+                labels: data.map(d => months[d.month - 1]),
+                datasets: [{
+                    label: kpi.title,
+                    data: data.map(d => d[kpiId]),
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: true } }
+            }
+        };
+    } else if (viewType === 'daily') {
+        // Generate daily data simulation
+        const dailyData = [];
+        const dailyLabels = [];
+        for (let i = 1; i <= 30; i++) {
+            dailyLabels.push(`${i}.`);
+            const baseValue = data.length > 0 ? data[data.length - 1][kpiId] / 30 : 0;
+            dailyData.push(baseValue * (0.7 + Math.random() * 0.6));
+        }
+
+        chartConfig = {
+            type: 'line',
+            data: {
+                labels: dailyLabels,
+                datasets: [{
+                    label: `${kpi.title} (Tagesverlauf)`,
+                    data: dailyData,
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: true } }
+            }
+        };
+    }
+
+    state.fullscreenChart = new Chart(ctx, chartConfig);
 }
 
 function closeFullscreen() {
     const modal = document.getElementById('fullscreenModal');
     modal.classList.remove('show');
+    currentFullscreenKpiId = null;
     if (state.fullscreenChart) {
         state.fullscreenChart.destroy();
         state.fullscreenChart = null;
     }
 }
+
+// Fullscreen view toggle event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const viewToggle = document.getElementById('fullscreenViewToggle');
+    if (viewToggle) {
+        viewToggle.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button || !currentFullscreenKpiId) return;
+
+            const viewType = button.dataset.view;
+
+            // Update active button
+            viewToggle.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Render new chart
+            renderFullscreenChart(currentFullscreenKpiId, viewType);
+        });
+    }
+});
 
 function switchToDaily(kpiId) {
     const viewButtons = document.querySelectorAll(`[data-kpi="${kpiId}"]`);
