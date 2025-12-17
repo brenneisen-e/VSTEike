@@ -2757,6 +2757,17 @@ body.modal-open {
     border-left-color: #3b82f6;
 }
 
+.aufgabe-item.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.aufgabe-item.clickable:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
 .aufgabe-priority {
     width: 36px;
     height: 36px;
@@ -4492,6 +4503,160 @@ body.modal-open {
 
 .crm-profile-view.active {
     display: flex;
+    flex-direction: column;
+}
+
+/* Task Hint Box - shown when opening from task */
+.crm-task-hint {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-bottom: 2px solid #f59e0b;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-hint-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #92400e;
+}
+
+.task-hint-header svg {
+    color: #f59e0b;
+}
+
+.task-hint-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.task-hint-due {
+    font-size: 13px;
+    color: #92400e;
+}
+
+.task-hint-due.overdue {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.btn-ai-summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-ai-summary:hover {
+    background: #7c3aed;
+    transform: translateY(-1px);
+}
+
+/* AI Summary Modal */
+.ai-summary-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.ai-summary-modal {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.ai-summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+}
+
+.ai-summary-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.ai-summary-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.ai-summary-header button:hover {
+    opacity: 1;
+}
+
+.ai-summary-content {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+.ai-summary-content h4 {
+    margin: 16px 0 8px 0;
+    color: #1e293b;
+    font-size: 15px;
+}
+
+.ai-summary-content h4:first-child {
+    margin-top: 0;
+}
+
+.ai-summary-content p {
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+.ai-summary-content ul, .ai-summary-content ol {
+    margin: 0 0 12px 0;
+    padding-left: 20px;
+    color: #475569;
+}
+
+.ai-summary-content li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* CRM main content wrapper */
+.crm-profile-view.active > .crm-sidebar,
+.crm-profile-view.active > .crm-main {
+    /* Handled by flex */
+}
+
+.crm-profile-view .crm-content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }
 
 .crm-sidebar {
