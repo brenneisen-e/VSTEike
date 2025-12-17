@@ -24,8 +24,20 @@
         </div>
     </div>
     <div class="banken-header-center">
-        <!-- NPL Dashboard and Stage 2 Quick Access Tiles -->
+        <!-- Quick Access Tiles -->
         <div class="header-quick-tiles">
+            <button class="header-tile active" onclick="showBankenSection('segmentierung')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <div class="header-tile-text">
+                    <span class="header-tile-title">Segmentierung</span>
+                    <span class="header-tile-badge primary">10.234</span>
+                </div>
+            </button>
             <button class="header-tile coming-soon" onclick="showBankenSection('npl')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
@@ -87,34 +99,3 @@
     </div>
 </div>
 
-<!-- Navigation Tiles -->
-<div class="banken-nav-tiles">
-    <div class="nav-tile active" onclick="showBankenSection('segmentierung')">
-        <div class="nav-tile-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                <rect x="3" y="3" width="7" height="7"></rect>
-                <rect x="14" y="3" width="7" height="7"></rect>
-                <rect x="14" y="14" width="7" height="7"></rect>
-                <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-        </div>
-        <div class="nav-tile-content">
-            <div class="nav-tile-title">Kundensegmentierung</div>
-            <div class="nav-tile-desc">Willingness & Ability Matrix</div>
-        </div>
-        <div class="nav-tile-badge">10.234</div>
-    </div>
-    <div class="nav-tile" onclick="showBankenSection('aufgaben')">
-        <div class="nav-tile-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                <path d="M9 11l3 3L22 4"></path>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
-        </div>
-        <div class="nav-tile-content">
-            <div class="nav-tile-title">Meine Aufgaben</div>
-            <div class="nav-tile-desc">Offene Vorgänge</div>
-        </div>
-        <div class="nav-tile-badge highlight">23</div>
-    </div>
-</div>
