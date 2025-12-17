@@ -979,6 +979,13 @@ select:focus, .dropdown-button:focus {
     flex-shrink: 0;
 }
 
+.kpi-title-wrapper {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+}
+
 .kpi-title {
     font-size: 1.125rem;
     font-weight: bold;
@@ -1118,19 +1125,9 @@ select:focus, .dropdown-button:focus {
 
 /* KPI Icon - inline after title */
 .kpi-icon {
-    display: inline;
     font-size: 0.875rem;
-    margin-left: 0.25rem;
-    color: #3b82f6;
-}
-
-.kpi-icon svg {
-    width: 14px;
-    height: 14px;
-    stroke: #3b82f6;
-    vertical-align: middle;
-    fill: none;
-    stroke-width: 2;
+    margin-left: 0.35rem;
+    flex-shrink: 0;
 }
 
 .kpi-description {
