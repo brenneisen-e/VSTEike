@@ -3,23 +3,24 @@
 
 let bankenChatInitialized = false;
 
-// Demo customer data for the chat
+// Demo customer data for the chat - synchronized with table data
 const demoCustomerData = [
-    { id: 'K-2024-0001', name: 'Mueller GmbH', forderung: 125000, dpd: 127, segment: 'eskalation', status: 'Inkasso' },
-    { id: 'K-2024-0015', name: 'Schmidt & Partner', forderung: 89500, dpd: 95, segment: 'restrukturierung', status: 'Ratenzahlung' },
-    { id: 'K-2024-0023', name: 'Weber Logistics', forderung: 67800, dpd: 45, segment: 'prioritaet', status: 'Mahnung 2' },
-    { id: 'K-2024-0031', name: 'Hoffmann AG', forderung: 54200, dpd: 82, segment: 'restrukturierung', status: 'Stundung' },
-    { id: 'K-2024-0042', name: 'Becker Industries', forderung: 48900, dpd: 31, segment: 'prioritaet', status: 'Zahlungszusage' },
-    { id: 'K-2024-0055', name: 'Klein Textil', forderung: 42300, dpd: 156, segment: 'abwicklung', status: 'Abschreibung' },
-    { id: 'K-2024-0067', name: 'Fischer Transport', forderung: 38750, dpd: 28, segment: 'prioritaet', status: 'Mahnung 1' },
-    { id: 'K-2024-0078', name: 'Schneider Bau', forderung: 35200, dpd: 67, segment: 'restrukturierung', status: 'Verhandlung' },
-    { id: 'K-2024-0089', name: 'Wagner Metall', forderung: 31800, dpd: 112, segment: 'eskalation', status: 'Inkasso' },
-    { id: 'K-2024-0099', name: 'Braun Elektro', forderung: 28400, dpd: 19, segment: 'prioritaet', status: 'Mahnung 1' },
-    { id: 'K-2024-0105', name: 'Zimmermann GmbH', forderung: 24600, dpd: 88, segment: 'restrukturierung', status: 'Ratenzahlung' },
-    { id: 'K-2024-0112', name: 'Schulz Handel', forderung: 21300, dpd: 134, segment: 'eskalation', status: 'Gerichtlich' },
-    { id: 'K-2024-0120', name: 'Koch Catering', forderung: 18900, dpd: 42, segment: 'prioritaet', status: 'Zahlungszusage' },
-    { id: 'K-2024-0131', name: 'Richter Immobilien', forderung: 15700, dpd: 178, segment: 'abwicklung', status: 'Insolvenz' },
-    { id: 'K-2024-0145', name: 'Lange IT Services', forderung: 12400, dpd: 55, segment: 'restrukturierung', status: 'Stundung' }
+    { id: 'K-2024-0001', name: 'Mueller GmbH', forderung: 125000, dpd: 35, segment: 'eskalation', status: 'Inkasso' },
+    { id: 'K-2024-0002', name: 'Schmidt, Peter', forderung: 8450, dpd: 21, segment: 'prioritaet', status: 'Offen' },
+    { id: 'K-2024-0003', name: 'Weber KG', forderung: 45780, dpd: 14, segment: 'restrukturierung', status: 'Vereinbarung' },
+    { id: 'K-2024-0004', name: 'Braun, Maria', forderung: 3210, dpd: 67, segment: 'abwicklung', status: 'Abschreibung' },
+    { id: 'K-2024-0005', name: 'Hoffmann Bau GmbH', forderung: 287500, dpd: 48, segment: 'eskalation', status: 'Inkasso' },
+    { id: 'K-2024-0006', name: 'Keller, Thomas', forderung: 15800, dpd: 42, segment: 'eskalation', status: 'Inkasso' },
+    { id: 'K-2024-0007', name: 'Autohaus Berger', forderung: 89300, dpd: 55, segment: 'eskalation', status: 'Inkasso' },
+    { id: 'K-2024-0008', name: 'Lehmann, Sandra', forderung: 12650, dpd: 18, segment: 'prioritaet', status: 'Offen' },
+    { id: 'K-2024-0009', name: 'Meier Elektro OHG', forderung: 34200, dpd: 25, segment: 'prioritaet', status: 'Offen' },
+    { id: 'K-2024-0010', name: 'Fischer, Hans', forderung: 6890, dpd: 12, segment: 'prioritaet', status: 'Zusage' },
+    { id: 'K-2024-0011', name: 'Bäckerei Schulze', forderung: 67400, dpd: 28, segment: 'restrukturierung', status: 'Vereinbarung' },
+    { id: 'K-2024-0012', name: 'Neumann, Klaus', forderung: 156000, dpd: 8, segment: 'restrukturierung', status: 'Vereinbarung' },
+    { id: 'K-2024-0013', name: 'Gasthaus zum Löwen', forderung: 112800, dpd: 19, segment: 'restrukturierung', status: 'Vereinbarung' },
+    { id: 'K-2024-0014', name: 'Werner, Sabine', forderung: 4560, dpd: 92, segment: 'abwicklung', status: 'Abschreibung' },
+    { id: 'K-2024-0015', name: 'Maier Transporte', forderung: 78900, dpd: 78, segment: 'abwicklung', status: 'Abschreibung' },
+    { id: 'K-2024-0016', name: 'Zimmermann, Frank', forderung: 2340, dpd: 105, segment: 'abwicklung', status: 'Abschreibung' }
 ];
 
 // Demo payment data
@@ -351,7 +352,7 @@ function hideBankenTyping() {
 function showFilteredCustomers(customerIdsString) {
     console.log('🔍 Showing filtered customers:', customerIdsString);
 
-    const customerIds = customerIdsString.split(',');
+    const customerIds = customerIdsString.split(',').map(id => id.trim());
 
     // Scroll to customer list section
     const customerListSection = document.querySelector('.customer-list-section');
@@ -367,29 +368,54 @@ function showFilteredCustomers(customerIdsString) {
 
     // Find and highlight matching rows in the table
     const rows = document.querySelectorAll('.customer-table tbody tr');
-    rows.forEach(row => {
-        const customerCell = row.querySelector('.customer-cell small');
-        if (customerCell) {
-            const cellText = customerCell.textContent;
-            const matches = customerIds.some(id => cellText.includes(id.trim()));
+    let matchCount = 0;
+    let firstMatch = null;
 
-            if (matches) {
-                row.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                row.style.transition = 'background-color 0.3s ease';
-            } else {
-                row.style.backgroundColor = '';
+    rows.forEach(row => {
+        // Check if row onclick contains one of the customer IDs
+        const onclickAttr = row.getAttribute('onclick') || '';
+        const customerCell = row.querySelector('.customer-cell small');
+        const cellText = customerCell ? customerCell.textContent : '';
+
+        const matches = customerIds.some(id =>
+            onclickAttr.includes(id) || cellText.includes(id)
+        );
+
+        if (matches) {
+            matchCount++;
+            row.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
+            row.style.transition = 'background-color 0.3s ease';
+            row.style.boxShadow = 'inset 4px 0 0 #3b82f6';
+
+            // Remember first match to scroll to
+            if (!firstMatch) {
+                firstMatch = row;
             }
+        } else {
+            row.style.backgroundColor = '';
+            row.style.boxShadow = '';
         }
     });
 
-    // Show notification
-    if (typeof showNotification === 'function') {
-        showNotification(`${customerIds.length} Kunden hervorgehoben`, 'info');
+    // Scroll to first matching row after a short delay
+    if (firstMatch) {
+        setTimeout(() => {
+            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 500);
     }
 
-    // Close the chat widget (optional - keep it open for reference)
-    // const chatWidget = document.getElementById('bankenChatWidget');
-    // if (chatWidget) chatWidget.style.display = 'none';
+    // Show notification
+    if (typeof showNotification === 'function') {
+        showNotification(`${matchCount} Kunden hervorgehoben`, 'info');
+    }
+
+    // Clear highlight after 10 seconds
+    setTimeout(() => {
+        rows.forEach(row => {
+            row.style.backgroundColor = '';
+            row.style.boxShadow = '';
+        });
+    }, 10000);
 }
 
 // Export functions
