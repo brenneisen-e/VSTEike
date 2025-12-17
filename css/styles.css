@@ -1097,25 +1097,33 @@ select:focus, .dropdown-button:focus {
     font-weight: 500; 
 } 
 
-.kpi-metrics { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 0.75rem; 
-} 
+.kpi-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
 
-.kpi-value { 
-    font-size: 2.25rem; 
-    font-weight: 800; 
-    color: #2563eb; 
-} 
+/* Value and trend on same row */
+.kpi-metrics > div:first-child {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
 
-.kpi-trend { 
-    display: flex; 
-    align-items: center; 
-    gap: 0.25rem; 
-    font-size: 0.875rem; 
-    font-weight: 600; 
+.kpi-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #2563eb;
+}
+
+.kpi-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
 } 
 
 .kpi-trend.positive { 
