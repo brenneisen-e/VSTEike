@@ -1480,28 +1480,27 @@ body.modal-open {
     flex-shrink: 0;
 }
 
-/* Segment Colors - Subtle, Professional */
-/* Matrix quadrants - outline only with corner gradient */
+/* Segment Colors - Outline only */
 .segment-eskalation {
-    background: linear-gradient(315deg, rgba(251, 191, 36, 0.4) 0%, rgba(251, 191, 36, 0.1) 30%, transparent 60%);
+    background: transparent;
     border: 2px solid #fbbf24;
     color: #92400e;
 }
 
 .segment-prioritaet {
-    background: linear-gradient(225deg, rgba(34, 197, 94, 0.4) 0%, rgba(34, 197, 94, 0.1) 30%, transparent 60%);
+    background: transparent;
     border: 2px solid #22c55e;
     color: #166534;
 }
 
 .segment-abwicklung {
-    background: linear-gradient(45deg, rgba(239, 68, 68, 0.4) 0%, rgba(239, 68, 68, 0.1) 30%, transparent 60%);
+    background: transparent;
     border: 2px solid #ef4444;
     color: #991b1b;
 }
 
 .segment-restrukturierung {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(99, 102, 241, 0.1) 30%, transparent 60%);
+    background: transparent;
     border: 2px solid #6366f1;
     color: #3730a3;
 }
