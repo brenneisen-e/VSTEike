@@ -79,38 +79,67 @@ class GuidedTour {
     }
 
     defineSteps() {
+        // SVG icon definitions
+        const icons = {
+            welcome: '<svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>',
+            target: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
+            chart: '<svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>',
+            trending: '<svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>',
+            refresh: '<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>',
+            search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+            map: '<svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>',
+            bot: '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>',
+            table: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>',
+            maximize: '<svg viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>',
+            bank: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>',
+            check: '<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+        };
+
         // Define all tour steps
         this.steps = [
             // Welcome
             {
                 title: 'Willkommen zum KI-gestützten Arbeitsplatz',
                 description: 'Diese interaktive Tour zeigt Ihnen alle Funktionen unseres intelligenten Dashboards für Versicherungs- und Banking-Analytics. Klicken Sie auf "Weiter" um zu starten.',
-                icon: '👋',
-                element: null, // No specific element - centered
-                position: 'center'
+                icon: icons.welcome,
+                element: null,
+                position: 'center',
+                beforeShow: () => {
+                    // Ensure we start at the landing/module selection
+                    if (typeof switchModule === 'function') {
+                        switchModule('versicherung');
+                    }
+                }
             },
 
             // Landing Page - Module Selection
             {
                 title: 'Modul-Auswahl',
                 description: 'Wählen Sie hier zwischen verschiedenen Analyse-Modulen: Vertriebssteuerung für Versicherungs-KPIs, Banken-Inkasso für Forderungsmanagement, oder Risikoscoring für Bonitätsbewertungen.',
-                icon: '🎯',
+                icon: icons.target,
                 element: '.nav-boxes',
-                position: 'bottom'
+                position: 'bottom',
+                beforeShow: () => {
+                    // Show module selection area
+                    const modulePage = document.querySelector('.module-selector-page');
+                    if (modulePage) modulePage.style.display = 'block';
+                }
             },
 
             // KPI Dashboard
             {
                 title: 'KPI-Dashboard',
                 description: 'Das Herzstück: 9 interaktive KPI-Karten zeigen Echtzeit-Kennzahlen wie Neugeschäft, Bestand, Stornoquote und mehr. Jede Karte ist klickbar für Detailansichten.',
-                icon: '📊',
+                icon: icons.chart,
                 element: '.kpi-grid',
                 position: 'bottom',
                 beforeShow: () => {
-                    // Make sure we're on the dashboard view
+                    // Navigate to the dashboard/Gesamtübersicht
                     if (typeof openGesamtuebersicht === 'function') {
                         openGesamtuebersicht();
                     }
+                    // Small delay to let navigation complete
+                    return new Promise(resolve => setTimeout(resolve, 300));
                 }
             },
 
@@ -118,7 +147,7 @@ class GuidedTour {
             {
                 title: 'Interaktive KPI-Karten',
                 description: 'Jede Karte zeigt: aktueller Wert, Trend vs. Vormonat, und ein Mini-Chart. Klicken Sie auf die Icons rechts um zwischen Monats-, Verteilungs- und Tagesansicht zu wechseln.',
-                icon: '📈',
+                icon: icons.trending,
                 element: '.kpi-card:first-child',
                 position: 'right'
             },
@@ -127,7 +156,7 @@ class GuidedTour {
             {
                 title: 'Ansicht wechseln',
                 description: 'Diese Buttons ermöglichen verschiedene Visualisierungen: Monatsansicht (Zeitverlauf), Verteilung (Histogramm der Vermittler), und Tagesansicht (detaillierte Zeitreihe).',
-                icon: '🔄',
+                icon: icons.refresh,
                 element: '.kpi-card:first-child .view-toggle',
                 position: 'left'
             },
@@ -136,8 +165,8 @@ class GuidedTour {
             {
                 title: 'Intelligente Filter',
                 description: 'Filtern Sie die Daten nach Jahr, Silo (Ausschließlichkeit, Makler, etc.), Produktsegment oder einzelnen Vermittlern. Alle KPIs aktualisieren sich in Echtzeit.',
-                icon: '🔍',
-                element: '.filter-bar',
+                icon: icons.search,
+                element: '.filter-bar, .filters',
                 position: 'bottom'
             },
 
@@ -145,8 +174,8 @@ class GuidedTour {
             {
                 title: 'Interaktive Deutschlandkarte',
                 description: 'Klicken Sie auf Bundesländer um regionale Analysen durchzuführen. Die Karte zeigt farbcodiert die Performance je Region. Mehrfachauswahl möglich!',
-                icon: '🗺️',
-                element: '.map-container',
+                icon: icons.map,
+                element: '.map-container, .map-section',
                 position: 'left'
             },
 
@@ -154,8 +183,8 @@ class GuidedTour {
             {
                 title: 'KI-Assistent',
                 description: 'Unser integrierter KI-Chatbot versteht natürliche Sprache: "Zeige Top 5 Vermittler", "Wie ist die Performance in Bayern?", oder "Filtere nach Makler". Die KI setzt automatisch Filter und analysiert Daten.',
-                icon: '🤖',
-                element: '#chatWidget, #chatToggle',
+                icon: icons.bot,
+                element: '#chatWidget, #chatToggle, .chat-widget',
                 position: 'left',
                 beforeShow: () => {
                     const toggle = document.getElementById('chatToggle');
@@ -171,8 +200,8 @@ class GuidedTour {
             {
                 title: 'Tabellen-Ansicht',
                 description: 'Wechseln Sie zur detaillierten Tabellenansicht um alle Vermittler zu sehen. Sortieren, filtern und exportieren Sie Daten. Wählen Sie mehrere Vermittler für Vergleiche aus.',
-                icon: '📋',
-                element: '.sidebar-btn[onclick*="table"], .view-switch',
+                icon: icons.table,
+                element: '.view-mode-toggle, .sidebar-btn[onclick*="table"]',
                 position: 'right'
             },
 
@@ -180,7 +209,7 @@ class GuidedTour {
             {
                 title: 'Vollbild-Analyse',
                 description: 'Klicken Sie auf die Lupe bei jeder KPI-Karte um eine Vollbild-Ansicht mit erweiterten Analyse-Optionen zu öffnen. Perfekt für Präsentationen!',
-                icon: '🔎',
+                icon: icons.maximize,
                 element: '.zoom-button',
                 position: 'left'
             },
@@ -189,17 +218,24 @@ class GuidedTour {
             {
                 title: 'Banken-Inkasso Modul',
                 description: 'Das Collections-Dashboard für Forderungsmanagement: KI-basierte Kundensegmentierung, Zahlungsbereitschaft vs. Zahlungsfähigkeit Matrix, und automatisierte Aufgabenverwaltung.',
-                icon: '🏦',
-                element: '.nav-box[onclick*="Banken"], .nav-box:contains("Banken")',
+                icon: icons.bank,
+                element: '.nav-box[onclick*="banken"], .banken-module-card',
                 position: 'bottom',
-                fallbackElement: '.nav-boxes'
+                fallbackElement: '.nav-boxes',
+                beforeShow: () => {
+                    // Navigate to Banken module
+                    if (typeof switchModule === 'function') {
+                        switchModule('banken');
+                    }
+                    return new Promise(resolve => setTimeout(resolve, 300));
+                }
             },
 
             // Completion
             {
                 title: 'Tour abgeschlossen!',
                 description: 'Sie kennen jetzt alle wichtigen Funktionen. Erkunden Sie das Tool selbst oder starten Sie die Tour jederzeit erneut über den "Demo"-Button. Viel Erfolg!',
-                icon: '🎉',
+                icon: icons.check,
                 element: null,
                 position: 'center',
                 isLast: true
@@ -263,16 +299,16 @@ class GuidedTour {
         }
     }
 
-    showStep(index) {
+    async showStep(index) {
         const step = this.steps[index];
 
-        // Execute beforeShow callback if exists
+        // Execute beforeShow callback if exists (supports async)
         if (step.beforeShow) {
-            step.beforeShow();
+            await step.beforeShow();
         }
 
-        // Update content
-        this.tooltip.querySelector('.tour-icon').textContent = step.icon || '💡';
+        // Update content - use innerHTML for SVG icons
+        this.tooltip.querySelector('.tour-icon').innerHTML = step.icon || '';
         this.tooltip.querySelector('.tour-title').textContent = step.title;
         this.tooltip.querySelector('.tour-description').textContent = step.description;
         this.tooltip.querySelector('.tour-step-indicator').textContent = `Schritt ${index + 1} von ${this.steps.length}`;
