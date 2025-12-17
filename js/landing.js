@@ -889,6 +889,8 @@ window.toggleSettings = toggleSettings;
 window.openAgenturView = openAgenturView;
 window.openRisikoscoring = openRisikoscoring;
 window.closeRisikoscoring = closeRisikoscoring;
+window.openBestandsuebertragung = openBestandsuebertragung;
+window.closeBestandsuebertragung = closeBestandsuebertragung;
 window.saveUserName = saveUserName;
 window.loadUserName = loadUserName;
 
@@ -1010,6 +1012,86 @@ function closeRisikoscoring() {
     const rsModule = document.getElementById('risikoscoringModule');
     if (rsModule) {
         rsModule.style.display = 'none';
+    }
+
+    // Show landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'block';
+    }
+}
+
+// ========================================
+// BESTANDSUEBERTRAGUNG MODULE
+// ========================================
+
+let bestandsuebertragungLoaded = false;
+
+async function openBestandsuebertragung() {
+    console.log('📄 Bestandsübertragung öffnen...');
+
+    // Hide landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'none';
+    }
+
+    // Hide main app if visible
+    const mainApp = document.getElementById('mainApp');
+    if (mainApp) {
+        mainApp.style.display = 'none';
+    }
+
+    // Hide other modules
+    const bankenModule = document.getElementById('bankenModule');
+    if (bankenModule) {
+        bankenModule.style.display = 'none';
+    }
+
+    const rsModule = document.getElementById('risikoscoringModule');
+    if (rsModule) {
+        rsModule.style.display = 'none';
+    }
+
+    // Show bestandsuebertragung module
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    if (bestandModule) {
+        bestandModule.style.display = 'block';
+
+        // Load content if not already loaded
+        if (!bestandsuebertragungLoaded) {
+            try {
+                const response = await fetch('partials/bestandsuebertragung-module.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    bestandModule.innerHTML = html;
+                    bestandsuebertragungLoaded = true;
+
+                    // Initialize the bestandsuebertragung app
+                    if (typeof initBestandApp === 'function') {
+                        initBestandApp();
+                    } else if (typeof BestandApp !== 'undefined' && typeof BestandApp.init === 'function') {
+                        BestandApp.init();
+                    }
+                    console.log('✅ Bestandsübertragung Modul geladen');
+                } else {
+                    bestandModule.innerHTML = '<div class="error-message">Fehler beim Laden des Bestandsübertragung-Moduls</div>';
+                }
+            } catch (error) {
+                console.error('Error loading bestandsuebertragung module:', error);
+                bestandModule.innerHTML = '<div class="error-message">Fehler beim Laden des Bestandsübertragung-Moduls</div>';
+            }
+        }
+    }
+}
+
+function closeBestandsuebertragung() {
+    console.log('📄 Bestandsübertragung schließen...');
+
+    // Hide bestandsuebertragung module
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    if (bestandModule) {
+        bestandModule.style.display = 'none';
     }
 
     // Show landing page
