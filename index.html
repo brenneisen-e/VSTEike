@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/finanzplanung.css?v=20251216">
     <link rel="stylesheet" href="css/banken.css?v=20251216">
     <link rel="stylesheet" href="css/provisionssimulation.css?v=20251216">
+    <link rel="stylesheet" href="css/risikoscoring.css?v=20251217">
 </head>
 <body>
   <!-- ========================================
@@ -193,6 +194,13 @@
                             <line x1="12" y1="22.08" x2="12" y2="12"></line>
                         </svg>
                         <span>Potentialanalyse</span>
+                    </button>
+                    <button class="nav-box" onclick="openRisikoscoring()">
+                        <svg class="nav-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        <span>Vermittler-Scoring</span>
                     </button>
                 </div>
 
@@ -3790,6 +3798,16 @@
     </div>
   </div>
 
+  <!-- ========================================
+     RISIKOSCORING MODULE - Vermittler-Scoring Dashboard
+     ======================================== -->
+  <div id="risikoscoringModule" class="module-content" style="display: none;">
+    <div class="module-loading">
+      <div class="loading-spinner"></div>
+      <p>Risikoscoring wird geladen...</p>
+    </div>
+  </div>
+
 
     <!-- JavaScript Modules -->
     <script src="js/config.js"></script>
@@ -3804,6 +3822,7 @@
     <script src="js/landing.js?v=20251216"></script>
     <script src="js/finanzplanung.js?v=20251216"></script>
     <script src="js/banken.js?v=20251216"></script>
+    <script src="js/risikoscoring.js?v=20251217"></script>
     <script src="js/provisionssimulation.js?v=20251216"></script>
 </body>
 </html>

@@ -334,6 +334,8 @@ function openCustomerDetail(customerId) {
             // In real app, would fetch customer data
             customerName.textContent = customerId;
         }
+        // Always reset to Stammdaten tab when opening
+        showCustomerTab('stammdaten');
         console.log('Opening customer detail:', customerId);
     }
 }
@@ -348,20 +350,23 @@ function closeCustomerDetail() {
 
 // Show customer tab in modal
 function showCustomerTab(tabName) {
-    // Update modal tabs
-    document.querySelectorAll('.modal-tab').forEach(tab => {
+    const modal = document.getElementById('customerDetailModal');
+    if (!modal) return;
+
+    // Update modal tabs (scoped to modal)
+    modal.querySelectorAll('.modal-tab').forEach(tab => {
         tab.classList.remove('active');
     });
 
-    document.querySelectorAll('.modal-tab').forEach(tab => {
+    modal.querySelectorAll('.modal-tab').forEach(tab => {
         const onclickAttr = tab.getAttribute('onclick');
         if (onclickAttr && onclickAttr.includes(`'${tabName}'`)) {
             tab.classList.add('active');
         }
     });
 
-    // Update tab content
-    document.querySelectorAll('.customer-tab').forEach(content => {
+    // Update tab content (scoped to modal)
+    modal.querySelectorAll('.customer-tab').forEach(content => {
         content.classList.remove('active');
     });
 

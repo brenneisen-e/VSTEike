@@ -1,0 +1,626 @@
+<!-- Risikoscoring Module: Vermittler-Scoring Dashboard -->
+<div class="risikoscoring-page">
+    <!-- Module Header with Back Button -->
+    <div class="risikoscoring-header">
+        <div class="risikoscoring-header-left">
+            <button class="back-button" onclick="closeRisikoscoring()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Zurück
+            </button>
+            <div class="risikoscoring-header-info">
+                <div class="risikoscoring-logo-small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                </div>
+                <div class="risikoscoring-header-text">
+                    <h1 class="risikoscoring-page-title">Vermittler-Scoring Dashboard</h1>
+                    <div class="risikoscoring-subtitle">Mehrdimensionale Bewertung der Vertriebspartner</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="rs-tabs">
+        <div class="rs-tab active" onclick="switchRsTab(event, 'vermittler')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Vermittler-Scoring
+        </div>
+        <div class="rs-tab" onclick="switchRsTab(event, 'unternehmen')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Unternehmensperspektive
+        </div>
+    </div>
+
+    <!-- VERMITTLER SCORING -->
+    <div id="rs-vermittler" class="rs-tab-content active">
+        <div class="scoring-container">
+            <div class="scoring-parameters">
+                <h2 style="margin-bottom: 25px; color: #1f2937;">Parameter-Einstellungen</h2>
+
+                <!-- VERMITTLER AUSWAHL -->
+                <div class="parameter-section" style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); border: 2px solid #6366f1;">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-right: 8px;">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Vermittler-Auswahl
+                        </h3>
+                    </div>
+
+                    <div class="parameter-item">
+                        <select id="vermittlerSelect" onchange="loadVermittlerProfile()" style="width: 100%; padding: 12px; border: 2px solid #6366f1; border-radius: 8px; font-size: 16px; font-weight: 600; background: white;">
+                            <option value="">-- Bitte Vermittler wählen --</option>
+                            <option value="a-ao">A-Vermittler "Premium AO"</option>
+                            <option value="a-makler">A-Vermittler "Premium Makler"</option>
+                            <option value="b-ao">B-Vermittler "Solider AO"</option>
+                            <option value="b-makler">B-Vermittler "Solider Makler"</option>
+                            <option value="c-makler">C-Vermittler "Entwicklung Makler"</option>
+                            <option value="d-autohaus">D-Vermittler "Kritisch Autohaus"</option>
+                        </select>
+                    </div>
+
+                    <div class="parameter-item">
+                        <label style="font-weight: 600; color: #1f2937; margin-bottom: 8px; display: block;">Vermittlertyp</label>
+                        <div id="vermittlerTypDisplay" style="padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; color: #1f2937; font-weight: 500;">
+                            Großmakler
+                        </div>
+                        <input type="hidden" id="vermittlerTypSelect" value="grossmakler">
+                    </div>
+                </div>
+
+                <!-- GESCHÄFTSPERFORMANCE -->
+                <div class="parameter-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-right: 8px;">
+                                <line x1="12" y1="20" x2="12" y2="10"></line>
+                                <line x1="18" y1="20" x2="18" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="16"></line>
+                            </svg>
+                            Geschäftsperformance
+                        </h3>
+                        <span class="section-weight">20%</span>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">
+                                Neugeschäftsvolumen
+                                <span class="expand-arrow" onclick="toggleExpand('neugeschaeft')">▶</span>
+                            </span>
+                            <span class="parameter-value" id="neugeschaeftValue">€500k</span>
+                        </div>
+                        <div class="parameter-description">Gesamtvolumen aller neu abgeschlossenen Verträge</div>
+                        <input type="range" class="slider" id="neugeschaeftSlider" min="0" max="2000000" step="50000" value="500000" oninput="updateMainSlider('neugeschaeft', true)">
+
+                        <div class="expandable-content" id="neugeschaeftContent">
+                            <div class="segment-container">
+                                <div class="segment-item">
+                                    <div class="segment-header" onclick="toggleSegment('neuSchadenSegment')">
+                                        <span class="segment-name"><span class="expand-arrow">▶</span> Schaden/Unfall</span>
+                                        <span class="segment-value" id="neuSchadenValue">€200k</span>
+                                    </div>
+                                    <input type="range" class="slider mini-slider" id="neuSchadenSlider" min="0" max="800000" step="10000" value="200000" oninput="updateSegmentValues('neugeschaeft')">
+                                </div>
+                                <div class="segment-item">
+                                    <div class="segment-header" onclick="toggleSegment('neuKrankenSegment')">
+                                        <span class="segment-name"><span class="expand-arrow">▶</span> Kranken</span>
+                                        <span class="segment-value" id="neuKrankenValue">€150k</span>
+                                    </div>
+                                    <input type="range" class="slider mini-slider" id="neuKrankenSlider" min="0" max="600000" step="10000" value="150000" oninput="updateSegmentValues('neugeschaeft')">
+                                </div>
+                                <div class="segment-item">
+                                    <div class="segment-header" onclick="toggleSegment('neuLebenSegment')">
+                                        <span class="segment-name"><span class="expand-arrow">▶</span> Leben</span>
+                                        <span class="segment-value" id="neuLebenValue">€150k</span>
+                                    </div>
+                                    <input type="range" class="slider mini-slider" id="neuLebenSlider" min="0" max="600000" step="10000" value="150000" oninput="updateSegmentValues('neugeschaeft')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">
+                                Bestandsvolumen
+                                <span class="expand-arrow" onclick="toggleExpand('bestand')">▶</span>
+                            </span>
+                            <span class="parameter-value" id="bestandValue">€2.5M</span>
+                        </div>
+                        <div class="parameter-description">Gesamtwert aller verwalteten Versicherungsverträge</div>
+                        <input type="range" class="slider" id="bestandSlider" min="0" max="10000000" step="100000" value="2500000" oninput="updateMainSlider('bestand', true)">
+
+                        <div class="expandable-content" id="bestandContent">
+                            <div class="segment-container">
+                                <div class="segment-item">
+                                    <div class="segment-header" onclick="toggleSegment('bestandSchadenSegment')">
+                                        <span class="segment-name"><span class="expand-arrow">▶</span> Schaden/Unfall</span>
+                                        <span class="segment-value" id="bestandSchadenValue">€1M</span>
+                                    </div>
+                                    <input type="range" class="slider mini-slider" id="bestandSchadenSlider" min="0" max="4000000" step="50000" value="1000000" oninput="updateSegmentValues('bestand')">
+                                </div>
+                                <div class="segment-item">
+                                    <div class="segment-header" onclick="toggleSegment('bestandKrankenSegment')">
+                                        <span class="segment-name"><span class="expand-arrow">▶</span> Kranken</span>
+                                        <span class="segment-value" id="bestandKrankenValue">€750k</span>
+                                    </div>
+                                    <input type="range" class="slider mini-slider" id="bestandKrankenSlider" min="0" max="3000000" step="50000" value="750000" oninput="updateSegmentValues('bestand')">
+                                </div>
+                                <div class="segment-item">
+                                    <div class="segment-header" onclick="toggleSegment('bestandLebenSegment')">
+                                        <span class="segment-name"><span class="expand-arrow">▶</span> Leben</span>
+                                        <span class="segment-value" id="bestandLebenValue">€750k</span>
+                                    </div>
+                                    <input type="range" class="slider mini-slider" id="bestandLebenSlider" min="0" max="3000000" step="50000" value="750000" oninput="updateSegmentValues('bestand')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Anteil margenstarker Produkte</span>
+                            <span class="parameter-value" id="margenValue">35%</span>
+                        </div>
+                        <div class="parameter-description">Prozentualer Anteil von BU, Pflege, bAV am Gesamtportfolio</div>
+                        <input type="range" class="slider" id="margenSlider" min="0" max="100" step="5" value="35" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Cross-Selling-Quote</span>
+                            <span class="parameter-value" id="crossSellingValue">1.8</span>
+                        </div>
+                        <div class="parameter-description">Durchschnittliche Anzahl von Verträgen pro Kunde</div>
+                        <input type="range" class="slider" id="crossSellingSlider" min="1" max="5" step="0.1" value="1.8" oninput="updateScoring()">
+                    </div>
+                </div>
+
+                <!-- RISIKOSCORE -->
+                <div class="parameter-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-right: 8px;">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            Risikoscore
+                        </h3>
+                        <span class="section-weight">40%</span>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Schadenquote (Combined Ratio)</span>
+                            <span class="parameter-value" id="schadenquoteValue">95%</span>
+                        </div>
+                        <div class="parameter-description">Verhältnis von Schäden und Kosten zu Prämieneinnahmen</div>
+                        <input type="range" class="slider" id="schadenquoteSlider" min="70" max="150" step="1" value="95" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Großschadenhäufigkeit</span>
+                            <span class="parameter-value" id="grossschadenValue">2%</span>
+                        </div>
+                        <div class="parameter-description">Anteil der Schäden über €50.000 am Gesamtportfolio</div>
+                        <input type="range" class="slider" id="grossschadenSlider" min="0" max="10" step="0.5" value="2" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Underwriting-Qualität</span>
+                            <span class="parameter-value" id="underwritingValue">85%</span>
+                        </div>
+                        <div class="parameter-description">Anteil der Anträge, die den Risikoprüfungskriterien entsprechen</div>
+                        <input type="range" class="slider" id="underwritingSlider" min="0" max="100" step="5" value="85" oninput="updateScoring()">
+                    </div>
+                </div>
+
+                <!-- BESTANDSSTABILITÄT -->
+                <div class="parameter-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-right: 8px;">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            Bestandsstabilität
+                        </h3>
+                        <span class="section-weight">15%</span>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Stornoquote (1. Jahr)</span>
+                            <span class="parameter-value" id="stornoValue">12%</span>
+                        </div>
+                        <div class="parameter-description">Prozentsatz der Verträge, die im ersten Jahr gekündigt werden</div>
+                        <input type="range" class="slider" id="stornoSlider" min="0" max="40" step="1" value="12" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Ø Vertragsdauer</span>
+                            <span class="parameter-value" id="dauerValue">7.5 Jahre</span>
+                        </div>
+                        <div class="parameter-description">Durchschnittliche Laufzeit der vermittelten Verträge</div>
+                        <input type="range" class="slider" id="dauerSlider" min="1" max="20" step="0.5" value="7.5" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Bestandsausschöpfung</span>
+                            <span class="parameter-value" id="ausschoepfungValue">65%</span>
+                        </div>
+                        <div class="parameter-description">Anteil der Bestandskunden mit aktiven Folgeabschlüssen</div>
+                        <input type="range" class="slider" id="ausschoepfungSlider" min="0" max="100" step="5" value="65" oninput="updateScoring()">
+                    </div>
+                </div>
+
+                <!-- KUNDENORIENTIERUNG -->
+                <div class="parameter-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-right: 8px;">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 010 7.75"></path>
+                            </svg>
+                            Kundenorientierung
+                        </h3>
+                        <span class="section-weight">10%</span>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">NPS Score</span>
+                            <span class="parameter-value" id="npsValue">45</span>
+                        </div>
+                        <div class="parameter-description">Net Promoter Score - Kundenweiterempfehlungsrate</div>
+                        <input type="range" class="slider" id="npsSlider" min="-100" max="100" step="5" value="45" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Beratungsqualität</span>
+                            <span class="parameter-value" id="beratungValue">75%</span>
+                        </div>
+                        <div class="parameter-description">Bewertung durch Mystery Shopping und Kundenfeedback</div>
+                        <input type="range" class="slider" id="beratungSlider" min="0" max="100" step="5" value="75" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Beschwerdenquote</span>
+                            <span class="parameter-value" id="beschwerdenValue">3%</span>
+                        </div>
+                        <div class="parameter-description">Prozentsatz der Kunden mit formellen Beschwerden</div>
+                        <input type="range" class="slider" id="beschwerdenSlider" min="0" max="20" step="0.5" value="3" oninput="updateScoring()">
+                    </div>
+                </div>
+
+                <!-- PROFITABILITÄT -->
+                <div class="parameter-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-right: 8px;">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
+                            </svg>
+                            Profitabilität
+                        </h3>
+                        <span class="section-weight">15%</span>
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Deckungsbeitrag</span>
+                            <span class="parameter-value" id="deckungsbeitragValue">€85k</span>
+                        </div>
+                        <div class="parameter-description">Jährlicher Ertrag nach Abzug aller direkten Kosten</div>
+                        <input type="range" class="slider" id="deckungsbeitragSlider" min="0" max="500000" step="5000" value="85000" oninput="updateScoring()">
+                    </div>
+
+                    <div class="parameter-item">
+                        <div class="parameter-label">
+                            <span class="parameter-name">Kosten-Ertrags-Verhältnis</span>
+                            <span class="parameter-value" id="kostenertragValue">68%</span>
+                        </div>
+                        <div class="parameter-description">Verhältnis der Gesamtkosten zu den Erträgen</div>
+                        <input type="range" class="slider" id="kostenertragSlider" min="0" max="120" step="2" value="68" oninput="updateScoring()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="scoring-result">
+                <h2 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Scoring-Ergebnis</h2>
+
+                <div class="traffic-light">
+                    <div class="light red" id="redLight"></div>
+                    <div class="light yellow" id="yellowLight"></div>
+                    <div class="light green" id="greenLight"></div>
+                </div>
+
+                <div class="score-display">
+                    <div class="score-label">Gesamt-Score</div>
+                    <div class="score-value" id="totalScore">62</div>
+                    <div class="score-category b-level" id="scoreCategory">B-Vermittler</div>
+
+                    <div class="score-details">
+                        <div class="detail-row">
+                            <span>Risikoscore:</span>
+                            <span id="riskScore">20.0/40</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Geschäftsperformance:</span>
+                            <span id="performanceScore">15.0/20</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Bestandsstabilität:</span>
+                            <span id="stabilityScore">11.3/15</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Profitabilität:</span>
+                            <span id="profitScore">11.3/15</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Kundenorientierung:</span>
+                            <span id="customerScore">7.5/10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UNTERNEHMENSPERSPEKTIVE -->
+    <div id="rs-unternehmen" class="rs-tab-content">
+        <div class="enterprise-container">
+            <div class="enterprise-main">
+                <!-- SILO SELECTION -->
+                <div class="silo-toggle-container">
+                    <label class="silo-toggle-label">Vertriebssilo auswählen:</label>
+                    <div class="toggle-button-group">
+                        <button class="toggle-button active" onclick="selectSilo('alle')">Alle Vermittler</button>
+                        <button class="toggle-button" onclick="selectSilo('ao')">Ausschließlichkeitsorganisation</button>
+                        <button class="toggle-button" onclick="selectSilo('makler')">Makler (Alle)</button>
+                        <button class="toggle-button" onclick="selectSilo('grossmakler')">Großmakler</button>
+                        <button class="toggle-button" onclick="selectSilo('kleinmakler')">Kleinmakler</button>
+                        <button class="toggle-button" onclick="selectSilo('autohaus')">Autohäuser</button>
+                    </div>
+                </div>
+
+                <!-- DISTRIBUTION CHART -->
+                <div class="distribution-container">
+                    <h3 class="distribution-title">Score-Verteilung der Vermittler</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="distributionChart" width="800" height="400"></canvas>
+                        <div class="chart-tooltip" id="chartTooltip"></div>
+                    </div>
+                    <div class="legend-container">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, hsl(140, 50%, 75%) 0%, hsl(140, 70%, 65%) 100%);"></div>
+                            <span>A-Vermittler (80-100)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, hsl(50, 60%, 80%) 0%, hsl(50, 80%, 70%) 100%);"></div>
+                            <span>B-Vermittler (60-79)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, hsl(30, 65%, 75%) 0%, hsl(30, 85%, 65%) 100%);"></div>
+                            <span>C-Vermittler (40-59)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, hsl(0, 50%, 80%) 0%, hsl(0, 80%, 65%) 100%);"></div>
+                            <span>D-Vermittler (0-39)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATISTICS TABLE -->
+                <div class="statistics-container">
+                    <h3 class="statistics-title">Vertriebsstatistiken</h3>
+                    <table class="statistics-table">
+                        <thead>
+                            <tr>
+                                <th>Vermittlertyp</th>
+                                <th>Anzahl VM</th>
+                                <th>Ø Score</th>
+                                <th>Ø Neugeschäft</th>
+                                <th>Ø Bestand</th>
+                                <th>Ø Combined Ratio</th>
+                                <th>Ø Ertrag/VM</th>
+                                <th>Ø Stornoquote</th>
+                                <th>Ø Cross-Selling</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statisticsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- MEASURES SECTION -->
+                <div class="measures-container">
+                    <button class="measures-toggle-button" onclick="toggleMeasures()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                        <span>Maßnahmen aktivieren</span>
+                    </button>
+
+                    <div class="measures-content" id="measuresContent">
+                        <h3 class="statistics-title">Verbesserungsmaßnahmen auswählen:</h3>
+
+                        <div class="measures-grid">
+                            <div class="measure-item">
+                                <label class="measure-checkbox">
+                                    <input type="checkbox" value="schulungen" onchange="updateMeasures()">
+                                    <div class="measure-info">
+                                        <div class="measure-title">Schulungsprogramm</div>
+                                        <div class="measure-description">Umfassende Weiterbildung für alle Vermittler</div>
+                                        <div class="measure-effect">D: +10 | C: +7 | B: +4 | A: +2 Punkte</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="measure-item">
+                                <label class="measure-checkbox">
+                                    <input type="checkbox" value="vertragspruefung" onchange="updateMeasures()">
+                                    <div class="measure-info">
+                                        <div class="measure-title">Erweiterte Vertragsprüfung</div>
+                                        <div class="measure-description">Intensive Qualitätskontrolle für D-Vermittler</div>
+                                        <div class="measure-effect">Nur D-Vermittler: +15 Punkte</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="measure-item">
+                                <label class="measure-checkbox">
+                                    <input type="checkbox" value="digitalisierung" onchange="updateMeasures()">
+                                    <div class="measure-info">
+                                        <div class="measure-title">Digitalisierung</div>
+                                        <div class="measure-description">Moderne Tools und digitale Prozesse</div>
+                                        <div class="measure-effect">Alle Vermittler: +6 Punkte</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="measure-item">
+                                <label class="measure-checkbox">
+                                    <input type="checkbox" value="incentive" onchange="updateMeasures()">
+                                    <div class="measure-info">
+                                        <div class="measure-title">Incentive-System</div>
+                                        <div class="measure-description">Leistungsbasierte Anreizsysteme</div>
+                                        <div class="measure-effect">B: +8 | C: +5 | D: +3 Punkte</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="measure-item">
+                                <label class="measure-checkbox">
+                                    <input type="checkbox" value="prozessoptimierung" onchange="updateMeasures()">
+                                    <div class="measure-info">
+                                        <div class="measure-title">Prozessoptimierung</div>
+                                        <div class="measure-description">Effizientere Arbeitsabläufe</div>
+                                        <div class="measure-effect">Alle Vermittler: +4 Punkte</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="measure-item">
+                                <label class="measure-checkbox">
+                                    <input type="checkbox" value="betreuung" onchange="updateMeasures()">
+                                    <div class="measure-info">
+                                        <div class="measure-title">Betreuungsintensivierung</div>
+                                        <div class="measure-description">Persönliche Unterstützung für schwache Vermittler</div>
+                                        <div class="measure-effect">D: +12 | C: +8 Punkte</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Comparison Section -->
+                        <div class="comparison-container" id="comparisonContainer" style="display: none;">
+                            <h3 class="comparison-title">Vorher-Nachher-Vergleich</h3>
+                            <div class="comparison-grid">
+                                <div class="comparison-column">
+                                    <div class="comparison-label">Vorher</div>
+                                    <div class="comparison-value" id="beforeAvgScore">61.5</div>
+                                    <div class="comparison-detail">Durchschnittlicher Score</div>
+                                    <div style="margin-top: 15px;">
+                                        <span class="level-badge a">A: <span id="beforeA">200</span></span>
+                                        <span class="level-badge b">B: <span id="beforeB">500</span></span>
+                                        <span class="level-badge c">C: <span id="beforeC">800</span></span>
+                                        <span class="level-badge d">D: <span id="beforeD">300</span></span>
+                                    </div>
+                                </div>
+                                <div class="comparison-column">
+                                    <div class="comparison-label">Nachher</div>
+                                    <div class="comparison-value" id="afterAvgScore">68.7</div>
+                                    <div class="comparison-detail">Durchschnittlicher Score <span class="improvement-badge">+7.2</span></div>
+                                    <div style="margin-top: 15px;">
+                                        <span class="level-badge a">A: <span id="afterA">350</span></span>
+                                        <span class="level-badge b">B: <span id="afterB">700</span></span>
+                                        <span class="level-badge c">C: <span id="afterC">550</span></span>
+                                        <span class="level-badge d">D: <span id="afterD">200</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI BOX -->
+            <div class="kpi-box">
+                <h2 class="kpi-box-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="margin-right: 8px;">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Haupt-KPIs
+                </h2>
+
+                <div class="kpi-item">
+                    <div class="kpi-label">Combined Ratio</div>
+                    <div class="kpi-value-container">
+                        <div class="kpi-value combined-ratio-red" id="kpiCombinedRatio">118.0%</div>
+                        <div class="kpi-trend positive" id="kpiCombinedTrend" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="kpi-item">
+                    <div class="kpi-label">Gesamtergebnis</div>
+                    <div class="kpi-value-container">
+                        <div class="kpi-value" id="kpiGesamtergebnis" style="color: #dc2626;">-€77M</div>
+                        <div class="kpi-trend positive" id="kpiErgebnisTrend" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="kpi-item">
+                    <div class="kpi-label">VM-Entwicklung (Risk-Return)</div>
+                    <div class="vm-distribution">
+                        <div class="vm-level a">
+                            <div class="vm-count" id="kpiVmA">200</div>
+                            <div class="vm-label">A</div>
+                        </div>
+                        <div class="vm-level b">
+                            <div class="vm-count" id="kpiVmB">500</div>
+                            <div class="vm-label">B</div>
+                        </div>
+                        <div class="vm-level c">
+                            <div class="vm-count" id="kpiVmC">800</div>
+                            <div class="vm-label">C</div>
+                        </div>
+                        <div class="vm-level d">
+                            <div class="vm-count" id="kpiVmD">300</div>
+                            <div class="vm-label">D</div>
+                        </div>
+                    </div>
+                    <div class="kpi-benchmark" style="margin-top: 10px;">
+                        Gesamt: <span id="kpiVmTotal">1,800</span> Vermittler
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
