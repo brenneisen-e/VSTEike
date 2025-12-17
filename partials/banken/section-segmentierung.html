@@ -319,21 +319,26 @@
         </div>
 
         <!-- Main Content Grid with Sidebar -->
-        <div class="main-content-grid">
-            <!-- Left: Matrix Quadrants with Gradients -->
-            <div class="matrix-section">
-                <div class="card-header">
-                    <div>
+        <div class="matrix-ehemalige-grid">
+            <!-- Left: Matrix Section (Collapsible) -->
+            <div class="collapsible-section matrix-section-wrapper" id="matrixSection">
+                <div class="collapsible-header" onclick="toggleSection('matrixSection')">
+                    <div class="collapsible-header-left">
                         <h3>Willingness / Ability Matrix</h3>
                         <p class="card-subtitle">KI-gestützte Segmentierung • Klick auf Quadrant zum Filtern</p>
                     </div>
-                    <div class="card-actions">
-                        <button class="btn-secondary btn-sm" onclick="exportMatrix()">Export</button>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <button class="btn-secondary btn-sm" onclick="event.stopPropagation(); exportMatrix()">Export</button>
+                        <div class="collapse-toggle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Matrix Quadrants Grid -->
-                <div class="matrix-quadrants">
+                <div class="collapsible-content">
+                    <!-- Matrix Quadrants Grid -->
+                    <div class="matrix-quadrants">
                     <!-- Top Left: Eskalation (High Ability, Low Willingness) -->
                     <div class="matrix-quadrant segment-eskalation" onclick="openSegmentFullscreen('eskalation')">
                         <div class="quadrant-header">
@@ -411,14 +416,76 @@
                     </div>
                 </div>
 
-                <!-- Axis Labels -->
-                <div class="matrix-axis-labels">
-                    <span class="axis-left">← Geringe Willingness</span>
-                    <span class="axis-center">↑ Ability ↓</span>
-                    <span class="axis-right">Hohe Willingness →</span>
+                    <!-- Axis Labels -->
+                    <div class="matrix-axis-labels">
+                        <span class="axis-left">← Geringe Willingness</span>
+                        <span class="axis-center">↑ Ability ↓</span>
+                        <span class="axis-right">Hohe Willingness →</span>
+                    </div>
                 </div>
             </div>
 
+            <!-- Right: Ehemalige Fälle Section (Collapsible) -->
+            <div class="collapsible-section ehemalige-section" id="ehemaligeSection">
+                <div class="collapsible-header" onclick="toggleSection('ehemaligeSection')">
+                    <div class="collapsible-header-left">
+                        <h3>Ehemalige Fälle</h3>
+                    </div>
+                    <div class="collapse-toggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div class="collapsible-content" style="padding: 0;">
+                    <div class="ehemalige-tile" onclick="openSegmentFullscreen('ehemalige')">
+                        <div class="ehemalige-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="ehemalige-title">Abgeschlossen</div>
+                        <div class="ehemalige-subtitle">Verzug in letzten 12 Monaten, jetzt regulär</div>
+                        <div class="ehemalige-count">847</div>
+                        <div class="ehemalige-volume">€ 4,2 Mio zurückgezahlt</div>
+                        <div class="ehemalige-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Monitoring, Nachbetreuung
+                        </div>
+                    </div>
+                    <div class="ehemalige-list">
+                        <div class="ehemalige-list-title">Kürzlich abgeschlossen</div>
+                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-7234')">
+                            <div>
+                                <div class="ehemalige-item-name">Braun, Thomas</div>
+                                <div class="ehemalige-item-info">Ratenkredit • vor 3 Tagen</div>
+                            </div>
+                            <div class="ehemalige-item-amount">€1.890</div>
+                        </div>
+                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-6891')">
+                            <div>
+                                <div class="ehemalige-item-name">Klein KG</div>
+                                <div class="ehemalige-item-info">Betriebsmittel • vor 5 Tagen</div>
+                            </div>
+                            <div class="ehemalige-item-amount">€8.400</div>
+                        </div>
+                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5982')">
+                            <div>
+                                <div class="ehemalige-item-name">Meier, Stefan</div>
+                                <div class="ehemalige-item-info">Dispo • vor 1 Woche</div>
+                            </div>
+                            <div class="ehemalige-item-amount">€2.340</div>
+                        </div>
+                        <button class="ehemalige-show-all" onclick="showAllEhemalige()">
+                            Alle 847 Fälle anzeigen
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Customer List with Actions -->
@@ -705,6 +772,7 @@
                             <td><span class="mahnstufe-badge m3">M3</span></td>
                             <td><div class="next-action"><span class="action-type">Inkasso-Übergabe</span><small class="action-date overdue">14.12.2024</small></div></td>
                             <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td><span class="bearbeiter-badge">K. Weber</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn danger" title="Abschreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0007')">
@@ -717,6 +785,7 @@
                             <td><span class="mahnstufe-badge m4">M4</span></td>
                             <td><div class="next-action"><span class="action-type">Zwangsvollstreckung</span><small class="action-date overdue">08.12.2024</small></div></td>
                             <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Verkaufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></button></td>
                         </tr>
                         <!-- Additional Priorität cases -->
@@ -730,6 +799,7 @@
                             <td><span class="mahnstufe-badge m1">M1</span></td>
                             <td><div class="next-action"><span class="action-type">Zahlungserinnerung</span><small class="action-date upcoming">19.12.2024</small></div></td>
                             <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="bearbeiter-badge">S. Müller</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0009')">
@@ -742,6 +812,7 @@
                             <td><span class="mahnstufe-badge m2">M2</span></td>
                             <td><div class="next-action"><span class="action-type">Telefonat</span><small class="action-date upcoming">17.12.2024</small></div></td>
                             <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0010')">
@@ -754,6 +825,7 @@
                             <td><span class="mahnstufe-badge m1">M1</span></td>
                             <td><div class="next-action"><span class="action-type">Zahlungszusage</span><small class="action-date upcoming">20.12.2024</small></div></td>
                             <td><span class="status-badge zusage">Zusage</span></td>
+                            <td><span class="bearbeiter-badge">A. Becker</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Vereinbarung"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></button></td>
                         </tr>
                         <!-- Additional Restrukturierung cases -->
@@ -767,6 +839,7 @@
                             <td><span class="mahnstufe-badge m2">M2</span></td>
                             <td><div class="next-action"><span class="action-type">Stundungsvereinbarung</span><small class="action-date">22.12.2024</small></div></td>
                             <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0012')">
@@ -779,6 +852,7 @@
                             <td><span class="mahnstufe-badge m1">M1</span></td>
                             <td><div class="next-action"><span class="action-type">Ratenpause</span><small class="action-date">18.12.2024</small></div></td>
                             <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td><span class="bearbeiter-badge">K. Weber</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0013')">
@@ -791,6 +865,7 @@
                             <td><span class="mahnstufe-badge m2">M2</span></td>
                             <td><div class="next-action"><span class="action-type">Tilgungsstreckung</span><small class="action-date">21.12.2024</small></div></td>
                             <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td><span class="bearbeiter-badge">S. Müller</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
                         </tr>
                         <!-- Additional Abwicklung cases -->
@@ -804,6 +879,7 @@
                             <td><span class="mahnstufe-badge m4">M4</span></td>
                             <td><div class="next-action"><span class="action-type">Forderungsverkauf</span><small class="action-date overdue">05.12.2024</small></div></td>
                             <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td><span class="bearbeiter-badge">A. Becker</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Verkaufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0015')">
@@ -816,6 +892,7 @@
                             <td><span class="mahnstufe-badge m4">M4</span></td>
                             <td><div class="next-action"><span class="action-type">Insolvenzanmeldung</span><small class="action-date overdue">01.12.2024</small></div></td>
                             <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn danger" title="Abschreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0016')">
@@ -828,6 +905,7 @@
                             <td><span class="mahnstufe-badge m4">M4</span></td>
                             <td><div class="next-action"><span class="action-type">Abschreibung</span><small class="action-date overdue">28.11.2024</small></div></td>
                             <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn danger" title="Abschreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
                         </tr>
                     </tbody>

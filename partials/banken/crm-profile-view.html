@@ -333,9 +333,244 @@
 
             <div class="crm-section" id="crm-dokumente">
                 <div class="crm-section-header">
-                    <h2>Dokumente</h2>
+                    <h2>Dokumente & Schreiben</h2>
+                    <button class="btn-secondary" onclick="uploadDocument()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Hochladen
+                    </button>
                 </div>
-                <p>Alle archivierten Dokumente...</p>
+
+                <!-- Expandable Document List -->
+                <div class="document-list">
+                    <!-- Mahnung 3 -->
+                    <div class="document-item expandable" id="doc-001">
+                        <div class="document-header" onclick="toggleDocument('doc-001')">
+                            <div class="document-icon danger">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">3. Mahnung - Letzte außergerichtliche Aufforderung</span>
+                                <span class="document-meta">01.12.2025 • Ausgehend • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge danger">Versendet</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="letter-preview">
+                                    <div class="letter-header">
+                                        <strong>Musterbank AG</strong><br>
+                                        Inkasso-Abteilung<br>
+                                        Bankstraße 123<br>
+                                        60311 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-recipient">
+                                        <strong>Mueller GmbH</strong><br>
+                                        Herr Max Mueller<br>
+                                        Industriestraße 45<br>
+                                        60487 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-date">Frankfurt, 01.12.2025</div>
+                                    <div class="letter-subject"><strong>3. Mahnung - Letzte außergerichtliche Aufforderung</strong></div>
+                                    <div class="letter-body">
+                                        <p>Sehr geehrter Herr Mueller,</p>
+                                        <p>trotz unserer bisherigen Mahnungen und Zahlungsaufforderungen ist Ihre Verbindlichkeit in Höhe von <strong>€ 125.000,00</strong> weiterhin nicht beglichen.</p>
+                                        <p>Wir fordern Sie hiermit letztmalig auf, den offenen Betrag bis zum <strong>15.12.2025</strong> auf das unten genannte Konto zu überweisen.</p>
+                                        <p>Sollte bis zu diesem Datum kein Zahlungseingang erfolgen, sehen wir uns gezwungen, ohne weitere Ankündigung gerichtliche Schritte einzuleiten und die Forderung an ein Inkassounternehmen zu übergeben.</p>
+                                        <p>Mit freundlichen Grüßen<br>Ihre Musterbank AG</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-001')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Herunterladen
+                                </button>
+                                <button class="doc-btn" onclick="printDocument('doc-001')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                        <rect x="6" y="14" width="12" height="8"></rect>
+                                    </svg>
+                                    Drucken
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mahnung 2 -->
+                    <div class="document-item expandable" id="doc-002">
+                        <div class="document-header" onclick="toggleDocument('doc-002')">
+                            <div class="document-icon warning">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">2. Mahnung - Zahlungserinnerung</span>
+                                <span class="document-meta">01.11.2025 • Ausgehend • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge warning">Versendet</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="letter-preview">
+                                    <div class="letter-header">
+                                        <strong>Musterbank AG</strong><br>
+                                        Forderungsmanagement<br>
+                                        Bankstraße 123<br>
+                                        60311 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-recipient">
+                                        <strong>Mueller GmbH</strong><br>
+                                        Herr Max Mueller<br>
+                                        Industriestraße 45<br>
+                                        60487 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-date">Frankfurt, 01.11.2025</div>
+                                    <div class="letter-subject"><strong>2. Mahnung - Zahlungserinnerung</strong></div>
+                                    <div class="letter-body">
+                                        <p>Sehr geehrter Herr Mueller,</p>
+                                        <p>leider haben wir bis heute keinen Zahlungseingang zu unserer 1. Mahnung vom 01.10.2025 feststellen können.</p>
+                                        <p>Ihre offene Forderung beträgt weiterhin <strong>€ 125.000,00</strong>.</p>
+                                        <p>Bitte überweisen Sie den Betrag bis zum <strong>15.11.2025</strong>.</p>
+                                        <p>Mit freundlichen Grüßen<br>Ihre Musterbank AG</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-002')">Herunterladen</button>
+                                <button class="doc-btn" onclick="printDocument('doc-002')">Drucken</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mahnung 1 -->
+                    <div class="document-item expandable" id="doc-003">
+                        <div class="document-header" onclick="toggleDocument('doc-003')">
+                            <div class="document-icon info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">1. Mahnung - Zahlungserinnerung</span>
+                                <span class="document-meta">01.10.2025 • Ausgehend • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge info">Versendet</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="letter-preview">
+                                    <div class="letter-header">
+                                        <strong>Musterbank AG</strong><br>
+                                        Kundenservice<br>
+                                        Bankstraße 123<br>
+                                        60311 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-recipient">
+                                        <strong>Mueller GmbH</strong><br>
+                                        Herr Max Mueller<br>
+                                        Industriestraße 45<br>
+                                        60487 Frankfurt am Main
+                                    </div>
+                                    <div class="letter-date">Frankfurt, 01.10.2025</div>
+                                    <div class="letter-subject"><strong>1. Mahnung - Freundliche Zahlungserinnerung</strong></div>
+                                    <div class="letter-body">
+                                        <p>Sehr geehrter Herr Mueller,</p>
+                                        <p>bei der Durchsicht unserer Konten haben wir festgestellt, dass folgende Zahlung noch aussteht:</p>
+                                        <p><strong>Offener Betrag: € 125.000,00</strong></p>
+                                        <p>Bitte überweisen Sie den Betrag bis zum <strong>15.10.2025</strong>.</p>
+                                        <p>Mit freundlichen Grüßen<br>Ihre Musterbank AG</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-003')">Herunterladen</button>
+                                <button class="doc-btn" onclick="printDocument('doc-003')">Drucken</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kreditvertrag -->
+                    <div class="document-item expandable" id="doc-004">
+                        <div class="document-header" onclick="toggleDocument('doc-004')">
+                            <div class="document-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                </svg>
+                            </div>
+                            <div class="document-info">
+                                <span class="document-title">Kreditvertrag Nr. BK-2024-001234</span>
+                                <span class="document-meta">15.01.2024 • Vertrag • PDF</span>
+                            </div>
+                            <div class="document-actions">
+                                <span class="document-badge">Archiviert</span>
+                                <span class="expand-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="document-content">
+                            <div class="document-preview">
+                                <div class="contract-summary">
+                                    <h4>Vertragsdetails</h4>
+                                    <table class="contract-table">
+                                        <tr><td>Vertragsnummer:</td><td>BK-2024-001234</td></tr>
+                                        <tr><td>Kreditart:</td><td>Betriebsmittelkredit</td></tr>
+                                        <tr><td>Kreditsumme:</td><td>€ 200.000,00</td></tr>
+                                        <tr><td>Zinssatz:</td><td>4,75% p.a.</td></tr>
+                                        <tr><td>Laufzeit:</td><td>60 Monate</td></tr>
+                                        <tr><td>Monatliche Rate:</td><td>€ 3.750,00</td></tr>
+                                        <tr><td>Vertragsbeginn:</td><td>01.02.2024</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="document-toolbar">
+                                <button class="doc-btn" onclick="downloadDocument('doc-004')">Herunterladen</button>
+                                <button class="doc-btn" onclick="printDocument('doc-004')">Drucken</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="crm-section" id="crm-workflow">

@@ -252,13 +252,56 @@ function filterBySegment(segment) {
 // Track currently selected segment
 let currentSelectedSegment = null;
 
+// Toggle collapsible sections
+function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.classList.toggle('collapsed');
+
+        // Save state to localStorage
+        const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '{}');
+        collapsedSections[sectionId] = section.classList.contains('collapsed');
+        localStorage.setItem('collapsedSections', JSON.stringify(collapsedSections));
+    }
+}
+
+// Restore collapsed sections state on page load
+function restoreCollapsedSections() {
+    const collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '{}');
+    Object.keys(collapsedSections).forEach(sectionId => {
+        if (collapsedSections[sectionId]) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('collapsed');
+            }
+        }
+    });
+}
+
+// Show all ehemalige (former) cases
+function showAllEhemalige() {
+    // Filter customer list by ehemalige status
+    showNotification('Zeige alle ehemaligen Fälle', 'info');
+
+    // For demo, show notification - in production this would filter/show a dedicated view
+    const customerTable = document.querySelector('.customer-table tbody');
+    if (customerTable) {
+        // Scroll to customer list
+        const customerList = document.querySelector('.customer-list-section');
+        if (customerList) {
+            customerList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+}
+
 // Navigate to customer list with segment filter applied
 function openSegmentFullscreen(segment) {
     const segmentConfig = {
         'eskalation': { badgeClass: 'escalate', name: 'Eskalation', filterValue: 'escalate' },
         'prioritaet': { badgeClass: 'priority', name: 'Priorität', filterValue: 'priority' },
         'restrukturierung': { badgeClass: 'restructure', name: 'Restrukturierung', filterValue: 'restructure' },
-        'abwicklung': { badgeClass: 'writeoff', name: 'Abwicklung', filterValue: 'writeoff' }
+        'abwicklung': { badgeClass: 'writeoff', name: 'Abwicklung', filterValue: 'writeoff' },
+        'ehemalige': { badgeClass: 'ehemalige', name: 'Ehemalige Fälle', filterValue: 'ehemalige' }
     };
 
     const config = segmentConfig[segment];
@@ -1702,6 +1745,68 @@ function showCrmSection(sectionName) {
     if (activeSection) activeSection.classList.add('active');
 }
 
+// Toggle expandable document
+function toggleDocument(docId) {
+    const docItem = document.getElementById(docId);
+    if (docItem) {
+        // Toggle expanded class
+        docItem.classList.toggle('expanded');
+
+        // Optionally close other expanded documents
+        document.querySelectorAll('.document-item.expanded').forEach(item => {
+            if (item.id !== docId) {
+                item.classList.remove('expanded');
+            }
+        });
+    }
+}
+
+// Download document
+function downloadDocument(docId) {
+    showNotification(`Dokument ${docId} wird heruntergeladen...`, 'info');
+    // In production, this would trigger actual file download
+}
+
+// Print document
+function printDocument(docId) {
+    const docItem = document.getElementById(docId);
+    if (docItem) {
+        const letterPreview = docItem.querySelector('.letter-preview, .contract-summary');
+        if (letterPreview) {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Dokument drucken</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
+                        .letter-preview { font-family: Georgia, serif; font-size: 13px; line-height: 1.8; }
+                        .letter-header, .letter-recipient { font-size: 12px; margin-bottom: 24px; }
+                        .letter-date { text-align: right; font-size: 12px; color: #666; margin-bottom: 24px; }
+                        .letter-subject { font-size: 14px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #ccc; }
+                        .letter-body p { margin: 0 0 12px 0; }
+                        .contract-summary table { width: 100%; border-collapse: collapse; }
+                        .contract-summary td { padding: 8px 0; border-bottom: 1px solid #eee; }
+                        @media print { body { padding: 20px; } }
+                    </style>
+                </head>
+                <body>${letterPreview.outerHTML}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        }
+    }
+}
+
+// Upload document
+function uploadDocument() {
+    showNotification('Dokument-Upload wird geöffnet...', 'info');
+}
+
 function crmCall() {
     showNotification('Anruf wird gestartet...', 'info');
 }
@@ -2817,6 +2922,9 @@ Entscheidungshilfe und ersetzen nicht die fachliche Einzelfallprüfung.
 window.downloadDashboardSummary = downloadDashboardSummary;
 
 // Initialize module selector on DOM ready
-document.addEventListener('DOMContentLoaded', initModuleSelector);
+document.addEventListener('DOMContentLoaded', function() {
+    initModuleSelector();
+    restoreCollapsedSections();
+});
 
 console.log('✅ banken.js geladen');
