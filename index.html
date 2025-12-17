@@ -703,7 +703,7 @@
                     </div>
 
                     <!-- Provisionssimulation Section -->
-                    <div class="provision-simulation-section">
+                    <div class="provision-simulation-section" id="provisionSimulation">
                         <div class="provision-simulation-header">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
                                 <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -711,9 +711,41 @@
                             </svg>
                             <h3>Provisionsmodell-Simulation</h3>
                             <span class="header-badge">AlphaProtect vs BetaCare</span>
+                            <div class="header-spacer"></div>
+                            <div class="perspective-toggle">
+                                <button class="perspective-btn active" onclick="switchPerspective('vermittler')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Vermittlersicht
+                                </button>
+                                <button class="perspective-btn" onclick="switchPerspective('unternehmen')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    </svg>
+                                    Unternehmenssicht
+                                </button>
+                            </div>
+                            <button class="fullscreen-btn" onclick="toggleProvisionFullscreen()" title="Vollbild">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" class="expand-icon">
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <polyline points="9 21 3 21 3 15"></polyline>
+                                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                                </svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" class="collapse-icon" style="display: none;">
+                                    <polyline points="4 14 10 14 10 20"></polyline>
+                                    <polyline points="20 10 14 10 14 4"></polyline>
+                                    <line x1="14" y1="10" x2="21" y2="3"></line>
+                                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                                </svg>
+                            </button>
                         </div>
 
-                        <!-- Segment Sliders -->
+                        <!-- Vermittler Perspective (existing content) -->
+                        <div class="perspective-content active" id="vermittlerPerspective">
                         <div class="segment-sliders-grid">
                             <!-- Leben -->
                             <div class="segment-slider-card">
@@ -933,6 +965,210 @@
                                 <span>Top (110%)</span>
                             </div>
                         </div>
+                        </div>
+                        <!-- End Vermittler Perspective -->
+
+                        <!-- Unternehmensperspektive -->
+                        <div class="perspective-content" id="unternehmenPerspective">
+                            <div class="company-intro">
+                                <div class="company-intro-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    </svg>
+                                </div>
+                                <div class="company-intro-text">
+                                    <h4>Kostenanalyse des Provisionsmodell-Wechsels</h4>
+                                    <p>Welche finanziellen Auswirkungen hat ein Wechsel des Provisionsmodells auf das Unternehmen? Hier analysieren Sie Gesamtkosten, Margeneffekte und Break-Even-Szenarien.</p>
+                                </div>
+                            </div>
+
+                            <!-- Company KPIs -->
+                            <div class="company-kpi-grid">
+                                <div class="company-kpi-card cost">
+                                    <div class="company-kpi-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="company-kpi-content">
+                                        <span class="company-kpi-label">Provisionskosten Alpha</span>
+                                        <span class="company-kpi-value" id="companyAlphaCost">€ 0</span>
+                                        <span class="company-kpi-sub">Gesamtkosten pro Jahr</span>
+                                    </div>
+                                </div>
+                                <div class="company-kpi-card cost">
+                                    <div class="company-kpi-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="company-kpi-content">
+                                        <span class="company-kpi-label">Provisionskosten Beta</span>
+                                        <span class="company-kpi-value" id="companyBetaCost">€ 0</span>
+                                        <span class="company-kpi-sub">Gesamtkosten pro Jahr</span>
+                                    </div>
+                                </div>
+                                <div class="company-kpi-card delta highlight">
+                                    <div class="company-kpi-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                            <polyline points="17 6 23 6 23 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="company-kpi-content">
+                                        <span class="company-kpi-label">Kostendifferenz</span>
+                                        <span class="company-kpi-value" id="companyCostDelta">€ 0</span>
+                                        <span class="company-kpi-sub" id="companyCostDeltaLabel">Mehrkosten/Jahr</span>
+                                    </div>
+                                </div>
+                                <div class="company-kpi-card margin">
+                                    <div class="company-kpi-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="company-kpi-content">
+                                        <span class="company-kpi-label">Margeneffekt</span>
+                                        <span class="company-kpi-value" id="companyMarginEffect">0%</span>
+                                        <span class="company-kpi-sub">Auswirkung auf Combined Ratio</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Company Simulator -->
+                            <div class="company-simulator">
+                                <div class="simulator-section">
+                                    <h4>Vermittlerbestand-Simulation</h4>
+                                    <div class="simulator-controls">
+                                        <div class="simulator-control">
+                                            <label>Anzahl Vermittler</label>
+                                            <input type="number" id="companyAgentCount" value="150" min="1" max="10000" onchange="calculateCompanyCosts()">
+                                            <span class="control-hint">Betroffene Vermittler</span>
+                                        </div>
+                                        <div class="simulator-control">
+                                            <label>Ø Produktion/Vermittler</label>
+                                            <input type="number" id="companyAvgProduction" value="800000" step="50000" onchange="calculateCompanyCosts()">
+                                            <span class="control-hint">Jahresprämienvolumen in €</span>
+                                        </div>
+                                        <div class="simulator-control">
+                                            <label>Migrationsrate Jahr 1</label>
+                                            <input type="range" id="companyMigrationRate" value="30" min="0" max="100" oninput="updateMigrationDisplay(); calculateCompanyCosts()">
+                                            <span class="control-value" id="migrationRateValue">30%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="simulator-section">
+                                    <h4>5-Jahres-Projektion</h4>
+                                    <div class="projection-chart-container">
+                                        <canvas id="companyProjectionChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cost Breakdown Table -->
+                            <div class="company-breakdown-section">
+                                <h4>Detaillierte Kostenaufstellung</h4>
+                                <table class="company-breakdown-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kostenposition</th>
+                                            <th>AlphaProtect</th>
+                                            <th>BetaCare</th>
+                                            <th>Differenz</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="companyBreakdownBody">
+                                        <tr>
+                                            <td>Abschlussprovision (AP)</td>
+                                            <td id="companyAlphaAP">€ 0</td>
+                                            <td id="companyBetaAP">€ 0</td>
+                                            <td id="companyDeltaAP">€ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bestandsprovision (BP)</td>
+                                            <td id="companyAlphaBP">€ 0</td>
+                                            <td id="companyBetaBP">€ 0</td>
+                                            <td id="companyDeltaBP">€ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bonifikationen</td>
+                                            <td id="companyAlphaBonus">€ 0</td>
+                                            <td id="companyBetaBonus">€ 0</td>
+                                            <td id="companyDeltaBonus">€ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Implementierungskosten</td>
+                                            <td>-</td>
+                                            <td id="companyImplCost">€ 250.000</td>
+                                            <td id="companyImplCostDelta">€ 250.000</td>
+                                        </tr>
+                                        <tr class="total-row">
+                                            <td><strong>Gesamt (Jahr 1)</strong></td>
+                                            <td id="companyAlphaTotal"><strong>€ 0</strong></td>
+                                            <td id="companyBetaTotal"><strong>€ 0</strong></td>
+                                            <td id="companyTotalDelta"><strong>€ 0</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ROI Analysis -->
+                            <div class="company-roi-section">
+                                <div class="roi-card">
+                                    <div class="roi-header">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        <h5>Break-Even-Analyse</h5>
+                                    </div>
+                                    <div class="roi-content">
+                                        <div class="roi-metric">
+                                            <span class="roi-label">Break-Even bei Neugeschäftssteigerung</span>
+                                            <span class="roi-value" id="breakEvenGrowth">+12%</span>
+                                        </div>
+                                        <div class="roi-metric">
+                                            <span class="roi-label">Erforderliche Mehrbeiträge</span>
+                                            <span class="roi-value" id="breakEvenPremium">€ 2,4 Mio.</span>
+                                        </div>
+                                        <div class="roi-metric">
+                                            <span class="roi-label">Amortisationszeitraum</span>
+                                            <span class="roi-value" id="paybackPeriod">18 Monate</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="roi-card highlight">
+                                    <div class="roi-header">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                        </svg>
+                                        <h5>Erwarteter Nutzen</h5>
+                                    </div>
+                                    <div class="roi-content">
+                                        <div class="roi-metric">
+                                            <span class="roi-label">Prognostizierte Produktionssteigerung</span>
+                                            <span class="roi-value positive" id="expectedGrowth">+18%</span>
+                                        </div>
+                                        <div class="roi-metric">
+                                            <span class="roi-label">Vermittlerbindungseffekt</span>
+                                            <span class="roi-value positive" id="retentionEffect">+8% Retention</span>
+                                        </div>
+                                        <div class="roi-metric">
+                                            <span class="roi-label">5-Jahres-ROI</span>
+                                            <span class="roi-value positive" id="fiveYearROI">+340%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Unternehmensperspektive -->
 
                         <!-- Actions -->
                         <div class="provision-actions">
