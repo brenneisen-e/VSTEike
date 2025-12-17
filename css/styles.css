@@ -1118,22 +1118,17 @@ select:focus, .dropdown-button:focus {
 
 /* KPI Icon - inline after title */
 .kpi-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.125rem;
-    height: 1.125rem;
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    border-radius: 50%;
-    font-size: 0.625rem;
-    margin-left: 0.375rem;
-    vertical-align: middle;
+    display: inline;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+    color: #3b82f6;
 }
 
 .kpi-icon svg {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     stroke: #3b82f6;
+    vertical-align: middle;
     fill: none;
     stroke-width: 2;
 }
