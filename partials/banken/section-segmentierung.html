@@ -222,6 +222,102 @@
             </div>
         </div>
 
+        <!-- News & Updates -->
+        <div class="dashboard-updates">
+            <div class="updates-card new-cases">
+                <div class="updates-header">
+                    <div class="updates-icon new">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h4>Neue Fälle seit letztem Login</h4>
+                    <span class="updates-count">47</span>
+                </div>
+                <div class="updates-list">
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8847')">
+                        <div class="update-main">
+                            <span class="update-name">Müller, Hans</span>
+                            <span class="update-amount">€4.230</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Dispositionskredit</span>
+                            <span class="update-time">vor 2 Std.</span>
+                        </div>
+                    </div>
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8846')">
+                        <div class="update-main">
+                            <span class="update-name">Schmidt GmbH</span>
+                            <span class="update-amount">€12.890</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Betriebsmittelkredit</span>
+                            <span class="update-time">vor 3 Std.</span>
+                        </div>
+                    </div>
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8845')">
+                        <div class="update-main">
+                            <span class="update-name">Weber, Anna</span>
+                            <span class="update-amount">€2.150</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Kreditkarte</span>
+                            <span class="update-time">vor 5 Std.</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-show-all" onclick="showAllNewCases()">Alle 47 anzeigen</button>
+            </div>
+
+            <div class="updates-card resolved-cases">
+                <div class="updates-header">
+                    <div class="updates-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h4>Zahlungseingänge</h4>
+                    <span class="updates-count success">31</span>
+                </div>
+                <div class="updates-list">
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-7234')">
+                        <div class="update-main">
+                            <span class="update-name">Braun, Thomas</span>
+                            <span class="update-amount positive">€1.890 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Vollständige Tilgung</span>
+                            <span class="update-time">heute, 09:14</span>
+                        </div>
+                    </div>
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6891')">
+                        <div class="update-main">
+                            <span class="update-name">Klein KG</span>
+                            <span class="update-amount positive">€3.400 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Ratenvereinbarung</span>
+                            <span class="update-time">heute, 08:45</span>
+                        </div>
+                    </div>
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6234')">
+                        <div class="update-main">
+                            <span class="update-name">Fischer, Maria</span>
+                            <span class="update-amount positive">€780 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Teilzahlung</span>
+                            <span class="update-time">gestern, 16:30</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-show-all success" onclick="showAllResolvedCases()">Alle 31 anzeigen</button>
+            </div>
+        </div>
+
         <!-- Main Content Grid with Sidebar -->
         <div class="main-content-grid">
             <!-- Left: Matrix Quadrants with Gradients -->
@@ -323,102 +419,6 @@
                 </div>
             </div>
 
-        </div>
-
-        <!-- News & Updates -->
-        <div class="dashboard-updates">
-            <div class="updates-card new-cases">
-                <div class="updates-header">
-                    <div class="updates-icon new">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="16"></line>
-                            <line x1="8" y1="12" x2="16" y2="12"></line>
-                        </svg>
-                    </div>
-                    <h4>Neue Fälle seit letztem Login</h4>
-                    <span class="updates-count">47</span>
-                </div>
-                <div class="updates-list">
-                    <div class="update-item" onclick="openCustomerDetail('K-2024-8847')">
-                        <div class="update-main">
-                            <span class="update-name">Müller, Hans</span>
-                            <span class="update-amount">€4.230</span>
-                        </div>
-                        <div class="update-sub">
-                            <span class="update-type">Dispositionskredit</span>
-                            <span class="update-time">vor 2 Std.</span>
-                        </div>
-                    </div>
-                    <div class="update-item" onclick="openCustomerDetail('K-2024-8846')">
-                        <div class="update-main">
-                            <span class="update-name">Schmidt GmbH</span>
-                            <span class="update-amount">€12.890</span>
-                        </div>
-                        <div class="update-sub">
-                            <span class="update-type">Betriebsmittelkredit</span>
-                            <span class="update-time">vor 3 Std.</span>
-                        </div>
-                    </div>
-                    <div class="update-item" onclick="openCustomerDetail('K-2024-8845')">
-                        <div class="update-main">
-                            <span class="update-name">Weber, Anna</span>
-                            <span class="update-amount">€2.150</span>
-                        </div>
-                        <div class="update-sub">
-                            <span class="update-type">Kreditkarte</span>
-                            <span class="update-time">vor 5 Std.</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn-show-all" onclick="showAllNewCases()">Alle 47 anzeigen</button>
-            </div>
-
-            <div class="updates-card resolved-cases">
-                <div class="updates-header">
-                    <div class="updates-icon success">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                    <h4>Zahlungseingänge</h4>
-                    <span class="updates-count success">31</span>
-                </div>
-                <div class="updates-list">
-                    <div class="update-item success" onclick="openCustomerDetail('K-2024-7234')">
-                        <div class="update-main">
-                            <span class="update-name">Braun, Thomas</span>
-                            <span class="update-amount positive">€1.890 gezahlt</span>
-                        </div>
-                        <div class="update-sub">
-                            <span class="update-type">Vollständige Tilgung</span>
-                            <span class="update-time">heute, 09:14</span>
-                        </div>
-                    </div>
-                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6891')">
-                        <div class="update-main">
-                            <span class="update-name">Klein KG</span>
-                            <span class="update-amount positive">€3.400 gezahlt</span>
-                        </div>
-                        <div class="update-sub">
-                            <span class="update-type">Ratenvereinbarung</span>
-                            <span class="update-time">heute, 08:45</span>
-                        </div>
-                    </div>
-                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6234')">
-                        <div class="update-main">
-                            <span class="update-name">Fischer, Maria</span>
-                            <span class="update-amount positive">€780 gezahlt</span>
-                        </div>
-                        <div class="update-sub">
-                            <span class="update-type">Teilzahlung</span>
-                            <span class="update-time">gestern, 16:30</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn-show-all success" onclick="showAllResolvedCases()">Alle 31 anzeigen</button>
-            </div>
         </div>
 
         <!-- Customer List with Actions -->
