@@ -367,44 +367,33 @@
                                         <span>€0</span>
                                     </div>
                                     <div class="chart-area">
-                                        <svg viewBox="0 0 400 160" preserveAspectRatio="none">
-                                            <!-- Limit-Linie -->
-                                            <line x1="0" y1="10" x2="400" y2="10" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6,4"/>
-                                            <text x="355" y="8" fill="#ef4444" font-size="11">Limit</text>
+                                        <span class="chart-limit-label danger">Limit €15.000</span>
+                                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                                            <!-- Limit-Linie oben -->
+                                            <line x1="0" y1="2" x2="100" y2="2" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="2,1"/>
 
                                             <!-- Gitterlinien -->
-                                            <line x1="0" y1="35" x2="400" y2="35" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="60" x2="400" y2="60" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="85" x2="400" y2="85" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="110" x2="400" y2="110" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="135" x2="400" y2="135" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="0" y1="10" x2="100" y2="10" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="18" x2="100" y2="18" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="26" x2="100" y2="26" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="34" x2="100" y2="34" stroke="#e2e8f0" stroke-width="0.3"/>
 
                                             <!-- Saldo-Verlauf -->
                                             <polyline
-                                                points="15,100 50,80 85,65 120,110 155,90 190,70 225,55 260,100 295,80 330,60 365,40 400,27"
+                                                points="2,24 10,20 18,16 26,28 34,22 42,18 50,14 58,24 66,20 74,15 82,10 98,6"
                                                 fill="none"
                                                 stroke="#ef4444"
-                                                stroke-width="3"
-                                                stroke-linejoin="round"
-                                                stroke-linecap="round"/>
-
-                                            <!-- Zahlungspunkte markieren -->
-                                            <circle cx="120" cy="110" r="6" fill="#22c55e" stroke="white" stroke-width="2"/>
-                                            <circle cx="260" cy="100" r="6" fill="#22c55e" stroke="white" stroke-width="2"/>
+                                                stroke-width="0.8"/>
 
                                             <!-- Fläche unter der Kurve -->
                                             <polygon
-                                                points="15,100 50,80 85,65 120,110 155,90 190,70 225,55 260,100 295,80 330,60 365,40 400,27 400,160 15,160"
-                                                fill="url(#redGradient1)"
-                                                opacity="0.15"/>
-
-                                            <defs>
-                                                <linearGradient id="redGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                    <stop offset="0%" stop-color="#ef4444"/>
-                                                    <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-                                                </linearGradient>
-                                            </defs>
+                                                points="2,24 10,20 18,16 26,28 34,22 42,18 50,14 58,24 66,20 74,15 82,10 98,6 98,40 2,40"
+                                                fill="#ef4444"
+                                                opacity="0.1"/>
                                         </svg>
+                                        <!-- Zahlungspunkte als HTML -->
+                                        <span class="chart-point green" style="left: 26%; bottom: 30%;" title="Zahlung April"></span>
+                                        <span class="chart-point green" style="left: 58%; bottom: 40%;" title="Zahlung August"></span>
                                     </div>
                                     <div class="x-axis">
                                         <span>Jan</span>
@@ -537,28 +526,26 @@
                                         <span>€0</span>
                                     </div>
                                     <div class="chart-area">
-                                        <svg viewBox="0 0 400 160" preserveAspectRatio="none">
-                                            <!-- Limit-Linie bei €10k -->
-                                            <line x1="0" y1="50" x2="400" y2="50" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
-                                            <text x="340" y="47" fill="#f59e0b" font-size="11">Limit €10k</text>
+                                        <span class="chart-limit-label warning" style="top: 33%;">Limit €10.000</span>
+                                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                                            <!-- Limit-Linie -->
+                                            <line x1="0" y1="13" x2="100" y2="13" stroke="#f59e0b" stroke-width="0.5" stroke-dasharray="2,1"/>
 
                                             <!-- Gitterlinien -->
-                                            <line x1="0" y1="25" x2="400" y2="25" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="75" x2="400" y2="75" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="100" x2="400" y2="100" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="125" x2="400" y2="125" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="0" y1="7" x2="100" y2="7" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="20" x2="100" y2="20" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="27" x2="100" y2="27" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="34" x2="100" y2="34" stroke="#e2e8f0" stroke-width="0.3"/>
+
+                                            <!-- Über-Limit-Bereich -->
+                                            <rect x="55" y="0" width="45" height="13" fill="#ef4444" opacity="0.08"/>
 
                                             <!-- Saldo-Verlauf -->
                                             <polyline
-                                                points="15,120 50,110 85,95 120,100 155,85 190,75 225,60 260,55 295,45 330,35 365,25 400,20"
+                                                points="2,32 10,28 18,24 26,26 34,22 42,18 50,15 58,12 66,10 74,8 82,6 98,4"
                                                 fill="none"
                                                 stroke="#ef4444"
-                                                stroke-width="3"
-                                                stroke-linejoin="round"
-                                                stroke-linecap="round"/>
-
-                                            <!-- Über-Limit-Bereich markieren -->
-                                            <rect x="225" y="10" width="175" height="40" fill="#ef4444" opacity="0.1"/>
+                                                stroke-width="0.8"/>
                                         </svg>
                                     </div>
                                     <div class="x-axis">
@@ -681,35 +668,33 @@
                                         <span>€270k</span>
                                     </div>
                                     <div class="chart-area">
-                                        <svg viewBox="0 0 400 160" preserveAspectRatio="none">
+                                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
                                             <!-- Gitterlinien -->
-                                            <line x1="0" y1="30" x2="400" y2="30" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="60" x2="400" y2="60" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="90" x2="400" y2="90" stroke="#e2e8f0" stroke-width="1"/>
-                                            <line x1="0" y1="120" x2="400" y2="120" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="0" y1="8" x2="100" y2="8" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="16" x2="100" y2="16" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="24" x2="100" y2="24" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="32" x2="100" y2="32" stroke="#e2e8f0" stroke-width="0.3"/>
+
+                                            <!-- Rückstands-Bereich -->
+                                            <polygon
+                                                points="65,25 74,25 82,25 90,25 98,24 98,38 90,35 82,32 74,29 65,26"
+                                                fill="#f59e0b"
+                                                opacity="0.15"/>
 
                                             <!-- Plan-Linie (gestrichelt, grün) -->
                                             <polyline
-                                                points="15,20 50,30 85,42 120,54 155,66 190,78 225,90 260,102 295,114 330,126 365,138 400,145"
+                                                points="2,5 10,8 18,11 26,14 34,17 42,20 50,23 58,26 66,29 74,32 82,35 98,38"
                                                 fill="none"
                                                 stroke="#22c55e"
-                                                stroke-width="2.5"
-                                                stroke-dasharray="8,4"/>
+                                                stroke-width="0.6"
+                                                stroke-dasharray="2,1"/>
 
                                             <!-- Ist-Linie (durchgehend, blau) -->
                                             <polyline
-                                                points="15,20 50,30 85,42 120,54 155,66 190,78 225,90 260,98 295,98 330,98 365,98 400,95"
+                                                points="2,5 10,8 18,11 26,14 34,17 42,20 50,23 58,25 66,25 74,25 82,25 98,24"
                                                 fill="none"
                                                 stroke="#3b82f6"
-                                                stroke-width="3"
-                                                stroke-linejoin="round"
-                                                stroke-linecap="round"/>
-
-                                            <!-- Differenz markieren -->
-                                            <polygon
-                                                points="260,98 295,98 330,98 365,98 400,95 400,145 365,138 330,126 295,114 260,102"
-                                                fill="#f59e0b"
-                                                opacity="0.15"/>
+                                                stroke-width="0.8"/>
                                         </svg>
                                     </div>
                                     <div class="x-axis">
