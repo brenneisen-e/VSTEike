@@ -1628,7 +1628,174 @@ function openCustomerDetailCRM(customerId) {
     openCrmProfile(customerId);
 }
 
+// ========================================
+// DEMO CUSTOMER FILE GENERATOR
+// ========================================
+
+function generateDemoCustomerFile() {
+    // Random demo data
+    const demoCustomers = [
+        { name: 'Müller Maschinenbau GmbH', street: 'Industriestraße 45', zip: '70173', city: 'Stuttgart', iban: 'DE89 3704 0044 0532 0130 00', amount: 47850.00, dueDate: '2024-10-15', type: 'Gewerbe' },
+        { name: 'Hans Schmidt', street: 'Hauptstraße 12', zip: '80331', city: 'München', iban: 'DE91 1000 0000 0123 4567 89', amount: 3420.50, dueDate: '2024-11-01', type: 'Privat' },
+        { name: 'Weber & Söhne KG', street: 'Am Marktplatz 8', zip: '50667', city: 'Köln', iban: 'DE75 3705 0198 0012 3456 78', amount: 125000.00, dueDate: '2024-09-30', type: 'Gewerbe' },
+        { name: 'Maria Fischer', street: 'Gartenweg 23', zip: '60311', city: 'Frankfurt', iban: 'DE44 5001 0517 5407 3249 31', amount: 8750.00, dueDate: '2024-10-20', type: 'Privat' },
+        { name: 'Autohaus Berger GmbH', street: 'Berliner Allee 100', zip: '40210', city: 'Düsseldorf', iban: 'DE68 2105 0170 0012 3456 78', amount: 89300.00, dueDate: '2024-08-15', type: 'Gewerbe' }
+    ];
+
+    const customer = demoCustomers[Math.floor(Math.random() * demoCustomers.length)];
+    const today = new Date().toLocaleDateString('de-DE');
+    const docNumber = 'INK-' + Date.now().toString().slice(-8);
+
+    // Create canvas for the document
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 1130;
+    const ctx = canvas.getContext('2d');
+
+    // White background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Header with bank logo placeholder
+    ctx.fillStyle = '#1e3a5f';
+    ctx.fillRect(0, 0, 800, 100);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 28px Arial';
+    ctx.fillText('MUSTERBANK AG', 40, 55);
+    ctx.font = '14px Arial';
+    ctx.fillText('Forderungsmanagement', 40, 80);
+
+    // Document title
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 24px Arial';
+    ctx.fillText('Mahnung / Zahlungsaufforderung', 40, 160);
+
+    // Document number and date
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText(`Dokument-Nr.: ${docNumber}`, 550, 140);
+    ctx.fillText(`Datum: ${today}`, 550, 160);
+
+    // Customer data section
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(40, 200, 720, 180);
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.strokeRect(40, 200, 720, 180);
+
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 14px Arial';
+    ctx.fillText('Kundendaten', 60, 230);
+
+    ctx.font = '13px Arial';
+    ctx.fillStyle = '#334155';
+
+    const labels = ['Name / Firma:', 'Adresse:', '', 'Kundentyp:', 'IBAN:'];
+    const values = [customer.name, customer.street, `${customer.zip} ${customer.city}`, customer.type, customer.iban];
+
+    let y = 260;
+    for (let i = 0; i < labels.length; i++) {
+        if (labels[i]) {
+            ctx.fillStyle = '#64748b';
+            ctx.fillText(labels[i], 60, y);
+            ctx.fillStyle = '#1e293b';
+            ctx.fillText(values[i], 200, y);
+        } else {
+            ctx.fillStyle = '#1e293b';
+            ctx.fillText(values[i], 200, y);
+        }
+        y += 25;
+    }
+
+    // Claim details section
+    ctx.fillStyle = '#fef3c7';
+    ctx.fillRect(40, 410, 720, 150);
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(40, 410, 720, 150);
+
+    ctx.fillStyle = '#92400e';
+    ctx.font = 'bold 16px Arial';
+    ctx.fillText('Forderungsdetails', 60, 445);
+
+    ctx.font = '13px Arial';
+    ctx.fillStyle = '#78350f';
+    ctx.fillText('Offener Betrag:', 60, 480);
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText(`€ ${customer.amount.toLocaleString('de-DE', { minimumFractionDigits: 2 })}`, 200, 482);
+
+    ctx.font = '13px Arial';
+    ctx.fillText('Fälligkeitsdatum:', 60, 515);
+    ctx.font = '14px Arial';
+    const dueDateFormatted = new Date(customer.dueDate).toLocaleDateString('de-DE');
+    ctx.fillText(dueDateFormatted, 200, 515);
+
+    ctx.fillText('Verzugstage:', 400, 515);
+    const daysOverdue = Math.floor((new Date() - new Date(customer.dueDate)) / (1000 * 60 * 60 * 24));
+    ctx.fillStyle = '#dc2626';
+    ctx.font = 'bold 14px Arial';
+    ctx.fillText(`${Math.max(0, daysOverdue)} Tage`, 500, 515);
+
+    // Text content
+    ctx.fillStyle = '#334155';
+    ctx.font = '12px Arial';
+    const textLines = [
+        'Sehr geehrte Damen und Herren,',
+        '',
+        'trotz unserer vorherigen Zahlungserinnerungen ist der oben genannte Betrag',
+        'noch nicht auf unserem Konto eingegangen.',
+        '',
+        'Wir fordern Sie hiermit auf, den ausstehenden Betrag innerhalb von 10 Tagen',
+        'auf das folgende Konto zu überweisen:',
+        '',
+        'Empfänger: Musterbank AG',
+        'IBAN: DE12 3456 7890 1234 5678 90',
+        'Verwendungszweck: ' + docNumber,
+        '',
+        'Bei Nichtzahlung behalten wir uns weitere rechtliche Schritte vor.',
+        '',
+        'Mit freundlichen Grüßen',
+        'Ihr Forderungsmanagement-Team'
+    ];
+
+    let textY = 600;
+    textLines.forEach(line => {
+        ctx.fillText(line, 60, textY);
+        textY += 20;
+    });
+
+    // Footer
+    ctx.fillStyle = '#f1f5f9';
+    ctx.fillRect(0, 1050, 800, 80);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '10px Arial';
+    ctx.fillText('Musterbank AG | Bankstraße 1 | 10115 Berlin | Tel: +49 30 12345-0 | forderung@musterbank.de', 40, 1080);
+    ctx.fillText('Geschäftsführer: Dr. Max Mustermann | Amtsgericht Berlin HRB 12345 | USt-IdNr.: DE123456789', 40, 1095);
+
+    // Add QR code placeholder
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(650, 600, 80, 80);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '8px Arial';
+    ctx.fillText('QR-Code', 670, 645);
+
+    // Download the image
+    canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Demo_Kundenakte_${docNumber}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showNotification('Demo-Kundenakte erstellt und heruntergeladen!', 'success');
+    }, 'image/png');
+}
+
 // Scanner Functions
+window.generateDemoCustomerFile = generateDemoCustomerFile;
 window.openDocumentScanner = openDocumentScanner;
 window.closeDocumentScanner = closeDocumentScanner;
 window.handleDragOver = handleDragOver;
