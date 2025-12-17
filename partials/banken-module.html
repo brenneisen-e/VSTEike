@@ -35,6 +35,34 @@
         </div>
     </div>
 
+    <!-- Alert Banner for Overdue Tasks -->
+    <div class="alert-banner warning" id="overdueAlertBanner">
+        <div class="alert-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+        </div>
+        <div class="alert-content">
+            <strong>23 überfällige Bewertungen</strong>
+            <span>Diese Fälle erfordern sofortige Aufmerksamkeit</span>
+        </div>
+        <button class="alert-action" onclick="showOverdueCases()">
+            Jetzt bearbeiten
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </button>
+        <button class="alert-dismiss" onclick="dismissAlert('overdueAlertBanner')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
     <!-- Navigation Tiles -->
     <div class="banken-nav-tiles">
         <div class="nav-tile active" onclick="showBankenSection('segmentierung')">
@@ -102,9 +130,9 @@
             <p>Die KI-gestützte Analyse klassifiziert jeden Kunden anhand von Transaktionsmustern, externen Datenquellen und historischem Verhalten. Die Punktewolke zeigt die Verteilung aller 10.234 Fälle nach <strong>Willingness to Pay</strong> (horizontale Achse) und <strong>Ability to Pay</strong> (vertikale Achse).</p>
         </div>
 
-        <!-- Portfolio KPI Boxes -->
-        <div class="portfolio-kpi-grid">
-            <div class="portfolio-kpi-box">
+        <!-- Portfolio KPI Boxes - 5 Cards -->
+        <div class="portfolio-kpi-grid five-columns">
+            <div class="portfolio-kpi-box clickable" onclick="filterByAll()">
                 <div class="kpi-icon blue">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                         <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -112,7 +140,7 @@
                     </svg>
                 </div>
                 <div class="kpi-content">
-                    <div class="kpi-label">Gesamtkredite</div>
+                    <div class="kpi-label">Aktive Fälle</div>
                     <div class="kpi-value">10.234</div>
                     <div class="kpi-change negative">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
@@ -123,7 +151,7 @@
                     </div>
                 </div>
             </div>
-            <div class="portfolio-kpi-box">
+            <div class="portfolio-kpi-box clickable" onclick="filterByAmount()">
                 <div class="kpi-icon orange">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                         <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -131,52 +159,68 @@
                     </svg>
                 </div>
                 <div class="kpi-content">
-                    <div class="kpi-label">Ausstehende Gesamtforderung</div>
-                    <div class="kpi-value">€ 47,8 Mio.</div>
+                    <div class="kpi-label">Offene Forderung</div>
+                    <div class="kpi-value">€ 47,8 Mio</div>
                     <div class="kpi-change negative">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
                             <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
                             <polyline points="17 18 23 18 23 12"></polyline>
                         </svg>
-                        +€ 1,2 Mio. zur Vorwoche
+                        +€ 1,2 Mio
                     </div>
                 </div>
             </div>
-            <div class="portfolio-kpi-box">
-                <div class="kpi-icon purple">
+            <div class="portfolio-kpi-box clickable" onclick="showRecoveryDetails()">
+                <div class="kpi-icon green">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
                     </svg>
                 </div>
                 <div class="kpi-content">
-                    <div class="kpi-label">Ø Schulden pro Kunde</div>
-                    <div class="kpi-value">€ 4.672</div>
+                    <div class="kpi-label">Recovery Rate</div>
+                    <div class="kpi-value highlight-green">68,4%</div>
                     <div class="kpi-change positive">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
                             <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                             <polyline points="17 6 23 6 23 12"></polyline>
                         </svg>
-                        -€ 89 zur Vorwoche
+                        +2,3% vs. Vormonat
                     </div>
                 </div>
             </div>
-            <div class="portfolio-kpi-box">
-                <div class="kpi-icon red">
+            <div class="portfolio-kpi-box clickable" onclick="filterByDPD()">
+                <div class="kpi-icon purple">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="12" y1="18" x2="12" y2="12"></line>
-                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
                 </div>
                 <div class="kpi-content">
-                    <div class="kpi-label">Offene Bewertungsaufgaben</div>
-                    <div class="kpi-value">156</div>
-                    <div class="kpi-change neutral">
+                    <div class="kpi-label">Ø DPD</div>
+                    <div class="kpi-value">47</div>
+                    <div class="kpi-change positive">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        -3 Tage vs. Vorwoche
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box clickable" onclick="showTasks()">
+                <div class="kpi-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Meine Aufgaben</div>
+                    <div class="kpi-value">156</div>
+                    <div class="kpi-change neutral pulse-text">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                         </svg>
                         23 überfällig
                     </div>
@@ -223,69 +267,223 @@
             </div>
         </div>
 
-        <div class="segmentierung-grid">
-            <!-- Left: Scatter Plot Matrix -->
-            <div class="scatter-plot-card">
+        <!-- Main Content Grid with Sidebar -->
+        <div class="main-content-grid">
+            <!-- Left: Matrix Quadrants with Gradients -->
+            <div class="matrix-section">
                 <div class="card-header">
-                    <h3>Willingness vs. Ability Matrix</h3>
+                    <div>
+                        <h3>Willingness / Ability Matrix</h3>
+                        <p class="card-subtitle">KI-gestützte Segmentierung • Klick auf Quadrant zum Filtern</p>
+                    </div>
                     <div class="card-actions">
-                        <button class="btn-icon" onclick="refreshScatterPlot()" title="Aktualisieren">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <polyline points="23 4 23 10 17 10"></polyline>
-                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                            </svg>
-                        </button>
-                        <button class="btn-icon" onclick="exportMatrix()" title="Exportieren">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                        </button>
+                        <button class="btn-secondary btn-sm" onclick="exportMatrix()">Export</button>
                     </div>
                 </div>
-                <div class="scatter-plot-container">
-                    <canvas id="scatterPlotCanvas"></canvas>
-                    <!-- Quadrant Labels -->
-                    <div class="quadrant-label q1">Priorität<br><small>Schnelle Vereinbarung</small></div>
-                    <div class="quadrant-label q2">Restrukturierung<br><small>Raten/Stundung</small></div>
-                    <div class="quadrant-label q3">Eskalation<br><small>Inkasso/Mahnung</small></div>
-                    <div class="quadrant-label q4">Abwicklung<br><small>Verkauf/Abschreibung</small></div>
+
+                <!-- Matrix Quadrants Grid -->
+                <div class="matrix-quadrants">
+                    <!-- Top Left: Eskalation (High Ability, Low Willingness) -->
+                    <div class="matrix-quadrant segment-eskalation" onclick="filterBySegment('eskalation')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Hohe Fähigkeit • Geringe Bereitschaft</span>
+                                <h4 class="quadrant-title">Eskalation</h4>
+                            </div>
+                            <span class="quadrant-count">1.890</span>
+                        </div>
+                        <p class="quadrant-volume">€ 12,4 Mio • Ø € 6.560</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Inkasso, Mahnbescheid, Vollstreckung
+                        </div>
+                    </div>
+
+                    <!-- Top Right: Priorität (High Ability, High Willingness) -->
+                    <div class="matrix-quadrant segment-prioritaet" onclick="filterBySegment('prioritaet')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Hohe Fähigkeit • Hohe Bereitschaft</span>
+                                <h4 class="quadrant-title">Priorität</h4>
+                            </div>
+                            <span class="quadrant-count">2.340</span>
+                        </div>
+                        <p class="quadrant-volume">€ 8,2 Mio • Ø € 3.504</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Schnelle Vereinbarung, flexible Raten
+                        </div>
+                    </div>
+
+                    <!-- Bottom Left: Abwicklung (Low Ability, Low Willingness) -->
+                    <div class="matrix-quadrant segment-abwicklung" onclick="filterBySegment('abwicklung')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Geringe Fähigkeit • Geringe Bereitschaft</span>
+                                <h4 class="quadrant-title">Abwicklung</h4>
+                            </div>
+                            <span class="quadrant-count">2.884</span>
+                        </div>
+                        <p class="quadrant-volume">€ 18,7 Mio • Ø € 6.484</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Verkauf, Abschreibung, Insolvenz
+                        </div>
+                    </div>
+
+                    <!-- Bottom Right: Restrukturierung (Low Ability, High Willingness) -->
+                    <div class="matrix-quadrant segment-restrukturierung" onclick="filterBySegment('restrukturierung')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Geringe Fähigkeit • Hohe Bereitschaft</span>
+                                <h4 class="quadrant-title">Restrukturierung</h4>
+                            </div>
+                            <span class="quadrant-count">3.120</span>
+                        </div>
+                        <p class="quadrant-volume">€ 8,5 Mio • Ø € 2.724</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Stundung, Ratenpläne, Beratung
+                        </div>
+                    </div>
                 </div>
-                <div class="scatter-legend">
-                    <div class="legend-item"><span class="dot green"></span> Priorität (2.340)</div>
-                    <div class="legend-item"><span class="dot yellow"></span> Restrukturierung (3.120)</div>
-                    <div class="legend-item"><span class="dot orange"></span> Eskalation (1.890)</div>
-                    <div class="legend-item"><span class="dot red"></span> Abwicklung (2.884)</div>
+
+                <!-- Axis Labels -->
+                <div class="matrix-axis-labels">
+                    <span class="axis-left">← Geringe Willingness</span>
+                    <span class="axis-center">↑ Ability ↓</span>
+                    <span class="axis-right">Hohe Willingness →</span>
                 </div>
             </div>
 
-            <!-- Right: Portfolio Evolution -->
-            <div class="portfolio-evolution-card">
-                <div class="card-header">
-                    <h3>Portfolio-Entwicklung</h3>
-                    <select class="time-select" onchange="updatePortfolioChart(this.value)">
-                        <option value="12m">Letzte 12 Monate</option>
-                        <option value="6m">Letzte 6 Monate</option>
-                        <option value="3m">Letzte 3 Monate</option>
-                    </select>
+            <!-- Right Sidebar -->
+            <div class="dashboard-sidebar">
+                <!-- DPD Buckets -->
+                <div class="sidebar-card">
+                    <h4>Verzugsbuckets (DPD)</h4>
+                    <div class="dpd-buckets">
+                        <div class="dpd-bucket bucket-green" onclick="filterByDPDBucket('0-30')">
+                            <div class="bucket-left">
+                                <span class="bucket-dot green"></span>
+                                <span class="bucket-label">0-30 Tage</span>
+                            </div>
+                            <div class="bucket-right">
+                                <span class="bucket-count">5.010</span>
+                                <span class="bucket-volume">€ 18,2 Mio</span>
+                            </div>
+                        </div>
+                        <div class="dpd-bucket bucket-amber" onclick="filterByDPDBucket('31-90')">
+                            <div class="bucket-left">
+                                <span class="bucket-dot amber"></span>
+                                <span class="bucket-label">31-90 Tage</span>
+                            </div>
+                            <div class="bucket-right">
+                                <span class="bucket-count">2.880</span>
+                                <span class="bucket-volume">€ 15,4 Mio</span>
+                            </div>
+                        </div>
+                        <div class="dpd-bucket bucket-red" onclick="filterByDPDBucket('90+')">
+                            <div class="bucket-left">
+                                <span class="bucket-dot red"></span>
+                                <span class="bucket-label">&gt; 90 Tage</span>
+                            </div>
+                            <div class="bucket-right">
+                                <span class="bucket-count">2.344</span>
+                                <span class="bucket-volume">€ 14,2 Mio</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="portfolio-chart-container">
-                    <canvas id="portfolioEvolutionChart"></canvas>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h4>Schnellaktionen</h4>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn primary-action" onclick="openDocumentScanner()">
+                            <span class="action-icon">📷</span>
+                            <div class="action-text">
+                                <strong>Dokument erfassen</strong>
+                                <small>KI-gestützte Datenextraktion</small>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="startMahnlauf()">
+                            <span class="action-icon">📤</span>
+                            <div class="action-text">
+                                <strong>Mahnlauf starten</strong>
+                                <small>Nächster geplant: 20.12.2025</small>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="exportReport()">
+                            <span class="action-icon">📊</span>
+                            <div class="action-text">
+                                <strong>Report generieren</strong>
+                                <small>Excel, PDF oder DATEV</small>
+                            </div>
+                        </button>
+                    </div>
                 </div>
-                <div class="portfolio-stats">
-                    <div class="portfolio-stat">
-                        <span class="stat-label">Neuzugänge (Monat)</span>
-                        <span class="stat-value negative">+847</span>
+
+                <!-- Today's Highlights -->
+                <div class="sidebar-card">
+                    <h4>Heute</h4>
+                    <div class="today-highlights">
+                        <div class="highlight-item" onclick="showNewCases()">
+                            <span class="highlight-icon blue">🆕</span>
+                            <span class="highlight-label">Neue Fälle</span>
+                            <span class="highlight-count blue">47</span>
+                        </div>
+                        <div class="highlight-item" onclick="showPayments()">
+                            <span class="highlight-icon green">💳</span>
+                            <span class="highlight-label">Zahlungseingänge</span>
+                            <span class="highlight-count green">31</span>
+                        </div>
+                        <div class="highlight-item" onclick="showPromises()">
+                            <span class="highlight-icon purple">🤝</span>
+                            <span class="highlight-label">Zahlungsversprechen</span>
+                            <span class="highlight-count purple">18</span>
+                        </div>
                     </div>
-                    <div class="portfolio-stat">
-                        <span class="stat-label">Abgänge (regulär)</span>
-                        <span class="stat-value positive">-523</span>
-                    </div>
-                    <div class="portfolio-stat">
-                        <span class="stat-label">Netto-Veränderung</span>
-                        <span class="stat-value negative">+324</span>
-                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Evolution - Full Width -->
+        <div class="portfolio-evolution-card full-width">
+            <div class="card-header">
+                <h3>Portfolio-Entwicklung</h3>
+                <select class="time-select" onchange="updatePortfolioChart(this.value)">
+                    <option value="12m">Letzte 12 Monate</option>
+                    <option value="6m">Letzte 6 Monate</option>
+                    <option value="3m">Letzte 3 Monate</option>
+                </select>
+            </div>
+            <div class="portfolio-chart-container">
+                <canvas id="portfolioEvolutionChart"></canvas>
+            </div>
+            <div class="portfolio-stats">
+                <div class="portfolio-stat">
+                    <span class="stat-label">Neuzugänge (Monat)</span>
+                    <span class="stat-value negative">+847</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="stat-label">Abgänge (regulär)</span>
+                    <span class="stat-value positive">-523</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="stat-label">Netto-Veränderung</span>
+                    <span class="stat-value negative">+324</span>
                 </div>
             </div>
         </div>
@@ -424,7 +622,9 @@
                             <th>Forderung</th>
                             <th>DPD</th>
                             <th>Segment</th>
-                            <th>KI-Score</th>
+                            <th>W/A Score</th>
+                            <th>Mahnstufe</th>
+                            <th>Nächste Aktion</th>
                             <th>Status</th>
                             <th>Aktionen</th>
                         </tr>
@@ -442,11 +642,28 @@
                             <td><span class="dpd-badge high">35</span></td>
                             <td><span class="segment-badge escalate">Eskalation</span></td>
                             <td>
-                                <div class="ki-score">
-                                    <div class="score-bar" style="--willingness: 25%; --ability: 60%;">
-                                        <span class="score-dot"></span>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness" style="width: 25%;"></div>
+                                        </div>
+                                        <span class="wa-value">25%</span>
                                     </div>
-                                    <small>W: 25% | A: 60%</small>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability" style="width: 60%;"></div>
+                                        </div>
+                                        <span class="wa-value">60%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m3">M3</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Inkasso-Übergabe</span>
+                                    <small class="action-date overdue">15.12.2024</small>
                                 </div>
                             </td>
                             <td><span class="status-badge inkasso">Inkasso</span></td>
@@ -483,11 +700,28 @@
                             <td><span class="dpd-badge medium">21</span></td>
                             <td><span class="segment-badge priority">Priorität</span></td>
                             <td>
-                                <div class="ki-score">
-                                    <div class="score-bar" style="--willingness: 85%; --ability: 70%;">
-                                        <span class="score-dot"></span>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness high" style="width: 85%;"></div>
+                                        </div>
+                                        <span class="wa-value">85%</span>
                                     </div>
-                                    <small>W: 85% | A: 70%</small>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability" style="width: 70%;"></div>
+                                        </div>
+                                        <span class="wa-value">70%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m1">M1</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Telefonat</span>
+                                    <small class="action-date upcoming">18.12.2024</small>
                                 </div>
                             </td>
                             <td><span class="status-badge offen">Offen</span></td>
@@ -519,11 +753,28 @@
                             <td><span class="dpd-badge low">14</span></td>
                             <td><span class="segment-badge restructure">Restrukturierung</span></td>
                             <td>
-                                <div class="ki-score">
-                                    <div class="score-bar" style="--willingness: 70%; --ability: 35%;">
-                                        <span class="score-dot"></span>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness" style="width: 70%;"></div>
+                                        </div>
+                                        <span class="wa-value">70%</span>
                                     </div>
-                                    <small>W: 70% | A: 35%</small>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability low" style="width: 35%;"></div>
+                                        </div>
+                                        <span class="wa-value">35%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m2">M2</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Ratenzahlung prüfen</span>
+                                    <small class="action-date">20.12.2024</small>
                                 </div>
                             </td>
                             <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
@@ -548,11 +799,28 @@
                             <td><span class="dpd-badge high">67</span></td>
                             <td><span class="segment-badge writeoff">Abwicklung</span></td>
                             <td>
-                                <div class="ki-score">
-                                    <div class="score-bar" style="--willingness: 15%; --ability: 10%;">
-                                        <span class="score-dot"></span>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness low" style="width: 15%;"></div>
+                                        </div>
+                                        <span class="wa-value">15%</span>
                                     </div>
-                                    <small>W: 15% | A: 10%</small>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability low" style="width: 10%;"></div>
+                                        </div>
+                                        <span class="wa-value">10%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m4">M4</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Abschreibung</span>
+                                    <small class="action-date overdue">10.12.2024</small>
                                 </div>
                             </td>
                             <td><span class="status-badge abschreibung">Abschreibung</span></td>
@@ -923,62 +1191,238 @@
         <div class="modal-body">
             <!-- Tab: Stammdaten -->
             <div class="customer-tab active" id="tab-stammdaten">
-                <div class="stammdaten-grid">
+                <div class="stammdaten-grid enhanced">
+                    <!-- Unternehmensdaten -->
                     <div class="stammdaten-section">
-                        <h4>Kundendaten</h4>
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Unternehmensdaten
+                        </h4>
                         <div class="stammdaten-row">
-                            <span class="label">Name:</span>
+                            <span class="label">Firmenname:</span>
                             <span class="value">Mueller GmbH</span>
                         </div>
                         <div class="stammdaten-row">
-                            <span class="label">Typ:</span>
-                            <span class="value">Gewerbekunde</span>
+                            <span class="label">Rechtsform:</span>
+                            <span class="value">GmbH</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Handelsregister:</span>
+                            <span class="value">HRB 12345 Braunschweig</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">USt-ID:</span>
+                            <span class="value">DE123456789</span>
                         </div>
                         <div class="stammdaten-row">
                             <span class="label">Branche:</span>
-                            <span class="value">Gastronomie</span>
+                            <span class="value">Gastronomie (NACE 56.10)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Gründungsjahr:</span>
+                            <span class="value">2008</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Mitarbeiter:</span>
+                            <span class="value">12 (Stand: 2024)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Jahresumsatz:</span>
+                            <span class="value">€1,2 Mio (2023)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kundentyp:</span>
+                            <span class="value badge gewerbe">Gewerbekunde</span>
                         </div>
                         <div class="stammdaten-row">
                             <span class="label">Kunde seit:</span>
-                            <span class="value">15.03.2018</span>
+                            <span class="value">15.03.2018 (7 Jahre)</span>
                         </div>
                         <div class="stammdaten-row">
-                            <span class="label">Betreuer:</span>
+                            <span class="label">Kundenbetreuer:</span>
                             <span class="value">Eike Brenneisen</span>
                         </div>
                     </div>
+
+                    <!-- Kontaktdaten -->
                     <div class="stammdaten-section">
-                        <h4>Kontakt</h4>
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Kontaktdaten
+                        </h4>
                         <div class="stammdaten-row">
                             <span class="label">Adresse:</span>
-                            <span class="value">Musterstraße 123, 38100 Braunschweig</span>
+                            <span class="value">Musterstraße 123<br>38100 Braunschweig</span>
                         </div>
                         <div class="stammdaten-row">
-                            <span class="label">Telefon:</span>
-                            <span class="value">+49 531 123456</span>
+                            <span class="label">Telefon Zentrale:</span>
+                            <span class="value clickable" onclick="initiateCall('+49531123456')">+49 531 123456</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Telefon Mobil:</span>
+                            <span class="value clickable" onclick="initiateCall('+49170123456')">+49 170 1234567</span>
                         </div>
                         <div class="stammdaten-row">
                             <span class="label">E-Mail:</span>
-                            <span class="value">info@mueller-gmbh.de</span>
+                            <span class="value clickable" onclick="sendEmail('info@mueller-gmbh.de')">info@mueller-gmbh.de</span>
                         </div>
                         <div class="stammdaten-row">
-                            <span class="label">Geschäftsführer:</span>
+                            <span class="label">Website:</span>
+                            <span class="value">www.mueller-gmbh.de</span>
+                        </div>
+                        <div class="stammdaten-subsection">
+                            <strong>Geschäftsführung</strong>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Name:</span>
                             <span class="value">Hans Mueller</span>
                         </div>
-                    </div>
-                    <div class="stammdaten-section">
-                        <h4>Bonität</h4>
                         <div class="stammdaten-row">
-                            <span class="label">Rating:</span>
+                            <span class="label">Direktwahl:</span>
+                            <span class="value clickable" onclick="initiateCall('+4953112345610')">+49 531 123456-10</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">E-Mail:</span>
+                            <span class="value clickable">h.mueller@mueller-gmbh.de</span>
+                        </div>
+                        <div class="stammdaten-subsection">
+                            <strong>Ansprechpartner Buchhaltung</strong>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Name:</span>
+                            <span class="value">Petra Schmidt</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Direktwahl:</span>
+                            <span class="value clickable">+49 531 123456-20</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">E-Mail:</span>
+                            <span class="value clickable">buchhaltung@mueller-gmbh.de</span>
+                        </div>
+                    </div>
+
+                    <!-- Bankverbindung & Bonität -->
+                    <div class="stammdaten-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            Bankverbindung & Bonität
+                        </h4>
+                        <div class="stammdaten-row">
+                            <span class="label">IBAN:</span>
+                            <span class="value mono">DE89 3704 0044 0532 0130 00</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">BIC:</span>
+                            <span class="value mono">COBADEFFXXX</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kreditinstitut:</span>
+                            <span class="value">Commerzbank AG</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">SEPA-Mandat:</span>
+                            <span class="value badge warning">Widerrufen (01.11.2025)</span>
+                        </div>
+                        <div class="stammdaten-subsection">
+                            <strong>Bonitätsinformationen</strong>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Internes Rating:</span>
                             <span class="value rating-bad">C-</span>
                         </div>
                         <div class="stammdaten-row">
+                            <span class="label">Creditreform-Index:</span>
+                            <span class="value">312 (hohes Risiko)</span>
+                        </div>
+                        <div class="stammdaten-row">
                             <span class="label">Schufa-Score:</span>
-                            <span class="value">78</span>
+                            <span class="value">78 / 100</span>
                         </div>
                         <div class="stammdaten-row">
                             <span class="label">Letzte Prüfung:</span>
                             <span class="value">01.12.2025</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Zahlungsmoral:</span>
+                            <span class="value rating-bad">Mangelhaft</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Ø Zahlungsverzug:</span>
+                            <span class="value">32 Tage</span>
+                        </div>
+                    </div>
+
+                    <!-- Kreditdetails -->
+                    <div class="stammdaten-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            Kreditdetails
+                        </h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragsart:</span>
+                            <span class="value">Betriebsmittelkredit</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragsnummer:</span>
+                            <span class="value mono">BMK-2018-0456789</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Ursprungsbetrag:</span>
+                            <span class="value">€200.000</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Restschuld:</span>
+                            <span class="value highlight-red">€125.000</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Zinssatz:</span>
+                            <span class="value">5,75% p.a.</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Monatsrate:</span>
+                            <span class="value">€2.500</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragsbeginn:</span>
+                            <span class="value">01.04.2018</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragslaufzeit:</span>
+                            <span class="value">120 Monate</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Restlaufzeit:</span>
+                            <span class="value">28 Monate</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Sicherheiten:</span>
+                            <span class="value">Bürgschaft GF, Inventar</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Sicherheitenwert:</span>
+                            <span class="value">€85.000 (geschätzt)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Stage:</span>
+                            <span class="value badge danger">Stage 3 (NPL)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">DPD:</span>
+                            <span class="value highlight-red">35 Tage</span>
                         </div>
                     </div>
                 </div>
@@ -1279,10 +1723,69 @@
                     </div>
                 </div>
 
-                <div class="ki-recommendation">
-                    <h4>KI-Empfehlung</h4>
-                    <div class="recommendation-box">
-                        <p><strong>Empfohlene Maßnahme:</strong> Aufgrund der hohen Fähigkeit zur Zahlung (60%) bei niedriger Zahlungsbereitschaft (25%) empfiehlt die KI eine <strong>verstärkte Inkasso-Strategie</strong> mit zeitnaher Eskalation zum gerichtlichen Mahnverfahren, sofern innerhalb von 14 Tagen keine Reaktion erfolgt.</p>
+                <div class="ki-recommendation-enhanced">
+                    <div class="ai-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        KI-Handlungsempfehlung
+                    </div>
+                    <div class="ai-recommendation-content">
+                        <div class="recommendation-header">
+                            <div class="recommendation-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                <span>Empfohlene Maßnahme: <strong>Verstärkte Inkasso-Strategie</strong></span>
+                            </div>
+                            <span class="confidence-badge">Konfidenz: 87%</span>
+                        </div>
+                        <div class="recommendation-details">
+                            <p>Aufgrund der hohen Fähigkeit zur Zahlung (60%) bei niedriger Zahlungsbereitschaft (25%) empfiehlt die KI:</p>
+                            <ul class="recommendation-steps">
+                                <li>
+                                    <span class="step-icon urgent">1</span>
+                                    <span>Sofortige Eskalation der Inkasso-Maßnahmen</span>
+                                </li>
+                                <li>
+                                    <span class="step-icon">2</span>
+                                    <span>Gerichtliches Mahnverfahren einleiten (14 Tage Frist)</span>
+                                </li>
+                                <li>
+                                    <span class="step-icon">3</span>
+                                    <span>Parallele Verhandlung über Vergleich anbieten</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="recommendation-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Erfolgswahrscheinlichkeit</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 72%;"></div>
+                                </div>
+                                <span class="metric-value">72%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Erwartete Recovery</span>
+                                <span class="metric-value highlight">€89.000</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Zeitrahmen</span>
+                                <span class="metric-value">30-45 Tage</span>
+                            </div>
+                        </div>
+                        <div class="recommendation-actions">
+                            <button class="ai-action-btn primary" onclick="applyAIRecommendation()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Empfehlung anwenden
+                            </button>
+                            <button class="ai-action-btn secondary" onclick="showAlternativeStrategies()">
+                                Alternative Strategien
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
