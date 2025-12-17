@@ -1257,6 +1257,35 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
+// Show new cases panel
+function showNewCases() {
+    // Scroll to and highlight the updates panel
+    const updatesPanel = document.querySelector('.updates-panel');
+    if (updatesPanel) {
+        updatesPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        updatesPanel.classList.add('highlight-pulse');
+        setTimeout(() => updatesPanel.classList.remove('highlight-pulse'), 2000);
+    }
+    showNotification('47 neue Fälle seit letztem Login', 'info');
+}
+
+// Show payments panel
+function showPayments() {
+    // Scroll to and highlight the payments panel
+    const paymentsPanel = document.querySelector('.payments-panel');
+    if (paymentsPanel) {
+        paymentsPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        paymentsPanel.classList.add('highlight-pulse');
+        setTimeout(() => paymentsPanel.classList.remove('highlight-pulse'), 2000);
+    }
+    showNotification('31 Zahlungseingänge heute erfasst', 'success');
+}
+
+// Show promises panel
+function showPromises() {
+    showNotification('18 aktive Zahlungszusagen', 'info');
+}
+
 // Add animation styles
 const animationStyles = document.createElement('style');
 animationStyles.textContent = `
@@ -1267,6 +1296,13 @@ animationStyles.textContent = `
     @keyframes slideOut {
         from { transform: translateX(0); opacity: 1; }
         to { transform: translateX(100%); opacity: 0; }
+    }
+    @keyframes highlightPulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.3); }
+    }
+    .highlight-pulse {
+        animation: highlightPulse 0.5s ease-in-out 3;
     }
 `;
 document.head.appendChild(animationStyles);
@@ -1291,6 +1327,9 @@ window.scheduleCallback = scheduleCallback;
 window.completeTask = completeTask;
 window.exportReport = exportReport;
 window.showNotification = showNotification;
+window.showNewCases = showNewCases;
+window.showPayments = showPayments;
+window.showPromises = showPromises;
 
 // Customer Detail Modal
 window.openCustomerDetail = openCustomerDetail;
