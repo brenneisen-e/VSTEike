@@ -249,6 +249,9 @@ function filterBySegment(segment) {
     console.log('Filtered by segment:', segment, '- Found:', matchingRows.length);
 }
 
+// Track currently selected segment
+let currentSelectedSegment = null;
+
 // Navigate to customer list with segment filter applied
 function openSegmentFullscreen(segment) {
     const segmentConfig = {
@@ -260,6 +263,27 @@ function openSegmentFullscreen(segment) {
 
     const config = segmentConfig[segment];
     if (!config) return;
+
+    // Toggle: if same segment clicked, deselect
+    if (currentSelectedSegment === segment) {
+        clearSegmentFilter();
+        currentSelectedSegment = null;
+        showNotification('Filter aufgehoben', 'info');
+        return;
+    }
+
+    // Remove selected from all quadrants
+    document.querySelectorAll('.matrix-quadrant').forEach(q => {
+        q.classList.remove('selected');
+    });
+
+    // Add selected to clicked quadrant
+    const clickedQuadrant = document.querySelector(`.segment-${segment}`);
+    if (clickedQuadrant) {
+        clickedQuadrant.classList.add('selected');
+    }
+
+    currentSelectedSegment = segment;
 
     // Apply segment filter to customer list
     filterBySegment(segment);
@@ -326,6 +350,9 @@ function showFilterIndicator(segmentName, color, count, segmentKey) {
 
 // Clear segment filter
 function clearSegmentFilter() {
+    // Reset selected segment tracker
+    currentSelectedSegment = null;
+
     // Remove indicator
     const indicator = document.querySelector('.segment-filter-indicator');
     if (indicator) {

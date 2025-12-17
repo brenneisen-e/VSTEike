@@ -189,8 +189,10 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 20px 20px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
 }
 
 .banken-header-left {
@@ -1400,9 +1402,29 @@ body.modal-open {
 }
 
 .matrix-quadrant.selected {
-    transform: scale(1.03);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5), 0 8px 25px rgba(0, 0, 0, 0.15);
-    filter: brightness(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px currentColor;
+}
+
+/* Segment-specific selected states */
+.segment-eskalation.selected {
+    background: rgba(251, 191, 36, 0.15);
+    border-width: 3px;
+}
+
+.segment-prioritaet.selected {
+    background: rgba(34, 197, 94, 0.15);
+    border-width: 3px;
+}
+
+.segment-abwicklung.selected {
+    background: rgba(239, 68, 68, 0.15);
+    border-width: 3px;
+}
+
+.segment-restrukturierung.selected {
+    background: rgba(99, 102, 241, 0.15);
+    border-width: 3px;
 }
 
 /* Segment Filter Indicator */
