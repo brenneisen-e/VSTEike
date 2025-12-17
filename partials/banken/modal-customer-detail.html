@@ -18,7 +18,7 @@
             <button class="modal-tab active" onclick="showCustomerTab('stammdaten')">Stammdaten</button>
             <button class="modal-tab" onclick="showCustomerTab('transaktionen')">Transaktionen</button>
             <button class="modal-tab" onclick="showCustomerTab('forderungen')">Forderungen</button>
-            <button class="modal-tab" onclick="showCustomerTab('workflow')">Workflow</button>
+            <button class="modal-tab" onclick="showCustomerTab('kommunikation')">Kommunikation</button>
             <button class="modal-tab" onclick="showCustomerTab('ki-analyse')">KI-Analyse</button>
         </div>
 
@@ -366,105 +366,196 @@
                 </div>
             </div>
 
-            <!-- Tab: Workflow -->
-            <div class="customer-tab" id="tab-workflow">
-                <div class="workflow-status">
-                    <span class="status-label">Aktueller Status:</span>
-                    <span class="status-value inkasso">Inkasso-Verfahren</span>
-                </div>
-                <div class="workflow-timeline">
-                    <div class="wf-item completed">
-                        <div class="wf-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </div>
-                        <div class="wf-content">
-                            <div class="wf-title">Erste Mahnung</div>
-                            <div class="wf-date">15.10.2025</div>
-                            <div class="wf-note">Automatisch versendet</div>
-                        </div>
+            <!-- Tab: Kommunikation -->
+            <div class="customer-tab" id="tab-kommunikation">
+                <div class="kommunikation-header">
+                    <div class="workflow-status">
+                        <span class="status-label">Aktueller Status:</span>
+                        <span class="status-value inkasso">Inkasso-Verfahren</span>
                     </div>
-                    <div class="wf-item completed">
-                        <div class="wf-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </div>
-                        <div class="wf-content">
-                            <div class="wf-title">Zweite Mahnung</div>
-                            <div class="wf-date">01.11.2025</div>
-                            <div class="wf-note">Automatisch versendet</div>
-                        </div>
-                    </div>
-                    <div class="wf-item completed">
-                        <div class="wf-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                            </svg>
-                        </div>
-                        <div class="wf-content">
-                            <div class="wf-title">Telefonischer Kontakt</div>
-                            <div class="wf-date">10.11.2025</div>
-                            <div class="wf-note">Kunde nicht erreichbar (3 Versuche)</div>
-                        </div>
-                    </div>
-                    <div class="wf-item completed">
-                        <div class="wf-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </div>
-                        <div class="wf-content">
-                            <div class="wf-title">Letzte Mahnung</div>
-                            <div class="wf-date">15.11.2025</div>
-                            <div class="wf-note">Mit Inkasso-Androhung</div>
-                        </div>
-                    </div>
-                    <div class="wf-item active">
-                        <div class="wf-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </div>
-                        <div class="wf-content">
-                            <div class="wf-title">Inkasso-Übergabe</div>
-                            <div class="wf-date">01.12.2025</div>
-                            <div class="wf-note">An Creditreform übergeben</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="workflow-actions">
-                    <h4>Verfügbare Aktionen</h4>
-                    <div class="action-buttons">
-                        <button class="action-btn-large" onclick="addNote()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <div class="kommunikation-actions">
+                        <button class="btn-small" onclick="addNote()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
-                            Notiz hinzufügen
+                            Notiz
                         </button>
-                        <button class="action-btn-large" onclick="scheduleCallback()">
+                        <button class="btn-small" onclick="scheduleCallback()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"></path>
+                                <path d="M16 2v4M8 2v4M3 10h18"></path>
+                            </svg>
+                            Rückruf
+                        </button>
+                        <button class="btn-small primary" onclick="composeEmail()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            E-Mail
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kommunikationshistorie -->
+                <div class="kommunikation-timeline">
+                    <h4>Kommunikationshistorie</h4>
+
+                    <!-- Schriftliche Kommunikation: Inkasso-Androhung -->
+                    <div class="komm-item letter">
+                        <div class="komm-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="komm-content">
+                            <div class="komm-header">
+                                <span class="komm-type">Letzte Mahnung</span>
+                                <span class="komm-date">15.11.2025, 09:30</span>
+                            </div>
+                            <div class="komm-body">
+                                <p><strong>Betreff:</strong> Letzte Zahlungsaufforderung - Vertrag BMK-2018-0456789</p>
+                                <div class="komm-preview">
+                                    Sehr geehrter Herr Mueller,<br><br>
+                                    trotz mehrfacher Aufforderung ist die ausstehende Forderung in Höhe von <strong>€7.500,00</strong> nicht beglichen worden.
+                                    Wir fordern Sie hiermit letztmalig auf, den offenen Betrag bis zum <strong>25.11.2025</strong> zu begleichen.<br><br>
+                                    Sollte die Zahlung nicht fristgerecht eingehen, sehen wir uns gezwungen, den Fall an ein Inkassounternehmen zu übergeben...
+                                </div>
+                                <button class="btn-link" onclick="showFullLetter('mahnung-3')">Vollständiges Schreiben anzeigen →</button>
+                            </div>
+                            <div class="komm-meta">
+                                <span class="meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Zugestellt
+                                </span>
+                                <span class="meta-item">Per Post</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Telefonat -->
+                    <div class="komm-item phone missed">
+                        <div class="komm-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                             </svg>
-                            Rückruf planen
-                        </button>
-                        <button class="action-btn-large warning" onclick="sellCase()">
+                        </div>
+                        <div class="komm-content">
+                            <div class="komm-header">
+                                <span class="komm-type">Anrufversuch</span>
+                                <span class="komm-date">10.11.2025, 14:15</span>
+                            </div>
+                            <div class="komm-body">
+                                <p>3 Anrufversuche - Kunde nicht erreichbar</p>
+                                <div class="komm-note">
+                                    <strong>Notiz:</strong> Mailbox aktiv, keine Rückrufoption. Nächster Versuch morgen vormittags geplant.
+                                </div>
+                            </div>
+                            <div class="komm-meta">
+                                <span class="meta-item warning">Nicht erreicht</span>
+                                <span class="meta-item">Bearbeiter: E. Brenneisen</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schriftliche Kommunikation: 2. Mahnung -->
+                    <div class="komm-item letter">
+                        <div class="komm-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <line x1="12" y1="1" x2="12" y2="23"></line>
-                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
-                            Forderung verkaufen
-                        </button>
-                        <button class="action-btn-large danger" onclick="writeOffCase()">
+                        </div>
+                        <div class="komm-content">
+                            <div class="komm-header">
+                                <span class="komm-type">2. Mahnung</span>
+                                <span class="komm-date">01.11.2025, 08:00</span>
+                            </div>
+                            <div class="komm-body">
+                                <p><strong>Betreff:</strong> Zweite Zahlungserinnerung - Vertrag BMK-2018-0456789</p>
+                                <div class="komm-preview">
+                                    Sehr geehrter Herr Mueller,<br><br>
+                                    leider haben wir bis heute keinen Zahlungseingang für die fällige Rate feststellen können.
+                                    Wir bitten Sie, den offenen Betrag von <strong>€5.000,00</strong> umgehend zu überweisen...
+                                </div>
+                                <button class="btn-link" onclick="showFullLetter('mahnung-2')">Vollständiges Schreiben anzeigen →</button>
+                            </div>
+                            <div class="komm-meta">
+                                <span class="meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Zugestellt
+                                </span>
+                                <span class="meta-item">Per E-Mail & Post</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- E-Mail Eingang vom Kunden -->
+                    <div class="komm-item email incoming">
+                        <div class="komm-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
-                            Abschreiben
-                        </button>
+                        </div>
+                        <div class="komm-content">
+                            <div class="komm-header">
+                                <span class="komm-type incoming-badge">E-Mail vom Kunden</span>
+                                <span class="komm-date">20.10.2025, 16:42</span>
+                            </div>
+                            <div class="komm-body">
+                                <p><strong>Betreff:</strong> Re: Zahlungserinnerung</p>
+                                <div class="komm-preview customer-message">
+                                    Sehr geehrte Damen und Herren,<br><br>
+                                    aufgrund von Liquiditätsengpässen ist es uns derzeit nicht möglich, die volle Rate zu begleichen.
+                                    Wir bitten um Ratenzahlung und werden ab dem 15.11. wieder regulär zahlen können...
+                                </div>
+                                <button class="btn-link" onclick="showFullLetter('email-kunde-1')">Vollständige E-Mail anzeigen →</button>
+                            </div>
+                            <div class="komm-meta">
+                                <span class="meta-item">Von: h.mueller@mueller-gmbh.de</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1. Mahnung -->
+                    <div class="komm-item letter">
+                        <div class="komm-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="komm-content">
+                            <div class="komm-header">
+                                <span class="komm-type">1. Mahnung</span>
+                                <span class="komm-date">15.10.2025, 08:00</span>
+                            </div>
+                            <div class="komm-body">
+                                <p><strong>Betreff:</strong> Zahlungserinnerung - Vertrag BMK-2018-0456789</p>
+                                <div class="komm-preview">
+                                    Sehr geehrter Herr Mueller,<br><br>
+                                    bei der Überprüfung unserer Konten haben wir festgestellt, dass die am 01.10.2025 fällige Rate
+                                    in Höhe von <strong>€2.500,00</strong> noch nicht eingegangen ist...
+                                </div>
+                                <button class="btn-link" onclick="showFullLetter('mahnung-1')">Vollständiges Schreiben anzeigen →</button>
+                            </div>
+                            <div class="komm-meta">
+                                <span class="meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Zugestellt
+                                </span>
+                                <span class="meta-item">Automatisch versendet</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

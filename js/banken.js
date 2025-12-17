@@ -321,6 +321,196 @@ function clearSegmentFilter() {
     showNotification('Filter aufgehoben', 'info');
 }
 
+// Show chart popup for KPI mini charts
+function showChartPopup(chartId, title) {
+    // Chart data for different KPIs
+    const chartData = {
+        'aktive-faelle': {
+            color: '#3b82f6',
+            data: [9800, 9950, 10050, 10100, 10180, 10234],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+        },
+        'offene-forderung': {
+            color: '#f97316',
+            data: [42.5, 44.1, 45.2, 46.0, 46.8, 47.8],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: ' Mio €'
+        },
+        'recovery-rate': {
+            color: '#22c55e',
+            data: [62.1, 63.5, 64.8, 66.2, 67.1, 68.4],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: '%'
+        },
+        'dpd': {
+            color: '#8b5cf6',
+            data: [52, 51, 50, 49, 48, 47],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+            suffix: ' Tage'
+        },
+        'aufgaben': {
+            color: '#ef4444',
+            data: [180, 165, 172, 158, 162, 156],
+            labels: ['Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+        }
+    };
+
+    const config = chartData[chartId] || chartData['aktive-faelle'];
+
+    // Create popup overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'chart-popup-overlay';
+    overlay.onclick = (e) => {
+        if (e.target === overlay) closeChartPopup();
+    };
+
+    // Create popup content
+    const popup = document.createElement('div');
+    popup.className = 'chart-popup';
+    popup.innerHTML = `
+        <div class="chart-popup-header">
+            <h3>${title}</h3>
+            <button class="chart-popup-close" onclick="closeChartPopup()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="chart-popup-content" id="popup-chart-${chartId}"></div>
+    `;
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    // Render chart using simple SVG
+    renderPopupChart(chartId, config);
+}
+
+// Render chart in popup
+function renderPopupChart(chartId, config) {
+    const container = document.getElementById(`popup-chart-${chartId}`);
+    if (!container) return;
+
+    const width = 650;
+    const height = 280;
+    const padding = { top: 20, right: 30, bottom: 40, left: 60 };
+
+    const chartWidth = width - padding.left - padding.right;
+    const chartHeight = height - padding.top - padding.bottom;
+
+    const data = config.data;
+    const labels = config.labels;
+    const maxVal = Math.max(...data) * 1.1;
+    const minVal = Math.min(...data) * 0.9;
+    const range = maxVal - minVal;
+
+    // Create points
+    const points = data.map((val, i) => {
+        const x = padding.left + (i / (data.length - 1)) * chartWidth;
+        const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
+        return `${x},${y}`;
+    }).join(' ');
+
+    // Create area path
+    const areaPath = `M ${padding.left},${height - padding.bottom} ` +
+        data.map((val, i) => {
+            const x = padding.left + (i / (data.length - 1)) * chartWidth;
+            const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
+            return `L ${x},${y}`;
+        }).join(' ') +
+        ` L ${width - padding.right},${height - padding.bottom} Z`;
+
+    // Generate Y-axis labels
+    const yLabels = [];
+    for (let i = 0; i <= 4; i++) {
+        const val = minVal + (range * i / 4);
+        const y = padding.top + chartHeight - (i / 4) * chartHeight;
+        yLabels.push({ val: val.toFixed(config.suffix === '%' ? 1 : 0) + (config.suffix || ''), y });
+    }
+
+    container.innerHTML = `
+        <svg width="${width}" height="${height}" style="display: block; margin: 0 auto;">
+            <!-- Grid lines -->
+            ${yLabels.map(l => `<line x1="${padding.left}" y1="${l.y}" x2="${width - padding.right}" y2="${l.y}" stroke="#e2e8f0" stroke-dasharray="4,4"/>`).join('')}
+
+            <!-- Area fill -->
+            <path d="${areaPath}" fill="${config.color}" fill-opacity="0.1"/>
+
+            <!-- Line -->
+            <polyline fill="none" stroke="${config.color}" stroke-width="3" points="${points}" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Data points -->
+            ${data.map((val, i) => {
+                const x = padding.left + (i / (data.length - 1)) * chartWidth;
+                const y = padding.top + chartHeight - ((val - minVal) / range) * chartHeight;
+                return `<circle cx="${x}" cy="${y}" r="6" fill="white" stroke="${config.color}" stroke-width="3"/>`;
+            }).join('')}
+
+            <!-- X-axis labels -->
+            ${labels.map((label, i) => {
+                const x = padding.left + (i / (data.length - 1)) * chartWidth;
+                return `<text x="${x}" y="${height - 10}" text-anchor="middle" font-size="12" fill="#64748b">${label}</text>`;
+            }).join('')}
+
+            <!-- Y-axis labels -->
+            ${yLabels.map(l => `<text x="${padding.left - 10}" y="${l.y + 4}" text-anchor="end" font-size="11" fill="#64748b">${l.val}</text>`).join('')}
+        </svg>
+    `;
+}
+
+// Close chart popup
+function closeChartPopup() {
+    const overlay = document.querySelector('.chart-popup-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// Filter by DPD bucket
+function filterByDPDBucket(bucket) {
+    const bucketConfig = {
+        '0-30': { label: '0-30 Tage', minDpd: 0, maxDpd: 30 },
+        '31-90': { label: '31-90 Tage', minDpd: 31, maxDpd: 90 },
+        '90+': { label: '> 90 Tage', minDpd: 91, maxDpd: 999 }
+    };
+
+    const config = bucketConfig[bucket];
+    if (!config) return;
+
+    showNotification(`Filter: DPD ${config.label}`, 'info');
+    console.log('Filtering by DPD bucket:', bucket);
+
+    // Filter table rows by DPD value
+    const table = document.querySelector('.banken-page .customer-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    let matchCount = 0;
+
+    rows.forEach(row => {
+        const dpdBadge = row.querySelector('.dpd-badge');
+        if (dpdBadge) {
+            const dpd = parseInt(dpdBadge.textContent) || 0;
+            if (dpd >= config.minDpd && dpd <= config.maxDpd) {
+                row.style.display = '';
+                matchCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+
+    // Update pagination
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = `Zeige ${matchCount} Fälle mit DPD ${config.label}`;
+    }
+}
+
 // Toggle all NPL checkboxes
 function toggleAllNpl(checkbox) {
     const isChecked = checkbox.checked;
@@ -930,6 +1120,9 @@ window.showBankenTab = showBankenTab;
 window.showBankenSection = showBankenSection;
 window.filterBySegment = filterBySegment;
 window.clearSegmentFilter = clearSegmentFilter;
+window.showChartPopup = showChartPopup;
+window.closeChartPopup = closeChartPopup;
+window.filterByDPDBucket = filterByDPDBucket;
 window.toggleAllNpl = toggleAllNpl;
 window.bulkAction = bulkAction;
 window.openCase = openCase;
