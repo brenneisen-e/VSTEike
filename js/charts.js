@@ -173,7 +173,7 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
                     top: 5,
                     right: 8,
                     bottom: 5,
-                    left: 0
+                    left: 8
                 }
             },
             plugins: {
@@ -238,7 +238,7 @@ function createChart(kpiId, data, view, kpi, timeRange = 'year', offset = 0) {
                     },
                     // Fixe Breite für alle Y-Achsen = exakte Chart-Ausrichtung
                     afterFit: function(scaleInstance) {
-                        scaleInstance.width = 55;
+                        scaleInstance.width = 65;
                     }
                 }
             }
