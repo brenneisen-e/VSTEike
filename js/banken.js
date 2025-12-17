@@ -907,6 +907,30 @@ function showCustomerTab(tabName) {
     console.log('Customer tab:', tabName);
 }
 
+// Toggle between chart and table view for credit products
+function toggleCreditView(button, viewType) {
+    const card = button.closest('.credit-product-large');
+    if (!card) return;
+
+    // Update toggle buttons
+    card.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    button.classList.add('active');
+
+    // Update views
+    card.querySelectorAll('.credit-view').forEach(view => {
+        view.classList.remove('active');
+    });
+
+    const targetView = card.querySelector(`.${viewType}-view`);
+    if (targetView) {
+        targetView.classList.add('active');
+    }
+
+    console.log('Credit view toggled:', viewType);
+}
+
 // ========================================
 // NEW: Customer Actions
 // ========================================

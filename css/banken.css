@@ -3210,8 +3210,8 @@ body.modal-open {
 
 .modal-content {
     position: relative;
-    width: 90%;
-    max-width: 900px;
+    width: 95%;
+    max-width: 1200px;
     max-height: 90vh;
     background: white;
     border-radius: 16px;
@@ -7049,71 +7049,87 @@ body.modal-open {
    KONTEN & FINANZEN - KOMBINIERTE ANSICHT
    ======================================== */
 
-/* Finanzen Overview Header */
+/* Finanzen Overview Header - Modernes Grid Layout */
 .finanzen-overview {
-    display: flex;
-    gap: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
     margin-bottom: 24px;
-    padding: 20px;
+    padding: 20px 24px;
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border-radius: 12px;
     color: white;
+    align-items: stretch;
 }
 
 .finanzen-kpis {
-    display: flex;
-    gap: 24px;
-    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
 }
 
 .finanzen-kpi {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    min-width: 100px;
+    gap: 6px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 110px;
+    text-align: center;
 }
 
 .finanzen-kpi.danger {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
 .finanzen-kpi.warning {
-    background: rgba(245, 158, 11, 0.2);
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: rgba(245, 158, 11, 0.25);
+    border: 1px solid rgba(245, 158, 11, 0.4);
 }
 
 .finanzen-kpi .kpi-label {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    font-weight: 500;
 }
 
 .finanzen-kpi .kpi-value {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-/* Forderungen Compact */
+/* Forderungen Compact - Sidebar */
 .forderungen-compact {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: 12px 16px;
+    gap: 8px;
+    padding: 14px 18px;
     background: rgba(239, 68, 68, 0.15);
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid rgba(239, 68, 68, 0.3);
-    min-width: 180px;
+    min-width: 200px;
+}
+
+.forderungen-compact::before {
+    content: 'Forderungsaufstellung';
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
 }
 
 .forderung-breakdown-row {
     display: flex;
     justify-content: space-between;
     font-size: 12px;
+    padding: 2px 0;
 }
 
 .forderung-breakdown-row .label {
@@ -7122,6 +7138,7 @@ body.modal-open {
 
 .forderung-breakdown-row .value {
     font-weight: 600;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
 }
 
 /* Credit Products Large - Full Width Cards */
@@ -7247,12 +7264,12 @@ body.modal-open {
     margin-bottom: 12px;
 }
 
-/* Chart with Axes */
+/* Chart with Axes - Modern Sharp Design */
 .chart-with-axes {
     display: grid;
-    grid-template-columns: 50px 1fr;
-    grid-template-rows: 1fr 24px;
-    gap: 4px;
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: 1fr 28px;
+    gap: 0;
 }
 
 .y-axis {
@@ -7260,32 +7277,48 @@ body.modal-open {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
-    padding-right: 8px;
-    font-size: 10px;
-    color: #94a3b8;
-    height: 150px;
+    padding-right: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    height: 160px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .chart-area {
-    border-left: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    height: 150px;
+    border-left: 2px solid #cbd5e1;
+    border-bottom: 2px solid #cbd5e1;
+    height: 160px;
     position: relative;
-    background: #fafafa;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: 0 4px 0 0;
 }
 
 .chart-area svg {
     width: 100%;
     height: 100%;
+    shape-rendering: geometricPrecision;
+}
+
+.chart-area svg polyline {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.chart-area svg text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
 }
 
 .x-axis {
     grid-column: 2;
     display: flex;
     justify-content: space-between;
-    font-size: 10px;
-    color: #94a3b8;
-    padding: 4px 0;
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    padding: 8px 4px 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Chart Legend */
@@ -7487,4 +7520,156 @@ body.modal-open {
     .x-axis {
         font-size: 9px;
     }
+}
+
+/* ========================================
+   VIEW TOGGLE & CREDIT TABLES
+   ======================================== */
+
+/* View Toggle Button Group */
+.view-toggle {
+    display: flex;
+    gap: 2px;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 8px;
+    margin-left: auto;
+}
+
+.toggle-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: #475569;
+}
+
+.toggle-btn.active {
+    background: white;
+    color: #3b82f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Credit Views */
+.credit-view {
+    display: none;
+}
+
+.credit-view.active {
+    display: block;
+}
+
+/* Credit Transaction Table */
+.credit-tx-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.credit-tx-table thead {
+    background: #f8fafc;
+}
+
+.credit-tx-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.credit-tx-table td {
+    padding: 12px 16px;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.credit-tx-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.credit-tx-table .highlight-row {
+    background: #fef2f2;
+}
+
+.credit-tx-table .highlight-row:hover {
+    background: #fee2e2;
+}
+
+.credit-tx-table .negative {
+    color: #dc2626;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.credit-tx-table .positive {
+    color: #16a34a;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+/* Transaction Badge */
+.tx-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.tx-badge.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.tx-badge.success {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.tx-badge.warning {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Update chart-container-large for better spacing */
+.chart-container-large {
+    margin-top: 0;
+}
+
+/* Credit Product Header Large - Fix alignment with toggle */
+.credit-product-header-large {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+/* Ensure status badge doesn't push toggle */
+.credit-product-header-large .credit-status-badge {
+    flex-shrink: 0;
 }
