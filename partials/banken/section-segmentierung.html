@@ -463,6 +463,7 @@
                             <th>Mahnstufe</th>
                             <th>Nächste Aktion</th>
                             <th>Status</th>
+                            <th>Bearbeiter</th>
                             <th>Aktionen</th>
                         </tr>
                     </thead>
@@ -504,6 +505,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="startMahnprozess('K-2024-0001')" title="Mahnprozess">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -562,6 +564,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="bearbeiter-badge">K. Weber</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn primary" onclick="scheduleCall('K-2024-0002')" title="Anrufen">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -615,6 +618,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td><span class="bearbeiter-badge">S. Müller</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="viewAgreement('K-2024-0003')" title="Vereinbarung ansehen">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -661,6 +665,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="sellCase('K-2024-0004')" title="Verkaufen">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -687,6 +692,7 @@
                             <td><span class="mahnstufe-badge m3">M3</span></td>
                             <td><div class="next-action"><span class="action-type">Rechtliche Schritte</span><small class="action-date overdue">12.12.2024</small></div></td>
                             <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td><span class="bearbeiter-badge">A. Becker</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Mahnprozess"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0006')">

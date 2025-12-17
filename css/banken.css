@@ -2071,6 +2071,18 @@ body.modal-open {
 .status-badge.inkasso { background: #fee2e2; color: #dc2626; }
 .status-badge.vereinbarung { background: #dcfce7; color: #16a34a; }
 .status-badge.abschreibung { background: #f1f5f9; color: #64748b; }
+.status-badge.zusage { background: #f0fdf4; color: #15803d; }
+
+/* Bearbeiter Badge */
+.bearbeiter-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #f8fafc;
+    color: #475569;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
 
 /* KI Score in Table */
 .ki-score {
