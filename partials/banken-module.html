@@ -102,6 +102,119 @@
             <p>Die KI-gestützte Analyse klassifiziert jeden Kunden anhand von Transaktionsmustern, externen Datenquellen und historischem Verhalten. Die Punktewolke zeigt die Verteilung aller 10.234 Fälle nach <strong>Willingness to Pay</strong> (horizontale Achse) und <strong>Ability to Pay</strong> (vertikale Achse).</p>
         </div>
 
+        <!-- Portfolio KPI Boxes -->
+        <div class="portfolio-kpi-grid">
+            <div class="portfolio-kpi-box">
+                <div class="kpi-icon blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Gesamtkredite</div>
+                    <div class="kpi-value">10.234</div>
+                    <div class="kpi-change negative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                            <polyline points="17 18 23 18 23 12"></polyline>
+                        </svg>
+                        +127 zur Vorwoche
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box">
+                <div class="kpi-icon orange">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Ausstehende Gesamtforderung</div>
+                    <div class="kpi-value">€ 47,8 Mio.</div>
+                    <div class="kpi-change negative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                            <polyline points="17 18 23 18 23 12"></polyline>
+                        </svg>
+                        +€ 1,2 Mio. zur Vorwoche
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box">
+                <div class="kpi-icon purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Ø Schulden pro Kunde</div>
+                    <div class="kpi-value">€ 4.672</div>
+                    <div class="kpi-change positive">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        -€ 89 zur Vorwoche
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box">
+                <div class="kpi-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Offene Bewertungsaufgaben</div>
+                    <div class="kpi-value">156</div>
+                    <div class="kpi-change neutral">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        23 überfällig
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar with Scan -->
+        <div class="action-bar">
+            <div class="action-bar-left">
+                <button class="btn-primary" onclick="openDocumentScanner()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Akte scannen / Neuer Kunde
+                </button>
+                <button class="btn-secondary" onclick="showBulkImport()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Bulk-Import
+                </button>
+            </div>
+            <div class="action-bar-right">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" placeholder="Kunden-Nr, Name oder IBAN suchen..." oninput="searchCustomers(this.value)">
+                </div>
+            </div>
+        </div>
+
         <div class="segmentierung-grid">
             <!-- Left: Scatter Plot Matrix -->
             <div class="scatter-plot-card">
@@ -1164,6 +1277,672 @@
                         <p><strong>Empfohlene Maßnahme:</strong> Aufgrund der hohen Fähigkeit zur Zahlung (60%) bei niedriger Zahlungsbereitschaft (25%) empfiehlt die KI eine <strong>verstärkte Inkasso-Strategie</strong> mit zeitnaher Eskalation zum gerichtlichen Mahnverfahren, sofern innerhalb von 14 Tagen keine Reaktion erfolgt.</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         DOCUMENT SCANNER MODAL
+         ======================================== -->
+    <div class="scanner-modal" id="documentScannerModal">
+        <div class="scanner-container">
+            <div class="scanner-header">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Akte scannen / Neuer Kunde anlegen
+                </h2>
+                <button class="close-scanner-btn" onclick="closeDocumentScanner()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="scanner-body">
+                <!-- Step 1: Upload -->
+                <div class="scanner-step active" id="scanner-step-1">
+                    <div class="scanner-step-header">
+                        <div class="step-indicator">
+                            <span class="step-number active">1</span>
+                            <span class="step-line"></span>
+                            <span class="step-number">2</span>
+                            <span class="step-line"></span>
+                            <span class="step-number">3</span>
+                        </div>
+                        <div class="step-labels">
+                            <span class="active">Dokument hochladen</span>
+                            <span>KI-Erkennung</span>
+                            <span>Kunde anlegen</span>
+                        </div>
+                    </div>
+
+                    <div class="upload-area" id="dropZone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <h3>Dokument hochladen</h3>
+                        <p>Ziehen Sie eine Datei hierher oder klicken Sie zum Auswählen</p>
+                        <p class="supported-formats">Unterstützte Formate: PDF, JPG, PNG, TIFF</p>
+                        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif" onchange="handleFileSelect(event)" hidden>
+                        <button class="btn-primary" onclick="document.getElementById('fileInput').click()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Datei auswählen
+                        </button>
+                        <div class="camera-option">
+                            <span>oder</span>
+                            <button class="btn-secondary" onclick="openCamera()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                                Kamera verwenden
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="upload-preview" id="uploadPreview" style="display: none;">
+                        <div class="preview-image-container">
+                            <img id="previewImage" src="" alt="Vorschau">
+                        </div>
+                        <div class="preview-info">
+                            <span class="file-name" id="fileName"></span>
+                            <button class="btn-icon" onclick="removeUpload()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="btn-primary" onclick="startAIRecognition()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            KI-Erkennung starten
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: AI Recognition -->
+                <div class="scanner-step" id="scanner-step-2">
+                    <div class="scanner-step-header">
+                        <div class="step-indicator">
+                            <span class="step-number completed">1</span>
+                            <span class="step-line completed"></span>
+                            <span class="step-number active">2</span>
+                            <span class="step-line"></span>
+                            <span class="step-number">3</span>
+                        </div>
+                        <div class="step-labels">
+                            <span class="completed">Dokument hochladen</span>
+                            <span class="active">KI-Erkennung</span>
+                            <span>Kunde anlegen</span>
+                        </div>
+                    </div>
+
+                    <div class="recognition-content">
+                        <div class="recognition-preview">
+                            <img id="recognitionImage" src="" alt="Dokument">
+                            <div class="recognition-overlay" id="recognitionOverlay">
+                                <!-- Dynamically highlighted areas -->
+                            </div>
+                        </div>
+                        <div class="recognition-results">
+                            <div class="recognition-status" id="recognitionStatus">
+                                <div class="loading-spinner"></div>
+                                <p>KI analysiert Dokument...</p>
+                            </div>
+                            <div class="recognized-fields" id="recognizedFields" style="display: none;">
+                                <h4>Erkannte Daten</h4>
+                                <div class="field-group">
+                                    <label>Name / Firma</label>
+                                    <input type="text" id="rec-name" value="">
+                                    <span class="confidence">95%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Adresse</label>
+                                    <input type="text" id="rec-address" value="">
+                                    <span class="confidence">88%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>IBAN</label>
+                                    <input type="text" id="rec-iban" value="">
+                                    <span class="confidence">92%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Forderungsbetrag</label>
+                                    <input type="text" id="rec-amount" value="">
+                                    <span class="confidence">97%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Fälligkeitsdatum</label>
+                                    <input type="date" id="rec-due-date" value="">
+                                    <span class="confidence">90%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Dokumenttyp</label>
+                                    <select id="rec-doc-type">
+                                        <option value="mahnung">Mahnung</option>
+                                        <option value="rechnung">Rechnung</option>
+                                        <option value="vertrag">Kreditvertrag</option>
+                                        <option value="inkasso">Inkasso-Schreiben</option>
+                                        <option value="sonstiges">Sonstiges</option>
+                                    </select>
+                                </div>
+                                <button class="btn-primary" onclick="goToStep3()">
+                                    Weiter zur Kundenanlage
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Create Customer -->
+                <div class="scanner-step" id="scanner-step-3">
+                    <div class="scanner-step-header">
+                        <div class="step-indicator">
+                            <span class="step-number completed">1</span>
+                            <span class="step-line completed"></span>
+                            <span class="step-number completed">2</span>
+                            <span class="step-line completed"></span>
+                            <span class="step-number active">3</span>
+                        </div>
+                        <div class="step-labels">
+                            <span class="completed">Dokument hochladen</span>
+                            <span class="completed">KI-Erkennung</span>
+                            <span class="active">Kunde anlegen</span>
+                        </div>
+                    </div>
+
+                    <div class="create-customer-form">
+                        <div class="form-section">
+                            <h4>Kundendaten</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Kundentyp *</label>
+                                    <select id="customer-type">
+                                        <option value="privat">Privatkunde</option>
+                                        <option value="gewerbe">Gewerbekunde</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Name / Firma *</label>
+                                    <input type="text" id="customer-name" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Straße, Hausnr. *</label>
+                                    <input type="text" id="customer-street" value="">
+                                </div>
+                                <div class="form-group half">
+                                    <label>PLZ *</label>
+                                    <input type="text" id="customer-zip" value="">
+                                </div>
+                                <div class="form-group half">
+                                    <label>Ort *</label>
+                                    <input type="text" id="customer-city" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefon</label>
+                                    <input type="text" id="customer-phone" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>E-Mail</label>
+                                    <input type="email" id="customer-email" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Bankverbindung</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>IBAN *</label>
+                                    <input type="text" id="customer-iban" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>BIC</label>
+                                    <input type="text" id="customer-bic" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Forderung</h4>
+                            <div class="form-grid">
+                                <div class="form-group half">
+                                    <label>Betrag *</label>
+                                    <input type="number" id="claim-amount" value="" step="0.01">
+                                </div>
+                                <div class="form-group half">
+                                    <label>Währung</label>
+                                    <select id="claim-currency">
+                                        <option value="EUR">EUR</option>
+                                        <option value="USD">USD</option>
+                                        <option value="CHF">CHF</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fälligkeitsdatum *</label>
+                                    <input type="date" id="claim-due-date" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Kategorie</label>
+                                    <select id="claim-category">
+                                        <option value="kredit">Kredit</option>
+                                        <option value="dispo">Dispositionskredit</option>
+                                        <option value="kreditkarte">Kreditkarte</option>
+                                        <option value="sonstiges">Sonstiges</option>
+                                    </select>
+                                </div>
+                                <div class="form-group full">
+                                    <label>Notiz</label>
+                                    <textarea id="claim-note" rows="3" placeholder="Zusätzliche Informationen..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Dokument anhängen</h4>
+                            <div class="attached-document">
+                                <div class="doc-preview">
+                                    <img id="attachedDocPreview" src="" alt="Dokument">
+                                </div>
+                                <div class="doc-info">
+                                    <span class="doc-name" id="attachedDocName"></span>
+                                    <span class="doc-meta">Wird automatisch archiviert</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-secondary" onclick="goToStep2()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                Zurück
+                            </button>
+                            <button class="btn-primary" onclick="createCustomerFromScan()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                                </svg>
+                                Kunde anlegen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         FULL CRM CUSTOMER PROFILE VIEW
+         ======================================== -->
+    <div class="crm-profile-view" id="crmProfileView">
+        <div class="crm-sidebar">
+            <div class="crm-customer-card">
+                <div class="customer-avatar">
+                    <span>MG</span>
+                </div>
+                <div class="customer-main-info">
+                    <h2 id="crm-customer-name">Mueller GmbH</h2>
+                    <span class="customer-type-badge">Gewerbekunde</span>
+                    <div class="customer-id">Kd.-Nr: KD-2018-0847</div>
+                </div>
+                <div class="customer-status">
+                    <span class="status-badge danger">Stage 3</span>
+                    <span class="dpd-badge">DPD: 127</span>
+                </div>
+            </div>
+
+            <div class="crm-quick-actions">
+                <button class="action-btn" onclick="crmCall()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Anrufen
+                </button>
+                <button class="action-btn" onclick="crmEmail()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    E-Mail
+                </button>
+                <button class="action-btn" onclick="crmSchedule()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Termin
+                </button>
+                <button class="action-btn" onclick="crmNote()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    Notiz
+                </button>
+            </div>
+
+            <div class="crm-nav">
+                <button class="crm-nav-item active" onclick="showCrmSection('overview')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Übersicht
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('stammdaten')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Stammdaten
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('konten')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                    Konten & Verträge
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('transaktionen')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    Transaktionen
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('forderungen')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Forderungen
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('kommunikation')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Kommunikation
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('dokumente')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Dokumente
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('workflow')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Workflow
+                </button>
+                <button class="crm-nav-item" onclick="showCrmSection('ki-analyse')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    KI-Analyse
+                </button>
+            </div>
+
+            <button class="close-crm-btn" onclick="closeCrmProfile()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Zurück zur Übersicht
+            </button>
+        </div>
+
+        <div class="crm-main">
+            <!-- Section: Overview -->
+            <div class="crm-section active" id="crm-overview">
+                <div class="crm-section-header">
+                    <h2>Kundenübersicht</h2>
+                    <div class="section-actions">
+                        <button class="btn-danger" onclick="startMahnprozess()">Mahnprozess starten</button>
+                        <button class="btn-warning" onclick="sellCase()">Verkaufen</button>
+                        <button class="btn-secondary" onclick="writeOff()">Abschreiben</button>
+                    </div>
+                </div>
+
+                <div class="overview-grid">
+                    <div class="overview-card highlight">
+                        <div class="card-icon danger">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Offene Forderung</span>
+                            <span class="card-value">€ 12.450,00</span>
+                            <span class="card-sub">+ € 847 Zinsen & Gebühren</span>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-icon warning">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Tage überfällig (DPD)</span>
+                            <span class="card-value">127</span>
+                            <span class="card-sub">Stage 3 seit 01.08.2025</span>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Letzte Zahlung</span>
+                            <span class="card-value">€ 500,00</span>
+                            <span class="card-sub">15.11.2025 (Teilzahlung)</span>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-icon info">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-label">Mahnstatus</span>
+                            <span class="card-value">Mahnung 3</span>
+                            <span class="card-sub">Gesendet: 01.12.2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overview-row">
+                    <div class="ki-scores-card">
+                        <h3>KI-Scoring</h3>
+                        <div class="ki-scores-grid">
+                            <div class="ki-score-item">
+                                <div class="score-circle" style="--percentage: 25; --color: #ef4444;">
+                                    <span>25%</span>
+                                </div>
+                                <span class="score-label">Willingness</span>
+                            </div>
+                            <div class="ki-score-item">
+                                <div class="score-circle" style="--percentage: 60; --color: #f59e0b;">
+                                    <span>60%</span>
+                                </div>
+                                <span class="score-label">Ability</span>
+                            </div>
+                            <div class="ki-score-item">
+                                <div class="score-circle" style="--percentage: 35; --color: #ef4444;">
+                                    <span>35%</span>
+                                </div>
+                                <span class="score-label">Recovery</span>
+                            </div>
+                        </div>
+                        <div class="ki-recommendation-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            KI-Empfehlung: Inkasso-Eskalation
+                        </div>
+                    </div>
+
+                    <div class="recent-activity-card">
+                        <h3>Letzte Aktivitäten</h3>
+                        <div class="activity-timeline">
+                            <div class="activity-item">
+                                <div class="activity-icon outgoing">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <span class="activity-title">3. Mahnung versendet</span>
+                                    <span class="activity-date">01.12.2025, 09:15</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon incoming">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <span class="activity-title">Teilzahlung eingegangen: € 500</span>
+                                    <span class="activity-date">15.11.2025, 14:22</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon missed">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"></path>
+                                        <line x1="23" y1="1" x2="17" y2="7"></line>
+                                        <line x1="17" y1="1" x2="23" y2="7"></line>
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <span class="activity-title">Anrufversuch - nicht erreicht</span>
+                                    <span class="activity-date">10.11.2025, 11:30</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon outgoing">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <span class="activity-title">2. Mahnung versendet</span>
+                                    <span class="activity-date">01.11.2025, 09:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="view-all-btn" onclick="showCrmSection('kommunikation')">Alle Aktivitäten anzeigen</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More CRM sections would go here (stammdaten, konten, transaktionen, etc.) -->
+            <div class="crm-section" id="crm-stammdaten">
+                <div class="crm-section-header">
+                    <h2>Stammdaten</h2>
+                    <button class="btn-secondary" onclick="editStammdaten()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        Bearbeiten
+                    </button>
+                </div>
+                <p>Vollständige Stammdaten des Kunden...</p>
+            </div>
+
+            <div class="crm-section" id="crm-konten">
+                <div class="crm-section-header">
+                    <h2>Konten & Verträge</h2>
+                </div>
+                <p>Alle Konten und Verträge des Kunden...</p>
+            </div>
+
+            <div class="crm-section" id="crm-transaktionen">
+                <div class="crm-section-header">
+                    <h2>Transaktionen</h2>
+                </div>
+                <p>Vollständiger Kontoauszug mit Lastschriftrückgaben...</p>
+            </div>
+
+            <div class="crm-section" id="crm-forderungen">
+                <div class="crm-section-header">
+                    <h2>Forderungen</h2>
+                </div>
+                <p>Detaillierte Aufstellung aller offenen Forderungen...</p>
+            </div>
+
+            <div class="crm-section" id="crm-kommunikation">
+                <div class="crm-section-header">
+                    <h2>Kommunikation</h2>
+                </div>
+                <p>Komplette Kommunikationshistorie...</p>
+            </div>
+
+            <div class="crm-section" id="crm-dokumente">
+                <div class="crm-section-header">
+                    <h2>Dokumente</h2>
+                </div>
+                <p>Alle archivierten Dokumente...</p>
+            </div>
+
+            <div class="crm-section" id="crm-workflow">
+                <div class="crm-section-header">
+                    <h2>Workflow</h2>
+                </div>
+                <p>Workflow-Status und Maßnahmen...</p>
+            </div>
+
+            <div class="crm-section" id="crm-ki-analyse">
+                <div class="crm-section-header">
+                    <h2>KI-Analyse</h2>
+                </div>
+                <p>Detaillierte KI-Auswertung und Prognosen...</p>
             </div>
         </div>
     </div>

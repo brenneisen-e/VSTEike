@@ -778,6 +778,290 @@ window.reviewForRestructure = reviewForRestructure;
 window.addNote = addNote;
 window.writeOffCase = writeOffCase;
 
+// ========================================
+// DOCUMENT SCANNER FUNCTIONS
+// ========================================
+
+let uploadedFile = null;
+let uploadedFileData = null;
+
+function openDocumentScanner() {
+    const modal = document.getElementById('documentScannerModal');
+    if (modal) {
+        modal.classList.add('active');
+        resetScanner();
+    }
+}
+
+function closeDocumentScanner() {
+    const modal = document.getElementById('documentScannerModal');
+    if (modal) {
+        modal.classList.remove('active');
+        resetScanner();
+    }
+}
+
+function resetScanner() {
+    uploadedFile = null;
+    uploadedFileData = null;
+
+    // Reset to step 1
+    document.querySelectorAll('.scanner-step').forEach(step => step.classList.remove('active'));
+    const step1 = document.getElementById('scanner-step-1');
+    if (step1) step1.classList.add('active');
+
+    // Reset upload area
+    const uploadPreview = document.getElementById('uploadPreview');
+    const dropZone = document.getElementById('dropZone');
+    if (uploadPreview) uploadPreview.style.display = 'none';
+    if (dropZone) dropZone.style.display = 'block';
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) dropZone.classList.add('dragover');
+}
+
+function handleDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) dropZone.classList.remove('dragover');
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) dropZone.classList.remove('dragover');
+
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        processFile(files[0]);
+    }
+}
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        processFile(file);
+    }
+}
+
+function processFile(file) {
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/tiff'];
+    if (!allowedTypes.includes(file.type)) {
+        showNotification('Ungültiges Dateiformat. Bitte PDF, JPG, PNG oder TIFF verwenden.', 'error');
+        return;
+    }
+
+    uploadedFile = file;
+
+    // Show preview
+    const dropZone = document.getElementById('dropZone');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const previewImage = document.getElementById('previewImage');
+    const fileName = document.getElementById('fileName');
+
+    if (dropZone) dropZone.style.display = 'none';
+    if (uploadPreview) uploadPreview.style.display = 'block';
+    if (fileName) fileName.textContent = file.name;
+
+    // Create preview based on file type
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadedFileData = e.target.result;
+            if (previewImage) previewImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        // PDF - show placeholder
+        if (previewImage) previewImage.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjUwIiB2aWV3Qm94PSIwIDAgMjAwIDI1MCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyNTAiIGZpbGw9IiNmOGZhZmMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI0MCIgZmlsbD0iI2RjMjYyNiI+UERG PC90ZXh0Pjwvc3ZnPg==';
+        uploadedFileData = 'pdf-placeholder';
+    }
+}
+
+function removeUpload() {
+    uploadedFile = null;
+    uploadedFileData = null;
+
+    const dropZone = document.getElementById('dropZone');
+    const uploadPreview = document.getElementById('uploadPreview');
+
+    if (dropZone) dropZone.style.display = 'block';
+    if (uploadPreview) uploadPreview.style.display = 'none';
+}
+
+function openCamera() {
+    showNotification('Kamera-Funktion wird in einer zukünftigen Version verfügbar sein.', 'info');
+}
+
+function startAIRecognition() {
+    if (!uploadedFile) {
+        showNotification('Bitte laden Sie zuerst ein Dokument hoch.', 'error');
+        return;
+    }
+
+    // Move to step 2
+    document.querySelectorAll('.scanner-step').forEach(step => step.classList.remove('active'));
+    const step2 = document.getElementById('scanner-step-2');
+    if (step2) step2.classList.add('active');
+
+    // Set recognition image
+    const recognitionImage = document.getElementById('recognitionImage');
+    if (recognitionImage && uploadedFileData) {
+        recognitionImage.src = uploadedFileData !== 'pdf-placeholder' ? uploadedFileData : document.getElementById('previewImage').src;
+    }
+
+    // Simulate AI recognition
+    setTimeout(() => {
+        const recognitionStatus = document.getElementById('recognitionStatus');
+        const recognizedFields = document.getElementById('recognizedFields');
+
+        if (recognitionStatus) recognitionStatus.style.display = 'none';
+        if (recognizedFields) recognizedFields.style.display = 'block';
+
+        // Fill in sample recognized data
+        document.getElementById('rec-name').value = 'Schmidt Elektronik GmbH';
+        document.getElementById('rec-address').value = 'Industriestr. 45, 38112 Braunschweig';
+        document.getElementById('rec-iban').value = 'DE89 3704 0044 0532 0130 00';
+        document.getElementById('rec-amount').value = '€ 8.450,00';
+        document.getElementById('rec-due-date').value = '2025-10-15';
+
+        showNotification('Dokumentenanalyse abgeschlossen', 'success');
+    }, 2000);
+}
+
+function goToStep2() {
+    document.querySelectorAll('.scanner-step').forEach(step => step.classList.remove('active'));
+    const step2 = document.getElementById('scanner-step-2');
+    if (step2) step2.classList.add('active');
+}
+
+function goToStep3() {
+    document.querySelectorAll('.scanner-step').forEach(step => step.classList.remove('active'));
+    const step3 = document.getElementById('scanner-step-3');
+    if (step3) step3.classList.add('active');
+
+    // Pre-fill form with recognized data
+    document.getElementById('customer-name').value = document.getElementById('rec-name').value;
+    document.getElementById('customer-street').value = document.getElementById('rec-address').value.split(',')[0] || '';
+    document.getElementById('customer-iban').value = document.getElementById('rec-iban').value;
+    document.getElementById('claim-amount').value = parseFloat(document.getElementById('rec-amount').value.replace(/[€\s.]/g, '').replace(',', '.')) || 0;
+    document.getElementById('claim-due-date').value = document.getElementById('rec-due-date').value;
+
+    // Set document preview
+    const attachedDocPreview = document.getElementById('attachedDocPreview');
+    const attachedDocName = document.getElementById('attachedDocName');
+    if (attachedDocPreview) attachedDocPreview.src = document.getElementById('recognitionImage').src;
+    if (attachedDocName) attachedDocName.textContent = uploadedFile ? uploadedFile.name : 'Dokument';
+}
+
+function createCustomerFromScan() {
+    showNotification('Kunde wurde erfolgreich angelegt!', 'success');
+    closeDocumentScanner();
+
+    // Refresh the customer list or show new customer
+    setTimeout(() => {
+        showNotification('Neuer Fall wurde zur Segmentierung hinzugefügt.', 'info');
+    }, 1000);
+}
+
+function showBulkImport() {
+    showNotification('Bulk-Import wird vorbereitet...', 'info');
+}
+
+// ========================================
+// FULL CRM PROFILE FUNCTIONS
+// ========================================
+
+function openCrmProfile(customerId) {
+    const crmView = document.getElementById('crmProfileView');
+    if (crmView) {
+        crmView.classList.add('active');
+        // Could load customer data here based on customerId
+        console.log('Opening CRM profile for customer:', customerId);
+    }
+}
+
+function closeCrmProfile() {
+    const crmView = document.getElementById('crmProfileView');
+    if (crmView) {
+        crmView.classList.remove('active');
+    }
+}
+
+function showCrmSection(sectionName) {
+    // Update navigation
+    document.querySelectorAll('.crm-nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const activeNav = document.querySelector(`.crm-nav-item[onclick="showCrmSection('${sectionName}')"]`);
+    if (activeNav) activeNav.classList.add('active');
+
+    // Update sections
+    document.querySelectorAll('.crm-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    const activeSection = document.getElementById('crm-' + sectionName);
+    if (activeSection) activeSection.classList.add('active');
+}
+
+function crmCall() {
+    showNotification('Anruf wird gestartet...', 'info');
+}
+
+function crmEmail() {
+    showNotification('E-Mail-Vorlage wird geöffnet...', 'info');
+}
+
+function crmSchedule() {
+    showNotification('Terminplanung wird geöffnet...', 'info');
+}
+
+function crmNote() {
+    showNotification('Notizfeld wird geöffnet...', 'info');
+}
+
+function editStammdaten() {
+    showNotification('Bearbeitungsmodus aktiviert', 'info');
+}
+
+// Update openCustomerDetail to use full CRM view
+const originalOpenCustomerDetail = openCustomerDetail;
+function openCustomerDetailCRM(customerId) {
+    // Use the full CRM profile instead of the modal
+    openCrmProfile(customerId);
+}
+
+// Scanner Functions
+window.openDocumentScanner = openDocumentScanner;
+window.closeDocumentScanner = closeDocumentScanner;
+window.handleDragOver = handleDragOver;
+window.handleDragLeave = handleDragLeave;
+window.handleDrop = handleDrop;
+window.handleFileSelect = handleFileSelect;
+window.removeUpload = removeUpload;
+window.openCamera = openCamera;
+window.startAIRecognition = startAIRecognition;
+window.goToStep2 = goToStep2;
+window.goToStep3 = goToStep3;
+window.createCustomerFromScan = createCustomerFromScan;
+window.showBulkImport = showBulkImport;
+
+// CRM Functions
+window.openCrmProfile = openCrmProfile;
+window.closeCrmProfile = closeCrmProfile;
+window.showCrmSection = showCrmSection;
+window.crmCall = crmCall;
+window.crmEmail = crmEmail;
+window.crmSchedule = crmSchedule;
+window.crmNote = crmNote;
+window.editStammdaten = editStammdaten;
+
 // Initialize module selector on DOM ready
 document.addEventListener('DOMContentLoaded', initModuleSelector);
 
