@@ -11,8 +11,10 @@
             <div class="portfolio-kpi-box clickable" onclick="filterByAll()">
                 <div class="kpi-icon blue">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                 </div>
                 <div class="kpi-content">
@@ -20,8 +22,7 @@
                     <div class="kpi-value">10.234</div>
                     <div class="kpi-change negative">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
-                            <polyline points="17 18 23 18 23 12"></polyline>
+                            <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
                         +127 zur Vorwoche
                     </div>
@@ -39,8 +40,7 @@
                     <div class="kpi-value">€ 47,8 Mio</div>
                     <div class="kpi-change negative">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
-                            <polyline points="17 18 23 18 23 12"></polyline>
+                            <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
                         +€ 1,2 Mio
                     </div>
@@ -58,8 +58,7 @@
                     <div class="kpi-value highlight-green">68,4%</div>
                     <div class="kpi-change positive">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                            <polyline points="17 6 23 6 23 12"></polyline>
+                            <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
                         +2,3% vs. Vormonat
                     </div>
@@ -77,14 +76,13 @@
                     <div class="kpi-value">47</div>
                     <div class="kpi-change positive">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                            <polyline points="17 6 23 6 23 12"></polyline>
+                            <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                         -3 Tage vs. Vorwoche
                     </div>
                 </div>
             </div>
-            <div class="portfolio-kpi-box clickable" onclick="showTasks()">
+            <div class="portfolio-kpi-box clickable" onclick="showBankenSection('aufgaben')">
                 <div class="kpi-icon red">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                         <path d="M9 11l3 3L22 4"></path>
@@ -96,7 +94,9 @@
                     <div class="kpi-value">156</div>
                     <div class="kpi-change neutral pulse-text">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                         23 überfällig
                     </div>
@@ -104,35 +104,9 @@
             </div>
         </div>
 
-        <!-- Action Bar with Scan -->
-        <div class="action-bar">
+        <!-- Action Bar with Quick Actions and Today Stats -->
+        <div class="action-bar compact">
             <div class="action-bar-left">
-                <button class="btn-primary" onclick="openDocumentScanner()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                    Akte scannen / Neuer Kunde
-                </button>
-                <button class="btn-secondary" onclick="showBulkImport()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    Bulk-Import
-                </button>
-                <button class="btn-secondary" onclick="downloadDashboardSummary()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    Zusammenfassung
-                </button>
-            </div>
-            <div class="action-bar-right">
                 <div class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -140,6 +114,52 @@
                     </svg>
                     <input type="text" placeholder="Kunden-Nr, Name oder IBAN suchen..." oninput="searchCustomers(this.value)">
                 </div>
+            </div>
+            <div class="action-bar-center">
+                <div class="inline-stats">
+                    <div class="inline-stat" onclick="showNewCases()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                        <span class="stat-label">Neue Fälle</span>
+                        <span class="stat-value blue">47</span>
+                    </div>
+                    <div class="inline-stat" onclick="showPayments()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        <span class="stat-label">Zahlungen</span>
+                        <span class="stat-value green">31</span>
+                    </div>
+                    <div class="inline-stat" onclick="showPromises()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span class="stat-label">Versprechen</span>
+                        <span class="stat-value purple">18</span>
+                    </div>
+                </div>
+            </div>
+            <div class="action-bar-right">
+                <button class="btn-icon" onclick="startMahnlauf()" title="Mahnlauf starten">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </button>
+                <button class="btn-icon" onclick="exportReport()" title="Report generieren">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -244,8 +264,8 @@
                 </div>
             </div>
 
-            <!-- Right Sidebar -->
-            <div class="dashboard-sidebar">
+            <!-- Right Sidebar - Compact -->
+            <div class="dashboard-sidebar compact">
                 <!-- DPD Buckets -->
                 <div class="sidebar-card">
                     <h4>Verzugsbuckets (DPD)</h4>
@@ -279,56 +299,6 @@
                                 <span class="bucket-count">2.344</span>
                                 <span class="bucket-volume">€ 14,2 Mio</span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="sidebar-card">
-                    <h4>Schnellaktionen</h4>
-                    <div class="quick-actions">
-                        <button class="quick-action-btn primary-action" onclick="openDocumentScanner()">
-                            <span class="action-icon">📷</span>
-                            <div class="action-text">
-                                <strong>Dokument erfassen</strong>
-                                <small>KI-gestützte Datenextraktion</small>
-                            </div>
-                        </button>
-                        <button class="quick-action-btn" onclick="startMahnlauf()">
-                            <span class="action-icon">📤</span>
-                            <div class="action-text">
-                                <strong>Mahnlauf starten</strong>
-                                <small>Nächster geplant: 20.12.2025</small>
-                            </div>
-                        </button>
-                        <button class="quick-action-btn" onclick="exportReport()">
-                            <span class="action-icon">📊</span>
-                            <div class="action-text">
-                                <strong>Report generieren</strong>
-                                <small>Excel, PDF oder DATEV</small>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Today's Highlights -->
-                <div class="sidebar-card">
-                    <h4>Heute</h4>
-                    <div class="today-highlights">
-                        <div class="highlight-item" onclick="showNewCases()">
-                            <span class="highlight-icon blue">🆕</span>
-                            <span class="highlight-label">Neue Fälle</span>
-                            <span class="highlight-count blue">47</span>
-                        </div>
-                        <div class="highlight-item" onclick="showPayments()">
-                            <span class="highlight-icon green">💳</span>
-                            <span class="highlight-label">Zahlungseingänge</span>
-                            <span class="highlight-count green">31</span>
-                        </div>
-                        <div class="highlight-item" onclick="showPromises()">
-                            <span class="highlight-icon purple">🤝</span>
-                            <span class="highlight-label">Zahlungsversprechen</span>
-                            <span class="highlight-count purple">18</span>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,1072 @@
+<!-- Bestandsuebertragung Module: Portfolio Transfer Management -->
+<div class="bestand-page">
+    <!-- Module Header with Back Button -->
+    <div class="bestand-module-header">
+        <button class="back-button" onclick="closeBestandsuebertragung()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Zurück
+        </button>
+        <div class="bestand-header-info">
+            <div class="bestand-logo-small">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </div>
+            <div class="bestand-header-text">
+                <h1 class="bestand-page-title">Bestandsübertragung</h1>
+                <div class="bestand-subtitle">Sales Operations | Portfolio Transfer Management</div>
+            </div>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <svg width="100" height="36" viewBox="0 0 100 36" fill="none">
+                    <rect width="100" height="36" rx="4" fill="#C8102E"/>
+                    <text x="50" y="24" text-anchor="middle" fill="white" font-size="16" font-weight="bold">ERGO</text>
+                </svg>
+            </div>
+            <h1>Bestandsübertragung</h1>
+        </div>
+        <div class="header-actions">
+            <label class="btn btn-secondary">
+                <span class="icon">↓</span> JSON Import
+                <input type="file" id="fileInput" accept=".json" hidden>
+            </label>
+            <button class="btn btn-secondary" id="downloadDemoBtn" title="1000 Demo-E-Mails herunterladen">
+                <span class="icon">↑</span> Demo JSON
+            </button>
+            <button class="btn btn-secondary" id="resetDemoBtn" title="Demo-Daten zurücksetzen">
+                <span class="icon">↻</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Haupt-Navigation -->
+    <nav class="main-nav">
+        <button class="nav-btn active" data-view="dashboard">
+            Dashboard
+        </button>
+        <button class="nav-btn" data-view="vorgaenge">
+            Vorgänge
+            <span class="nav-count" id="vorgaengeCount">0</span>
+        </button>
+        <button class="nav-btn" data-view="makler">
+            Makler
+            <span class="nav-count" id="maklerNavCount">0</span>
+        </button>
+        <button class="nav-btn" data-view="emails">
+            E-Mails
+            <span class="nav-count" id="emailsNavCount">0</span>
+        </button>
+        <button class="nav-btn" data-view="architektur">
+            Architektur
+        </button>
+        <button class="nav-btn" data-view="vorlagen">
+            E-Mail Vorlagen
+        </button>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Dashboard -->
+    <!-- ============================================ -->
+    <section class="view active" id="view-dashboard">
+        <!-- KPI Cards - Workflow-Schritte -->
+        <div class="kpi-grid">
+            <div class="kpi-card kpi-total">
+                <div class="kpi-icon">◉</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpiTotal">0</div>
+                    <div class="kpi-label">Vorgänge gesamt</div>
+                </div>
+            </div>
+            <div class="kpi-card kpi-ki-recognized">
+                <div class="kpi-icon">◈</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpiKiRecognized">0</div>
+                    <div class="kpi-label">Von KI erkannt</div>
+                    <div class="kpi-percent" id="kpiKiRecognizedPct">0%</div>
+                </div>
+            </div>
+            <div class="kpi-card kpi-pv-validated">
+                <div class="kpi-icon">✓</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpiPvValidated">0</div>
+                    <div class="kpi-label">Von PV validiert</div>
+                    <div class="kpi-percent" id="kpiPvValidatedPct">0%</div>
+                </div>
+            </div>
+            <div class="kpi-card kpi-export-ready kpi-card-clickable kpi-card-with-action" id="exportReadyBtn">
+                <div class="kpi-icon">↑</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpiExportReady">0</div>
+                    <div class="kpi-label">Export-Bereit</div>
+                    <div class="kpi-percent" id="kpiExportReadyPct">0%</div>
+                </div>
+                <button class="kpi-hover-action" id="exportToRoboticsBtn" title="Nach Robotics exportieren">
+                    Exportieren
+                </button>
+            </div>
+            <div class="kpi-card kpi-exportiert">
+                <div class="kpi-icon">↗</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpiExportiert">0</div>
+                    <div class="kpi-label">Exportiert</div>
+                    <div class="kpi-percent" id="kpiExportiertPct">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card card-incomplete">
+                <h3>Vorgänge ergänzen</h3>
+                <p class="card-description">Unvollständige Vorgänge mit fehlenden Daten.</p>
+                <div class="incomplete-count" id="incompleteCount">0</div>
+                <button class="btn btn-warning btn-large" id="showIncompleteBtn">
+                    <span class="icon">◇</span> Unvollständige anzeigen
+                </button>
+            </div>
+            <div class="dashboard-card card-validation">
+                <h3>Offene Validierung</h3>
+                <p class="card-description">Von KI erkannte Vorgänge die noch validiert werden müssen.</p>
+                <div class="validation-count" id="validationPendingCount">0</div>
+                <div class="validation-buttons">
+                    <button class="btn btn-secondary btn-large" id="validateAllBtn">
+                        <span class="icon">✓</span> Offene validieren
+                    </button>
+                    <button class="btn btn-primary btn-large" id="massValidateBtn">
+                        <span class="icon">⚡</span> Massenvalidierung
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vorgangssuche mit Live-Ergebnissen -->
+        <div class="dashboard-card dashboard-wide">
+            <h3>Vorgangssuche</h3>
+            <div class="search-box search-box-large">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="dashboardSearch" placeholder="Kunde, VS-Nr oder Makler suchen...">
+            </div>
+            <div id="dashboardSearchResults" class="search-results-live"></div>
+        </div>
+
+        <!-- Letzte Aktivitäten -->
+        <div class="dashboard-card dashboard-wide">
+            <div class="activity-header">
+                <h3>Letzte Aktivitäten</h3>
+                <div class="activity-controls">
+                    <select id="activityStatusFilter">
+                        <option value="">Alle Status</option>
+                        <option value="unvollstaendig">◇ Unvollständig</option>
+                        <option value="zu-validieren">◐ Zu Validieren</option>
+                        <option value="export-bereit">● Export-Bereit</option>
+                        <option value="abgeschlossen">✓ Abgeschlossen</option>
+                        <option value="abgelehnt">✕ Abgelehnt</option>
+                        <option value="wiedervorlage">⟳ Wiedervorlage</option>
+                    </select>
+                    <select id="activitySort">
+                        <option value="desc">Neueste zuerst</option>
+                        <option value="asc">Älteste zuerst</option>
+                    </select>
+                </div>
+            </div>
+            <table class="data-table compact">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Kunde</th>
+                        <th>Makler</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentActivityBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Import/Export Historie -->
+        <div class="dashboard-card dashboard-wide">
+            <h3>Import/Export Historie</h3>
+            <table class="data-table compact">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Typ</th>
+                        <th>Anzahl</th>
+                        <th>Bearbeiter</th>
+                    </tr>
+                </thead>
+                <tbody id="importExportHistory"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Vorgänge (Status-gruppierte Liste) -->
+    <!-- ============================================ -->
+    <section class="view" id="view-vorgaenge">
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="vorgaengeSearch" placeholder="Kunde, VS-Nr oder Makler suchen...">
+            </div>
+            <select id="filterSparte">
+                <option value="">Alle Sparten</option>
+                <option value="KFZ">KFZ</option>
+                <option value="Leben">Leben</option>
+                <option value="Kranken">Kranken</option>
+                <option value="Haftpflicht">Haftpflicht</option>
+                <option value="Hausrat">Hausrat</option>
+                <option value="Rechtsschutz">Rechtsschutz</option>
+                <option value="Unfall">Unfall</option>
+                <option value="BU">BU</option>
+                <option value="Wohngebäude">Wohngebäude</option>
+                <option value="Rente">Rente</option>
+            </select>
+            <select id="filterExport">
+                <option value="">Alle</option>
+                <option value="not-exported">Nicht exportiert</option>
+                <option value="exported">Bereits exportiert</option>
+            </select>
+            <button class="btn btn-primary" id="newCaseBtn">+ Neuer Vorgang</button>
+        </div>
+
+        <!-- Status-gruppierte Liste -->
+        <div class="cases-grouped" id="casesGroupedContainer">
+            <!-- Dynamisch gefüllt -->
+        </div>
+        <div class="empty-state" id="vorgaengeEmpty" style="display: none;">
+            <p>Keine Vorgänge gefunden</p>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Makler -->
+    <!-- ============================================ -->
+    <section class="view" id="view-makler">
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="maklerSearch" placeholder="Makler suchen...">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="maklerTable">
+                <thead>
+                    <tr>
+                        <th class="col-makler-name sortable" data-sort="name">Maklerbüro</th>
+                        <th class="col-makler-email">E-Mail</th>
+                        <th class="col-number sortable" data-sort="total">Vorgänge</th>
+                        <th class="col-number sortable" data-sort="bestaetigt">Bestätigt</th>
+                        <th class="col-number sortable" data-sort="offen">Offen</th>
+                        <th class="col-number sortable" data-sort="abgelehnt">Abgelehnt</th>
+                    </tr>
+                </thead>
+                <tbody id="maklerTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="maklerEmpty" style="display: none;">
+                <p>Keine Makler gefunden</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- VIEW: E-Mails -->
+    <!-- ============================================ -->
+    <section class="view" id="view-emails">
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="emailSearch" placeholder="In E-Mails suchen...">
+            </div>
+            <select id="emailSort">
+                <option value="desc">Neueste zuerst</option>
+                <option value="asc">Älteste zuerst</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table" id="emailsTable">
+                <thead>
+                    <tr>
+                        <th class="col-direction"></th>
+                        <th class="col-datum">Datum</th>
+                        <th class="col-sender">Von / An</th>
+                        <th class="col-subject">Betreff</th>
+                        <th class="col-kunde">Kunde</th>
+                        <th class="col-status">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="emailsTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="emailsEmpty" style="display: none;">
+                <p>Keine E-Mails gefunden</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Architektur -->
+    <!-- ============================================ -->
+    <section class="view" id="view-architektur">
+        <div class="architecture-container">
+            <h2 class="architecture-title">Lösungsarchitektur Bestandsübertragung</h2>
+            <p class="architecture-intro">Übersicht der verschiedenen Implementierungsoptionen für die automatisierte Bestandsübertragung.</p>
+
+            <!-- Option 1: Ohne KI -->
+            <div class="architecture-card">
+                <div class="architecture-header">
+                    <span class="architecture-number">1</span>
+                    <h3>Ohne KI (Stichwortbasiert)</h3>
+                    <span class="architecture-badge badge-simple">Einfachste Lösung</span>
+                </div>
+                <p class="architecture-description">
+                    Rein regelbasierte Extraktion mittels Stichwortverzeichnis. Keine KI-Komponente erforderlich.
+                </p>
+                <div class="architecture-flow">
+                    <div class="flow-step">
+                        <div class="flow-icon">✉</div>
+                        <div class="flow-label">Outlook</div>
+                        <div class="flow-detail">E-Mail Export Tool</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">⌕</div>
+                        <div class="flow-label">Web-Tool</div>
+                        <div class="flow-detail">Stichwortverzeichnis</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">✓</div>
+                        <div class="flow-label">PV Validierung</div>
+                        <div class="flow-detail">Manuelle Prüfung</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">⚙</div>
+                        <div class="flow-label">Robotics</div>
+                        <div class="flow-detail">JSON Export</div>
+                    </div>
+                </div>
+                <div class="architecture-pros-cons">
+                    <div class="pros">
+                        <h4>✓ Vorteile</h4>
+                        <ul>
+                            <li>Keine zusätzliche Infrastruktur</li>
+                            <li>Sofort einsetzbar</li>
+                            <li>Geringe Kosten</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>✕ Nachteile</h4>
+                        <ul>
+                            <li>Höherer manueller Aufwand</li>
+                            <li>Begrenzte Erkennungsqualität</li>
+                            <li>Kein Lernen aus Fehlern</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 2: Mit KI -->
+            <div class="architecture-card architecture-card-ai">
+                <div class="architecture-header">
+                    <span class="architecture-number">2</span>
+                    <h3>Mit KI (Agent-basiert)</h3>
+                    <span class="architecture-badge badge-advanced">Empfohlen</span>
+                </div>
+                <p class="architecture-description">
+                    KI-Agent extrahiert strukturierte Daten aus E-Mails. Höhere Erkennungsrate und kontinuierliche Verbesserung.
+                </p>
+
+                <!-- Sub-Option 2a: ERGO Lösung -->
+                <div class="architecture-suboption">
+                    <div class="suboption-header">
+                        <span class="suboption-letter">A</span>
+                        <h4>ERGO-Lösung (Interne Agent-Plattform)</h4>
+                    </div>
+                    <p class="suboption-description">
+                        Agent wird auf ERGO-eigener Plattform gehostet. Volle Kontrolle über Daten und Infrastruktur.
+                    </p>
+                    <div class="architecture-flow">
+                        <div class="flow-step">
+                            <div class="flow-icon">✉</div>
+                            <div class="flow-label">Outlook</div>
+                            <div class="flow-detail">E-Mail Export</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step flow-step-highlight">
+                            <div class="flow-icon">◈</div>
+                            <div class="flow-label">ERGO Agent</div>
+                            <div class="flow-detail">Interne Plattform</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">⌕</div>
+                            <div class="flow-label">Web-Tool</div>
+                            <div class="flow-detail">+ PV Validierung</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">⚙</div>
+                            <div class="flow-label">Robotics</div>
+                            <div class="flow-detail">JSON Export</div>
+                        </div>
+                    </div>
+                    <div class="suboption-requirement">
+                        <strong>Voraussetzung:</strong> ERGO Agent-Plattform für Hosting des KI-Agenten
+                    </div>
+                </div>
+
+                <!-- Sub-Option 2b: Deloitte Lösung -->
+                <div class="architecture-suboption">
+                    <div class="suboption-header">
+                        <span class="suboption-letter">B</span>
+                        <h4>Deloitte-Lösung (Externe Agent-API)</h4>
+                    </div>
+                    <p class="suboption-description">
+                        Deloitte stellt den Agenten als Service bereit. Zwei Varianten für den Datenaustausch:
+                    </p>
+
+                    <!-- Variante B1: Direkte API -->
+                    <div class="architecture-variant">
+                        <h5><span class="variant-badge">B1</span> Direkte API-Verbindung</h5>
+                        <div class="architecture-flow architecture-flow-small">
+                            <div class="flow-step">
+                                <div class="flow-icon">✉</div>
+                                <div class="flow-label">E-Mails</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step flow-step-deloitte">
+                                <div class="flow-icon">◈</div>
+                                <div class="flow-label">Deloitte API</div>
+                                <div class="flow-detail">Echtzeit</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-icon">⌕</div>
+                                <div class="flow-label">Web-Tool</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-icon">⚙</div>
+                                <div class="flow-label">Robotics</div>
+                            </div>
+                        </div>
+                        <p class="variant-note">Direkte Verbindung zum Agenten - Antwort in Echtzeit. Aufwändigere Integration.</p>
+                    </div>
+
+                    <!-- Variante B2: Batch-Austausch -->
+                    <div class="architecture-variant">
+                        <h5><span class="variant-badge">B2</span> Sicherer Batch-Datenaustausch</h5>
+                        <div class="architecture-flow architecture-flow-small">
+                            <div class="flow-step">
+                                <div class="flow-icon">✉</div>
+                                <div class="flow-label">E-Mails</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step flow-step-transfer">
+                                <div class="flow-icon">↔</div>
+                                <div class="flow-label">Sicherer Transfer</div>
+                                <div class="flow-detail">z.B. 1x/Woche</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step flow-step-deloitte">
+                                <div class="flow-icon">◈</div>
+                                <div class="flow-label">Deloitte Agent</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step flow-step-transfer">
+                                <div class="flow-icon">↔</div>
+                                <div class="flow-label">Rücktransfer</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-icon">⌕</div>
+                                <div class="flow-label">Web-Tool</div>
+                            </div>
+                        </div>
+                        <p class="variant-note">Periodischer Datenaustausch über sichere Kanäle. Einfachere Integration, aber zeitversetzt.</p>
+                    </div>
+                </div>
+
+                <div class="architecture-pros-cons">
+                    <div class="pros">
+                        <h4>✓ Vorteile KI-Lösung</h4>
+                        <ul>
+                            <li>Höhere Erkennungsqualität (>95%)</li>
+                            <li>Weniger manuelle Nacharbeit</li>
+                            <li>Kontinuierliches Lernen</li>
+                            <li>Skalierbar</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>✕ Nachteile</h4>
+                        <ul>
+                            <li>Zusätzliche Infrastruktur/Kosten</li>
+                            <li>Datenschutz-Anforderungen</li>
+                            <li>Längere Implementierungszeit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empfehlung -->
+            <div class="architecture-recommendation">
+                <h3>💡 Empfehlung</h3>
+                <p>
+                    <strong>Kurzfristig:</strong> Start mit Lösung 1 (Stichwortbasiert) für schnellen Go-Live.<br>
+                    <strong>Mittelfristig:</strong> Migration zu Lösung 2A (ERGO Agent-Plattform) für optimale Kontrolle und Datenhoheit.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- VIEW: E-Mail Vorlagen -->
+    <!-- ============================================ -->
+    <section class="view" id="view-vorlagen">
+        <div class="vorlagen-container">
+            <h2>E-Mail Vorlagen</h2>
+            <p class="text-muted" style="margin-bottom: 1.5rem;">Klicken Sie auf "Kopieren" um den Text in die Zwischenablage zu kopieren.</p>
+
+            <div class="vorlagen-grid">
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>1. Bestandsübertragung anfragen</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="tpl1">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="tpl1">Sehr geehrte Damen und Herren,
+
+hiermit beantragen wir die Bestandsübertragung für unseren Kunden Hans Müller.
+
+Versicherungsnummer: ERG-7823456
+Sparte: KFZ
+Gewünschter Übertragungstermin: 01.01.2026
+
+Die unterschriebene Maklervollmacht liegt diesem Schreiben bei.
+
+Mit freundlichen Grüßen
+Thomas Meier
+Versicherungsmakler</div>
+                </div>
+
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>2. Rückfrage fehlende Versicherungsnummer</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="tpl2">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="tpl2">Sehr geehrte Damen und Herren,
+
+bezugnehmend auf unseren Antrag zur Bestandsübertragung für Ralf Seidel bitten wir um Mitteilung der korrekten Versicherungsnummer.
+
+In den uns vorliegenden Unterlagen konnte die VS-Nr nicht eindeutig identifiziert werden.
+
+Vielen Dank für Ihre Rückmeldung.
+
+Mit freundlichen Grüßen
+Martina Koch
+Versicherungsmaklerin</div>
+                </div>
+
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>3. Nachreichung Maklervollmacht</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="tpl3">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="tpl3">Sehr geehrte Damen und Herren,
+
+in der Anlage übersende ich Ihnen die nachgeforderte Maklervollmacht für die Kundin Birgit Franke.
+
+Versicherungsnummer: ERG-4432109
+
+Ich bitte um Fortsetzung der Bestandsübertragung.
+
+Mit freundlichen Grüßen
+Stefan Zimmermann
+Versicherungsmakler</div>
+                </div>
+
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>4. Statusanfrage laufende Übertragung</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="tpl4">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="tpl4">Sehr geehrte Damen und Herren,
+
+ich erlaube mir, nach dem Stand unserer Bestandsübertragung zu fragen.
+
+Kunde: Christine Weber
+Versicherungsnummer: ERG-4512378
+Antragsdatum: 15.10.2024
+
+Über eine zeitnahe Rückmeldung würde ich mich freuen.
+
+Mit freundlichen Grüßen
+Sandra Schmidt
+Versicherungsmaklerin</div>
+                </div>
+
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>5. Bestätigung an Makler weiterleiten</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="tpl5">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="tpl5">Sehr geehrter Herr Meier,
+
+wir freuen uns, Ihnen mitteilen zu können, dass die Bestandsübertragung für Ihren Kunden Hans Müller bestätigt wurde.
+
+Versicherungsnummer: ERG-7823456
+Wirksam ab: 01.01.2026
+
+Sie sind nun als betreuender Makler für diesen Vertrag hinterlegt.
+
+Bei Fragen stehen wir Ihnen gerne zur Verfügung.
+
+Mit freundlichen Grüßen
+ERGO Maklerservice</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- MODAL: Vorgang Detail (Komplett neu) -->
+    <!-- ============================================ -->
+    <div class="modal-overlay" id="caseModal" style="display: none;">
+        <div class="modal modal-xlarge">
+            <div class="modal-header">
+                <h2 id="modalTitle">Vorgang</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body case-detail-body">
+                <form id="caseForm">
+                    <input type="hidden" id="caseId">
+
+                    <!-- Workflow Timeline -->
+                    <div class="workflow-section">
+                        <h3>Prozess-Status</h3>
+                        <div class="workflow-timeline" id="workflowTimeline">
+                            <div class="workflow-step" data-step="mailReceived">
+                                <div class="step-icon">◉</div>
+                                <div class="step-content">
+                                    <div class="step-label">Mail erhalten</div>
+                                    <div class="step-date" id="stepMailReceived">–</div>
+                                </div>
+                            </div>
+                            <div class="workflow-connector"></div>
+                            <div class="workflow-step" data-step="mailUploaded">
+                                <div class="step-icon">↑</div>
+                                <div class="step-content">
+                                    <div class="step-label">Importiert</div>
+                                    <div class="step-date" id="stepMailUploaded">–</div>
+                                </div>
+                            </div>
+                            <div class="workflow-connector"></div>
+                            <div class="workflow-step" data-step="kiRecognized">
+                                <div class="step-icon">◈</div>
+                                <div class="step-content">
+                                    <div class="step-label">Von KI erkannt</div>
+                                    <div class="step-date" id="stepKiRecognized">–</div>
+                                </div>
+                            </div>
+                            <div class="workflow-connector"></div>
+                            <div class="workflow-step" data-step="pvValidated">
+                                <div class="step-icon">✓</div>
+                                <div class="step-content">
+                                    <div class="step-label">Von PV validiert</div>
+                                    <div class="step-date" id="stepPvValidated">–</div>
+                                </div>
+                            </div>
+                            <div class="workflow-connector"></div>
+                            <div class="workflow-step" data-step="exported">
+                                <div class="step-icon">↗</div>
+                                <div class="step-content">
+                                    <div class="step-label">Exportiert</div>
+                                    <div class="step-date" id="stepExported">–</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zwei-Spalten Layout -->
+                    <div class="case-detail-columns">
+                        <!-- Linke Spalte: Stammdaten -->
+                        <div class="case-detail-left">
+                            <div class="stammdaten-card">
+                                <h3>Stammdaten</h3>
+                                <div class="stammdaten-grid">
+                                    <div class="stammdaten-item">
+                                        <label>Kunde (VN)</label>
+                                        <input type="text" id="caseKunde" placeholder="Nachname, Vorname">
+                                    </div>
+                                    <div class="stammdaten-item">
+                                        <label>VS-Nr</label>
+                                        <input type="text" id="caseVsNr" placeholder="ERG-12345678">
+                                    </div>
+                                    <div class="stammdaten-item">
+                                        <label>Sparte</label>
+                                        <select id="caseSparte">
+                                            <option value="">– Auswählen –</option>
+                                            <option value="KFZ">KFZ</option>
+                                            <option value="Leben">Leben</option>
+                                            <option value="Kranken">Kranken</option>
+                                            <option value="Haftpflicht">Haftpflicht</option>
+                                            <option value="Hausrat">Hausrat</option>
+                                            <option value="Rechtsschutz">Rechtsschutz</option>
+                                            <option value="Unfall">Unfall</option>
+                                            <option value="BU">BU</option>
+                                            <option value="Wohngebäude">Wohngebäude</option>
+                                            <option value="Rente">Rente</option>
+                                        </select>
+                                    </div>
+                                    <div class="stammdaten-item">
+                                        <label>Gültig ab</label>
+                                        <input type="text" id="caseDatum" placeholder="TT.MM.JJJJ">
+                                    </div>
+                                    <div class="stammdaten-item">
+                                        <label>Maklerbüro</label>
+                                        <input type="text" id="caseMaklerName" placeholder="Name des Maklerbüros">
+                                    </div>
+                                    <div class="stammdaten-item">
+                                        <label>Makler E-Mail</label>
+                                        <input type="email" id="caseMaklerEmail" placeholder="makler@beispiel.de">
+                                    </div>
+                                    <div class="stammdaten-item full-width">
+                                        <label>Status</label>
+                                        <select id="caseStatus">
+                                            <option value="unvollstaendig">◇ Unvollständig</option>
+                                            <option value="zu-validieren">◐ Zu Validieren</option>
+                                            <option value="export-bereit">● Export-Bereit</option>
+                                            <option value="abgeschlossen">✓ Abgeschlossen</option>
+                                            <option value="abgelehnt">✕ Abgelehnt</option>
+                                            <option value="wiedervorlage">⟳ Wiedervorlage</option>
+                                        </select>
+                                    </div>
+                                    <div class="stammdaten-item full-width">
+                                        <label>Notizen</label>
+                                        <textarea id="caseNotes" rows="2" placeholder="Interne Notizen..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Erkannte Schlagwörter -->
+                            <div class="keywords-card">
+                                <h3>Erkannte Schlagwörter</h3>
+                                <div class="keywords-list" id="keywordsList">
+                                    <!-- Dynamisch gefüllt -->
+                                </div>
+                            </div>
+
+                            <!-- Verknüpfte Vorgänge (aus Sammelmail) -->
+                            <div class="linked-cases-card" id="linkedCasesCard" style="display: none;">
+                                <h3>Verknüpfte Vorgänge <span class="badge" id="linkedCasesCount">0</span></h3>
+                                <p class="card-description">Weitere Vorgänge aus derselben E-Mail</p>
+                                <div class="linked-cases-list" id="linkedCasesList">
+                                    <!-- Dynamisch gefüllt -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rechte Spalte: E-Mails -->
+                        <div class="case-detail-right">
+                            <div class="emails-card">
+                                <h3>E-Mail Verlauf <span class="badge" id="modalMailCount">0</span></h3>
+                                <div class="email-timeline" id="emailTimeline">
+                                    <!-- Dynamisch gefüllt -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="deleteCase">Löschen</button>
+                <button class="btn btn-warning" id="validateCaseBtn" style="display: none;">
+                    <span class="icon">✓</span> Validieren
+                </button>
+                <div class="modal-footer-right">
+                    <button class="btn btn-secondary" id="cancelCase">Abbrechen</button>
+                    <button class="btn btn-primary" id="saveCase">Speichern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Makler Details -->
+    <div class="modal-overlay" id="maklerModal" style="display: none;">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2 id="maklerModalTitle">Makler</h2>
+                <button class="modal-close" id="maklerModalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="makler-info" id="maklerInfo"></div>
+                <h3>Vorgänge dieses Maklers</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Kunde</th>
+                            <th>VS-Nr</th>
+                            <th>Sparte</th>
+                            <th>Letzte Aktivität</th>
+                        </tr>
+                    </thead>
+                    <tbody id="maklerCasesBody"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeMaklerModal">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Export Dialog -->
+    <div class="modal-overlay" id="exportModal" style="display: none;">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2>Robotics Export</h2>
+                <button class="modal-close" id="exportModalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <p><strong id="exportCaseCount">0</strong> Vorgänge werden exportiert.</p>
+                <div class="form-group">
+                    <label for="exporterName">Bearbeiter</label>
+                    <input type="text" id="exporterName" placeholder="Ihr Name" required>
+                </div>
+                <p class="text-muted">Die exportierten Vorgänge werden als "exportiert" markiert.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelExport">Abbrechen</button>
+                <button class="btn btn-primary" id="confirmExport">
+                    <span class="icon">↑</span> Exportieren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Validierung Schritt-für-Schritt -->
+    <div class="modal-overlay" id="validationModal" style="display: none;">
+        <div class="modal modal-medium">
+            <div class="modal-header">
+                <h2>PV-Validierung</h2>
+                <div class="validation-progress">
+                    <span id="validationCurrent">1</span> / <span id="validationTotal">0</span>
+                </div>
+                <button class="modal-close" id="validationModalClose">×</button>
+            </div>
+            <div class="modal-body validation-body">
+                <div class="validation-case-data">
+                    <p class="validation-hint">Klicken Sie auf ein Feld zum Bearbeiten. Änderungen werden gespeichert.</p>
+                    <div class="validation-field">
+                        <label class="field-label">Kunde (VN)</label>
+                        <input type="text" class="field-input" id="valKunde" placeholder="-">
+                    </div>
+                    <div class="validation-field">
+                        <label class="field-label">VS-Nr</label>
+                        <input type="text" class="field-input" id="valVsNr" placeholder="-">
+                    </div>
+                    <div class="validation-field">
+                        <label class="field-label">Sparte</label>
+                        <select class="field-input" id="valSparte">
+                            <option value="">-</option>
+                            <option value="KFZ">KFZ</option>
+                            <option value="Leben">Leben</option>
+                            <option value="Kranken">Kranken</option>
+                            <option value="Haftpflicht">Haftpflicht</option>
+                            <option value="Hausrat">Hausrat</option>
+                            <option value="Rechtsschutz">Rechtsschutz</option>
+                            <option value="Unfall">Unfall</option>
+                            <option value="BU">BU</option>
+                            <option value="Wohngebäude">Wohngebäude</option>
+                            <option value="Rente">Rente</option>
+                        </select>
+                    </div>
+                    <div class="validation-field">
+                        <label class="field-label">Gültig ab</label>
+                        <input type="date" class="field-input" id="valDatum">
+                    </div>
+                    <div class="validation-field">
+                        <label class="field-label">Makler</label>
+                        <input type="text" class="field-input" id="valMakler" placeholder="-">
+                    </div>
+                    <div class="validation-field">
+                        <label class="field-label">Wiedervorlage</label>
+                        <input type="date" class="field-input" id="valWiedervorlage">
+                    </div>
+                </div>
+                <div class="validation-email-preview">
+                    <h4>E-Mail Auszug <span class="highlight-hint">(Stichworte markiert)</span></h4>
+                    <div class="email-preview-content" id="valEmailPreview">-</div>
+                </div>
+                <!-- Ablehnungsgrund (zunächst versteckt) -->
+                <div class="validation-reject-section" id="valRejectSection" style="display: none;">
+                    <label class="field-label">Ablehnungsgrund</label>
+                    <textarea class="field-input" id="valRejectReason" rows="3" placeholder="Bitte Grund für Ablehnung angeben..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer validation-footer">
+                <button class="btn btn-secondary" id="validationSkip">
+                    Überspringen →
+                </button>
+                <button class="btn btn-danger" id="validationReject">
+                    <span class="icon">✕</span> Ablehnen
+                </button>
+                <button class="btn btn-warning" id="validationWiedervorlage">
+                    <span class="icon">⟳</span> Wiedervorlage
+                </button>
+                <button class="btn btn-success" id="validationConfirm">
+                    <span class="icon">✓</span> Validieren
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: E-Mail Vorlagen -->
+    <div class="modal-overlay" id="emailTemplatesModal" style="display: none;">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2>E-Mail Vorlagen</h2>
+                <button class="modal-close" id="emailTemplatesModalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted" style="margin-bottom: 1rem;">Klicken Sie auf "Kopieren" um den Text in die Zwischenablage zu kopieren.</p>
+
+                <!-- Vorlage 1: Bestandsübertragung anfragen -->
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>1. Bestandsübertragung anfragen</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="template1">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="template1">Sehr geehrte Damen und Herren,
+
+hiermit beantragen wir die Bestandsübertragung für unseren Kunden Hans Müller.
+
+Versicherungsnummer: ERG-7823456
+Sparte: KFZ
+Gewünschter Übertragungstermin: 01.01.2026
+
+Die unterschriebene Maklervollmacht liegt diesem Schreiben bei.
+
+Mit freundlichen Grüßen
+Thomas Meier
+Versicherungsmakler</div>
+                </div>
+
+                <!-- Vorlage 2: Rückfrage VS-Nr -->
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>2. Rückfrage fehlende Versicherungsnummer</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="template2">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="template2">Sehr geehrte Damen und Herren,
+
+bezugnehmend auf unseren Antrag zur Bestandsübertragung für Ralf Seidel bitten wir um Mitteilung der korrekten Versicherungsnummer.
+
+In den uns vorliegenden Unterlagen konnte die VS-Nr nicht eindeutig identifiziert werden.
+
+Vielen Dank für Ihre Rückmeldung.
+
+Mit freundlichen Grüßen
+Martina Koch
+Versicherungsmaklerin</div>
+                </div>
+
+                <!-- Vorlage 3: Nachreichung Vollmacht -->
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>3. Nachreichung Maklervollmacht</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="template3">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="template3">Sehr geehrte Damen und Herren,
+
+in der Anlage übersende ich Ihnen die nachgeforderte Maklervollmacht für die Kundin Birgit Franke.
+
+Versicherungsnummer: ERG-4432109
+
+Ich bitte um Fortsetzung der Bestandsübertragung.
+
+Mit freundlichen Grüßen
+Stefan Zimmermann
+Versicherungsmakler</div>
+                </div>
+
+                <!-- Vorlage 4: Statusanfrage -->
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>4. Statusanfrage laufende Übertragung</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="template4">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="template4">Sehr geehrte Damen und Herren,
+
+ich erlaube mir, nach dem Stand unserer Bestandsübertragung zu fragen.
+
+Kunde: Christine Weber
+Versicherungsnummer: ERG-4512378
+Antragsdatum: 15.10.2024
+
+Über eine zeitnahe Rückmeldung würde ich mich freuen.
+
+Mit freundlichen Grüßen
+Sandra Schmidt
+Versicherungsmaklerin</div>
+                </div>
+
+                <!-- Vorlage 5: Bestätigung erhalten -->
+                <div class="email-template-card">
+                    <div class="template-header">
+                        <h4>5. Bestätigung an Makler weiterleiten</h4>
+                        <button class="btn btn-secondary btn-copy" data-template="template5">Kopieren</button>
+                    </div>
+                    <div class="template-content" id="template5">Sehr geehrter Herr Meier,
+
+wir freuen uns, Ihnen mitteilen zu können, dass die Bestandsübertragung für Ihren Kunden Hans Müller bestätigt wurde.
+
+Versicherungsnummer: ERG-7823456
+Wirksam ab: 01.01.2026
+
+Sie sind nun als betreuender Makler für diesen Vertrag hinterlegt.
+
+Bei Fragen stehen wir Ihnen gerne zur Verfügung.
+
+Mit freundlichen Grüßen
+ERGO Maklerservice</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeEmailTemplates">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drag & Drop Overlay -->
+    <div class="drop-overlay" id="dropOverlay" style="display: none;">
+        <div class="drop-content">
+            <span class="drop-icon">↓</span>
+            <p>JSON-Datei hier ablegen</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/extractor.js"></script>
+    <script src="js/matcher.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/demo-data.js"></script>
+    <script src="js/app.js"></script>
+</div>

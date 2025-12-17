@@ -887,6 +887,10 @@ window.openGenerator = openGenerator;
 window.backToLanding = backToLanding;
 window.toggleSettings = toggleSettings;
 window.openAgenturView = openAgenturView;
+window.openRisikoscoring = openRisikoscoring;
+window.closeRisikoscoring = closeRisikoscoring;
+window.openBestandsuebertragung = openBestandsuebertragung;
+window.closeBestandsuebertragung = closeBestandsuebertragung;
 window.saveUserName = saveUserName;
 window.loadUserName = loadUserName;
 
@@ -942,6 +946,159 @@ function setNavigationEnabled(enabled) {
             box.style.opacity = '0.5';
         }
     });
+}
+
+// ========================================
+// RISIKOSCORING MODULE
+// ========================================
+
+let risikoscoringLoaded = false;
+
+async function openRisikoscoring() {
+    console.log('📊 Risikoscoring öffnen...');
+
+    // Hide landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'none';
+    }
+
+    // Hide main app if visible
+    const mainApp = document.getElementById('mainApp');
+    if (mainApp) {
+        mainApp.style.display = 'none';
+    }
+
+    // Hide banken module if visible
+    const bankenModule = document.getElementById('bankenModule');
+    if (bankenModule) {
+        bankenModule.style.display = 'none';
+    }
+
+    // Show risikoscoring module
+    const rsModule = document.getElementById('risikoscoringModule');
+    if (rsModule) {
+        rsModule.style.display = 'block';
+
+        // Load content if not already loaded
+        if (!risikoscoringLoaded) {
+            try {
+                const response = await fetch('partials/risikoscoring-module.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    rsModule.innerHTML = html;
+                    risikoscoringLoaded = true;
+
+                    // Initialize the module
+                    if (typeof initRisikoscoring === 'function') {
+                        initRisikoscoring();
+                    }
+                    console.log('✅ Risikoscoring Modul geladen');
+                } else {
+                    rsModule.innerHTML = '<div class="error-message">Fehler beim Laden des Risikoscoring-Moduls</div>';
+                }
+            } catch (error) {
+                console.error('Error loading risikoscoring module:', error);
+                rsModule.innerHTML = '<div class="error-message">Fehler beim Laden des Risikoscoring-Moduls</div>';
+            }
+        }
+    }
+}
+
+function closeRisikoscoring() {
+    console.log('📊 Risikoscoring schließen...');
+
+    // Hide risikoscoring module
+    const rsModule = document.getElementById('risikoscoringModule');
+    if (rsModule) {
+        rsModule.style.display = 'none';
+    }
+
+    // Show landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'block';
+    }
+}
+
+// ========================================
+// BESTANDSUEBERTRAGUNG MODULE
+// ========================================
+
+let bestandsuebertragungLoaded = false;
+
+async function openBestandsuebertragung() {
+    console.log('📄 Bestandsübertragung öffnen...');
+
+    // Hide landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'none';
+    }
+
+    // Hide main app if visible
+    const mainApp = document.getElementById('mainApp');
+    if (mainApp) {
+        mainApp.style.display = 'none';
+    }
+
+    // Hide other modules
+    const bankenModule = document.getElementById('bankenModule');
+    if (bankenModule) {
+        bankenModule.style.display = 'none';
+    }
+
+    const rsModule = document.getElementById('risikoscoringModule');
+    if (rsModule) {
+        rsModule.style.display = 'none';
+    }
+
+    // Show bestandsuebertragung module
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    if (bestandModule) {
+        bestandModule.style.display = 'block';
+
+        // Load content if not already loaded
+        if (!bestandsuebertragungLoaded) {
+            try {
+                const response = await fetch('partials/bestandsuebertragung-module.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    bestandModule.innerHTML = html;
+                    bestandsuebertragungLoaded = true;
+
+                    // Initialize the bestandsuebertragung app
+                    if (typeof initBestandApp === 'function') {
+                        initBestandApp();
+                    } else if (typeof BestandApp !== 'undefined' && typeof BestandApp.init === 'function') {
+                        BestandApp.init();
+                    }
+                    console.log('✅ Bestandsübertragung Modul geladen');
+                } else {
+                    bestandModule.innerHTML = '<div class="error-message">Fehler beim Laden des Bestandsübertragung-Moduls</div>';
+                }
+            } catch (error) {
+                console.error('Error loading bestandsuebertragung module:', error);
+                bestandModule.innerHTML = '<div class="error-message">Fehler beim Laden des Bestandsübertragung-Moduls</div>';
+            }
+        }
+    }
+}
+
+function closeBestandsuebertragung() {
+    console.log('📄 Bestandsübertragung schließen...');
+
+    // Hide bestandsuebertragung module
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    if (bestandModule) {
+        bestandModule.style.display = 'none';
+    }
+
+    // Show landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'block';
+    }
 }
 
 // ========================================
