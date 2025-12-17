@@ -27,13 +27,10 @@ function createKPICard(kpi) {
     }
 
     card.innerHTML = `
-        <div class="kpi-icon-header">
-            <span class="kpi-icon">${kpi.icon}</span>
-        </div>
         <div class="kpi-header">
             <div class="kpi-header-text">
                 <div class="kpi-title-row">
-                    <span class="kpi-title">${kpi.title}</span>
+                    <span class="kpi-title">${kpi.title} <span class="kpi-icon">${kpi.icon}</span></span>
                     <div class="kpi-header-actions">
                         <div class="kpi-badge">Aktueller Monat: ${formatValue(currentValue, kpi.unit)}</div>
                     </div>
