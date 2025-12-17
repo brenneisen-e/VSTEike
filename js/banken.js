@@ -1062,6 +1062,259 @@ window.crmSchedule = crmSchedule;
 window.crmNote = crmNote;
 window.editStammdaten = editStammdaten;
 
+// ========================================
+// DASHBOARD SUMMARY DOWNLOAD
+// ========================================
+
+function downloadDashboardSummary() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    const timeStr = now.toLocaleTimeString('de-DE', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    let summary = `
+================================================================================
+                    COLLECTIONS MANAGEMENT - DASHBOARD ZUSAMMENFASSUNG
+                         Braunschweiger Sparkasse | Forderungsmanagement
+================================================================================
+
+Erstellt am: ${dateStr} um ${timeStr} Uhr
+Berichtszeitraum: Aktueller Stand
+
+================================================================================
+                              1. EXECUTIVE SUMMARY
+================================================================================
+
+Dieses Dashboard bietet eine umfassende Übersicht über das Forderungsportfolio
+der Braunschweiger Sparkasse. Die KI-gestützte Analyse klassifiziert jeden
+Kunden anhand von Transaktionsmustern, externen Datenquellen und historischem
+Verhalten nach Zahlungsbereitschaft (Willingness to Pay) und Zahlungsfähigkeit
+(Ability to Pay).
+
+================================================================================
+                           2. PORTFOLIO-KENNZAHLEN (KPIs)
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ KENNZAHL                      │ AKTUELLER WERT     │ VERÄNDERUNG           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Gesamtkredite                 │ 10.234 Fälle       │ +127 zur Vorwoche     │
+│ Ausstehende Gesamtforderung   │ € 47,8 Mio.        │ +€ 1,2 Mio. (Vorwoche)│
+│ Ø Schulden pro Kunde          │ € 4.672            │ -€ 89 (Verbesserung)  │
+│ Offene Bewertungsaufgaben     │ 156 Aufgaben       │ 23 überfällig         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                     3. KUNDENSEGMENTIERUNG (WILLINGNESS/ABILITY MATRIX)
+================================================================================
+
+Die Matrix segmentiert Kunden in vier Quadranten basierend auf ihrer
+Zahlungsbereitschaft (X-Achse) und Zahlungsfähigkeit (Y-Achse):
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  RESTRUKTURIERUNG (Oben Links)        │  PRIORITÄT (Oben Rechts)            │
+│  • Hohe Ability, Niedrige Willingness │  • Hohe Ability, Hohe Willingness   │
+│  • Anzahl: 3.120 Fälle                │  • Anzahl: 2.340 Fälle              │
+│  • Strategie: Ratenzahlung,           │  • Strategie: Schnelle Vereinbarung │
+│    Schuldnerberatung                  │    Zahlungsplan                     │
+│                                       │                                     │
+├───────────────────────────────────────┼─────────────────────────────────────┤
+│                                       │                                     │
+│  ESKALATION (Unten Links)             │  ABWICKLUNG (Unten Rechts)          │
+│  • Niedrige Ability & Willingness     │  • Niedrige Ability, Hohe Willing.  │
+│  • Anzahl: 1.890 Fälle                │  • Anzahl: 2.884 Fälle              │
+│  • Strategie: Inkasso, Mahnverfahren, │  • Strategie: Verkauf, Abschreibung,│
+│    Gerichtliche Schritte              │    Restrukturierung                 │
+│                                       │                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+VERTEILUNG GESAMT:
+• Priorität (Grün):         2.340 Fälle (22,9%)  - Schnellste Rückzahlung
+• Restrukturierung (Gelb):  3.120 Fälle (30,5%)  - Mittleres Risiko
+• Eskalation (Orange):      1.890 Fälle (18,5%)  - Hohes Risiko
+• Abwicklung (Rot):         2.884 Fälle (28,2%)  - Kritisch
+
+================================================================================
+                           4. PORTFOLIO-ENTWICKLUNG (12 MONATE)
+================================================================================
+
+Entwicklung des Forderungsportfolios in den letzten 12 Monaten:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ METRIK                        │ WERT                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Neuzugänge (pro Monat)        │ +847 Fälle durchschnittlich                 │
+│ Abgänge (regulär)             │ -523 Fälle durchschnittlich                 │
+│ Netto-Veränderung             │ +324 Fälle pro Monat                        │
+│ Trend                         │ Ansteigend (Portfoliowachstum)              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                      5. NEUE FÄLLE SEIT LETZTEM LOGIN
+================================================================================
+
+Anzahl neuer Fälle seit dem letzten Dashboard-Aufruf: 47 Fälle
+
+Diese neuen Fälle wurden automatisch durch die KI bewertet und den
+entsprechenden Segmenten zugeordnet. Eine manuelle Überprüfung wird
+für Fälle mit niedriger Confidence-Score empfohlen.
+
+================================================================================
+                           6. ZAHLUNGSEINGÄNGE
+================================================================================
+
+Positive Entwicklungen - Kunden mit erfolgten Zahlungen: 31 Fälle
+
+Diese Fälle zeigen Zahlungsaktivität und sollten ggf. im Segment
+nach oben korrigiert werden.
+
+================================================================================
+                       7. SEGMENTSPEZIFISCHE HANDLUNGSEMPFEHLUNGEN
+================================================================================
+
+PRIORITÄT (Grüne Zone - 2.340 Fälle):
+────────────────────────────────────
+✓ Schnelle Kontaktaufnahme für Zahlungsvereinbarung
+✓ Flexible Ratenzahlungsangebote
+✓ Hohe Erfolgswahrscheinlichkeit bei zeitnaher Bearbeitung
+✓ Durchschnittliche Recovery Rate: 85-95%
+
+RESTRUKTURIERUNG (Gelbe Zone - 3.120 Fälle):
+────────────────────────────────────────────
+✓ Individuelle Schuldnerberatung anbieten
+✓ Langfristige Ratenpläne entwickeln
+✓ Kontakt zu Sozialberatung bei Bedarf
+✓ Durchschnittliche Recovery Rate: 60-75%
+
+ESKALATION (Orange Zone - 1.890 Fälle):
+───────────────────────────────────────
+! Inkasso-Verfahren einleiten
+! Gerichtliches Mahnverfahren prüfen
+! Vermögensauskunft einholen
+! Durchschnittliche Recovery Rate: 25-40%
+
+ABWICKLUNG (Rote Zone - 2.884 Fälle):
+─────────────────────────────────────
+✗ Verkauf an Inkasso-Dienstleister prüfen
+✗ Abschreibung nach Einzelfallprüfung
+✗ Restschuldbefreiung bei Insolvenz
+✗ Durchschnittliche Recovery Rate: 5-15%
+
+================================================================================
+                           8. IFRS 9 STAGE KLASSIFIZIERUNG
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STAGE       │ BESCHREIBUNG                  │ FÄLLE    │ VOLUMEN           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Stage 1     │ Performing (< 30 DPD)         │ 5.010    │ € 18,2 Mio.       │
+│ Stage 2     │ Underperforming (30-90 DPD)   │ 2.880    │ € 15,4 Mio.       │
+│ Stage 3     │ Non-Performing (> 90 DPD)     │ 2.344    │ € 14,2 Mio.       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+DPD = Days Past Due (Tage überfällig)
+
+================================================================================
+                           9. ERWARTETE KREDITVERLUSTE (ECL)
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STAGE       │ ECL-QUOTE      │ RÜCKSTELLUNG                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Stage 1     │ 0,8%           │ € 145.600                                   │
+│ Stage 2     │ 8,5%           │ € 1.309.000                                 │
+│ Stage 3     │ 45,2%          │ € 6.418.400                                 │
+│ GESAMT      │                │ € 7.873.000                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                           10. KI-MODELL PERFORMANCE
+================================================================================
+
+Accuracy der Segmentierung:          94,2%
+Precision (Willingness to Pay):      91,8%
+Precision (Ability to Pay):          93,5%
+F1-Score gesamt:                     92,4%
+
+Datenquellen für KI-Analyse:
+• Transaktionshistorie (intern)
+• SCHUFA-Score (extern)
+• Kontoführungsverhalten (intern)
+• Externe Wirtschaftsdaten
+• Historisches Zahlungsverhalten
+
+================================================================================
+                              11. OFFENE AUFGABEN
+================================================================================
+
+Meine aktuellen Aufgaben im Forderungsmanagement:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PRIORITÄT   │ AUFGABE                                   │ FÄLLIGKEIT       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ HOCH        │ 23 überfällige Bewertungsaufgaben         │ Sofort           │
+│ MITTEL      │ Neue Fälle prüfen (47 Stück)              │ Heute            │
+│ MITTEL      │ Zahlungseingänge verifizieren (31 Stück)  │ Diese Woche      │
+│ NIEDRIG     │ Portfolio-Review für Q4                   │ Ende des Monats  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                           12. SYSTEM-INFORMATIONEN
+================================================================================
+
+Dashboard-Version:      Collections Management v2.1
+Datenstand:             ${dateStr}, ${timeStr}
+Nächste Aktualisierung: Automatisch alle 15 Minuten
+Datenquelle:            SAP Banking Core + KI-Modul
+Benutzer:               [Aktueller Benutzer]
+
+================================================================================
+                              13. KONTAKT & SUPPORT
+================================================================================
+
+Bei Fragen zum Dashboard oder zur Segmentierung:
+• IT-Support: support@braunschweiger-sparkasse.de
+• Fachliche Fragen: collections@braunschweiger-sparkasse.de
+• Notfall-Hotline: +49 531 XXX-XXXX
+
+================================================================================
+                                   DISCLAIMER
+================================================================================
+
+Dieses Dokument enthält vertrauliche Informationen und ist ausschließlich für
+den internen Gebrauch bestimmt. Die KI-gestützten Empfehlungen dienen als
+Entscheidungshilfe und ersetzen nicht die fachliche Einzelfallprüfung.
+
+================================================================================
+                     © 2025 Braunschweiger Sparkasse - Collections Management
+================================================================================
+`;
+
+    // Create and download file
+    const blob = new Blob([summary], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `collections-dashboard-zusammenfassung-${now.toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showNotification('Dashboard-Zusammenfassung wurde heruntergeladen', 'success');
+}
+
+// Export download function
+window.downloadDashboardSummary = downloadDashboardSummary;
+
 // Initialize module selector on DOM ready
 document.addEventListener('DOMContentLoaded', initModuleSelector);
 

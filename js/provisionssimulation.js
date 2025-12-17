@@ -424,12 +424,277 @@ function resetProvisionSimulation() {
     showNotification('Simulation zurückgesetzt', 'info');
 }
 
+// ========================================
+// FULLSCREEN MODE
+// ========================================
+
+function toggleProvisionFullscreen() {
+    const section = document.getElementById('provisionSimulation');
+    if (section) {
+        section.classList.toggle('fullscreen');
+
+        // Re-render chart if exists
+        if (provisionChart) {
+            setTimeout(() => {
+                provisionChart.resize();
+            }, 100);
+        }
+        if (companyProjectionChart) {
+            setTimeout(() => {
+                companyProjectionChart.resize();
+            }, 100);
+        }
+    }
+}
+
+// Close fullscreen on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const section = document.getElementById('provisionSimulation');
+        if (section && section.classList.contains('fullscreen')) {
+            section.classList.remove('fullscreen');
+        }
+    }
+});
+
+// ========================================
+// PERSPECTIVE SWITCHING
+// ========================================
+
+function switchPerspective(perspective) {
+    // Update buttons
+    document.querySelectorAll('.perspective-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    const activeBtn = document.querySelector(`.perspective-btn[onclick="switchPerspective('${perspective}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Update content
+    document.querySelectorAll('.perspective-content').forEach(content => {
+        content.classList.remove('active');
+    });
+
+    if (perspective === 'vermittler') {
+        document.getElementById('vermittlerPerspective').classList.add('active');
+    } else {
+        document.getElementById('unternehmenPerspective').classList.add('active');
+        // Initialize company view calculations
+        initCompanyView();
+    }
+}
+
+// ========================================
+// COMPANY PERSPECTIVE CALCULATIONS
+// ========================================
+
+let companyProjectionChart = null;
+
+function initCompanyView() {
+    calculateCompanyCosts();
+    renderCompanyProjectionChart();
+}
+
+function updateMigrationDisplay() {
+    const slider = document.getElementById('companyMigrationRate');
+    const display = document.getElementById('migrationRateValue');
+    if (slider && display) {
+        display.textContent = slider.value + '%';
+    }
+}
+
+function calculateCompanyCosts() {
+    const agentCount = parseInt(document.getElementById('companyAgentCount')?.value || 150);
+    const avgProduction = parseInt(document.getElementById('companyAvgProduction')?.value || 800000);
+    const migrationRate = parseInt(document.getElementById('companyMigrationRate')?.value || 30) / 100;
+
+    // Calculate costs based on commission rates
+    // AP = Abschlussprovision, BP = Bestandsprovision
+    const alphaRates = {
+        ap: 0.018,  // 1.8% durchschnittlich
+        bp: 0.004,  // 0.4% durchschnittlich
+        bonus: 0.002 // Bonifikationen
+    };
+
+    const betaRates = {
+        ap: 0.014,  // 1.4% - niedrigere AP
+        bp: 0.008,  // 0.8% - höhere BP
+        bonus: 0.003 // Höhere Bonifikationen
+    };
+
+    const totalProduction = agentCount * avgProduction;
+
+    // Alpha costs
+    const alphaAP = totalProduction * alphaRates.ap * 0.4; // 40% Neugeschäft
+    const alphaBP = totalProduction * alphaRates.bp * 0.6 * 3; // 60% Bestand, 3 Jahre
+    const alphaBonus = totalProduction * alphaRates.bonus;
+    const alphaTotal = alphaAP + alphaBP + alphaBonus;
+
+    // Beta costs (considering migration)
+    const betaAgents = agentCount * migrationRate;
+    const betaProduction = betaAgents * avgProduction;
+    const remainingAlphaProduction = totalProduction - betaProduction;
+
+    const betaAP = betaProduction * betaRates.ap * 0.4;
+    const betaBP = betaProduction * betaRates.bp * 0.6 * 3;
+    const betaBonus = betaProduction * betaRates.bonus;
+    const remainingAlphaAP = remainingAlphaProduction * alphaRates.ap * 0.4;
+    const remainingAlphaBP = remainingAlphaProduction * alphaRates.bp * 0.6 * 3;
+    const remainingAlphaBonus = remainingAlphaProduction * alphaRates.bonus;
+
+    const betaTotalAP = betaAP + remainingAlphaAP;
+    const betaTotalBP = betaBP + remainingAlphaBP;
+    const betaTotalBonus = betaBonus + remainingAlphaBonus;
+    const implementationCost = 250000;
+    const betaTotal = betaTotalAP + betaTotalBP + betaTotalBonus + implementationCost;
+
+    const delta = betaTotal - alphaTotal;
+    const marginEffect = ((delta / totalProduction) * 100).toFixed(2);
+
+    // Update KPIs
+    updateElement('companyAlphaCost', formatCurrency(alphaTotal));
+    updateElement('companyBetaCost', formatCurrency(betaTotal));
+    updateElement('companyCostDelta', (delta >= 0 ? '+' : '') + formatCurrency(delta));
+    updateElement('companyCostDeltaLabel', delta >= 0 ? 'Mehrkosten/Jahr' : 'Einsparung/Jahr');
+    updateElement('companyMarginEffect', (marginEffect >= 0 ? '+' : '') + marginEffect + '%');
+
+    // Update breakdown table
+    updateElement('companyAlphaAP', formatCurrency(alphaAP));
+    updateElement('companyBetaAP', formatCurrency(betaTotalAP));
+    updateElement('companyDeltaAP', formatCurrency(betaTotalAP - alphaAP));
+
+    updateElement('companyAlphaBP', formatCurrency(alphaBP));
+    updateElement('companyBetaBP', formatCurrency(betaTotalBP));
+    updateElement('companyDeltaBP', formatCurrency(betaTotalBP - alphaBP));
+
+    updateElement('companyAlphaBonus', formatCurrency(alphaBonus));
+    updateElement('companyBetaBonus', formatCurrency(betaTotalBonus));
+    updateElement('companyDeltaBonus', formatCurrency(betaTotalBonus - alphaBonus));
+
+    updateElement('companyAlphaTotal', '<strong>' + formatCurrency(alphaTotal) + '</strong>');
+    updateElement('companyBetaTotal', '<strong>' + formatCurrency(betaTotal) + '</strong>');
+    updateElement('companyTotalDelta', '<strong>' + formatCurrency(delta) + '</strong>');
+
+    // Update ROI metrics
+    const breakEvenGrowth = Math.max(0, (delta / totalProduction) * 100 / 0.02).toFixed(0);
+    updateElement('breakEvenGrowth', '+' + breakEvenGrowth + '%');
+    updateElement('breakEvenPremium', formatCurrency(delta / 0.05));
+
+    const payback = Math.ceil(implementationCost / (Math.abs(delta) / 12));
+    updateElement('paybackPeriod', payback + ' Monate');
+
+    // Render projection chart
+    renderCompanyProjectionChart();
+}
+
+function updateElement(id, value) {
+    const el = document.getElementById(id);
+    if (el) {
+        if (value.includes('<')) {
+            el.innerHTML = value;
+        } else {
+            el.textContent = value;
+        }
+    }
+}
+
+function renderCompanyProjectionChart() {
+    const canvas = document.getElementById('companyProjectionChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+
+    const agentCount = parseInt(document.getElementById('companyAgentCount')?.value || 150);
+    const avgProduction = parseInt(document.getElementById('companyAvgProduction')?.value || 800000);
+    const initialMigration = parseInt(document.getElementById('companyMigrationRate')?.value || 30) / 100;
+
+    // 5-year projection
+    const years = ['Jahr 1', 'Jahr 2', 'Jahr 3', 'Jahr 4', 'Jahr 5'];
+    const alphaData = [];
+    const betaData = [];
+
+    let totalProduction = agentCount * avgProduction;
+
+    for (let i = 0; i < 5; i++) {
+        // Alpha costs (stable)
+        const alphaCost = totalProduction * 0.022;
+        alphaData.push(alphaCost);
+
+        // Beta costs (migration increases, production growth)
+        const migrationRate = Math.min(0.95, initialMigration + (i * 0.15));
+        const productionGrowth = 1 + (i * 0.05); // 5% growth per year with Beta
+        const betaCost = totalProduction * productionGrowth * 0.020 + (i === 0 ? 250000 : 0);
+        betaData.push(betaCost);
+    }
+
+    if (companyProjectionChart) {
+        companyProjectionChart.destroy();
+    }
+
+    companyProjectionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [
+                {
+                    label: 'AlphaProtect (Status Quo)',
+                    data: alphaData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4
+                },
+                {
+                    label: 'BetaCare (Migration)',
+                    data: betaData,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + formatCurrency(context.raw);
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(value) {
+                            return formatCurrency(value, true);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
 // Export Functions
 window.initProvisionSimulation = initProvisionSimulation;
 window.handleProvisionSlider = handleProvisionSlider;
 window.calculateProvisions = calculateProvisions;
 window.exportProvisionReport = exportProvisionReport;
 window.resetProvisionSimulation = resetProvisionSimulation;
+window.toggleProvisionFullscreen = toggleProvisionFullscreen;
+window.switchPerspective = switchPerspective;
+window.calculateCompanyCosts = calculateCompanyCosts;
+window.updateMigrationDisplay = updateMigrationDisplay;
+window.initCompanyView = initCompanyView;
 
 // Auto-init when Vergütung tab is shown
 const originalShowAgenturTab = window.showAgenturTab;
