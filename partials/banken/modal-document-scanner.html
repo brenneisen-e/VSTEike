@@ -1,0 +1,318 @@
+
+    <!-- ========================================
+         DOCUMENT SCANNER MODAL
+         ======================================== -->
+    <div class="scanner-modal" id="documentScannerModal">
+        <div class="scanner-container">
+            <div class="scanner-header">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Akte scannen / Neuer Kunde anlegen
+                </h2>
+                <button class="close-scanner-btn" onclick="closeDocumentScanner()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="scanner-body">
+                <!-- Step 1: Upload -->
+                <div class="scanner-step active" id="scanner-step-1">
+                    <div class="scanner-step-header">
+                        <div class="step-indicator">
+                            <span class="step-number active">1</span>
+                            <span class="step-line"></span>
+                            <span class="step-number">2</span>
+                            <span class="step-line"></span>
+                            <span class="step-number">3</span>
+                        </div>
+                        <div class="step-labels">
+                            <span class="active">Dokument hochladen</span>
+                            <span>KI-Erkennung</span>
+                            <span>Kunde anlegen</span>
+                        </div>
+                    </div>
+
+                    <div class="upload-area" id="dropZone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <h3>Dokument hochladen</h3>
+                        <p>Ziehen Sie eine Datei hierher oder klicken Sie zum Auswählen</p>
+                        <p class="supported-formats">Unterstützte Formate: PDF, JPG, PNG, TIFF</p>
+                        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif" onchange="handleFileSelect(event)" hidden>
+                        <button class="btn-primary" onclick="document.getElementById('fileInput').click()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Datei auswählen
+                        </button>
+                        <div class="camera-option">
+                            <span>oder</span>
+                            <button class="btn-secondary" onclick="openCamera()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                                Kamera verwenden
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="upload-preview" id="uploadPreview" style="display: none;">
+                        <div class="preview-image-container">
+                            <img id="previewImage" src="" alt="Vorschau">
+                        </div>
+                        <div class="preview-info">
+                            <span class="file-name" id="fileName"></span>
+                            <button class="btn-icon" onclick="removeUpload()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="btn-primary" onclick="startAIRecognition()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            KI-Erkennung starten
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: AI Recognition -->
+                <div class="scanner-step" id="scanner-step-2">
+                    <div class="scanner-step-header">
+                        <div class="step-indicator">
+                            <span class="step-number completed">1</span>
+                            <span class="step-line completed"></span>
+                            <span class="step-number active">2</span>
+                            <span class="step-line"></span>
+                            <span class="step-number">3</span>
+                        </div>
+                        <div class="step-labels">
+                            <span class="completed">Dokument hochladen</span>
+                            <span class="active">KI-Erkennung</span>
+                            <span>Kunde anlegen</span>
+                        </div>
+                    </div>
+
+                    <div class="recognition-content">
+                        <div class="recognition-preview">
+                            <img id="recognitionImage" src="" alt="Dokument">
+                            <div class="recognition-overlay" id="recognitionOverlay">
+                                <!-- Dynamically highlighted areas -->
+                            </div>
+                        </div>
+                        <div class="recognition-results">
+                            <div class="recognition-status" id="recognitionStatus">
+                                <div class="loading-spinner"></div>
+                                <p>KI analysiert Dokument...</p>
+                            </div>
+                            <div class="recognized-fields" id="recognizedFields" style="display: none;">
+                                <h4>Erkannte Daten</h4>
+                                <div class="field-group">
+                                    <label>Name / Firma</label>
+                                    <input type="text" id="rec-name" value="">
+                                    <span class="confidence">95%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Adresse</label>
+                                    <input type="text" id="rec-address" value="">
+                                    <span class="confidence">88%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>IBAN</label>
+                                    <input type="text" id="rec-iban" value="">
+                                    <span class="confidence">92%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Forderungsbetrag</label>
+                                    <input type="text" id="rec-amount" value="">
+                                    <span class="confidence">97%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Fälligkeitsdatum</label>
+                                    <input type="date" id="rec-due-date" value="">
+                                    <span class="confidence">90%</span>
+                                </div>
+                                <div class="field-group">
+                                    <label>Dokumenttyp</label>
+                                    <select id="rec-doc-type">
+                                        <option value="mahnung">Mahnung</option>
+                                        <option value="rechnung">Rechnung</option>
+                                        <option value="vertrag">Kreditvertrag</option>
+                                        <option value="inkasso">Inkasso-Schreiben</option>
+                                        <option value="sonstiges">Sonstiges</option>
+                                    </select>
+                                </div>
+                                <button class="btn-primary" onclick="goToStep3()">
+                                    Weiter zur Kundenanlage
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Create Customer -->
+                <div class="scanner-step" id="scanner-step-3">
+                    <div class="scanner-step-header">
+                        <div class="step-indicator">
+                            <span class="step-number completed">1</span>
+                            <span class="step-line completed"></span>
+                            <span class="step-number completed">2</span>
+                            <span class="step-line completed"></span>
+                            <span class="step-number active">3</span>
+                        </div>
+                        <div class="step-labels">
+                            <span class="completed">Dokument hochladen</span>
+                            <span class="completed">KI-Erkennung</span>
+                            <span class="active">Kunde anlegen</span>
+                        </div>
+                    </div>
+
+                    <div class="create-customer-form">
+                        <div class="form-section">
+                            <h4>Kundendaten</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Kundentyp *</label>
+                                    <select id="customer-type">
+                                        <option value="privat">Privatkunde</option>
+                                        <option value="gewerbe">Gewerbekunde</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Name / Firma *</label>
+                                    <input type="text" id="customer-name" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Straße, Hausnr. *</label>
+                                    <input type="text" id="customer-street" value="">
+                                </div>
+                                <div class="form-group half">
+                                    <label>PLZ *</label>
+                                    <input type="text" id="customer-zip" value="">
+                                </div>
+                                <div class="form-group half">
+                                    <label>Ort *</label>
+                                    <input type="text" id="customer-city" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Telefon</label>
+                                    <input type="text" id="customer-phone" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>E-Mail</label>
+                                    <input type="email" id="customer-email" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Bankverbindung</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>IBAN *</label>
+                                    <input type="text" id="customer-iban" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>BIC</label>
+                                    <input type="text" id="customer-bic" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Forderung</h4>
+                            <div class="form-grid">
+                                <div class="form-group half">
+                                    <label>Betrag *</label>
+                                    <input type="number" id="claim-amount" value="" step="0.01">
+                                </div>
+                                <div class="form-group half">
+                                    <label>Währung</label>
+                                    <select id="claim-currency">
+                                        <option value="EUR">EUR</option>
+                                        <option value="USD">USD</option>
+                                        <option value="CHF">CHF</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fälligkeitsdatum *</label>
+                                    <input type="date" id="claim-due-date" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Kategorie</label>
+                                    <select id="claim-category">
+                                        <option value="kredit">Kredit</option>
+                                        <option value="dispo">Dispositionskredit</option>
+                                        <option value="kreditkarte">Kreditkarte</option>
+                                        <option value="sonstiges">Sonstiges</option>
+                                    </select>
+                                </div>
+                                <div class="form-group full">
+                                    <label>Notiz</label>
+                                    <textarea id="claim-note" rows="3" placeholder="Zusätzliche Informationen..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Dokument anhängen</h4>
+                            <div class="attached-document">
+                                <div class="doc-preview">
+                                    <img id="attachedDocPreview" src="" alt="Dokument">
+                                </div>
+                                <div class="doc-info">
+                                    <span class="doc-name" id="attachedDocName"></span>
+                                    <span class="doc-meta">Wird automatisch archiviert</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-secondary" onclick="goToStep2()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                Zurück
+                            </button>
+                            <button class="btn-primary" onclick="createCustomerFromScan()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                                </svg>
+                                Kunde anlegen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         FULL CRM CUSTOMER PROFILE VIEW
+         ======================================== -->

@@ -1,0 +1,109 @@
+    <!-- Section: Stage 2 Analysis -->
+    <div class="banken-section" id="section-stage2">
+        <div class="section-intro">
+            <h2>Stage 2 Analyse - Auswirkung auf GuV</h2>
+            <p>Übersicht der Kredite mit signifikant erhöhtem Ausfallrisiko (Stage 2 nach IFRS 9). Diese Kredite erfordern eine erhöhte Risikovorsorge und belasten die Gewinn- und Verlustrechnung.</p>
+        </div>
+
+        <div class="stage2-overview">
+            <div class="stage2-main-card">
+                <div class="stage2-header">
+                    <h3>GuV-Auswirkung Stage 2 Portfolio</h3>
+                </div>
+                <div class="stage2-kpis">
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">Stage 2 Volumen</span>
+                        <span class="kpi-value">€32,1 Mio</span>
+                    </div>
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">Risikovorsorge (ECL)</span>
+                        <span class="kpi-value negative">€4,8 Mio</span>
+                    </div>
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">GuV-Belastung Q4</span>
+                        <span class="kpi-value negative">€1,2 Mio</span>
+                    </div>
+                    <div class="stage2-kpi">
+                        <span class="kpi-label">Coverage Ratio</span>
+                        <span class="kpi-value">15%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stage2-migration-card">
+                <h4>Stage-Migration (letzte 30 Tage)</h4>
+                <div class="migration-flow">
+                    <div class="migration-box stage1">
+                        <span class="migration-label">Stage 1</span>
+                        <span class="migration-arrow out">-423 Fälle</span>
+                    </div>
+                    <div class="migration-center">
+                        <div class="migration-in">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            +423
+                        </div>
+                        <div class="migration-box stage2-center">
+                            <span class="migration-label">Stage 2</span>
+                            <span class="migration-value">7.890</span>
+                        </div>
+                        <div class="migration-out">
+                            -312
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="migration-box stage3">
+                        <span class="migration-label">Stage 3</span>
+                        <span class="migration-arrow in">+312 Fälle</span>
+                    </div>
+                </div>
+                <div class="migration-summary">
+                    <span class="summary-negative">Netto-Zugang Stage 2: +111 Fälle (+€2,3 Mio)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stage2-details">
+            <div class="stage2-chart-card">
+                <h4>ECL-Entwicklung</h4>
+                <div class="chart-container">
+                    <canvas id="eclTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="stage2-risk-card">
+                <h4>Top-Risikotreiber</h4>
+                <div class="risk-drivers">
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 85%;">
+                            <span class="risk-name">Arbeitslosigkeit</span>
+                            <span class="risk-value">€8,2 Mio</span>
+                        </div>
+                    </div>
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 62%;">
+                            <span class="risk-name">Branchenrisiko (Gastronomie)</span>
+                            <span class="risk-value">€5,9 Mio</span>
+                        </div>
+                    </div>
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 48%;">
+                            <span class="risk-name">Scheidung/Trennung</span>
+                            <span class="risk-value">€4,6 Mio</span>
+                        </div>
+                    </div>
+                    <div class="risk-driver">
+                        <div class="risk-bar" style="--width: 35%;">
+                            <span class="risk-name">Überschuldung</span>
+                            <span class="risk-value">€3,4 Mio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

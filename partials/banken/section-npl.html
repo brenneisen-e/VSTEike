@@ -1,0 +1,118 @@
+    <!-- Section: NPL Dashboard (Stage 3) -->
+    <div class="banken-section" id="section-npl">
+        <div class="section-intro">
+            <h2>NPL Dashboard - Stage 3 Kredite</h2>
+            <p>Übersicht aller notleidenden Kredite (Non-Performing Loans) mit einer Ausfallwahrscheinlichkeit >90%. Diese Fälle befinden sich im fortgeschrittenen Mahnverfahren oder in der Abwicklung.</p>
+        </div>
+
+        <div class="npl-kpi-grid">
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">€15,1 Mio</div>
+                    <div class="npl-kpi-label">Gesamtvolumen Stage 3</div>
+                    <div class="npl-kpi-change negative">+€1,2 Mio vs. Vormonat</div>
+                </div>
+            </div>
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon warning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">2.344</div>
+                    <div class="npl-kpi-label">Anzahl NPL-Fälle</div>
+                    <div class="npl-kpi-change negative">+127 vs. Vormonat</div>
+                </div>
+            </div>
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon success">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">34%</div>
+                    <div class="npl-kpi-label">Recovery Rate</div>
+                    <div class="npl-kpi-change positive">+2,3% vs. Vormonat</div>
+                </div>
+            </div>
+            <div class="npl-kpi-card">
+                <div class="npl-kpi-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="npl-kpi-content">
+                    <div class="npl-kpi-value">142 Tage</div>
+                    <div class="npl-kpi-label">Ø Days Past Due</div>
+                    <div class="npl-kpi-change neutral">-3 Tage vs. Vormonat</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="npl-charts-grid">
+            <div class="npl-chart-card">
+                <h4>NPL-Entwicklung nach Monat</h4>
+                <div class="chart-container">
+                    <canvas id="nplTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="npl-chart-card">
+                <h4>Verteilung nach Produkttyp</h4>
+                <div class="chart-container">
+                    <canvas id="nplProductChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="npl-actions-section">
+            <h4>Empfohlene Maßnahmen</h4>
+            <div class="npl-action-cards">
+                <div class="npl-action-card">
+                    <div class="action-header">
+                        <span class="action-count">847</span>
+                        <span class="action-label">Fälle</span>
+                    </div>
+                    <div class="action-body">
+                        <strong>Portfolio-Verkauf prüfen</strong>
+                        <p>Forderungen >180 DPD mit Recovery-Erwartung <20%</p>
+                    </div>
+                    <button class="action-button" onclick="reviewForSale()">Prüfen</button>
+                </div>
+                <div class="npl-action-card">
+                    <div class="action-header">
+                        <span class="action-count">234</span>
+                        <span class="action-label">Fälle</span>
+                    </div>
+                    <div class="action-body">
+                        <strong>Abschreibung empfohlen</strong>
+                        <p>Uneinbringliche Forderungen nach Inkasso-Erschöpfung</p>
+                    </div>
+                    <button class="action-button" onclick="reviewForWriteOff()">Prüfen</button>
+                </div>
+                <div class="npl-action-card highlight">
+                    <div class="action-header">
+                        <span class="action-count">156</span>
+                        <span class="action-label">Fälle</span>
+                    </div>
+                    <div class="action-body">
+                        <strong>Restrukturierung möglich</strong>
+                        <p>Kunden mit positiver Zahlungshistorie vor Default</p>
+                    </div>
+                    <button class="action-button primary" onclick="reviewForRestructure()">Prüfen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+

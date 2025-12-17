@@ -1,0 +1,629 @@
+<div class="customer-detail-modal" id="customerDetailModal" style="display: none;">
+    <div class="modal-overlay" onclick="closeCustomerDetail()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">
+                <h2 id="customerName">Mueller GmbH</h2>
+                <span class="customer-id">K-2024-0001</span>
+            </div>
+            <button class="modal-close" onclick="closeCustomerDetail()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="modal-tabs">
+            <button class="modal-tab active" onclick="showCustomerTab('stammdaten')">Stammdaten</button>
+            <button class="modal-tab" onclick="showCustomerTab('transaktionen')">Transaktionen</button>
+            <button class="modal-tab" onclick="showCustomerTab('forderungen')">Forderungen</button>
+            <button class="modal-tab" onclick="showCustomerTab('workflow')">Workflow</button>
+            <button class="modal-tab" onclick="showCustomerTab('ki-analyse')">KI-Analyse</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Tab: Stammdaten -->
+            <div class="customer-tab active" id="tab-stammdaten">
+                <div class="stammdaten-grid enhanced">
+                    <!-- Unternehmensdaten -->
+                    <div class="stammdaten-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Unternehmensdaten
+                        </h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Firmenname:</span>
+                            <span class="value">Mueller GmbH</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Rechtsform:</span>
+                            <span class="value">GmbH</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Handelsregister:</span>
+                            <span class="value">HRB 12345 Braunschweig</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">USt-ID:</span>
+                            <span class="value">DE123456789</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Branche:</span>
+                            <span class="value">Gastronomie (NACE 56.10)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Gründungsjahr:</span>
+                            <span class="value">2008</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Mitarbeiter:</span>
+                            <span class="value">12 (Stand: 2024)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Jahresumsatz:</span>
+                            <span class="value">€1,2 Mio (2023)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kundentyp:</span>
+                            <span class="value badge gewerbe">Gewerbekunde</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kunde seit:</span>
+                            <span class="value">15.03.2018 (7 Jahre)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kundenbetreuer:</span>
+                            <span class="value">Eike Brenneisen</span>
+                        </div>
+                    </div>
+
+                    <!-- Kontaktdaten -->
+                    <div class="stammdaten-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Kontaktdaten
+                        </h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Adresse:</span>
+                            <span class="value">Musterstraße 123<br>38100 Braunschweig</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Telefon Zentrale:</span>
+                            <span class="value clickable" onclick="initiateCall('+49531123456')">+49 531 123456</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Telefon Mobil:</span>
+                            <span class="value clickable" onclick="initiateCall('+49170123456')">+49 170 1234567</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">E-Mail:</span>
+                            <span class="value clickable" onclick="sendEmail('info@mueller-gmbh.de')">info@mueller-gmbh.de</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Website:</span>
+                            <span class="value">www.mueller-gmbh.de</span>
+                        </div>
+                        <div class="stammdaten-subsection">
+                            <strong>Geschäftsführung</strong>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Name:</span>
+                            <span class="value">Hans Mueller</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Direktwahl:</span>
+                            <span class="value clickable" onclick="initiateCall('+4953112345610')">+49 531 123456-10</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">E-Mail:</span>
+                            <span class="value clickable">h.mueller@mueller-gmbh.de</span>
+                        </div>
+                        <div class="stammdaten-subsection">
+                            <strong>Ansprechpartner Buchhaltung</strong>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Name:</span>
+                            <span class="value">Petra Schmidt</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Direktwahl:</span>
+                            <span class="value clickable">+49 531 123456-20</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">E-Mail:</span>
+                            <span class="value clickable">buchhaltung@mueller-gmbh.de</span>
+                        </div>
+                    </div>
+
+                    <!-- Bankverbindung & Bonität -->
+                    <div class="stammdaten-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            Bankverbindung & Bonität
+                        </h4>
+                        <div class="stammdaten-row">
+                            <span class="label">IBAN:</span>
+                            <span class="value mono">DE89 3704 0044 0532 0130 00</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">BIC:</span>
+                            <span class="value mono">COBADEFFXXX</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Kreditinstitut:</span>
+                            <span class="value">Commerzbank AG</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">SEPA-Mandat:</span>
+                            <span class="value badge warning">Widerrufen (01.11.2025)</span>
+                        </div>
+                        <div class="stammdaten-subsection">
+                            <strong>Bonitätsinformationen</strong>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Internes Rating:</span>
+                            <span class="value rating-bad">C-</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Creditreform-Index:</span>
+                            <span class="value">312 (hohes Risiko)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Schufa-Score:</span>
+                            <span class="value">78 / 100</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Letzte Prüfung:</span>
+                            <span class="value">01.12.2025</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Zahlungsmoral:</span>
+                            <span class="value rating-bad">Mangelhaft</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Ø Zahlungsverzug:</span>
+                            <span class="value">32 Tage</span>
+                        </div>
+                    </div>
+
+                    <!-- Kreditdetails -->
+                    <div class="stammdaten-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            Kreditdetails
+                        </h4>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragsart:</span>
+                            <span class="value">Betriebsmittelkredit</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragsnummer:</span>
+                            <span class="value mono">BMK-2018-0456789</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Ursprungsbetrag:</span>
+                            <span class="value">€200.000</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Restschuld:</span>
+                            <span class="value highlight-red">€125.000</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Zinssatz:</span>
+                            <span class="value">5,75% p.a.</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Monatsrate:</span>
+                            <span class="value">€2.500</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragsbeginn:</span>
+                            <span class="value">01.04.2018</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Vertragslaufzeit:</span>
+                            <span class="value">120 Monate</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Restlaufzeit:</span>
+                            <span class="value">28 Monate</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Sicherheiten:</span>
+                            <span class="value">Bürgschaft GF, Inventar</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Sicherheitenwert:</span>
+                            <span class="value">€85.000 (geschätzt)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">Stage:</span>
+                            <span class="value badge danger">Stage 3 (NPL)</span>
+                        </div>
+                        <div class="stammdaten-row">
+                            <span class="label">DPD:</span>
+                            <span class="value highlight-red">35 Tage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Transaktionen -->
+            <div class="customer-tab" id="tab-transaktionen">
+                <div class="transaction-summary">
+                    <div class="summary-card">
+                        <span class="summary-label">Lastschriftrückgaben (12M)</span>
+                        <span class="summary-value negative">12</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Rückgabequote</span>
+                        <span class="summary-value negative">34%</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Letzte Zahlung</span>
+                        <span class="summary-value">15.11.2025</span>
+                    </div>
+                </div>
+                <h4>Kontoauszug (letzte 30 Tage)</h4>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Beschreibung</th>
+                            <th>Betrag</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="transaction-negative">
+                            <td>14.12.2025</td>
+                            <td>Lastschrift Ratenzahlung</td>
+                            <td class="amount negative">-€2.500</td>
+                            <td><span class="tx-status failed">Rückgabe</span></td>
+                        </tr>
+                        <tr>
+                            <td>01.12.2025</td>
+                            <td>Lastschrift Ratenzahlung</td>
+                            <td class="amount negative">-€2.500</td>
+                            <td><span class="tx-status failed">Rückgabe</span></td>
+                        </tr>
+                        <tr>
+                            <td>15.11.2025</td>
+                            <td>Überweisung Teilzahlung</td>
+                            <td class="amount positive">+€1.000</td>
+                            <td><span class="tx-status success">Gebucht</span></td>
+                        </tr>
+                        <tr>
+                            <td>01.11.2025</td>
+                            <td>Lastschrift Ratenzahlung</td>
+                            <td class="amount negative">-€2.500</td>
+                            <td><span class="tx-status failed">Rückgabe</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab: Forderungen -->
+            <div class="customer-tab" id="tab-forderungen">
+                <div class="forderungen-overview">
+                    <div class="forderung-total">
+                        <span class="label">Gesamtforderung</span>
+                        <span class="value">€125.000</span>
+                    </div>
+                    <div class="forderung-breakdown">
+                        <div class="breakdown-item">
+                            <span class="label">Hauptforderung</span>
+                            <span class="value">€110.000</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Zinsen</span>
+                            <span class="value">€8.450</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Mahngebühren</span>
+                            <span class="value">€350</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="label">Inkassokosten</span>
+                            <span class="value">€6.200</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="forderung-timeline">
+                    <h4>Fälligkeiten</h4>
+                    <div class="timeline-item overdue">
+                        <div class="timeline-date">01.10.2025</div>
+                        <div class="timeline-content">
+                            <strong>Rate 10/2025</strong> - €2.500 (35 Tage überfällig)
+                        </div>
+                    </div>
+                    <div class="timeline-item overdue">
+                        <div class="timeline-date">01.11.2025</div>
+                        <div class="timeline-content">
+                            <strong>Rate 11/2025</strong> - €2.500 (4 Tage überfällig - Teilzahlung €1.000)
+                        </div>
+                    </div>
+                    <div class="timeline-item overdue">
+                        <div class="timeline-date">01.12.2025</div>
+                        <div class="timeline-content">
+                            <strong>Rate 12/2025</strong> - €2.500 (Lastschrift zurückgegeben)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Workflow -->
+            <div class="customer-tab" id="tab-workflow">
+                <div class="workflow-status">
+                    <span class="status-label">Aktueller Status:</span>
+                    <span class="status-value inkasso">Inkasso-Verfahren</span>
+                </div>
+                <div class="workflow-timeline">
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Erste Mahnung</div>
+                            <div class="wf-date">15.10.2025</div>
+                            <div class="wf-note">Automatisch versendet</div>
+                        </div>
+                    </div>
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Zweite Mahnung</div>
+                            <div class="wf-date">01.11.2025</div>
+                            <div class="wf-note">Automatisch versendet</div>
+                        </div>
+                    </div>
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Telefonischer Kontakt</div>
+                            <div class="wf-date">10.11.2025</div>
+                            <div class="wf-note">Kunde nicht erreichbar (3 Versuche)</div>
+                        </div>
+                    </div>
+                    <div class="wf-item completed">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Letzte Mahnung</div>
+                            <div class="wf-date">15.11.2025</div>
+                            <div class="wf-note">Mit Inkasso-Androhung</div>
+                        </div>
+                    </div>
+                    <div class="wf-item active">
+                        <div class="wf-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="wf-content">
+                            <div class="wf-title">Inkasso-Übergabe</div>
+                            <div class="wf-date">01.12.2025</div>
+                            <div class="wf-note">An Creditreform übergeben</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow-actions">
+                    <h4>Verfügbare Aktionen</h4>
+                    <div class="action-buttons">
+                        <button class="action-btn-large" onclick="addNote()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Notiz hinzufügen
+                        </button>
+                        <button class="action-btn-large" onclick="scheduleCallback()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Rückruf planen
+                        </button>
+                        <button class="action-btn-large warning" onclick="sellCase()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            Forderung verkaufen
+                        </button>
+                        <button class="action-btn-large danger" onclick="writeOffCase()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Abschreiben
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: KI-Analyse -->
+            <div class="customer-tab" id="tab-ki-analyse">
+                <div class="ki-matrix-detail">
+                    <div class="ki-score-visual">
+                        <div class="score-chart">
+                            <div class="score-point" style="left: 25%; bottom: 60%;"></div>
+                            <div class="quadrant-lines"></div>
+                        </div>
+                        <div class="score-labels">
+                            <div class="score-item">
+                                <span class="score-name">Willingness to Pay</span>
+                                <div class="score-bar-visual">
+                                    <div class="bar-fill" style="width: 25%;"></div>
+                                </div>
+                                <span class="score-percent">25%</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-name">Ability to Pay</span>
+                                <div class="score-bar-visual">
+                                    <div class="bar-fill" style="width: 60%;"></div>
+                                </div>
+                                <span class="score-percent">60%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ki-segment-result">
+                        <div class="segment-badge large escalate">Eskalation</div>
+                        <p>Basierend auf der Analyse wird dieser Kunde dem Segment <strong>Eskalation</strong> zugeordnet. Empfehlung: Intensivierung der Inkasso-Maßnahmen.</p>
+                    </div>
+                </div>
+
+                <div class="ki-factors">
+                    <h4>KI-Einflussfaktoren</h4>
+                    <div class="factor-list">
+                        <div class="factor-item negative">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                            </span>
+                            <span class="factor-name">3 Lastschriftrückgaben in Folge</span>
+                            <span class="factor-impact">-25 Punkte</span>
+                        </div>
+                        <div class="factor-item negative">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Branchenrisiko: Gastronomie</span>
+                            <span class="factor-impact">-15 Punkte</span>
+                        </div>
+                        <div class="factor-item negative">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Keine Reaktion auf Kontaktversuche</span>
+                            <span class="factor-impact">-20 Punkte</span>
+                        </div>
+                        <div class="factor-item positive">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Langjährige Kundenbeziehung (7 Jahre)</span>
+                            <span class="factor-impact">+10 Punkte</span>
+                        </div>
+                        <div class="factor-item positive">
+                            <span class="factor-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span class="factor-name">Teilzahlung im November</span>
+                            <span class="factor-impact">+5 Punkte</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ki-recommendation-enhanced">
+                    <div class="ai-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        KI-Handlungsempfehlung
+                    </div>
+                    <div class="ai-recommendation-content">
+                        <div class="recommendation-header">
+                            <div class="recommendation-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                <span>Empfohlene Maßnahme: <strong>Verstärkte Inkasso-Strategie</strong></span>
+                            </div>
+                            <span class="confidence-badge">Konfidenz: 87%</span>
+                        </div>
+                        <div class="recommendation-details">
+                            <p>Aufgrund der hohen Fähigkeit zur Zahlung (60%) bei niedriger Zahlungsbereitschaft (25%) empfiehlt die KI:</p>
+                            <ul class="recommendation-steps">
+                                <li>
+                                    <span class="step-icon urgent">1</span>
+                                    <span>Sofortige Eskalation der Inkasso-Maßnahmen</span>
+                                </li>
+                                <li>
+                                    <span class="step-icon">2</span>
+                                    <span>Gerichtliches Mahnverfahren einleiten (14 Tage Frist)</span>
+                                </li>
+                                <li>
+                                    <span class="step-icon">3</span>
+                                    <span>Parallele Verhandlung über Vergleich anbieten</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="recommendation-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Erfolgswahrscheinlichkeit</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 72%;"></div>
+                                </div>
+                                <span class="metric-value">72%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Erwartete Recovery</span>
+                                <span class="metric-value highlight">€89.000</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Zeitrahmen</span>
+                                <span class="metric-value">30-45 Tage</span>
+                            </div>
+                        </div>
+                        <div class="recommendation-actions">
+                            <button class="ai-action-btn primary" onclick="applyAIRecommendation()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Empfehlung anwenden
+                            </button>
+                            <button class="ai-action-btn secondary" onclick="showAlternativeStrategies()">
+                                Alternative Strategien
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
