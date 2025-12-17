@@ -137,18 +137,18 @@ function processBankenQuery(message) {
 
         const sorted = [...demoCustomerData].sort((a, b) => b.forderung - a.forderung).slice(0, count);
 
-        let response = `📊 **Top ${count} Kunden nach Forderungshöhe:**\n\n`;
+        let response = `<span class="chat-icon chart"></span> **Top ${count} Kunden nach Forderungshöhe:**\n\n`;
         sorted.forEach((c, i) => {
             response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> (${c.id})\n`;
-            response += `   💰 €${c.forderung.toLocaleString('de-DE')} | 📅 ${c.dpd} DPD | ${c.status}\n\n`;
+            response += `   <span class="chat-icon euro"></span> €${c.forderung.toLocaleString('de-DE')} · <span class="chat-icon clock"></span> ${c.dpd} DPD · ${c.status}\n\n`;
         });
 
         const total = sorted.reduce((sum, c) => sum + c.forderung, 0);
-        response += `\n📈 **Summe Top ${count}:** €${total.toLocaleString('de-DE')}`;
+        response += `\n<span class="chat-icon trend"></span> **Summe Top ${count}:** €${total.toLocaleString('de-DE')}`;
 
         // Add navigation button
         const customerIds = sorted.map(c => c.id).join(',');
-        response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')">🔍 Diese ${count} Kunden in Liste anzeigen</button>`;
+        response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Diese ${count} Kunden in Liste anzeigen</button>`;
 
         return response;
     }
@@ -157,14 +157,14 @@ function processBankenQuery(message) {
     if (lower.includes('zahlung') || lower.includes('eingang') || lower.includes('bezahlt') || lower.includes('ausgeglichen')) {
         const isWeek = lower.includes('woche') || lower.includes('letzte');
 
-        let response = `💵 **Zahlungseingänge${isWeek ? ' der letzten Woche' : ''}:**\n\n`;
+        let response = `<span class="chat-icon payment"></span> **Zahlungseingänge${isWeek ? ' der letzten Woche' : ''}:**\n\n`;
         demoPayments.forEach(p => {
             response += `• **${p.kunde}** - €${p.betrag.toLocaleString('de-DE')}\n`;
-            response += `  ${p.datum} | ${p.art}\n\n`;
+            response += `  ${p.datum} · ${p.art}\n\n`;
         });
 
         const total = demoPayments.reduce((sum, p) => sum + p.betrag, 0);
-        response += `\n✅ **Gesamt:** €${total.toLocaleString('de-DE')} (${demoPayments.length} Zahlungen)`;
+        response += `\n<span class="chat-icon check"></span> **Gesamt:** €${total.toLocaleString('de-DE')} (${demoPayments.length} Zahlungen)`;
 
         return response;
     }
@@ -173,12 +173,12 @@ function processBankenQuery(message) {
     if (lower.includes('eskalation') || lower.includes('inkasso')) {
         const filtered = demoCustomerData.filter(c => c.segment === 'eskalation');
 
-        let response = `🚨 **Eskalation-Fälle (Inkasso):** ${filtered.length}\n\n`;
+        let response = `<span class="chat-icon alert"></span> **Eskalation-Fälle (Inkasso):** ${filtered.length}\n\n`;
         filtered.forEach(c => {
             response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} (${c.dpd} DPD)\n`;
         });
 
-        response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('eskalation')">🔍 Eskalation-Segment in Matrix anzeigen</button>`;
+        response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('eskalation')"><span class="chat-icon search"></span> Eskalation-Segment in Matrix anzeigen</button>`;
 
         return response;
     }
@@ -186,12 +186,12 @@ function processBankenQuery(message) {
     if (lower.includes('restrukturierung') || lower.includes('stundung')) {
         const filtered = demoCustomerData.filter(c => c.segment === 'restrukturierung');
 
-        let response = `🔄 **Restrukturierung-Fälle:** ${filtered.length}\n\n`;
+        let response = `<span class="chat-icon refresh"></span> **Restrukturierung-Fälle:** ${filtered.length}\n\n`;
         filtered.forEach(c => {
-            response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} | ${c.status}\n`;
+            response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} · ${c.status}\n`;
         });
 
-        response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('restrukturierung')">🔍 Restrukturierung-Segment in Matrix anzeigen</button>`;
+        response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('restrukturierung')"><span class="chat-icon search"></span> Restrukturierung-Segment in Matrix anzeigen</button>`;
 
         return response;
     }
@@ -203,17 +203,17 @@ function processBankenQuery(message) {
 
         const filtered = demoCustomerData.filter(c => c.dpd > minDpd);
 
-        let response = `⏰ **Fälle mit mehr als ${minDpd} DPD:** ${filtered.length}\n\n`;
+        let response = `<span class="chat-icon clock"></span> **Fälle mit mehr als ${minDpd} DPD:** ${filtered.length}\n\n`;
         filtered.sort((a, b) => b.dpd - a.dpd).forEach(c => {
             response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - ${c.dpd} Tage überfällig\n`;
-            response += `  €${c.forderung.toLocaleString('de-DE')} | ${c.status}\n\n`;
+            response += `  €${c.forderung.toLocaleString('de-DE')} · ${c.status}\n\n`;
         });
 
         // Add navigation button for DPD bucket
         const bucket = minDpd >= 90 ? '90+' : (minDpd >= 30 ? '31-90' : '0-30');
         const customerIds = filtered.map(c => c.id).join(',');
-        response += `\n<button class="chat-action-btn" onclick="filterByDPDBucket('${bucket}')">🔍 DPD Bucket in Dashboard anzeigen</button>`;
-        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')">📋 ${filtered.length} Kunden in Liste anzeigen</button>`;
+        response += `\n<button class="chat-action-btn" onclick="filterByDPDBucket('${bucket}')"><span class="chat-icon search"></span> DPD Bucket in Dashboard anzeigen</button>`;
+        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon list"></span> ${filtered.length} Kunden in Liste anzeigen</button>`;
 
         return response;
     }
@@ -230,17 +230,17 @@ function processBankenQuery(message) {
             abwicklung: demoCustomerData.filter(c => c.segment === 'abwicklung').length
         };
 
-        return `📊 **Portfolio-Übersicht:**
+        return `<span class="chat-icon chart"></span> **Portfolio-Übersicht:**
 
 **Gesamtforderung:** €${total.toLocaleString('de-DE')}
 **Aktive Fälle:** ${demoCustomerData.length}
 **Ø DPD:** ${avgDpd} Tage
 
 **Segmente:**
-🔴 Eskalation: ${segments.eskalation} Fälle
-🟢 Priorität: ${segments.prioritaet} Fälle
-🟡 Restrukturierung: ${segments.restrukturierung} Fälle
-⚫ Abwicklung: ${segments.abwicklung} Fälle
+<span class="chat-icon dot red"></span> Eskalation: ${segments.eskalation} Fälle
+<span class="chat-icon dot green"></span> Priorität: ${segments.prioritaet} Fälle
+<span class="chat-icon dot amber"></span> Restrukturierung: ${segments.restrukturierung} Fälle
+<span class="chat-icon dot gray"></span> Abwicklung: ${segments.abwicklung} Fälle
 
 **Letzte Zahlungen:** €${demoPayments.reduce((s, p) => s + p.betrag, 0).toLocaleString('de-DE')} (7 Tage)`;
     }
@@ -256,7 +256,7 @@ function processBankenQuery(message) {
             );
 
             if (found) {
-                return `🔍 **Gefunden: <span class="chat-customer-link" onclick="openCustomerDetail('${found.id}')">${found.name}</span>**
+                return `<span class="chat-icon search"></span> **Gefunden: <span class="chat-customer-link" onclick="openCustomerDetail('${found.id}')">${found.name}</span>**
 
 **ID:** ${found.id}
 **Forderung:** €${found.forderung.toLocaleString('de-DE')}
@@ -264,9 +264,9 @@ function processBankenQuery(message) {
 **Segment:** ${found.segment}
 **Status:** ${found.status}
 
-<button class="chat-action-btn" onclick="openCustomerDetail('${found.id}')">👤 Kundendetail öffnen</button>`;
+<button class="chat-action-btn" onclick="openCustomerDetail('${found.id}')"><span class="chat-icon user"></span> Kundendetail öffnen</button>`;
             } else {
-                return `❌ Kein Kunde mit "${nameMatch[1]}" gefunden.\n\nVerfügbare Kunden durchsuchen Sie in der Tabelle unten.`;
+                return `<span class="chat-icon x"></span> Kein Kunde mit "${nameMatch[1]}" gefunden.\n\nVerfügbare Kunden durchsuchen Sie in der Tabelle unten.`;
             }
         }
     }
@@ -282,7 +282,7 @@ function processBankenQuery(message) {
 • "Portfolio-Übersicht"
 • "Suche Kunde Mueller"
 
-💡 Stellen Sie Ihre Frage zu Kunden, Forderungen oder dem Portfolio.`;
+<span class="chat-icon lightbulb"></span> Stellen Sie Ihre Frage zu Kunden, Forderungen oder dem Portfolio.`;
 }
 
 // Add message to chat

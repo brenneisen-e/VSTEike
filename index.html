@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="css/provisionssimulation.css?v=20251216">
     <link rel="stylesheet" href="css/risikoscoring.css?v=20251217">
     <link rel="stylesheet" href="css/bestandsuebertragung-vst.css?v=20251217">
+    <link rel="stylesheet" href="css/guided-tour.css?v=20251217">
 </head>
 <body>
   <!-- ========================================
@@ -55,6 +56,15 @@
         <!-- Profile dropdown disabled - single role only -->
         <div class="profile-dropdown" id="profileDropdown" style="display: none !important;"></div>
     </div>
+
+    <!-- Demo Tour Button (fixed bottom-left) -->
+    <button class="demo-tour-btn" onclick="startDemoTour()" title="Interaktive Demo starten">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+        </svg>
+        Demo starten
+    </button>
 
     <!-- Loading Animation -->
     <div id="loadingAnimation" class="loading-container">
@@ -3861,5 +3871,7 @@
     <script src="js/bestand-export.js?v=20251217"></script>
     <script src="js/bestand-ui.js?v=20251217"></script>
     <script src="js/bestand-app.js?v=20251217"></script>
+    <!-- Guided Tour / Demo Mode -->
+    <script src="js/guided-tour.js?v=20251217"></script>
 </body>
 </html>
