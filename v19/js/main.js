@@ -27,16 +27,21 @@ function createKPICard(kpi) {
     }
 
     card.innerHTML = `
+        <div class="kpi-icon-header">
+            <span class="kpi-icon">${kpi.icon}</span>
+        </div>
         <div class="kpi-header">
-            <div style="flex: 1;">
-                <div class="kpi-title">
-                    <span class="kpi-icon">${kpi.icon}</span>
-                    ${kpi.title}
-                </div>
+            <div style="flex: 1; min-width: 0;">
+                <div class="kpi-title">${kpi.title}</div>
                 <div class="kpi-description">${kpi.description}</div>
             </div>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="zoom-button" onclick="openFullscreen('${kpi.id}')" title="Vollbildansicht">🔍</button>
+            <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+                <button class="zoom-button" onclick="openFullscreen('${kpi.id}')" title="Vollbildansicht">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
                 <div class="kpi-badge">Aktueller Monat: ${formatValue(currentValue, kpi.unit)}</div>
             </div>
         </div>

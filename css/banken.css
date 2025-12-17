@@ -303,6 +303,16 @@
     color: #d97706;
 }
 
+.header-tile-badge.primary {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.header-tile.active {
+    background: rgba(37, 99, 235, 0.1);
+    border-color: #3b82f6;
+}
+
 .banken-header-right {
     display: flex;
     align-items: center;
