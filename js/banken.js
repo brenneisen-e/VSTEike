@@ -249,6 +249,9 @@ function filterBySegment(segment) {
     console.log('Filtered by segment:', segment, '- Found:', matchingRows.length);
 }
 
+// Track currently selected segment
+let currentSelectedSegment = null;
+
 // Navigate to customer list with segment filter applied
 function openSegmentFullscreen(segment) {
     const segmentConfig = {
@@ -260,6 +263,27 @@ function openSegmentFullscreen(segment) {
 
     const config = segmentConfig[segment];
     if (!config) return;
+
+    // Toggle: if same segment clicked, deselect
+    if (currentSelectedSegment === segment) {
+        clearSegmentFilter();
+        currentSelectedSegment = null;
+        showNotification('Filter aufgehoben', 'info');
+        return;
+    }
+
+    // Remove selected from all quadrants
+    document.querySelectorAll('.matrix-quadrant').forEach(q => {
+        q.classList.remove('selected');
+    });
+
+    // Add selected to clicked quadrant
+    const clickedQuadrant = document.querySelector(`.segment-${segment}`);
+    if (clickedQuadrant) {
+        clickedQuadrant.classList.add('selected');
+    }
+
+    currentSelectedSegment = segment;
 
     // Apply segment filter to customer list
     filterBySegment(segment);
@@ -326,6 +350,9 @@ function showFilterIndicator(segmentName, color, count, segmentKey) {
 
 // Clear segment filter
 function clearSegmentFilter() {
+    // Reset selected segment tracker
+    currentSelectedSegment = null;
+
     // Remove indicator
     const indicator = document.querySelector('.segment-filter-indicator');
     if (indicator) {
@@ -1569,13 +1596,87 @@ function showBulkImport() {
 // FULL CRM PROFILE FUNCTIONS
 // ========================================
 
-function openCrmProfile(customerId) {
+function openCrmProfile(customerId, taskContext = null) {
     const crmView = document.getElementById('crmProfileView');
     if (crmView) {
         crmView.classList.add('active');
-        // Could load customer data here based on customerId
-        console.log('Opening CRM profile for customer:', customerId);
+
+        // Show/hide task hint box
+        const taskHintBox = document.getElementById('crmTaskHint');
+        if (taskHintBox) {
+            if (taskContext) {
+                taskHintBox.style.display = 'block';
+                taskHintBox.innerHTML = `
+                    <div class="task-hint-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <strong>Offene Aufgabe:</strong> ${taskContext.title}
+                    </div>
+                    <div class="task-hint-meta">
+                        <span class="task-hint-due ${taskContext.overdue ? 'overdue' : ''}">${taskContext.due}</span>
+                        <button class="btn-ai-summary" onclick="showAiSummary('${customerId}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
+                                <path d="M12 14c-4 0-8 2-8 4v2h16v-2c0-2-4-4-8-4z"></path>
+                            </svg>
+                            KI-Zusammenfassung
+                        </button>
+                    </div>
+                `;
+            } else {
+                taskHintBox.style.display = 'none';
+            }
+        }
+
+        console.log('Opening CRM profile for customer:', customerId, taskContext ? 'with task' : '');
     }
+}
+
+// Show AI Summary for customer
+function showAiSummary(customerId) {
+    showNotification('KI-Zusammenfassung wird erstellt...', 'info');
+
+    // Simulate AI loading
+    setTimeout(() => {
+        const summary = `
+            <div class="ai-summary-modal">
+                <div class="ai-summary-header">
+                    <h3>🤖 KI-Zusammenfassung für ${customerId}</h3>
+                    <button onclick="this.closest('.ai-summary-modal').remove()">✕</button>
+                </div>
+                <div class="ai-summary-content">
+                    <h4>📊 Kundenprofil</h4>
+                    <p>Der Kunde zeigt eine <strong>moderate Zahlungsbereitschaft</strong> (Willingness: 45%) bei <strong>eingeschränkter Zahlungsfähigkeit</strong> (Ability: 35%). Die Kommunikation war bisher konstruktiv.</p>
+
+                    <h4>📅 Aktivitäten (letzte 30 Tage)</h4>
+                    <ul>
+                        <li>3 Telefonkontakte (2 erfolgreich, 1 nicht erreicht)</li>
+                        <li>1 Zahlungsvereinbarung getroffen</li>
+                        <li>Teilzahlung i.H.v. €1.200 eingegangen</li>
+                    </ul>
+
+                    <h4>🎯 Empfohlene nächste Schritte</h4>
+                    <ol>
+                        <li><strong>Telefonat führen</strong> - Zahlungsvereinbarung nachfassen</li>
+                        <li><strong>Ratenzahlung prüfen</strong> - Kunde hat Interesse signalisiert</li>
+                        <li><strong>Dokumentation aktualisieren</strong> - Finanzielle Situation erfassen</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+
+        // Add modal to page
+        const modalContainer = document.createElement('div');
+        modalContainer.className = 'ai-summary-overlay';
+        modalContainer.innerHTML = summary;
+        modalContainer.onclick = (e) => {
+            if (e.target === modalContainer) modalContainer.remove();
+        };
+        document.body.appendChild(modalContainer);
+    }, 1500);
 }
 
 function closeCrmProfile() {
@@ -1814,6 +1915,17 @@ window.showBulkImport = showBulkImport;
 window.openCrmProfile = openCrmProfile;
 window.closeCrmProfile = closeCrmProfile;
 window.showCrmSection = showCrmSection;
+window.showAiSummary = showAiSummary;
+window.openTaskCustomer = openTaskCustomer;
+
+// Open customer from task with task context
+function openTaskCustomer(customerId, taskTitle, taskDue, isOverdue) {
+    openCrmProfile(customerId, {
+        title: taskTitle,
+        due: taskDue,
+        overdue: isOverdue
+    });
+}
 window.crmCall = crmCall;
 window.crmEmail = crmEmail;
 window.crmSchedule = crmSchedule;

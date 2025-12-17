@@ -189,8 +189,10 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 20px 20px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
 }
 
 .banken-header-left {
@@ -1400,9 +1402,29 @@ body.modal-open {
 }
 
 .matrix-quadrant.selected {
-    transform: scale(1.03);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5), 0 8px 25px rgba(0, 0, 0, 0.15);
-    filter: brightness(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px currentColor;
+}
+
+/* Segment-specific selected states */
+.segment-eskalation.selected {
+    background: rgba(251, 191, 36, 0.15);
+    border-width: 3px;
+}
+
+.segment-prioritaet.selected {
+    background: rgba(34, 197, 94, 0.15);
+    border-width: 3px;
+}
+
+.segment-abwicklung.selected {
+    background: rgba(239, 68, 68, 0.15);
+    border-width: 3px;
+}
+
+.segment-restrukturierung.selected {
+    background: rgba(99, 102, 241, 0.15);
+    border-width: 3px;
 }
 
 /* Segment Filter Indicator */
@@ -2049,6 +2071,18 @@ body.modal-open {
 .status-badge.inkasso { background: #fee2e2; color: #dc2626; }
 .status-badge.vereinbarung { background: #dcfce7; color: #16a34a; }
 .status-badge.abschreibung { background: #f1f5f9; color: #64748b; }
+.status-badge.zusage { background: #f0fdf4; color: #15803d; }
+
+/* Bearbeiter Badge */
+.bearbeiter-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #f8fafc;
+    color: #475569;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
 
 /* KI Score in Table */
 .ki-score {
@@ -2733,6 +2767,17 @@ body.modal-open {
 
 .aufgabe-item.priority-normal {
     border-left-color: #3b82f6;
+}
+
+.aufgabe-item.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.aufgabe-item.clickable:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .aufgabe-priority {
@@ -4470,6 +4515,160 @@ body.modal-open {
 
 .crm-profile-view.active {
     display: flex;
+    flex-direction: column;
+}
+
+/* Task Hint Box - shown when opening from task */
+.crm-task-hint {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-bottom: 2px solid #f59e0b;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-hint-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #92400e;
+}
+
+.task-hint-header svg {
+    color: #f59e0b;
+}
+
+.task-hint-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.task-hint-due {
+    font-size: 13px;
+    color: #92400e;
+}
+
+.task-hint-due.overdue {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.btn-ai-summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-ai-summary:hover {
+    background: #7c3aed;
+    transform: translateY(-1px);
+}
+
+/* AI Summary Modal */
+.ai-summary-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.ai-summary-modal {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.ai-summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+}
+
+.ai-summary-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.ai-summary-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.ai-summary-header button:hover {
+    opacity: 1;
+}
+
+.ai-summary-content {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+.ai-summary-content h4 {
+    margin: 16px 0 8px 0;
+    color: #1e293b;
+    font-size: 15px;
+}
+
+.ai-summary-content h4:first-child {
+    margin-top: 0;
+}
+
+.ai-summary-content p {
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+.ai-summary-content ul, .ai-summary-content ol {
+    margin: 0 0 12px 0;
+    padding-left: 20px;
+    color: #475569;
+}
+
+.ai-summary-content li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* CRM main content wrapper */
+.crm-profile-view.active > .crm-sidebar,
+.crm-profile-view.active > .crm-main {
+    /* Handled by flex */
+}
+
+.crm-profile-view .crm-content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }
 
 .crm-sidebar {

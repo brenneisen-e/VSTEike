@@ -463,6 +463,7 @@
                             <th>Mahnstufe</th>
                             <th>Nächste Aktion</th>
                             <th>Status</th>
+                            <th>Bearbeiter</th>
                             <th>Aktionen</th>
                         </tr>
                     </thead>
@@ -476,7 +477,7 @@
                             </td>
                             <td>Betriebsmittelkredit</td>
                             <td class="amount">€125.000</td>
-                            <td><span class="dpd-badge high">35</span></td>
+                            <td><span class="dpd-badge medium">35</span></td>
                             <td><span class="segment-badge escalate">Eskalation</span></td>
                             <td>
                                 <div class="wa-score-visual">
@@ -496,14 +497,15 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="mahnstufe-badge m3">M3</span></td>
+                            <td><span class="mahnstufe-badge m2">M2</span></td>
                             <td>
                                 <div class="next-action">
-                                    <span class="action-type">Inkasso-Übergabe</span>
-                                    <small class="action-date overdue">15.12.2024</small>
+                                    <span class="action-type">2. Mahnung versenden</span>
+                                    <small class="action-date upcoming">18.12.2024</small>
                                 </div>
                             </td>
-                            <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="startMahnprozess('K-2024-0001')" title="Mahnprozess">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -534,7 +536,7 @@
                             </td>
                             <td>Ratenkredit</td>
                             <td class="amount">€8.450</td>
-                            <td><span class="dpd-badge medium">21</span></td>
+                            <td><span class="dpd-badge low">21</span></td>
                             <td><span class="segment-badge priority">Priorität</span></td>
                             <td>
                                 <div class="wa-score-visual">
@@ -562,6 +564,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="bearbeiter-badge">K. Weber</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn primary" onclick="scheduleCall('K-2024-0002')" title="Anrufen">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -615,6 +618,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td><span class="bearbeiter-badge">S. Müller</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="viewAgreement('K-2024-0003')" title="Vereinbarung ansehen">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -633,7 +637,7 @@
                             </td>
                             <td>Kreditkarte</td>
                             <td class="amount">€3.210</td>
-                            <td><span class="dpd-badge high">67</span></td>
+                            <td><span class="dpd-badge medium">67</span></td>
                             <td><span class="segment-badge writeoff">Abwicklung</span></td>
                             <td>
                                 <div class="wa-score-visual">
@@ -661,6 +665,7 @@
                                 </div>
                             </td>
                             <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="sellCase('K-2024-0004')" title="Verkaufen">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
@@ -681,19 +686,20 @@
                             <td><div class="customer-cell"><strong>Hoffmann Bau GmbH</strong><small>Gewerbe | K-2024-0005</small></div></td>
                             <td>Investitionskredit</td>
                             <td class="amount">€287.500</td>
-                            <td><span class="dpd-badge high">48</span></td>
+                            <td><span class="dpd-badge medium">48</span></td>
                             <td><span class="segment-badge escalate">Eskalation</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 20%;"></div></div><span class="wa-value">20%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 45%;"></div></div><span class="wa-value">45%</span></div></div></td>
                             <td><span class="mahnstufe-badge m3">M3</span></td>
                             <td><div class="next-action"><span class="action-type">Rechtliche Schritte</span><small class="action-date overdue">12.12.2024</small></div></td>
                             <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td><span class="bearbeiter-badge">A. Becker</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Mahnprozess"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button></td>
                         </tr>
                         <tr onclick="openCustomerDetail('K-2024-0006')">
                             <td><div class="customer-cell"><strong>Keller, Thomas</strong><small>Privat | K-2024-0006</small></div></td>
                             <td>Dispositionskredit</td>
                             <td class="amount">€15.800</td>
-                            <td><span class="dpd-badge high">42</span></td>
+                            <td><span class="dpd-badge medium">42</span></td>
                             <td><span class="segment-badge escalate">Eskalation</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 15%;"></div></div><span class="wa-value">15%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 55%;"></div></div><span class="wa-value">55%</span></div></div></td>
                             <td><span class="mahnstufe-badge m3">M3</span></td>
@@ -705,7 +711,7 @@
                             <td><div class="customer-cell"><strong>Autohaus Berger</strong><small>Gewerbe | K-2024-0007</small></div></td>
                             <td>Betriebsmittelkredit</td>
                             <td class="amount">€89.300</td>
-                            <td><span class="dpd-badge high">55</span></td>
+                            <td><span class="dpd-badge medium">55</span></td>
                             <td><span class="segment-badge escalate">Eskalation</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 30%;"></div></div><span class="wa-value">30%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 40%;"></div></div><span class="wa-value">40%</span></div></div></td>
                             <td><span class="mahnstufe-badge m4">M4</span></td>
@@ -718,7 +724,7 @@
                             <td><div class="customer-cell"><strong>Lehmann, Sandra</strong><small>Privat | K-2024-0008</small></div></td>
                             <td>Autokredit</td>
                             <td class="amount">€12.650</td>
-                            <td><span class="dpd-badge medium">18</span></td>
+                            <td><span class="dpd-badge low">18</span></td>
                             <td><span class="segment-badge priority">Priorität</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 90%;"></div></div><span class="wa-value">90%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 75%;"></div></div><span class="wa-value">75%</span></div></div></td>
                             <td><span class="mahnstufe-badge m1">M1</span></td>
@@ -730,7 +736,7 @@
                             <td><div class="customer-cell"><strong>Meier Elektro OHG</strong><small>Gewerbe | K-2024-0009</small></div></td>
                             <td>Kontokorrent</td>
                             <td class="amount">€34.200</td>
-                            <td><span class="dpd-badge medium">25</span></td>
+                            <td><span class="dpd-badge low">25</span></td>
                             <td><span class="segment-badge priority">Priorität</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 80%;"></div></div><span class="wa-value">80%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 65%;"></div></div><span class="wa-value">65%</span></div></div></td>
                             <td><span class="mahnstufe-badge m2">M2</span></td>
@@ -755,7 +761,7 @@
                             <td><div class="customer-cell"><strong>Bäckerei Schulze</strong><small>Gewerbe | K-2024-0011</small></div></td>
                             <td>Betriebsmittelkredit</td>
                             <td class="amount">€67.400</td>
-                            <td><span class="dpd-badge medium">28</span></td>
+                            <td><span class="dpd-badge low">28</span></td>
                             <td><span class="segment-badge restructure">Restrukturierung</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 75%;"></div></div><span class="wa-value">75%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 30%;"></div></div><span class="wa-value">30%</span></div></div></td>
                             <td><span class="mahnstufe-badge m2">M2</span></td>
@@ -779,7 +785,7 @@
                             <td><div class="customer-cell"><strong>Gasthaus zum Löwen</strong><small>Gewerbe | K-2024-0013</small></div></td>
                             <td>Investitionskredit</td>
                             <td class="amount">€112.800</td>
-                            <td><span class="dpd-badge medium">19</span></td>
+                            <td><span class="dpd-badge low">19</span></td>
                             <td><span class="segment-badge restructure">Restrukturierung</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 65%;"></div></div><span class="wa-value">65%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 40%;"></div></div><span class="wa-value">40%</span></div></div></td>
                             <td><span class="mahnstufe-badge m2">M2</span></td>
@@ -804,7 +810,7 @@
                             <td><div class="customer-cell"><strong>Maier Transporte</strong><small>Gewerbe | K-2024-0015</small></div></td>
                             <td>Leasingvertrag</td>
                             <td class="amount">€78.900</td>
-                            <td><span class="dpd-badge high">78</span></td>
+                            <td><span class="dpd-badge medium">78</span></td>
                             <td><span class="segment-badge writeoff">Abwicklung</span></td>
                             <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 20%;"></div></div><span class="wa-value">20%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 15%;"></div></div><span class="wa-value">15%</span></div></div></td>
                             <td><span class="mahnstufe-badge m4">M4</span></td>
