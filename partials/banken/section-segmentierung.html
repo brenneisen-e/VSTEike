@@ -20,12 +20,14 @@
                 <div class="kpi-content-wrapper">
                     <div class="kpi-content">
                         <div class="kpi-label">Aktive Fälle</div>
-                        <div class="kpi-value">10.234</div>
-                        <div class="kpi-change negative">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                            +127 zur Vorwoche
+                        <div class="kpi-value-row">
+                            <div class="kpi-value">10.234</div>
+                            <div class="kpi-change negative">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                +127 zur Vorwoche
+                            </div>
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('aktive-faelle', 'Aktive Fälle - Zeitverlauf')">
@@ -46,12 +48,14 @@
                 <div class="kpi-content-wrapper">
                     <div class="kpi-content">
                         <div class="kpi-label">Offene Forderung</div>
-                        <div class="kpi-value">€ 47,8 Mio</div>
-                        <div class="kpi-change negative">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                            +€ 1,2 Mio
+                        <div class="kpi-value-row">
+                            <div class="kpi-value">€ 47,8 Mio</div>
+                            <div class="kpi-change negative">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                +€ 1,2 Mio
+                            </div>
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('offene-forderung', 'Offene Forderung - Zeitverlauf')">
@@ -72,12 +76,14 @@
                 <div class="kpi-content-wrapper">
                     <div class="kpi-content">
                         <div class="kpi-label">Recovery Rate</div>
-                        <div class="kpi-value highlight-green">68,4%</div>
-                        <div class="kpi-change positive">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                            +2,3% vs. Vormonat
+                        <div class="kpi-value-row">
+                            <div class="kpi-value highlight-green">68,4%</div>
+                            <div class="kpi-change positive">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                    <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                                +2,3% vs. Vormonat
+                            </div>
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('recovery-rate', 'Recovery Rate - Zeitverlauf')">
@@ -98,12 +104,14 @@
                 <div class="kpi-content-wrapper">
                     <div class="kpi-content">
                         <div class="kpi-label">Ø DPD</div>
-                        <div class="kpi-value">47</div>
-                        <div class="kpi-change positive">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                            -3 Tage vs. Vorwoche
+                        <div class="kpi-value-row">
+                            <div class="kpi-value">47</div>
+                            <div class="kpi-change positive">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                                -3 Tage vs. Vorwoche
+                            </div>
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('dpd', 'Ø DPD - Zeitverlauf')">
@@ -124,14 +132,16 @@
                 <div class="kpi-content-wrapper">
                     <div class="kpi-content">
                         <div class="kpi-label">Meine Aufgaben</div>
-                        <div class="kpi-value">156</div>
-                        <div class="kpi-change neutral pulse-text">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                            23 überfällig
+                        <div class="kpi-value-row">
+                            <div class="kpi-value">156</div>
+                            <div class="kpi-change neutral pulse-text">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                23 überfällig
+                            </div>
                         </div>
                     </div>
                     <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('aufgaben', 'Meine Aufgaben - Zeitverlauf')">
