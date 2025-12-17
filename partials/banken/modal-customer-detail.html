@@ -16,9 +16,7 @@
 
         <div class="modal-tabs">
             <button class="modal-tab active" onclick="showCustomerTab('stammdaten')">Stammdaten</button>
-            <button class="modal-tab" onclick="showCustomerTab('konten')">Konten & Verträge</button>
-            <button class="modal-tab" onclick="showCustomerTab('transaktionen')">Transaktionen</button>
-            <button class="modal-tab" onclick="showCustomerTab('forderungen')">Forderungen</button>
+            <button class="modal-tab" onclick="showCustomerTab('konten')">Konten & Finanzen</button>
             <button class="modal-tab" onclick="showCustomerTab('kommunikation')">Kommunikation</button>
             <button class="modal-tab" onclick="showCustomerTab('ki-analyse')">KI-Analyse</button>
         </div>
@@ -263,295 +261,381 @@
                 </div>
             </div>
 
-            <!-- Tab: Konten & Verträge -->
+            <!-- Tab: Konten & Finanzen (kombiniert) -->
             <div class="customer-tab" id="tab-konten">
-                <div class="konten-header">
-                    <div class="konten-summary">
-                        <div class="konten-kpi">
-                            <span class="kpi-value">5</span>
+                <!-- Übersichts-Header mit KPIs und Forderungen -->
+                <div class="finanzen-overview">
+                    <div class="finanzen-kpis">
+                        <div class="finanzen-kpi">
                             <span class="kpi-label">Kredite</span>
+                            <span class="kpi-value">5</span>
                         </div>
-                        <div class="konten-kpi">
-                            <span class="kpi-value highlight-red">€350.500</span>
+                        <div class="finanzen-kpi danger">
                             <span class="kpi-label">Gesamtforderung</span>
+                            <span class="kpi-value">€350.500</span>
                         </div>
-                        <div class="konten-kpi">
+                        <div class="finanzen-kpi">
+                            <span class="kpi-label">Monatl. Rate</span>
                             <span class="kpi-value">€2.380</span>
-                            <span class="kpi-label">Monatliche Rate</span>
                         </div>
-                    </div>
-                </div>
-
-                <div class="credit-products-grid">
-                    <!-- Kreditkarte Gold -->
-                    <div class="credit-product-card danger">
-                        <div class="credit-product-header">
-                            <div class="credit-product-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                    <line x1="1" y1="10" x2="23" y2="10"></line>
-                                </svg>
-                            </div>
-                            <div class="credit-product-info">
-                                <span class="credit-product-name">Kreditkarte Gold</span>
-                                <span class="credit-product-number">4929-****-****-8847</span>
-                            </div>
-                            <span class="credit-status-badge danger">45 DPD</span>
+                        <div class="finanzen-kpi warning">
+                            <span class="kpi-label">Überfällig</span>
+                            <span class="kpi-value">€15.000</span>
                         </div>
-                        <div class="credit-product-amounts">
-                            <div class="amount-row">
-                                <span class="amount-label">Saldo / Limit</span>
-                                <span class="amount-value">€12.450 / €15.000</span>
-                            </div>
-                            <div class="utilization-bar">
-                                <div class="utilization-fill danger" style="width: 83%;"></div>
-                            </div>
-                        </div>
-                        <div class="credit-mini-chart">
-                            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <polyline points="0,50 30,48 60,52 90,45 120,55 150,58 200,55" fill="none" stroke="#ef4444" stroke-width="2"/>
-                                <line x1="0" y1="30" x2="200" y2="30" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
-                            </svg>
-                            <span class="chart-label">Saldo-Verlauf (6 Monate)</span>
+                        <div class="finanzen-kpi danger">
+                            <span class="kpi-label">Rückgabequote</span>
+                            <span class="kpi-value">34%</span>
                         </div>
                     </div>
 
-                    <!-- Ratenkredit PKW -->
-                    <div class="credit-product-card warning">
-                        <div class="credit-product-header">
-                            <div class="credit-product-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                </svg>
-                            </div>
-                            <div class="credit-product-info">
-                                <span class="credit-product-name">Ratenkredit PKW</span>
-                                <span class="credit-product-number">RK-2022-0034521</span>
-                            </div>
-                            <span class="credit-status-badge warning">1 Rate</span>
-                        </div>
-                        <div class="credit-product-amounts">
-                            <div class="amount-row">
-                                <span class="amount-label">Restschuld</span>
-                                <span class="amount-value">€28.750</span>
-                            </div>
-                            <div class="amount-row">
-                                <span class="amount-label">Rate</span>
-                                <span class="amount-value">€650 / Monat</span>
-                            </div>
-                        </div>
-                        <div class="credit-mini-chart">
-                            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <polyline points="0,10 30,15 60,18 90,22 120,28 150,32 200,38" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                                <polyline points="0,10 30,14 60,18 90,22 120,26 150,30 200,34" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="4"/>
-                            </svg>
-                            <span class="chart-label">Tilgungsverlauf (Plan vs. Ist)</span>
-                        </div>
-                    </div>
-
-                    <!-- Ratenkredit Möbel -->
-                    <div class="credit-product-card danger">
-                        <div class="credit-product-header">
-                            <div class="credit-product-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                </svg>
-                            </div>
-                            <div class="credit-product-info">
-                                <span class="credit-product-name">Ratenkredit Möbel</span>
-                                <span class="credit-product-number">RK-2023-0078432</span>
-                            </div>
-                            <span class="credit-status-badge danger">60 DPD</span>
-                        </div>
-                        <div class="credit-product-amounts">
-                            <div class="amount-row">
-                                <span class="amount-label">Restschuld</span>
-                                <span class="amount-value">€9.800</span>
-                            </div>
-                            <div class="amount-row">
-                                <span class="amount-label">Rate</span>
-                                <span class="amount-value">€280 / Monat</span>
-                            </div>
-                        </div>
-                        <div class="credit-mini-chart">
-                            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <polyline points="0,8 30,15 60,20 90,25 120,32 150,42 200,55" fill="none" stroke="#ef4444" stroke-width="2"/>
-                            </svg>
-                            <span class="chart-label">Rückstands-Entwicklung</span>
-                        </div>
-                    </div>
-
-                    <!-- Dispositionskredit -->
-                    <div class="credit-product-card danger">
-                        <div class="credit-product-header">
-                            <div class="credit-product-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                                    <line x1="2" y1="10" x2="22" y2="10"></line>
-                                </svg>
-                            </div>
-                            <div class="credit-product-info">
-                                <span class="credit-product-name">Dispositionskredit</span>
-                                <span class="credit-product-number">GK-2018-0001234</span>
-                            </div>
-                            <span class="credit-status-badge danger">Über Limit</span>
-                        </div>
-                        <div class="credit-product-amounts">
-                            <div class="amount-row">
-                                <span class="amount-label">Saldo / Limit</span>
-                                <span class="amount-value highlight-red">€14.500 / €10.000</span>
-                            </div>
-                            <div class="utilization-bar">
-                                <div class="utilization-fill danger" style="width: 100%;"></div>
-                                <div class="over-limit-indicator" style="width: 45%;"></div>
-                            </div>
-                        </div>
-                        <div class="credit-mini-chart">
-                            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <line x1="0" y1="30" x2="200" y2="30" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
-                                <polyline points="0,28 30,30 60,35 90,40 120,48 150,55 200,58" fill="none" stroke="#ef4444" stroke-width="2"/>
-                            </svg>
-                            <span class="chart-label">€4.500 über Limit</span>
-                        </div>
-                    </div>
-
-                    <!-- Baufinanzierung -->
-                    <div class="credit-product-card primary">
-                        <div class="credit-product-header">
-                            <div class="credit-product-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </div>
-                            <div class="credit-product-info">
-                                <span class="credit-product-name">Baufinanzierung</span>
-                                <span class="credit-product-number">BF-2019-0098765</span>
-                            </div>
-                            <span class="credit-status-badge warning">2 Raten</span>
-                        </div>
-                        <div class="credit-product-amounts">
-                            <div class="amount-row">
-                                <span class="amount-label">Restschuld</span>
-                                <span class="amount-value">€285.000</span>
-                            </div>
-                            <div class="amount-row">
-                                <span class="amount-label">Rate</span>
-                                <span class="amount-value">€1.450 / Monat</span>
-                            </div>
-                        </div>
-                        <div class="credit-mini-chart">
-                            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <polyline points="0,8 30,12 60,18 90,24 120,30 150,36 200,42" fill="none" stroke="#3b82f6" stroke-width="2"/>
-                                <polyline points="0,8 30,11 60,14 90,17 120,20 150,23 200,26" fill="none" stroke="#22c55e" stroke-width="1" stroke-dasharray="4"/>
-                            </svg>
-                            <span class="chart-label">Tilgungsverlauf (Plan vs. Ist)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab: Transaktionen -->
-            <div class="customer-tab" id="tab-transaktionen">
-                <div class="transaction-summary">
-                    <div class="summary-card">
-                        <span class="summary-label">Lastschriftrückgaben (12M)</span>
-                        <span class="summary-value negative">12</span>
-                    </div>
-                    <div class="summary-card">
-                        <span class="summary-label">Rückgabequote</span>
-                        <span class="summary-value negative">34%</span>
-                    </div>
-                    <div class="summary-card">
-                        <span class="summary-label">Letzte Zahlung</span>
-                        <span class="summary-value">15.11.2025</span>
-                    </div>
-                </div>
-                <h4>Kontoauszug (letzte 30 Tage)</h4>
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            <th>Datum</th>
-                            <th>Beschreibung</th>
-                            <th>Betrag</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="transaction-negative">
-                            <td>14.12.2025</td>
-                            <td>Lastschrift Ratenzahlung</td>
-                            <td class="amount negative">-€2.500</td>
-                            <td><span class="tx-status failed">Rückgabe</span></td>
-                        </tr>
-                        <tr>
-                            <td>01.12.2025</td>
-                            <td>Lastschrift Ratenzahlung</td>
-                            <td class="amount negative">-€2.500</td>
-                            <td><span class="tx-status failed">Rückgabe</span></td>
-                        </tr>
-                        <tr>
-                            <td>15.11.2025</td>
-                            <td>Überweisung Teilzahlung</td>
-                            <td class="amount positive">+€1.000</td>
-                            <td><span class="tx-status success">Gebucht</span></td>
-                        </tr>
-                        <tr>
-                            <td>01.11.2025</td>
-                            <td>Lastschrift Ratenzahlung</td>
-                            <td class="amount negative">-€2.500</td>
-                            <td><span class="tx-status failed">Rückgabe</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Tab: Forderungen -->
-            <div class="customer-tab" id="tab-forderungen">
-                <div class="forderungen-overview">
-                    <div class="forderung-total">
-                        <span class="label">Gesamtforderung</span>
-                        <span class="value">€125.000</span>
-                    </div>
-                    <div class="forderung-breakdown">
-                        <div class="breakdown-item">
+                    <!-- Forderungsübersicht kompakt -->
+                    <div class="forderungen-compact">
+                        <div class="forderung-breakdown-row">
                             <span class="label">Hauptforderung</span>
                             <span class="value">€110.000</span>
                         </div>
-                        <div class="breakdown-item">
+                        <div class="forderung-breakdown-row">
                             <span class="label">Zinsen</span>
                             <span class="value">€8.450</span>
                         </div>
-                        <div class="breakdown-item">
+                        <div class="forderung-breakdown-row">
                             <span class="label">Mahngebühren</span>
                             <span class="value">€350</span>
                         </div>
-                        <div class="breakdown-item">
+                        <div class="forderung-breakdown-row">
                             <span class="label">Inkassokosten</span>
                             <span class="value">€6.200</span>
                         </div>
                     </div>
                 </div>
-                <div class="forderung-timeline">
-                    <h4>Fälligkeiten</h4>
-                    <div class="timeline-item overdue">
-                        <div class="timeline-date">01.10.2025</div>
-                        <div class="timeline-content">
-                            <strong>Rate 10/2025</strong> - €2.500 (35 Tage überfällig)
+
+                <!-- Kredit-Produkte mit großen Charts -->
+                <div class="credit-products-large">
+                    <!-- Kreditkarte Gold - großes Chart mit realistischem Saldoverlauf -->
+                    <div class="credit-product-large danger">
+                        <div class="credit-product-header-large">
+                            <div class="credit-product-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="credit-product-info-large">
+                                <span class="credit-product-name">Kreditkarte Gold</span>
+                                <span class="credit-product-number">4929-****-****-8847</span>
+                            </div>
+                            <div class="credit-amounts-inline">
+                                <div class="amount-item">
+                                    <span class="amount-label">Saldo</span>
+                                    <span class="amount-value danger">€12.450</span>
+                                </div>
+                                <div class="amount-item">
+                                    <span class="amount-label">Limit</span>
+                                    <span class="amount-value">€15.000</span>
+                                </div>
+                            </div>
+                            <span class="credit-status-badge danger">45 DPD</span>
+                        </div>
+
+                        <div class="chart-container-large">
+                            <div class="chart-title">Saldo-Verlauf (12 Monate) - Ausgaben ↑ Zahlungen ↓</div>
+                            <div class="chart-with-axes">
+                                <div class="y-axis">
+                                    <span>€15k</span>
+                                    <span>€12k</span>
+                                    <span>€9k</span>
+                                    <span>€6k</span>
+                                    <span>€3k</span>
+                                    <span>€0</span>
+                                </div>
+                                <div class="chart-area">
+                                    <svg viewBox="0 0 400 150" preserveAspectRatio="none">
+                                        <!-- Limit-Linie -->
+                                        <line x1="0" y1="10" x2="400" y2="10" stroke="#ef4444" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <text x="360" y="8" fill="#ef4444" font-size="10">Limit</text>
+
+                                        <!-- Gitterlinien -->
+                                        <line x1="0" y1="35" x2="400" y2="35" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="60" x2="400" y2="60" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="85" x2="400" y2="85" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="110" x2="400" y2="110" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="135" x2="400" y2="135" stroke="#f1f5f9" stroke-width="1"/>
+
+                                        <!-- Saldo-Verlauf: Ausgaben steigen, Zahlung reduziert, wieder steigend -->
+                                        <!-- Jan: 5k, Feb: 7k, März: 8.5k, April: 4k (Zahlung), Mai: 6k, Juni: 8k -->
+                                        <!-- Juli: 9.5k, Aug: 5k (Zahlung), Sep: 7k, Okt: 9k, Nov: 11k, Dez: 12.4k -->
+                                        <polyline
+                                            points="15,100 50,80 85,65 120,110 155,90 190,70 225,55 260,100 295,80 330,60 365,40 400,27"
+                                            fill="none"
+                                            stroke="#ef4444"
+                                            stroke-width="2.5"
+                                            stroke-linejoin="round"/>
+
+                                        <!-- Zahlungspunkte markieren (Saldo sinkt) -->
+                                        <circle cx="120" cy="110" r="5" fill="#22c55e" stroke="white" stroke-width="2"/>
+                                        <circle cx="260" cy="100" r="5" fill="#22c55e" stroke="white" stroke-width="2"/>
+
+                                        <!-- Fläche unter der Kurve -->
+                                        <polygon
+                                            points="15,100 50,80 85,65 120,110 155,90 190,70 225,55 260,100 295,80 330,60 365,40 400,27 400,150 15,150"
+                                            fill="url(#redGradient)"
+                                            opacity="0.2"/>
+
+                                        <defs>
+                                            <linearGradient id="redGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#ef4444"/>
+                                                <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                                <div class="x-axis">
+                                    <span>Jan</span>
+                                    <span>Feb</span>
+                                    <span>Mär</span>
+                                    <span>Apr</span>
+                                    <span>Mai</span>
+                                    <span>Jun</span>
+                                    <span>Jul</span>
+                                    <span>Aug</span>
+                                    <span>Sep</span>
+                                    <span>Okt</span>
+                                    <span>Nov</span>
+                                    <span>Dez</span>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <span class="legend-item"><span class="dot red"></span> Saldo</span>
+                                <span class="legend-item"><span class="dot green"></span> Zahlung eingegangen</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="timeline-item overdue">
-                        <div class="timeline-date">01.11.2025</div>
-                        <div class="timeline-content">
-                            <strong>Rate 11/2025</strong> - €2.500 (4 Tage überfällig - Teilzahlung €1.000)
+
+                    <!-- Dispositionskredit -->
+                    <div class="credit-product-large danger">
+                        <div class="credit-product-header-large">
+                            <div class="credit-product-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="credit-product-info-large">
+                                <span class="credit-product-name">Dispositionskredit</span>
+                                <span class="credit-product-number">GK-2018-0001234</span>
+                            </div>
+                            <div class="credit-amounts-inline">
+                                <div class="amount-item">
+                                    <span class="amount-label">Saldo</span>
+                                    <span class="amount-value danger">€14.500</span>
+                                </div>
+                                <div class="amount-item">
+                                    <span class="amount-label">Limit</span>
+                                    <span class="amount-value">€10.000</span>
+                                </div>
+                            </div>
+                            <span class="credit-status-badge danger">+€4.500 über Limit</span>
+                        </div>
+
+                        <div class="chart-container-large">
+                            <div class="chart-title">Kontostand-Verlauf (12 Monate)</div>
+                            <div class="chart-with-axes">
+                                <div class="y-axis">
+                                    <span>€15k</span>
+                                    <span>€12k</span>
+                                    <span>€10k</span>
+                                    <span>€8k</span>
+                                    <span>€5k</span>
+                                    <span>€0</span>
+                                </div>
+                                <div class="chart-area">
+                                    <svg viewBox="0 0 400 150" preserveAspectRatio="none">
+                                        <!-- Limit-Linie bei €10k -->
+                                        <line x1="0" y1="50" x2="400" y2="50" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,5"/>
+                                        <text x="350" y="47" fill="#f59e0b" font-size="10">Limit €10k</text>
+
+                                        <!-- Gitterlinien -->
+                                        <line x1="0" y1="25" x2="400" y2="25" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="75" x2="400" y2="75" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="100" x2="400" y2="100" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="125" x2="400" y2="125" stroke="#f1f5f9" stroke-width="1"/>
+
+                                        <!-- Saldo-Verlauf: unter Limit -> über Limit -->
+                                        <polyline
+                                            points="15,120 50,110 85,95 120,100 155,85 190,75 225,60 260,55 295,45 330,35 365,25 400,20"
+                                            fill="none"
+                                            stroke="#ef4444"
+                                            stroke-width="2.5"
+                                            stroke-linejoin="round"/>
+
+                                        <!-- Über-Limit-Bereich markieren -->
+                                        <rect x="225" y="10" width="175" height="40" fill="#ef4444" opacity="0.1"/>
+                                    </svg>
+                                </div>
+                                <div class="x-axis">
+                                    <span>Jan</span>
+                                    <span>Feb</span>
+                                    <span>Mär</span>
+                                    <span>Apr</span>
+                                    <span>Mai</span>
+                                    <span>Jun</span>
+                                    <span>Jul</span>
+                                    <span>Aug</span>
+                                    <span>Sep</span>
+                                    <span>Okt</span>
+                                    <span>Nov</span>
+                                    <span>Dez</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="timeline-item overdue">
-                        <div class="timeline-date">01.12.2025</div>
-                        <div class="timeline-content">
-                            <strong>Rate 12/2025</strong> - €2.500 (Lastschrift zurückgegeben)
+
+                    <!-- Baufinanzierung -->
+                    <div class="credit-product-large primary">
+                        <div class="credit-product-header-large">
+                            <div class="credit-product-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <div class="credit-product-info-large">
+                                <span class="credit-product-name">Baufinanzierung</span>
+                                <span class="credit-product-number">BF-2019-0098765</span>
+                            </div>
+                            <div class="credit-amounts-inline">
+                                <div class="amount-item">
+                                    <span class="amount-label">Restschuld</span>
+                                    <span class="amount-value">€285.000</span>
+                                </div>
+                                <div class="amount-item">
+                                    <span class="amount-label">Rate</span>
+                                    <span class="amount-value">€1.450/M</span>
+                                </div>
+                            </div>
+                            <span class="credit-status-badge warning">2 Raten offen</span>
+                        </div>
+
+                        <div class="chart-container-large">
+                            <div class="chart-title">Tilgungsverlauf - Plan vs. Ist</div>
+                            <div class="chart-with-axes">
+                                <div class="y-axis">
+                                    <span>€320k</span>
+                                    <span>€300k</span>
+                                    <span>€290k</span>
+                                    <span>€285k</span>
+                                    <span>€280k</span>
+                                    <span>€270k</span>
+                                </div>
+                                <div class="chart-area">
+                                    <svg viewBox="0 0 400 150" preserveAspectRatio="none">
+                                        <!-- Gitterlinien -->
+                                        <line x1="0" y1="30" x2="400" y2="30" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="60" x2="400" y2="60" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="90" x2="400" y2="90" stroke="#f1f5f9" stroke-width="1"/>
+                                        <line x1="0" y1="120" x2="400" y2="120" stroke="#f1f5f9" stroke-width="1"/>
+
+                                        <!-- Plan-Linie (gestrichelt, grün) -->
+                                        <polyline
+                                            points="15,20 50,30 85,42 120,54 155,66 190,78 225,90 260,102 295,114 330,126 365,138 400,145"
+                                            fill="none"
+                                            stroke="#22c55e"
+                                            stroke-width="2"
+                                            stroke-dasharray="8,4"/>
+
+                                        <!-- Ist-Linie (durchgehend, blau) - hinter Plan ab Oktober -->
+                                        <polyline
+                                            points="15,20 50,30 85,42 120,54 155,66 190,78 225,90 260,98 295,98 330,98 365,98 400,95"
+                                            fill="none"
+                                            stroke="#3b82f6"
+                                            stroke-width="2.5"
+                                            stroke-linejoin="round"/>
+
+                                        <!-- Differenz markieren -->
+                                        <polygon
+                                            points="260,98 295,98 330,98 365,98 400,95 400,145 365,138 330,126 295,114 260,102"
+                                            fill="#f59e0b"
+                                            opacity="0.2"/>
+                                    </svg>
+                                </div>
+                                <div class="x-axis">
+                                    <span>Jan</span>
+                                    <span>Feb</span>
+                                    <span>Mär</span>
+                                    <span>Apr</span>
+                                    <span>Mai</span>
+                                    <span>Jun</span>
+                                    <span>Jul</span>
+                                    <span>Aug</span>
+                                    <span>Sep</span>
+                                    <span>Okt</span>
+                                    <span>Nov</span>
+                                    <span>Dez</span>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <span class="legend-item"><span class="dot blue"></span> Ist-Restschuld</span>
+                                <span class="legend-item"><span class="line green"></span> Plan</span>
+                                <span class="legend-item"><span class="area orange"></span> Rückstand</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weitere Kredite kompakt -->
+                    <div class="credit-products-compact">
+                        <!-- Ratenkredit PKW -->
+                        <div class="credit-product-compact warning">
+                            <div class="compact-header">
+                                <span class="compact-name">Ratenkredit PKW</span>
+                                <span class="credit-status-badge warning">1 Rate</span>
+                            </div>
+                            <div class="compact-details">
+                                <span>RK-2022-0034521</span>
+                                <span class="compact-amount">€28.750 | €650/M</span>
+                            </div>
+                        </div>
+
+                        <!-- Ratenkredit Möbel -->
+                        <div class="credit-product-compact danger">
+                            <div class="compact-header">
+                                <span class="compact-name">Ratenkredit Möbel</span>
+                                <span class="credit-status-badge danger">60 DPD</span>
+                            </div>
+                            <div class="compact-details">
+                                <span>RK-2023-0078432</span>
+                                <span class="compact-amount">€9.800 | €280/M</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Letzte Transaktionen kompakt -->
+                <div class="transaktionen-compact">
+                    <h4>Letzte Transaktionen</h4>
+                    <div class="tx-compact-list">
+                        <div class="tx-compact-item failed">
+                            <span class="tx-date">14.12.2025</span>
+                            <span class="tx-desc">Lastschrift Ratenzahlung</span>
+                            <span class="tx-amount negative">-€2.500</span>
+                            <span class="tx-status-badge failed">Rückgabe</span>
+                        </div>
+                        <div class="tx-compact-item failed">
+                            <span class="tx-date">01.12.2025</span>
+                            <span class="tx-desc">Lastschrift Ratenzahlung</span>
+                            <span class="tx-amount negative">-€2.500</span>
+                            <span class="tx-status-badge failed">Rückgabe</span>
+                        </div>
+                        <div class="tx-compact-item success">
+                            <span class="tx-date">15.11.2025</span>
+                            <span class="tx-desc">Überweisung Teilzahlung</span>
+                            <span class="tx-amount positive">+€1.000</span>
+                            <span class="tx-status-badge success">Gebucht</span>
+                        </div>
+                        <div class="tx-compact-item failed">
+                            <span class="tx-date">01.11.2025</span>
+                            <span class="tx-desc">Lastschrift Ratenzahlung</span>
+                            <span class="tx-amount negative">-€2.500</span>
+                            <span class="tx-status-badge failed">Rückgabe</span>
                         </div>
                     </div>
                 </div>

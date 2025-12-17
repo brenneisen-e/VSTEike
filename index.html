@@ -31,32 +31,6 @@
      ======================================== -->
 <div id="landingPage" class="landing-page">
 
-    <!-- Hidden File Inputs für Profilbild-Upload -->
-    <input type="file" id="userProfileUpload" accept="image/*" style="display: none;" onchange="handleUserProfileUpload(event)">
-    <input type="file" id="userProfileUploadDropdown" accept="image/*" style="display: none;" onchange="handleUserProfileUploadDropdown(event)">
-
-    <!-- User Profile Switcher (oben rechts) -->
-    <div class="user-profile-switcher" id="userProfileSwitcher">
-        <div class="profile-display">
-            <div class="profile-avatar" onclick="triggerUserProfileUpload(event)" title="Klicken zum Ändern des Profilbilds">
-                <img src="assets/images/default-profile.svg" alt="Profilbild" id="profileAvatarImg">
-                <div class="avatar-upload-overlay">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"></path>
-                        <circle cx="12" cy="13" r="4"></circle>
-                    </svg>
-                </div>
-            </div>
-            <!-- Role selection removed - single role only -->
-            <div class="profile-info" style="cursor: default;">
-                <span class="profile-name" id="profileName">Eike Brenneisen</span>
-                <span class="profile-role" id="profileRole">Vertriebssteuerung</span>
-            </div>
-        </div>
-        <!-- Profile dropdown disabled - single role only -->
-        <div class="profile-dropdown" id="profileDropdown" style="display: none !important;"></div>
-    </div>
-
     <!-- Demo Tour Button (fixed bottom-left) -->
     <button class="demo-tour-btn" onclick="startDemoTour()" title="Interaktive Demo starten">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
