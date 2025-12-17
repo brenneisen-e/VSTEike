@@ -2549,6 +2549,20 @@
     background: #f1f5f9;
 }
 
+/* Aufgaben Pagination */
+.aufgaben-pagination {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination-info {
+    font-size: 13px;
+    color: #64748b;
+}
+
 /* ========================================
    CUSTOMER DETAIL MODAL
    ======================================== */

@@ -751,13 +751,35 @@ function viewAgreement(customerId) {
 
 // Filter Aufgaben
 function filterAufgaben(filter) {
+    // Update active button
     document.querySelectorAll('.aufgaben-filter').forEach(btn => {
         btn.classList.remove('active');
+        if (btn.dataset.filter === filter) {
+            btn.classList.add('active');
+        }
     });
 
-    event.target.classList.add('active');
-    showNotification(`Filter: ${filter}`, 'info');
-    console.log('Filtering tasks:', filter);
+    // Filter task items
+    const items = document.querySelectorAll('.aufgabe-item');
+    items.forEach(item => {
+        const status = item.dataset.status;
+        if (filter === 'alle') {
+            item.style.display = '';
+        } else if (filter === status) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    // Update pagination info
+    const visibleCount = document.querySelectorAll('.aufgabe-item:not([style*="display: none"])').length;
+    const paginationInfo = document.querySelector('.pagination-info');
+    if (paginationInfo) {
+        paginationInfo.textContent = `Zeige 1-${visibleCount} von ${visibleCount} Aufgaben`;
+    }
+
+    console.log('Filtering tasks:', filter, 'visible:', visibleCount);
 }
 
 // Reschedule Task
