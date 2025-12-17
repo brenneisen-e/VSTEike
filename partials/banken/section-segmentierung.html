@@ -1,0 +1,734 @@
+    <!-- Section: Kundensegmentierung -->
+    <div class="banken-section active" id="section-segmentierung">
+        <!-- Intro Text -->
+        <div class="section-intro">
+            <h2>Kundensegmentierung nach Zahlungsbereitschaft & Zahlungsfähigkeit</h2>
+            <p>Die KI-gestützte Analyse klassifiziert jeden Kunden anhand von Transaktionsmustern, externen Datenquellen und historischem Verhalten. Die Punktewolke zeigt die Verteilung aller 10.234 Fälle nach <strong>Willingness to Pay</strong> (horizontale Achse) und <strong>Ability to Pay</strong> (vertikale Achse).</p>
+        </div>
+
+        <!-- Portfolio KPI Boxes - 5 Cards -->
+        <div class="portfolio-kpi-grid five-columns">
+            <div class="portfolio-kpi-box clickable" onclick="filterByAll()">
+                <div class="kpi-icon blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Aktive Fälle</div>
+                    <div class="kpi-value">10.234</div>
+                    <div class="kpi-change negative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                            <polyline points="17 18 23 18 23 12"></polyline>
+                        </svg>
+                        +127 zur Vorwoche
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box clickable" onclick="filterByAmount()">
+                <div class="kpi-icon orange">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Offene Forderung</div>
+                    <div class="kpi-value">€ 47,8 Mio</div>
+                    <div class="kpi-change negative">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                            <polyline points="17 18 23 18 23 12"></polyline>
+                        </svg>
+                        +€ 1,2 Mio
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box clickable" onclick="showRecoveryDetails()">
+                <div class="kpi-icon green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Recovery Rate</div>
+                    <div class="kpi-value highlight-green">68,4%</div>
+                    <div class="kpi-change positive">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        +2,3% vs. Vormonat
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box clickable" onclick="filterByDPD()">
+                <div class="kpi-icon purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Ø DPD</div>
+                    <div class="kpi-value">47</div>
+                    <div class="kpi-change positive">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        -3 Tage vs. Vorwoche
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-kpi-box clickable" onclick="showTasks()">
+                <div class="kpi-icon red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Meine Aufgaben</div>
+                    <div class="kpi-value">156</div>
+                    <div class="kpi-change neutral pulse-text">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        </svg>
+                        23 überfällig
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar with Scan -->
+        <div class="action-bar">
+            <div class="action-bar-left">
+                <button class="btn-primary" onclick="openDocumentScanner()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Akte scannen / Neuer Kunde
+                </button>
+                <button class="btn-secondary" onclick="showBulkImport()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Bulk-Import
+                </button>
+                <button class="btn-secondary" onclick="downloadDashboardSummary()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Zusammenfassung
+                </button>
+            </div>
+            <div class="action-bar-right">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" placeholder="Kunden-Nr, Name oder IBAN suchen..." oninput="searchCustomers(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid with Sidebar -->
+        <div class="main-content-grid">
+            <!-- Left: Matrix Quadrants with Gradients -->
+            <div class="matrix-section">
+                <div class="card-header">
+                    <div>
+                        <h3>Willingness / Ability Matrix</h3>
+                        <p class="card-subtitle">KI-gestützte Segmentierung • Klick auf Quadrant zum Filtern</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-secondary btn-sm" onclick="exportMatrix()">Export</button>
+                    </div>
+                </div>
+
+                <!-- Matrix Quadrants Grid -->
+                <div class="matrix-quadrants">
+                    <!-- Top Left: Eskalation (High Ability, Low Willingness) -->
+                    <div class="matrix-quadrant segment-eskalation" onclick="filterBySegment('eskalation')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Hohe Fähigkeit • Geringe Bereitschaft</span>
+                                <h4 class="quadrant-title">Eskalation</h4>
+                            </div>
+                            <span class="quadrant-count">1.890</span>
+                        </div>
+                        <p class="quadrant-volume">€ 12,4 Mio • Ø € 6.560</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Inkasso, Mahnbescheid, Vollstreckung
+                        </div>
+                    </div>
+
+                    <!-- Top Right: Priorität (High Ability, High Willingness) -->
+                    <div class="matrix-quadrant segment-prioritaet" onclick="filterBySegment('prioritaet')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Hohe Fähigkeit • Hohe Bereitschaft</span>
+                                <h4 class="quadrant-title">Priorität</h4>
+                            </div>
+                            <span class="quadrant-count">2.340</span>
+                        </div>
+                        <p class="quadrant-volume">€ 8,2 Mio • Ø € 3.504</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Schnelle Vereinbarung, flexible Raten
+                        </div>
+                    </div>
+
+                    <!-- Bottom Left: Abwicklung (Low Ability, Low Willingness) -->
+                    <div class="matrix-quadrant segment-abwicklung" onclick="filterBySegment('abwicklung')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Geringe Fähigkeit • Geringe Bereitschaft</span>
+                                <h4 class="quadrant-title">Abwicklung</h4>
+                            </div>
+                            <span class="quadrant-count">2.884</span>
+                        </div>
+                        <p class="quadrant-volume">€ 18,7 Mio • Ø € 6.484</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Verkauf, Abschreibung, Insolvenz
+                        </div>
+                    </div>
+
+                    <!-- Bottom Right: Restrukturierung (Low Ability, High Willingness) -->
+                    <div class="matrix-quadrant segment-restrukturierung" onclick="filterBySegment('restrukturierung')">
+                        <div class="quadrant-header">
+                            <div>
+                                <span class="quadrant-subtitle">Geringe Fähigkeit • Hohe Bereitschaft</span>
+                                <h4 class="quadrant-title">Restrukturierung</h4>
+                            </div>
+                            <span class="quadrant-count">3.120</span>
+                        </div>
+                        <p class="quadrant-volume">€ 8,5 Mio • Ø € 2.724</p>
+                        <div class="quadrant-strategy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            Stundung, Ratenpläne, Beratung
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Axis Labels -->
+                <div class="matrix-axis-labels">
+                    <span class="axis-left">← Geringe Willingness</span>
+                    <span class="axis-center">↑ Ability ↓</span>
+                    <span class="axis-right">Hohe Willingness →</span>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="dashboard-sidebar">
+                <!-- DPD Buckets -->
+                <div class="sidebar-card">
+                    <h4>Verzugsbuckets (DPD)</h4>
+                    <div class="dpd-buckets">
+                        <div class="dpd-bucket bucket-green" onclick="filterByDPDBucket('0-30')">
+                            <div class="bucket-left">
+                                <span class="bucket-dot green"></span>
+                                <span class="bucket-label">0-30 Tage</span>
+                            </div>
+                            <div class="bucket-right">
+                                <span class="bucket-count">5.010</span>
+                                <span class="bucket-volume">€ 18,2 Mio</span>
+                            </div>
+                        </div>
+                        <div class="dpd-bucket bucket-amber" onclick="filterByDPDBucket('31-90')">
+                            <div class="bucket-left">
+                                <span class="bucket-dot amber"></span>
+                                <span class="bucket-label">31-90 Tage</span>
+                            </div>
+                            <div class="bucket-right">
+                                <span class="bucket-count">2.880</span>
+                                <span class="bucket-volume">€ 15,4 Mio</span>
+                            </div>
+                        </div>
+                        <div class="dpd-bucket bucket-red" onclick="filterByDPDBucket('90+')">
+                            <div class="bucket-left">
+                                <span class="bucket-dot red"></span>
+                                <span class="bucket-label">&gt; 90 Tage</span>
+                            </div>
+                            <div class="bucket-right">
+                                <span class="bucket-count">2.344</span>
+                                <span class="bucket-volume">€ 14,2 Mio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h4>Schnellaktionen</h4>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn primary-action" onclick="openDocumentScanner()">
+                            <span class="action-icon">📷</span>
+                            <div class="action-text">
+                                <strong>Dokument erfassen</strong>
+                                <small>KI-gestützte Datenextraktion</small>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="startMahnlauf()">
+                            <span class="action-icon">📤</span>
+                            <div class="action-text">
+                                <strong>Mahnlauf starten</strong>
+                                <small>Nächster geplant: 20.12.2025</small>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="exportReport()">
+                            <span class="action-icon">📊</span>
+                            <div class="action-text">
+                                <strong>Report generieren</strong>
+                                <small>Excel, PDF oder DATEV</small>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Today's Highlights -->
+                <div class="sidebar-card">
+                    <h4>Heute</h4>
+                    <div class="today-highlights">
+                        <div class="highlight-item" onclick="showNewCases()">
+                            <span class="highlight-icon blue">🆕</span>
+                            <span class="highlight-label">Neue Fälle</span>
+                            <span class="highlight-count blue">47</span>
+                        </div>
+                        <div class="highlight-item" onclick="showPayments()">
+                            <span class="highlight-icon green">💳</span>
+                            <span class="highlight-label">Zahlungseingänge</span>
+                            <span class="highlight-count green">31</span>
+                        </div>
+                        <div class="highlight-item" onclick="showPromises()">
+                            <span class="highlight-icon purple">🤝</span>
+                            <span class="highlight-label">Zahlungsversprechen</span>
+                            <span class="highlight-count purple">18</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Evolution - Full Width -->
+        <div class="portfolio-evolution-card full-width">
+            <div class="card-header">
+                <h3>Portfolio-Entwicklung</h3>
+                <select class="time-select" onchange="updatePortfolioChart(this.value)">
+                    <option value="12m">Letzte 12 Monate</option>
+                    <option value="6m">Letzte 6 Monate</option>
+                    <option value="3m">Letzte 3 Monate</option>
+                </select>
+            </div>
+            <div class="portfolio-chart-container">
+                <canvas id="portfolioEvolutionChart"></canvas>
+            </div>
+            <div class="portfolio-stats">
+                <div class="portfolio-stat">
+                    <span class="stat-label">Neuzugänge (Monat)</span>
+                    <span class="stat-value negative">+847</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="stat-label">Abgänge (regulär)</span>
+                    <span class="stat-value positive">-523</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="stat-label">Netto-Veränderung</span>
+                    <span class="stat-value negative">+324</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News & Updates -->
+        <div class="dashboard-updates">
+            <div class="updates-card new-cases">
+                <div class="updates-header">
+                    <div class="updates-icon new">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h4>Neue Fälle seit letztem Login</h4>
+                    <span class="updates-count">47</span>
+                </div>
+                <div class="updates-list">
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8847')">
+                        <div class="update-main">
+                            <span class="update-name">Müller, Hans</span>
+                            <span class="update-amount">€4.230</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Dispositionskredit</span>
+                            <span class="update-time">vor 2 Std.</span>
+                        </div>
+                    </div>
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8846')">
+                        <div class="update-main">
+                            <span class="update-name">Schmidt GmbH</span>
+                            <span class="update-amount">€12.890</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Betriebsmittelkredit</span>
+                            <span class="update-time">vor 3 Std.</span>
+                        </div>
+                    </div>
+                    <div class="update-item" onclick="openCustomerDetail('K-2024-8845')">
+                        <div class="update-main">
+                            <span class="update-name">Weber, Anna</span>
+                            <span class="update-amount">€2.150</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Kreditkarte</span>
+                            <span class="update-time">vor 5 Std.</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-show-all" onclick="showAllNewCases()">Alle 47 anzeigen</button>
+            </div>
+
+            <div class="updates-card resolved-cases">
+                <div class="updates-header">
+                    <div class="updates-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h4>Zahlungseingänge</h4>
+                    <span class="updates-count success">31</span>
+                </div>
+                <div class="updates-list">
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-7234')">
+                        <div class="update-main">
+                            <span class="update-name">Braun, Thomas</span>
+                            <span class="update-amount positive">€1.890 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Vollständige Tilgung</span>
+                            <span class="update-time">heute, 09:14</span>
+                        </div>
+                    </div>
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6891')">
+                        <div class="update-main">
+                            <span class="update-name">Klein KG</span>
+                            <span class="update-amount positive">€3.400 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Ratenvereinbarung</span>
+                            <span class="update-time">heute, 08:45</span>
+                        </div>
+                    </div>
+                    <div class="update-item success" onclick="openCustomerDetail('K-2024-6234')">
+                        <div class="update-main">
+                            <span class="update-name">Fischer, Maria</span>
+                            <span class="update-amount positive">€780 gezahlt</span>
+                        </div>
+                        <div class="update-sub">
+                            <span class="update-type">Teilzahlung</span>
+                            <span class="update-time">gestern, 16:30</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-show-all success" onclick="showAllResolvedCases()">Alle 31 anzeigen</button>
+            </div>
+        </div>
+
+        <!-- Customer List with Actions -->
+        <div class="customer-list-section">
+            <div class="section-header">
+                <h3>Kundenliste</h3>
+                <div class="list-filters">
+                    <select class="filter-select" onchange="filterCustomers('segment', this.value)">
+                        <option value="">Alle Segmente</option>
+                        <option value="priority">Priorität</option>
+                        <option value="restructure">Restrukturierung</option>
+                        <option value="escalate">Eskalation</option>
+                        <option value="writeoff">Abwicklung</option>
+                    </select>
+                    <select class="filter-select" onchange="filterCustomers('product', this.value)">
+                        <option value="">Alle Produkte</option>
+                        <option value="dispo">Dispositionskredit</option>
+                        <option value="ratenkredit">Ratenkredit</option>
+                        <option value="kreditkarte">Kreditkarte</option>
+                        <option value="betriebsmittel">Betriebsmittelkredit</option>
+                    </select>
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" placeholder="Kunde suchen..." onkeyup="searchCustomers(this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="customer-table-wrapper">
+                <table class="customer-table">
+                    <thead>
+                        <tr>
+                            <th>Kunde</th>
+                            <th>Produkt</th>
+                            <th>Forderung</th>
+                            <th>DPD</th>
+                            <th>Segment</th>
+                            <th>W/A Score</th>
+                            <th>Mahnstufe</th>
+                            <th>Nächste Aktion</th>
+                            <th>Status</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="openCustomerDetail('K-2024-0001')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Mueller GmbH</strong>
+                                    <small>Gewerbe | K-2024-0001</small>
+                                </div>
+                            </td>
+                            <td>Betriebsmittelkredit</td>
+                            <td class="amount">€125.000</td>
+                            <td><span class="dpd-badge high">35</span></td>
+                            <td><span class="segment-badge escalate">Eskalation</span></td>
+                            <td>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness" style="width: 25%;"></div>
+                                        </div>
+                                        <span class="wa-value">25%</span>
+                                    </div>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability" style="width: 60%;"></div>
+                                        </div>
+                                        <span class="wa-value">60%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m3">M3</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Inkasso-Übergabe</span>
+                                    <small class="action-date overdue">15.12.2024</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge inkasso">Inkasso</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn" onclick="startMahnprozess('K-2024-0001')" title="Mahnprozess">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" onclick="sellCase('K-2024-0001')" title="Verkaufen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn danger" onclick="writeOff('K-2024-0001')" title="Abschreiben">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="openCustomerDetail('K-2024-0002')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Schmidt, Peter</strong>
+                                    <small>Privat | K-2024-0002</small>
+                                </div>
+                            </td>
+                            <td>Ratenkredit</td>
+                            <td class="amount">€8.450</td>
+                            <td><span class="dpd-badge medium">21</span></td>
+                            <td><span class="segment-badge priority">Priorität</span></td>
+                            <td>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness high" style="width: 85%;"></div>
+                                        </div>
+                                        <span class="wa-value">85%</span>
+                                    </div>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability" style="width: 70%;"></div>
+                                        </div>
+                                        <span class="wa-value">70%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m1">M1</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Telefonat</span>
+                                    <small class="action-date upcoming">18.12.2024</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge offen">Offen</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn primary" onclick="scheduleCall('K-2024-0002')" title="Anrufen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" onclick="createAgreement('K-2024-0002')" title="Vereinbarung">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="openCustomerDetail('K-2024-0003')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Weber KG</strong>
+                                    <small>Gewerbe | K-2024-0003</small>
+                                </div>
+                            </td>
+                            <td>Kontokorrent</td>
+                            <td class="amount">€45.780</td>
+                            <td><span class="dpd-badge low">14</span></td>
+                            <td><span class="segment-badge restructure">Restrukturierung</span></td>
+                            <td>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness" style="width: 70%;"></div>
+                                        </div>
+                                        <span class="wa-value">70%</span>
+                                    </div>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability low" style="width: 35%;"></div>
+                                        </div>
+                                        <span class="wa-value">35%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m2">M2</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Ratenzahlung prüfen</span>
+                                    <small class="action-date">20.12.2024</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn" onclick="viewAgreement('K-2024-0003')" title="Vereinbarung ansehen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="openCustomerDetail('K-2024-0004')">
+                            <td>
+                                <div class="customer-cell">
+                                    <strong>Braun, Maria</strong>
+                                    <small>Privat | K-2024-0004</small>
+                                </div>
+                            </td>
+                            <td>Kreditkarte</td>
+                            <td class="amount">€3.210</td>
+                            <td><span class="dpd-badge high">67</span></td>
+                            <td><span class="segment-badge writeoff">Abwicklung</span></td>
+                            <td>
+                                <div class="wa-score-visual">
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">W</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill willingness low" style="width: 15%;"></div>
+                                        </div>
+                                        <span class="wa-value">15%</span>
+                                    </div>
+                                    <div class="wa-bar-container">
+                                        <span class="wa-label">A</span>
+                                        <div class="wa-bar">
+                                            <div class="wa-bar-fill ability low" style="width: 10%;"></div>
+                                        </div>
+                                        <span class="wa-value">10%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="mahnstufe-badge m4">M4</span></td>
+                            <td>
+                                <div class="next-action">
+                                    <span class="action-type">Abschreibung</span>
+                                    <small class="action-date overdue">10.12.2024</small>
+                                </div>
+                            </td>
+                            <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();">
+                                <button class="action-btn" onclick="sellCase('K-2024-0004')" title="Verkaufen">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn danger" onclick="writeOff('K-2024-0004')" title="Abschreiben">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-pagination">
+                <span>Zeige 1-4 von 10.234 Kunden</span>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>Zurück</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <span>...</span>
+                    <button class="pagination-btn">2559</button>
+                    <button class="pagination-btn">Weiter</button>
+                </div>
+            </div>
+        </div>
+    </div>

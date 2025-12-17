@@ -5,7 +5,49 @@
 // Track if Banken module has been loaded
 let bankenModuleLoaded = false;
 
-// Load Banken module from partial
+// Component registry for the modular Banken system
+const BANKEN_COMPONENTS = [
+    'header',
+    'section-segmentierung',
+    'section-npl',
+    'section-stage2',
+    'section-aufgaben',
+    'modal-customer-detail',
+    'modal-document-scanner',
+    'crm-profile-view'
+];
+
+// Load a single component
+async function loadComponent(componentName) {
+    try {
+        const response = await fetch(`partials/banken/${componentName}.html`);
+        if (response.ok) {
+            return await response.text();
+        }
+        console.warn(`Component ${componentName} could not be loaded`);
+        return `<!-- Component ${componentName} failed to load -->`;
+    } catch (error) {
+        console.warn(`Error loading component ${componentName}:`, error);
+        return `<!-- Component ${componentName} error -->`;
+    }
+}
+
+// Load all components and inject into placeholders
+async function loadBankenComponents(container) {
+    const componentPlaceholders = container.querySelectorAll('[data-component]');
+
+    // Load all components in parallel for better performance
+    const loadPromises = Array.from(componentPlaceholders).map(async (placeholder) => {
+        const componentName = placeholder.getAttribute('data-component');
+        const html = await loadComponent(componentName);
+        placeholder.outerHTML = html;
+    });
+
+    await Promise.all(loadPromises);
+    console.log(`Loaded ${componentPlaceholders.length} components`);
+}
+
+// Load Banken module from partial (modular version)
 async function loadBankenModule() {
     if (bankenModuleLoaded) return;
 
@@ -13,14 +55,19 @@ async function loadBankenModule() {
     if (!container) return;
 
     try {
+        // First load the main shell template
         const response = await fetch('partials/banken-module.html');
         if (response.ok) {
             const html = await response.text();
             container.innerHTML = html;
-            bankenModuleLoaded = true;
-            console.log('Banken-Modul dynamisch geladen');
 
-            // Initialize charts after content is loaded
+            // Then load all components into placeholders
+            await loadBankenComponents(container);
+
+            bankenModuleLoaded = true;
+            console.log('Banken-Modul modular geladen');
+
+            // Initialize charts after all content is loaded
             setTimeout(() => {
                 initBankenCharts();
             }, 100);
@@ -30,7 +77,6 @@ async function loadBankenModule() {
     } catch (error) {
         console.warn('Banken-Modul konnte nicht geladen werden, verwende Fallback');
         // If fetch fails (e.g., file:// protocol), the module stays with loading state
-        // In production, you could embed the HTML as fallback here
         container.innerHTML = `
             <div class="module-loading">
                 <p style="color: #ef4444;">Modul konnte nicht geladen werden.</p>
