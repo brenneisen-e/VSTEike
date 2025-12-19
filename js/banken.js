@@ -872,7 +872,19 @@ function openCustomerDetail(customerId) {
             'K-2024-0013': { name: 'Gasthaus zum Löwen', type: 'Gewerbe' },
             'K-2024-0014': { name: 'Werner, Sabine', type: 'Privat' },
             'K-2024-0015': { name: 'Maier Transporte', type: 'Gewerbe' },
-            'K-2024-0016': { name: 'Zimmermann, Frank', type: 'Privat' }
+            'K-2024-0016': { name: 'Zimmermann, Frank', type: 'Privat' },
+            // Neue Fälle seit letztem Login
+            'K-2024-8847': { name: 'Müller, Hans', type: 'Privat' },
+            'K-2024-8846': { name: 'Schmidt GmbH', type: 'Gewerbe' },
+            'K-2024-8845': { name: 'Weber, Anna', type: 'Privat' },
+            // Zahlungseingänge / Ehemalige Fälle
+            'K-2024-7234': { name: 'Braun, Thomas', type: 'Privat' },
+            'K-2024-6891': { name: 'Klein KG', type: 'Gewerbe' },
+            'K-2024-6234': { name: 'Fischer, Maria', type: 'Privat' },
+            'K-2024-5982': { name: 'Meier, Stefan', type: 'Privat' },
+            'K-2024-5876': { name: 'Schneider Logistik GmbH', type: 'Gewerbe' },
+            'K-2024-5734': { name: 'Fischer, Anna', type: 'Privat' },
+            'K-2024-5612': { name: 'Bäckerei Müller', type: 'Gewerbe' }
         };
 
         const customer = customerData[customerId] || { name: customerId, type: 'Unbekannt' };

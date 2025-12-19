@@ -20,7 +20,19 @@ const demoCustomerData = [
     { id: 'K-2024-0013', name: 'Gasthaus zum Löwen', forderung: 112800, dpd: 19, segment: 'restrukturierung', status: 'Vereinbarung' },
     { id: 'K-2024-0014', name: 'Werner, Sabine', forderung: 4560, dpd: 92, segment: 'abwicklung', status: 'Abschreibung' },
     { id: 'K-2024-0015', name: 'Maier Transporte', forderung: 78900, dpd: 78, segment: 'abwicklung', status: 'Abschreibung' },
-    { id: 'K-2024-0016', name: 'Zimmermann, Frank', forderung: 2340, dpd: 105, segment: 'abwicklung', status: 'Abschreibung' }
+    { id: 'K-2024-0016', name: 'Zimmermann, Frank', forderung: 2340, dpd: 105, segment: 'abwicklung', status: 'Abschreibung' },
+    // Neue Fälle seit letztem Login
+    { id: 'K-2024-8847', name: 'Müller, Hans', forderung: 4230, dpd: 2, segment: 'prioritaet', status: 'Offen' },
+    { id: 'K-2024-8846', name: 'Schmidt GmbH', forderung: 12890, dpd: 3, segment: 'prioritaet', status: 'Offen' },
+    { id: 'K-2024-8845', name: 'Weber, Anna', forderung: 2150, dpd: 5, segment: 'prioritaet', status: 'Offen' },
+    // Zahlungseingänge / Ehemalige Fälle
+    { id: 'K-2024-7234', name: 'Braun, Thomas', forderung: 1890, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' },
+    { id: 'K-2024-6891', name: 'Klein KG', forderung: 8400, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' },
+    { id: 'K-2024-6234', name: 'Fischer, Maria', forderung: 780, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' },
+    { id: 'K-2024-5982', name: 'Meier, Stefan', forderung: 2340, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' },
+    { id: 'K-2024-5876', name: 'Schneider Logistik GmbH', forderung: 15200, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' },
+    { id: 'K-2024-5734', name: 'Fischer, Anna', forderung: 3450, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' },
+    { id: 'K-2024-5612', name: 'Bäckerei Müller', forderung: 24800, dpd: 0, segment: 'abgeschlossen', status: 'Bezahlt' }
 ];
 
 // Demo payment data - linked to actual customer IDs
