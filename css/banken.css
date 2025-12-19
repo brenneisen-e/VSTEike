@@ -6958,6 +6958,46 @@ body.modal-open {
     height: 14px;
 }
 
+/* Follow-up Suggestions after response */
+.chat-followup-suggestions {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.chat-followup-suggestions .followup-label {
+    display: block;
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.chat-followup-suggestions .followup-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chat-followup-suggestions .example-btn {
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 12px;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-followup-suggestions .example-btn:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
 /* Chat Customer Links */
 .chat-customer-link {
     color: #3b82f6;
@@ -7089,7 +7129,8 @@ body.modal-open {
 .finanzen-kpi {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 6px;
     padding: 16px 20px;
     background: white;
     border-radius: 10px;
@@ -7098,14 +7139,9 @@ body.modal-open {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.finanzen-kpi.danger {
-    background: #fef2f2;
-    border-color: #fecaca;
-}
-
-.finanzen-kpi.warning {
-    background: #fffbeb;
-    border-color: #fde68a;
+.finanzen-kpi .kpi-icon {
+    color: #64748b;
+    margin-bottom: 4px;
 }
 
 .finanzen-kpi .kpi-label {
@@ -7121,14 +7157,6 @@ body.modal-open {
     font-weight: 700;
     color: #1e293b;
     letter-spacing: -0.5px;
-}
-
-.finanzen-kpi.danger .kpi-value {
-    color: #dc2626;
-}
-
-.finanzen-kpi.warning .kpi-value {
-    color: #d97706;
 }
 
 /* Forderungen Compact - Sidebar Card */

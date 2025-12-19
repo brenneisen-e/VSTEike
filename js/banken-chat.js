@@ -129,8 +129,8 @@ function sendBankenMessage() {
 function processBankenQuery(message) {
     const lower = message.toLowerCase();
 
-    // Top customers by amount
-    if ((lower.includes('top') || lower.includes('höchste') || lower.includes('größte')) &&
+    // Customers by highest outstanding amount (Restforderung)
+    if ((lower.includes('restforderung') || lower.includes('höchste') || lower.includes('größte') || lower.includes('top')) &&
         (lower.includes('forderung') || lower.includes('kunden') || lower.includes('ausstehend'))) {
 
         const countMatch = message.match(/(\d+)/);
@@ -138,14 +138,14 @@ function processBankenQuery(message) {
 
         const sorted = [...demoCustomerData].sort((a, b) => b.forderung - a.forderung).slice(0, count);
 
-        let response = `<span class="chat-icon chart"></span> **Top ${count} Kunden nach Forderungshöhe:**\n\n`;
+        let response = `<span class="chat-icon chart"></span> **Kunden mit höchster Restforderung:**\n\n`;
         sorted.forEach((c, i) => {
             response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> (${c.id})\n`;
             response += `   <span class="chat-icon euro"></span> €${c.forderung.toLocaleString('de-DE')} · <span class="chat-icon clock"></span> ${c.dpd} DPD · ${c.status}\n\n`;
         });
 
         const total = sorted.reduce((sum, c) => sum + c.forderung, 0);
-        response += `\n<span class="chat-icon trend"></span> **Summe Top ${count}:** €${total.toLocaleString('de-DE')}`;
+        response += `\n<span class="chat-icon trend"></span> **Summe:** €${total.toLocaleString('de-DE')}`;
 
         // Add navigation button
         const customerIds = sorted.map(c => c.id).join(',');
@@ -153,7 +153,103 @@ function processBankenQuery(message) {
 
         // Add export buttons
         const exportData = { type: 'customers', items: sorted };
-        response += getExportButtons(exportData, `Top_${count}_Kunden`);
+        response += getExportButtons(exportData, `Hoechste_Restforderung`);
+        response += getFollowUpSuggestions();
+
+        return response;
+    }
+
+    // Customers with highest repayment chance
+    if (lower.includes('rückzahlung') || lower.includes('chance') || lower.includes('wahrscheinlich')) {
+        // Sort by low DPD and prioritaet segment (higher chance of repayment)
+        const sorted = [...demoCustomerData]
+            .filter(c => c.segment === 'prioritaet' || c.dpd < 30)
+            .sort((a, b) => a.dpd - b.dpd)
+            .slice(0, 5);
+
+        let response = `<span class="chat-icon check"></span> **Kunden mit höchster Rückzahlungschance:**\n\n`;
+        sorted.forEach((c, i) => {
+            const chance = Math.max(95 - c.dpd * 2, 45);
+            response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span>\n`;
+            response += `   <span class="chat-icon euro"></span> €${c.forderung.toLocaleString('de-DE')} · <span class="chat-icon clock"></span> ${c.dpd} DPD · <span class="chat-icon percent"></span> ${chance}% Chance\n\n`;
+        });
+
+        const customerIds = sorted.map(c => c.id).join(',');
+        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Diese Kunden in Liste anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: sorted };
+        response += getExportButtons(exportData, `Hoechste_Rueckzahlungschance`);
+        response += getFollowUpSuggestions();
+
+        return response;
+    }
+
+    // Customers with longest overdue (Verzugsdauer)
+    if (lower.includes('verzug') || lower.includes('längste') || lower.includes('älteste')) {
+        const sorted = [...demoCustomerData].sort((a, b) => b.dpd - a.dpd).slice(0, 5);
+
+        let response = `<span class="chat-icon clock"></span> **Kunden mit längster Verzugsdauer:**\n\n`;
+        sorted.forEach((c, i) => {
+            response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span>\n`;
+            response += `   <span class="chat-icon alert"></span> ${c.dpd} Tage überfällig · <span class="chat-icon euro"></span> €${c.forderung.toLocaleString('de-DE')} · ${c.status}\n\n`;
+        });
+
+        const customerIds = sorted.map(c => c.id).join(',');
+        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Diese Kunden in Liste anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: sorted };
+        response += getExportButtons(exportData, `Laengste_Verzugsdauer`);
+        response += getFollowUpSuggestions();
+
+        return response;
+    }
+
+    // New cases this week
+    if (lower.includes('neue') || lower.includes('neu') || lower.includes('diese woche') || lower.includes('dieser woche')) {
+        // Simulate new cases (low DPD)
+        const newCases = [...demoCustomerData]
+            .filter(c => c.dpd <= 14)
+            .sort((a, b) => a.dpd - b.dpd);
+
+        let response = `<span class="chat-icon plus"></span> **Neue Fälle dieser Woche:** ${newCases.length}\n\n`;
+        newCases.forEach((c, i) => {
+            response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span>\n`;
+            response += `   <span class="chat-icon euro"></span> €${c.forderung.toLocaleString('de-DE')} · Seit ${c.dpd} Tagen · ${c.status}\n\n`;
+        });
+
+        const total = newCases.reduce((sum, c) => sum + c.forderung, 0);
+        response += `\n<span class="chat-icon trend"></span> **Neue Forderungen gesamt:** €${total.toLocaleString('de-DE')}`;
+
+        const customerIds = newCases.map(c => c.id).join(',');
+        response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Neue Fälle in Liste anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: newCases };
+        response += getExportButtons(exportData, `Neue_Faelle`);
+        response += getFollowUpSuggestions();
+
+        return response;
+    }
+
+    // Active agreements (Vereinbarungen)
+    if (lower.includes('vereinbarung') || lower.includes('aktive') || lower.includes('bearbeitung')) {
+        const agreements = demoCustomerData.filter(c => c.status === 'Vereinbarung' || c.segment === 'restrukturierung');
+
+        let response = `<span class="chat-icon refresh"></span> **Vereinbarungen in Bearbeitung:** ${agreements.length}\n\n`;
+        agreements.forEach((c, i) => {
+            response += `${i + 1}. <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span>\n`;
+            response += `   <span class="chat-icon euro"></span> €${c.forderung.toLocaleString('de-DE')} · ${c.dpd} DPD · <span class="chat-icon check"></span> ${c.status}\n\n`;
+        });
+
+        const total = agreements.reduce((sum, c) => sum + c.forderung, 0);
+        response += `\n<span class="chat-icon trend"></span> **Forderungen in Vereinbarung:** €${total.toLocaleString('de-DE')}`;
+
+        const customerIds = agreements.map(c => c.id).join(',');
+        response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Diese Kunden in Liste anzeigen</button>`;
+        response += `\n<button class="chat-action-btn" onclick="filterBySegment('restrukturierung')"><span class="chat-icon grid"></span> Restrukturierung-Segment anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: agreements };
+        response += getExportButtons(exportData, `Aktive_Vereinbarungen`);
+        response += getFollowUpSuggestions();
 
         return response;
     }
@@ -174,6 +270,7 @@ function processBankenQuery(message) {
         // Add export buttons
         const exportData = { type: 'payments', items: demoPayments };
         response += getExportButtons(exportData, 'Zahlungseingaenge');
+        response += getFollowUpSuggestions();
 
         return response;
     }
@@ -187,7 +284,13 @@ function processBankenQuery(message) {
             response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} (${c.dpd} DPD)\n`;
         });
 
+        const customerIds = filtered.map(c => c.id).join(',');
         response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('eskalation')"><span class="chat-icon search"></span> Eskalation-Segment in Matrix anzeigen</button>`;
+        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon list"></span> In Liste anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: filtered };
+        response += getExportButtons(exportData, 'Eskalation_Faelle');
+        response += getFollowUpSuggestions();
 
         return response;
     }
@@ -200,13 +303,19 @@ function processBankenQuery(message) {
             response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${c.id}')">${c.name}</span> - €${c.forderung.toLocaleString('de-DE')} · ${c.status}\n`;
         });
 
+        const customerIds = filtered.map(c => c.id).join(',');
         response += `\n\n<button class="chat-action-btn" onclick="filterBySegment('restrukturierung')"><span class="chat-icon search"></span> Restrukturierung-Segment in Matrix anzeigen</button>`;
+        response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon list"></span> In Liste anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: filtered };
+        response += getExportButtons(exportData, 'Restrukturierung_Faelle');
+        response += getFollowUpSuggestions();
 
         return response;
     }
 
     // DPD filter
-    if (lower.includes('dpd') || lower.includes('überfällig') || lower.includes('verzug')) {
+    if (lower.includes('dpd') || (lower.includes('überfällig') && !lower.includes('längste'))) {
         const dpdMatch = message.match(/(\d+)\s*(?:dpd|tage)/i);
         const minDpd = dpdMatch ? parseInt(dpdMatch[1]) : 90;
 
@@ -223,6 +332,10 @@ function processBankenQuery(message) {
         const customerIds = filtered.map(c => c.id).join(',');
         response += `\n<button class="chat-action-btn" onclick="filterByDPDBucket('${bucket}')"><span class="chat-icon search"></span> DPD Bucket in Dashboard anzeigen</button>`;
         response += `\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon list"></span> ${filtered.length} Kunden in Liste anzeigen</button>`;
+
+        const exportData = { type: 'customers', items: filtered };
+        response += getExportButtons(exportData, `DPD_ueber_${minDpd}`);
+        response += getFollowUpSuggestions();
 
         return response;
     }
@@ -260,7 +373,7 @@ function processBankenQuery(message) {
 <span class="chat-icon dot amber"></span> Restrukturierung: ${segments.restrukturierung} Fälle
 <span class="chat-icon dot gray"></span> Abwicklung: ${segments.abwicklung} Fälle
 
-**Letzte Zahlungen:** €${demoPayments.reduce((s, p) => s + p.betrag, 0).toLocaleString('de-DE')} (7 Tage)` + getExportButtons(exportData, 'Portfolio_Uebersicht');
+**Letzte Zahlungen:** €${demoPayments.reduce((s, p) => s + p.betrag, 0).toLocaleString('de-DE')} (7 Tage)` + getExportButtons(exportData, 'Portfolio_Uebersicht') + getFollowUpSuggestions();
     }
 
     // Search for specific customer
@@ -282,9 +395,9 @@ function processBankenQuery(message) {
 **Segment:** ${found.segment}
 **Status:** ${found.status}
 
-<button class="chat-action-btn" onclick="openCustomerDetail('${found.id}')"><span class="chat-icon user"></span> Kundendetail öffnen</button>`;
+<button class="chat-action-btn" onclick="openCustomerDetail('${found.id}')"><span class="chat-icon user"></span> Kundendetail öffnen</button>` + getFollowUpSuggestions();
             } else {
-                return `<span class="chat-icon x"></span> Kein Kunde mit "${nameMatch[1]}" gefunden.\n\nVerfügbare Kunden durchsuchen Sie in der Tabelle unten.`;
+                return `<span class="chat-icon x"></span> Kein Kunde mit "${nameMatch[1]}" gefunden.\n\nVerfügbare Kunden durchsuchen Sie in der Tabelle unten.` + getFollowUpSuggestions();
             }
         }
     }
@@ -293,7 +406,7 @@ function processBankenQuery(message) {
     return `Ich verstehe Ihre Anfrage: "${message}"
 
 **Verfügbare Abfragen:**
-• "Top 5 Kunden mit höchsten Forderungen"
+• "Kunden mit höchster Restforderung"
 • "Zahlungseingänge der letzten Woche"
 • "Zeige alle Eskalation-Fälle"
 • "Fälle mit mehr als 90 DPD"
@@ -601,6 +714,23 @@ function exportChatToPdf(data, filename) {
 
 // Store last query result for export
 let lastChatQueryResult = null;
+
+// Generate follow-up suggestion buttons
+function getFollowUpSuggestions() {
+    return `
+        <div class="chat-followup-suggestions">
+            <span class="followup-label">Weitere Abfragen:</span>
+            <div class="followup-buttons">
+                <button class="example-btn" data-question="Kunden mit höchster Restforderung">Höchste Restforderung</button>
+                <button class="example-btn" data-question="Kunden mit höchster Rückzahlungschance">Rückzahlungschance</button>
+                <button class="example-btn" data-question="Kunden mit längster Verzugsdauer">Längste Verzugsdauer</button>
+                <button class="example-btn" data-question="Neue Fälle dieser Woche">Neue Fälle</button>
+                <button class="example-btn" data-question="Vereinbarungen in Bearbeitung">Vereinbarungen</button>
+                <button class="example-btn" data-question="Portfolio-Übersicht">Portfolio</button>
+            </div>
+        </div>
+    `;
+}
 
 // Update the processBankenQuery to store results for export
 function getExportButtons(data, title) {
