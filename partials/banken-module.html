@@ -81,4 +81,91 @@
     </div>
 </div>
 
+<!-- Feedback/Kommentar System -->
+<div class="feedback-button" onclick="toggleFeedbackPanel()" title="Feedback & Kommentare">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        <line x1="9" y1="9" x2="15" y2="9"></line>
+        <line x1="9" y1="13" x2="13" y2="13"></line>
+    </svg>
+    <span class="feedback-badge" id="feedbackBadge">0</span>
+</div>
+
+<div class="feedback-panel" id="feedbackPanel">
+    <div class="feedback-panel-header">
+        <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Feedback & Kommentare
+        </h3>
+        <button class="feedback-close" onclick="toggleFeedbackPanel()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="feedback-info">
+        <p>Hinterlassen Sie hier Feedback, Verbesserungsvorschläge oder Kommentare zum Dashboard. Alle Einträge werden lokal gespeichert.</p>
+    </div>
+
+    <div class="feedback-form">
+        <div class="feedback-form-row">
+            <label>Autor:</label>
+            <input type="text" id="feedbackAuthor" placeholder="Ihr Name" value="">
+        </div>
+        <div class="feedback-form-row">
+            <label>Bereich:</label>
+            <select id="feedbackArea">
+                <option value="allgemein">Allgemein</option>
+                <option value="dashboard">Dashboard Übersicht</option>
+                <option value="kundenakte">Kundenakte</option>
+                <option value="konten-finanzen">Konten & Finanzen</option>
+                <option value="kommunikation">Kommunikation</option>
+                <option value="ki-analyse">KI-Analyse</option>
+                <option value="design">Design/UI</option>
+                <option value="daten">Daten/Konsistenz</option>
+                <option value="funktion">Funktionalität</option>
+            </select>
+        </div>
+        <div class="feedback-form-row">
+            <label>Typ:</label>
+            <div class="feedback-type-buttons">
+                <button class="feedback-type-btn active" data-type="verbesserung" onclick="setFeedbackType('verbesserung')">💡 Verbesserung</button>
+                <button class="feedback-type-btn" data-type="fehler" onclick="setFeedbackType('fehler')">🐛 Fehler</button>
+                <button class="feedback-type-btn" data-type="frage" onclick="setFeedbackType('frage')">❓ Frage</button>
+                <button class="feedback-type-btn" data-type="lob" onclick="setFeedbackType('lob')">👍 Lob</button>
+            </div>
+        </div>
+        <div class="feedback-form-row">
+            <label>Kommentar:</label>
+            <textarea id="feedbackText" placeholder="Beschreiben Sie Ihr Feedback..." rows="4"></textarea>
+        </div>
+        <button class="feedback-submit-btn" onclick="submitFeedback()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Feedback speichern
+        </button>
+    </div>
+
+    <div class="feedback-list-header">
+        <h4>Bisherige Kommentare</h4>
+        <button class="feedback-export-btn" onclick="exportFeedback()" title="Als JSON exportieren">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="feedback-list" id="feedbackList">
+        <!-- Kommentare werden hier dynamisch eingefügt -->
+    </div>
+</div>
+
 </div>
