@@ -1612,6 +1612,24 @@ function updateKontenFields(modal, customer) {
                     statusEl.textContent = matchingProduct.status;
                     statusEl.className = 'credit-status-badge ' + (matchingProduct.badge || 'warning');
                 }
+
+                // Hide LIMIT for products that don't have limits (Ratenkredit, Baufinanzierung, Investitionskredit, Betriebsmittelkredit)
+                const produktTypLower = matchingProduct.typ.toLowerCase();
+                const hasLimit = produktTypLower.includes('dispo') ||
+                                 produktTypLower.includes('kontokorrent') ||
+                                 produktTypLower.includes('kreditkarte');
+
+                const amountItems = section.querySelectorAll('.amount-item');
+                amountItems.forEach(item => {
+                    const label = item.querySelector('.amount-label');
+                    if (label && label.textContent === 'Limit') {
+                        item.style.display = hasLimit ? '' : 'none';
+                    }
+                    // Update label for non-limit products: "Saldo" -> "Restschuld" for loans
+                    if (label && label.textContent === 'Saldo' && !hasLimit) {
+                        label.textContent = 'Restschuld';
+                    }
+                });
             }
         } else {
             section.style.display = 'none';
