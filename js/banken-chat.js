@@ -23,15 +23,15 @@ const demoCustomerData = [
     { id: 'K-2024-0016', name: 'Zimmermann, Frank', forderung: 2340, dpd: 105, segment: 'abwicklung', status: 'Abschreibung' }
 ];
 
-// Demo payment data
+// Demo payment data - linked to actual customer IDs
 const demoPayments = [
-    { id: 'Z-2024-1234', kunde: 'Maier Technik', betrag: 12500, datum: '2025-12-15', art: 'Vollzahlung' },
-    { id: 'Z-2024-1235', kunde: 'Huber GmbH', betrag: 8900, datum: '2025-12-14', art: 'Teilzahlung' },
-    { id: 'Z-2024-1236', kunde: 'Krause AG', betrag: 5600, datum: '2025-12-14', art: 'Ratenzahlung' },
-    { id: 'Z-2024-1237', kunde: 'Schmitt Bau', betrag: 15200, datum: '2025-12-13', art: 'Vollzahlung' },
-    { id: 'Z-2024-1238', kunde: 'Wolf & Söhne', betrag: 3400, datum: '2025-12-12', art: 'Ratenzahlung' },
-    { id: 'Z-2024-1239', kunde: 'Bauer Logistik', betrag: 7800, datum: '2025-12-11', art: 'Teilzahlung' },
-    { id: 'Z-2024-1240', kunde: 'Fuchs Elektro', betrag: 22100, datum: '2025-12-10', art: 'Vollzahlung' }
+    { id: 'Z-2024-1234', kundeId: 'K-2024-0010', kunde: 'Fischer, Hans', betrag: 2500, datum: '2025-12-15', art: 'Teilzahlung' },
+    { id: 'Z-2024-1235', kundeId: 'K-2024-0003', kunde: 'Weber KG', betrag: 8900, datum: '2025-12-14', art: 'Ratenzahlung' },
+    { id: 'Z-2024-1236', kundeId: 'K-2024-0012', kunde: 'Neumann, Klaus', betrag: 15600, datum: '2025-12-14', art: 'Ratenzahlung' },
+    { id: 'Z-2024-1237', kundeId: 'K-2024-0002', kunde: 'Schmidt, Peter', betrag: 3200, datum: '2025-12-13', art: 'Teilzahlung' },
+    { id: 'Z-2024-1238', kundeId: 'K-2024-0011', kunde: 'Bäckerei Schulze', betrag: 5400, datum: '2025-12-12', art: 'Ratenzahlung' },
+    { id: 'Z-2024-1239', kundeId: 'K-2024-0008', kunde: 'Lehmann, Sandra', betrag: 4800, datum: '2025-12-11', art: 'Teilzahlung' },
+    { id: 'Z-2024-1240', kundeId: 'K-2024-0013', kunde: 'Gasthaus zum Löwen', betrag: 12100, datum: '2025-12-10', art: 'Ratenzahlung' }
 ];
 
 // Initialize Banken Chat
@@ -260,12 +260,16 @@ function processBankenQuery(message) {
 
         let response = `<span class="chat-icon payment"></span> **Zahlungseingänge${isWeek ? ' der letzten Woche' : ''}:**\n\n`;
         demoPayments.forEach(p => {
-            response += `• **${p.kunde}** - €${p.betrag.toLocaleString('de-DE')}\n`;
+            response += `• <span class="chat-customer-link" onclick="openCustomerDetail('${p.kundeId}')">${p.kunde}</span> - €${p.betrag.toLocaleString('de-DE')}\n`;
             response += `  ${p.datum} · ${p.art}\n\n`;
         });
 
         const total = demoPayments.reduce((sum, p) => sum + p.betrag, 0);
         response += `\n<span class="chat-icon check"></span> **Gesamt:** €${total.toLocaleString('de-DE')} (${demoPayments.length} Zahlungen)`;
+
+        // Add navigation button
+        const customerIds = demoPayments.map(p => p.kundeId).join(',');
+        response += `\n\n<button class="chat-action-btn" onclick="showFilteredCustomers('${customerIds}')"><span class="chat-icon search"></span> Diese Kunden in Liste anzeigen</button>`;
 
         // Add export buttons
         const exportData = { type: 'payments', items: demoPayments };
