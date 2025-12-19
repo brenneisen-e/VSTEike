@@ -895,23 +895,37 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 5, gesamtforderung: 350500, monatsrate: 2380, ueberfaellig: 15000,
             rueckgabequote: 34, hauptforderung: 110000, zinsen: 8450, mahngebuehren: 350, inkassokosten: 6200,
             dpd: 35,
+            // Einkommen & Ausgaben (Gewerbe)
+            einkommenMonatlich: 45000, ausgabenMonatlich: 52000, ausgabenDetails: 'Personal: €28.000, Miete: €8.500, Wareneinkauf: €12.000, Sonstiges: €3.500',
             // KI-Analyse
             willingness: 25, ability: 60, segment: 'eskalation',
-            kernproblem: 'Gewerbekunde mit Liquiditätsengpässen seit Q3 2025. Gastronomie-Branche mit saisonalen Schwankungen. Mehrfache Lastschriftrückgaben trotz grundsätzlicher Zahlungsfähigkeit.',
+            kernproblem: 'Gewerbekunde mit Liquiditätsengpässen seit Q3 2025. Gastronomie-Branche mit saisonalen Schwankungen. Monatliche Ausgaben (€52.000) übersteigen Einnahmen (€45.000) um €7.000. Mehrfache Lastschriftrückgaben trotz grundsätzlicher Zahlungsfähigkeit.',
             // Kommunikation
-            workflowStatus: 'Inkasso-Verfahren', mahnstufe: 3
+            workflowStatus: 'Inkasso-Verfahren', mahnstufe: 3,
+            produkte: [
+                { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-1001', saldo: 125000, status: '35 DPD', badge: 'danger' },
+                { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-2345', saldo: 85000, status: 'Überzogen', badge: 'danger' },
+                { typ: 'Investitionskredit', nummer: 'IK-2022-0891', saldo: 140500, status: '28 DPD', badge: 'warning' }
+            ]
         },
         'K-2024-7234': {
             name: 'Braun, Thomas', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Lindenweg 45, 30159 Hannover', telefon: '+49 511 987654',
             email: 't.braun@email.de', ansprechpartner: 'Thomas Braun',
-            branche: 'Angestellter', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Vollständig beglichen am 16.12.2025',
-            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
-            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
-            dpd: 0, willingness: 90, ability: 85, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Kunde hat Ratenkredit vollständig beglichen. Gute Zahlungsmoral nach Vereinbarung.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            branche: 'Angestellter', restschuld: 6850, status: 'Aktiv',
+            statusBadge: 'warning', statusText: 'Überfällige Forderung beglichen am 16.12.2025',
+            krediteAnzahl: 3, gesamtforderung: 6850, monatsrate: 1425, ueberfaellig: 0,
+            rueckgabequote: 85, hauptforderung: 6850, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 90, ability: 85, segment: 'stabil',
+            // Einkommen & Ausgaben (Privat)
+            einkommenMonatlich: 4200, ausgabenMonatlich: 3800, ausgabenDetails: 'Miete: €1.100, Lebensmittel: €450, Auto: €650, Streaming/Abos: €180, Freizeit: €420, Sonstiges: €1.000',
+            kernproblem: 'Überfällige Forderung (Ratenkredit) vollständig beglichen. Nettoeinkommen €4.200, Ausgaben €3.800 - könnte mehr sparen. Hohe Ausgaben für Streaming-Abos (€180) und Freizeit (€420). Dispo ausgereizt für Autoreparatur.',
+            workflowStatus: 'Monitoring', mahnstufe: 0,
+            produkte: [
+                { typ: 'Ratenkredit', nummer: 'RK-2023-8841', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Dispositionskredit', nummer: 'DK-2024-1122', saldo: 4500, status: 'Aktiv', badge: 'warning' },
+                { typ: 'Baufinanzierung', nummer: 'BF-2021-5567', saldo: 2350, status: '2 Raten offen', badge: 'warning' }
+            ]
         },
         'K-2024-6891': {
             name: 'Klein KG', type: 'Gewerbe', rechtsform: 'KG',
@@ -922,44 +936,68 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 2, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
             rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 85, ability: 75, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Betriebsmittelkredit nach Ratenvereinbarung vollständig getilgt.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            // Einkommen & Ausgaben (Gewerbe)
+            einkommenMonatlich: 125000, ausgabenMonatlich: 98000, ausgabenDetails: 'Personal: €42.000, Lager: €15.000, Transport: €28.000, Verwaltung: €8.000, Sonstiges: €5.000',
+            kernproblem: 'Fall vollständig abgeschlossen. Beide Kredite getilgt. Stabile Finanzsituation: Einnahmen €125.000, Ausgaben €98.000 = positiver Cashflow €27.000/Monat.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0,
+            produkte: [
+                { typ: 'Betriebsmittelkredit', nummer: 'BMK-2022-4456', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Investitionskredit', nummer: 'IK-2021-7823', saldo: 0, status: 'Beglichen', badge: 'success' }
+            ]
         },
         'K-2024-6234': {
             name: 'Fischer, Maria', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Rosenstraße 12, 50667 Köln', telefon: '+49 221 334455',
             email: 'm.fischer@web.de', ansprechpartner: 'Maria Fischer',
-            branche: 'Rentnerin', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Teilzahlung abgeschlossen',
-            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
-            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
-            dpd: 0, willingness: 80, ability: 50, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Rentnerin mit eingeschränkter Zahlungsfähigkeit, aber hoher Kooperationsbereitschaft.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            branche: 'Rentnerin', restschuld: 3200, status: 'Aktiv',
+            statusBadge: 'warning', statusText: 'Überfällige Kreditkarte beglichen am 10.12.2025',
+            krediteAnzahl: 2, gesamtforderung: 3200, monatsrate: 180, ueberfaellig: 0,
+            rueckgabequote: 75, hauptforderung: 3200, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 80, ability: 50, segment: 'stabil',
+            // Einkommen & Ausgaben (Privat - Rentnerin)
+            einkommenMonatlich: 1450, ausgabenMonatlich: 1380, ausgabenDetails: 'Miete: €520, Lebensmittel: €280, Medikamente: €95, Versicherungen: €145, Enkel-Geschenke: €120, Sonstiges: €220',
+            kernproblem: 'Kreditkartenschuld beglichen. Ratenkredit (€3.200) noch offen mit €180/Monat Rate. Knappe Rente €1.450, Ausgaben €1.380. Gibt zu viel für Enkel-Geschenke (€120/Monat) aus. Hohe Kooperationsbereitschaft.',
+            workflowStatus: 'Monitoring', mahnstufe: 0,
+            produkte: [
+                { typ: 'Kreditkarte', nummer: 'KK-2023-6678', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Ratenkredit', nummer: 'RK-2024-1234', saldo: 3200, status: 'Aktiv', badge: 'warning' }
+            ]
         },
         'K-2024-5982': {
             name: 'Meier, Stefan', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Hauptstraße 56, 80331 München', telefon: '+49 89 112233',
             email: 's.meier@gmx.de', ansprechpartner: 'Stefan Meier',
             branche: 'Selbstständig', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Dispo ausgeglichen',
+            statusBadge: 'success', statusText: 'Dispo vollständig ausgeglichen',
             krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
             rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 75, ability: 70, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Selbstständiger mit Einkommensschwankungen hat Dispo ausgeglichen.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            // Einkommen & Ausgaben (Selbstständig)
+            einkommenMonatlich: 5800, ausgabenMonatlich: 4200, ausgabenDetails: 'Miete Büro: €800, Miete Wohnung: €1.400, Lebensmittel: €350, Betriebskosten: €650, Auto: €580, Sonstiges: €420',
+            kernproblem: 'Fall vollständig abgeschlossen. Dispo ausgeglichen. Selbstständiger Grafiker mit variabler Auftragslage. Einkommen Ø €5.800, Ausgaben €4.200. Finanzpuffer jetzt wieder aufgebaut.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0,
+            produkte: [
+                { typ: 'Dispositionskredit', nummer: 'DK-2024-3321', saldo: 0, status: 'Ausgeglichen', badge: 'success' }
+            ]
         },
         'K-2024-5876': {
             name: 'Schneider Logistik GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
             adresse: 'Hafenstraße 200, 20457 Hamburg', telefon: '+49 40 778899',
             email: 'info@schneider-logistik.de', ansprechpartner: 'Klaus Schneider',
             branche: 'Transport & Logistik', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Kontokorrent ausgeglichen',
+            statusBadge: 'success', statusText: 'Alle Kredite vollständig beglichen',
             krediteAnzahl: 3, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
             rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 80, ability: 85, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Logistikunternehmen hat Kontokorrent nach kurzfristigem Engpass ausgeglichen.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            // Einkommen & Ausgaben (Gewerbe)
+            einkommenMonatlich: 890000, ausgabenMonatlich: 795000, ausgabenDetails: 'Personal: €320.000, Fahrzeugkosten: €185.000, Treibstoff: €142.000, Versicherungen: €78.000, Verwaltung: €45.000, Sonstiges: €25.000',
+            kernproblem: 'Fall vollständig abgeschlossen. Alle 3 Kredite beglichen. Gesunde Finanzsituation: Umsatz €890.000/Monat, Kosten €795.000 = Gewinnmarge ~11%.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0,
+            produkte: [
+                { typ: 'Kontokorrentkredit', nummer: 'KKK-2023-5544', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Betriebsmittelkredit', nummer: 'BMK-2022-1123', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Leasing LKW-Flotte', nummer: 'LK-2021-8890', saldo: 0, status: 'Beglichen', badge: 'success' }
+            ]
         },
         'K-2024-5734': {
             name: 'Fischer, Anna', type: 'Privat', rechtsform: 'Privatperson',
@@ -1393,6 +1431,29 @@ function updateKontenFields(modal, customer) {
                     <td><span class="tx-badge">Gebucht</span></td>
                 </tr>
             `;
+        }
+    }
+
+    // Update Einkommen & Ausgaben section
+    const eaSection = kontenTab.querySelector('.einkommen-ausgaben-compact');
+    if (eaSection && customer.einkommenMonatlich) {
+        const einkommen = customer.einkommenMonatlich || 0;
+        const ausgaben = customer.ausgabenMonatlich || 0;
+        const differenz = einkommen - ausgaben;
+        const differenzClass = differenz >= 0 ? 'positiv' : 'negativ';
+        const differenzText = differenz >= 0 ? '+€' + differenz.toLocaleString('de-DE') : '-€' + Math.abs(differenz).toLocaleString('de-DE');
+
+        const eaRows = eaSection.querySelectorAll('.ea-row');
+        if (eaRows.length >= 3) {
+            eaRows[0].querySelector('.value').textContent = '€' + einkommen.toLocaleString('de-DE');
+            eaRows[1].querySelector('.value').textContent = '€' + ausgaben.toLocaleString('de-DE');
+            eaRows[2].querySelector('.value').textContent = differenzText;
+            eaRows[2].querySelector('.value').className = 'value ' + differenzClass;
+        }
+
+        const detailsText = eaSection.querySelector('.details-text');
+        if (detailsText && customer.ausgabenDetails) {
+            detailsText.textContent = customer.ausgabenDetails;
         }
     }
 }
