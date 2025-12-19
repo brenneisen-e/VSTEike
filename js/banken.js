@@ -917,12 +917,14 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 3, gesamtforderung: 6850, monatsrate: 1425, ueberfaellig: 0,
             rueckgabequote: 85, hauptforderung: 6850, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 90, ability: 85, segment: 'stabil',
+            // Letzte Zahlung (für Zahlungseingänge-Widget)
+            letzteZahlung: { betrag: 1890, datum: '16.12.2025', typ: 'Vollständige Tilgung' },
             // Einkommen & Ausgaben (Privat)
             einkommenMonatlich: 4200, ausgabenMonatlich: 3800, ausgabenDetails: 'Miete: €1.100, Lebensmittel: €450, Auto: €650, Streaming/Abos: €180, Freizeit: €420, Sonstiges: €1.000',
-            kernproblem: 'Überfällige Forderung (Ratenkredit) vollständig beglichen. Nettoeinkommen €4.200, Ausgaben €3.800 - könnte mehr sparen. Hohe Ausgaben für Streaming-Abos (€180) und Freizeit (€420). Dispo ausgereizt für Autoreparatur.',
+            kernproblem: 'Ratenkredit vollständig beglichen (€1.890 am 16.12.). Nettoeinkommen €4.200, Ausgaben €3.800. Noch aktiv: Dispo €4.500 + Baufinanzierung €2.350. Monitoring wegen knapper Liquidität.',
             workflowStatus: 'Monitoring', mahnstufe: 0,
             produkte: [
-                { typ: 'Ratenkredit', nummer: 'RK-2023-8841', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Ratenkredit', nummer: 'RK-2023-8841', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 1890 },
                 { typ: 'Dispositionskredit', nummer: 'DK-2024-1122', saldo: 4500, status: 'Aktiv', badge: 'warning' },
                 { typ: 'Baufinanzierung', nummer: 'BF-2021-5567', saldo: 2350, status: '2 Raten offen', badge: 'warning' }
             ]
@@ -932,16 +934,18 @@ function getFullCustomerData(customerId) {
             adresse: 'Industriestraße 78, 40210 Düsseldorf', telefon: '+49 211 456789',
             email: 'info@klein-kg.de', ansprechpartner: 'Peter Klein',
             branche: 'Großhandel', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Vollständig beglichen am 14.12.2025',
+            statusBadge: 'success', statusText: 'Ratenvereinbarung erfüllt am 19.12.2025',
             krediteAnzahl: 2, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
             rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 85, ability: 75, segment: 'abgeschlossen',
+            // Letzte Zahlung (für Zahlungseingänge-Widget)
+            letzteZahlung: { betrag: 3400, datum: '19.12.2025', typ: 'Ratenvereinbarung' },
             // Einkommen & Ausgaben (Gewerbe)
             einkommenMonatlich: 125000, ausgabenMonatlich: 98000, ausgabenDetails: 'Personal: €42.000, Lager: €15.000, Transport: €28.000, Verwaltung: €8.000, Sonstiges: €5.000',
-            kernproblem: 'Fall vollständig abgeschlossen. Beide Kredite getilgt. Stabile Finanzsituation: Einnahmen €125.000, Ausgaben €98.000 = positiver Cashflow €27.000/Monat.',
+            kernproblem: 'Fall abgeschlossen. Letzte Rate €3.400 heute eingegangen (Ratenvereinbarung). Beide Kredite vollständig getilgt. Gute Bonität für Folgegeschäft.',
             workflowStatus: 'Abgeschlossen', mahnstufe: 0,
             produkte: [
-                { typ: 'Betriebsmittelkredit', nummer: 'BMK-2022-4456', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Betriebsmittelkredit', nummer: 'BMK-2022-4456', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 3400 },
                 { typ: 'Investitionskredit', nummer: 'IK-2021-7823', saldo: 0, status: 'Beglichen', badge: 'success' }
             ]
         },
@@ -950,16 +954,18 @@ function getFullCustomerData(customerId) {
             adresse: 'Rosenstraße 12, 50667 Köln', telefon: '+49 221 334455',
             email: 'm.fischer@web.de', ansprechpartner: 'Maria Fischer',
             branche: 'Rentnerin', restschuld: 3200, status: 'Aktiv',
-            statusBadge: 'warning', statusText: 'Überfällige Kreditkarte beglichen am 10.12.2025',
+            statusBadge: 'warning', statusText: 'Teilzahlung €780 eingegangen am 18.12.2025',
             krediteAnzahl: 2, gesamtforderung: 3200, monatsrate: 180, ueberfaellig: 0,
             rueckgabequote: 75, hauptforderung: 3200, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 80, ability: 50, segment: 'stabil',
+            // Letzte Zahlung (für Zahlungseingänge-Widget)
+            letzteZahlung: { betrag: 780, datum: '18.12.2025', typ: 'Teilzahlung' },
             // Einkommen & Ausgaben (Privat - Rentnerin)
             einkommenMonatlich: 1450, ausgabenMonatlich: 1380, ausgabenDetails: 'Miete: €520, Lebensmittel: €280, Medikamente: €95, Versicherungen: €145, Enkel-Geschenke: €120, Sonstiges: €220',
-            kernproblem: 'Kreditkartenschuld beglichen. Ratenkredit (€3.200) noch offen mit €180/Monat Rate. Knappe Rente €1.450, Ausgaben €1.380. Gibt zu viel für Enkel-Geschenke (€120/Monat) aus. Hohe Kooperationsbereitschaft.',
+            kernproblem: 'Teilzahlung €780 gestern eingegangen. Kreditkartenschuld beglichen. Ratenkredit (€3.200) noch offen mit €180/Monat Rate. Knappe Rente €1.450, Ausgaben €1.380. Hohe Kooperationsbereitschaft.',
             workflowStatus: 'Monitoring', mahnstufe: 0,
             produkte: [
-                { typ: 'Kreditkarte', nummer: 'KK-2023-6678', saldo: 0, status: 'Beglichen', badge: 'success' },
+                { typ: 'Kreditkarte', nummer: 'KK-2023-6678', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 780 },
                 { typ: 'Ratenkredit', nummer: 'RK-2024-1234', saldo: 3200, status: 'Aktiv', badge: 'warning' }
             ]
         },
@@ -1439,12 +1445,16 @@ function updateKontenFields(modal, customer) {
         const saldo = hauptProdukt ? hauptProdukt.saldo : customer.restschuld;
 
         if (isBezahlt) {
-            // Bezahlt: Show final payment
+            // Bezahlt: Show final payment - use letzteZahlung if available
+            const zahlung = customer.letzteZahlung || {};
+            const zahlungsBetrag = zahlung.betrag || rate;
+            const zahlungsDatum = zahlung.datum || customer.statusText?.match(/\d{2}\.\d{2}\.\d{4}/)?.[0] || '15.12.2025';
+            const zahlungsTyp = zahlung.typ || 'Schlusszahlung';
             tbody.innerHTML = `
                 <tr>
-                    <td>${customer.statusText?.match(/\\d{2}\\.\\d{2}\\.\\d{4}/)?.[0] || '15.12.2025'}</td>
-                    <td>Schlusszahlung - Kredit vollständig getilgt</td>
-                    <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
+                    <td>${zahlungsDatum}</td>
+                    <td>${zahlungsTyp} - Kredit getilgt</td>
+                    <td class="positive">+€${zahlungsBetrag.toLocaleString('de-DE')}</td>
                     <td>€0</td>
                     <td><span class="tx-badge success">Abgeschlossen</span></td>
                 </tr>
@@ -1452,7 +1462,7 @@ function updateKontenFields(modal, customer) {
                     <td>01.12.2025</td>
                     <td>Reguläre Ratenzahlung</td>
                     <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
-                    <td>€${(rate * 2).toLocaleString('de-DE')}</td>
+                    <td>€${zahlungsBetrag.toLocaleString('de-DE')}</td>
                     <td><span class="tx-badge">Gebucht</span></td>
                 </tr>
             `;
