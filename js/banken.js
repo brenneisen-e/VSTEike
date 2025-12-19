@@ -892,7 +892,7 @@ function getFullCustomerData(customerId) {
             email: 'info@mueller-gmbh.de', ansprechpartner: 'Hans Mueller',
             branche: 'Gastronomie', restschuld: 125000, status: 'Inkasso',
             // Konten & Finanzen
-            krediteAnzahl: 5, gesamtforderung: 350500, monatsrate: 2380, ueberfaellig: 15000,
+            krediteAnzahl: 3, gesamtforderung: 350500, monatsrate: 2380, ueberfaellig: 15000,
             rueckgabequote: 34, hauptforderung: 110000, zinsen: 8450, mahngebuehren: 350, inkassokosten: 6200,
             dpd: 35,
             // Einkommen & Ausgaben (Gewerbe)
@@ -1564,6 +1564,59 @@ function updateKontenFields(modal, customer) {
             eaSection.style.display = 'none';
         }
     }
+
+    // Hide/show product sections based on customer's actual products
+    const productSections = kontenTab.querySelectorAll('[data-product]');
+    const customerProducts = customer.produkte || [];
+
+    // Map product types to data-product attribute values
+    const productTypeMap = {
+        'kreditkarte': ['kreditkarte', 'credit card'],
+        'dispo': ['dispo', 'dispositionskredit', 'kontokorrent', 'kontokorrentkredit'],
+        'baufi': ['baufinanzierung', 'baufi', 'hypothek'],
+        'ratenkredit-pkw': ['ratenkredit pkw', 'autokredit', 'kfz-kredit', 'kfz kredit'],
+        'ratenkredit-moebel': ['ratenkredit möbel', 'möbelkredit']
+    };
+
+    // Get list of product types the customer has
+    const customerProductTypes = customerProducts.map(p => p.typ.toLowerCase());
+
+    productSections.forEach(section => {
+        const dataProduct = section.getAttribute('data-product');
+        const matchingTypes = productTypeMap[dataProduct] || [];
+
+        // Check if customer has this product type
+        const hasProduct = customerProductTypes.some(customerType =>
+            matchingTypes.some(mappedType => customerType.includes(mappedType)) ||
+            (dataProduct === 'kreditkarte' && customerType.includes('ratenkredit') && !customerType.includes('pkw') && !customerType.includes('möbel'))
+        );
+
+        if (hasProduct) {
+            section.style.display = '';
+            // Update section with actual product data
+            const matchingProduct = customerProducts.find(p => {
+                const pType = p.typ.toLowerCase();
+                return matchingTypes.some(mt => pType.includes(mt)) ||
+                    (dataProduct === 'kreditkarte' && pType.includes('ratenkredit') && !pType.includes('pkw') && !pType.includes('möbel'));
+            });
+            if (matchingProduct) {
+                const nameEl = section.querySelector('.credit-product-name');
+                const numberEl = section.querySelector('.credit-product-number');
+                const saldoEl = section.querySelector('.amount-value');
+                const statusEl = section.querySelector('.credit-status-badge');
+
+                if (nameEl) nameEl.textContent = matchingProduct.typ;
+                if (numberEl) numberEl.textContent = matchingProduct.nummer;
+                if (saldoEl) saldoEl.textContent = '€' + matchingProduct.saldo.toLocaleString('de-DE');
+                if (statusEl) {
+                    statusEl.textContent = matchingProduct.status;
+                    statusEl.className = 'credit-status-badge ' + (matchingProduct.badge || 'warning');
+                }
+            }
+        } else {
+            section.style.display = 'none';
+        }
+    });
 }
 
 // Update Kommunikation tab with KI summary and dynamic timeline
