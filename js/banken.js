@@ -855,39 +855,8 @@ function openCustomerDetail(customerId) {
     if (modal) {
         modal.style.display = 'flex';
 
-        // Demo customer data mapping
-        const customerData = {
-            'K-2024-0001': { name: 'Mueller GmbH', type: 'Gewerbe' },
-            'K-2024-0002': { name: 'Schmidt, Peter', type: 'Privat' },
-            'K-2024-0003': { name: 'Weber KG', type: 'Gewerbe' },
-            'K-2024-0004': { name: 'Braun, Maria', type: 'Privat' },
-            'K-2024-0005': { name: 'Hoffmann Bau GmbH', type: 'Gewerbe' },
-            'K-2024-0006': { name: 'Keller, Thomas', type: 'Privat' },
-            'K-2024-0007': { name: 'Autohaus Berger', type: 'Gewerbe' },
-            'K-2024-0008': { name: 'Lehmann, Sandra', type: 'Privat' },
-            'K-2024-0009': { name: 'Meier Elektro OHG', type: 'Gewerbe' },
-            'K-2024-0010': { name: 'Fischer, Hans', type: 'Privat' },
-            'K-2024-0011': { name: 'Bäckerei Schulze', type: 'Gewerbe' },
-            'K-2024-0012': { name: 'Neumann, Klaus', type: 'Privat' },
-            'K-2024-0013': { name: 'Gasthaus zum Löwen', type: 'Gewerbe' },
-            'K-2024-0014': { name: 'Werner, Sabine', type: 'Privat' },
-            'K-2024-0015': { name: 'Maier Transporte', type: 'Gewerbe' },
-            'K-2024-0016': { name: 'Zimmermann, Frank', type: 'Privat' },
-            // Neue Fälle seit letztem Login
-            'K-2024-8847': { name: 'Müller, Hans', type: 'Privat' },
-            'K-2024-8846': { name: 'Schmidt GmbH', type: 'Gewerbe' },
-            'K-2024-8845': { name: 'Weber, Anna', type: 'Privat' },
-            // Zahlungseingänge / Ehemalige Fälle
-            'K-2024-7234': { name: 'Braun, Thomas', type: 'Privat' },
-            'K-2024-6891': { name: 'Klein KG', type: 'Gewerbe' },
-            'K-2024-6234': { name: 'Fischer, Maria', type: 'Privat' },
-            'K-2024-5982': { name: 'Meier, Stefan', type: 'Privat' },
-            'K-2024-5876': { name: 'Schneider Logistik GmbH', type: 'Gewerbe' },
-            'K-2024-5734': { name: 'Fischer, Anna', type: 'Privat' },
-            'K-2024-5612': { name: 'Bäckerei Müller', type: 'Gewerbe' }
-        };
-
-        const customer = customerData[customerId] || { name: customerId, type: 'Unbekannt' };
+        // Get full customer data
+        const customer = getFullCustomerData(customerId);
 
         // Update modal header
         const customerNameEl = document.getElementById('customerName');
@@ -901,9 +870,168 @@ function openCustomerDetail(customerId) {
             customerIdEl.textContent = customerId;
         }
 
+        // Update all Stammdaten fields
+        updateStammdatenFields(modal, customer);
+
         // Always reset to Stammdaten tab when opening
         showCustomerTab('stammdaten');
         console.log('Opening customer detail:', customerId, customer.name);
+    }
+}
+
+// Get full customer data for modal display
+function getFullCustomerData(customerId) {
+    const customers = {
+        'K-2024-0001': {
+            name: 'Mueller GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
+            adresse: 'Musterstraße 123, 38100 Braunschweig', telefon: '+49 531 123456',
+            email: 'info@mueller-gmbh.de', ansprechpartner: 'Hans Mueller',
+            branche: 'Maschinenbau', restschuld: 125000, status: 'Inkasso'
+        },
+        'K-2024-7234': {
+            name: 'Braun, Thomas', type: 'Privat', rechtsform: 'Privatperson',
+            adresse: 'Lindenweg 45, 30159 Hannover', telefon: '+49 511 987654',
+            email: 't.braun@email.de', ansprechpartner: 'Thomas Braun',
+            branche: 'Angestellter', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Vollständig beglichen am 16.12.2025'
+        },
+        'K-2024-6891': {
+            name: 'Klein KG', type: 'Gewerbe', rechtsform: 'KG',
+            adresse: 'Industriestraße 78, 40210 Düsseldorf', telefon: '+49 211 456789',
+            email: 'info@klein-kg.de', ansprechpartner: 'Peter Klein',
+            branche: 'Großhandel', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Vollständig beglichen am 14.12.2025'
+        },
+        'K-2024-6234': {
+            name: 'Fischer, Maria', type: 'Privat', rechtsform: 'Privatperson',
+            adresse: 'Rosenstraße 12, 50667 Köln', telefon: '+49 221 334455',
+            email: 'm.fischer@web.de', ansprechpartner: 'Maria Fischer',
+            branche: 'Rentnerin', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Teilzahlung abgeschlossen'
+        },
+        'K-2024-5982': {
+            name: 'Meier, Stefan', type: 'Privat', rechtsform: 'Privatperson',
+            adresse: 'Hauptstraße 56, 80331 München', telefon: '+49 89 112233',
+            email: 's.meier@gmx.de', ansprechpartner: 'Stefan Meier',
+            branche: 'Selbstständig', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Dispo ausgeglichen'
+        },
+        'K-2024-5876': {
+            name: 'Schneider Logistik GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
+            adresse: 'Hafenstraße 200, 20457 Hamburg', telefon: '+49 40 778899',
+            email: 'info@schneider-logistik.de', ansprechpartner: 'Klaus Schneider',
+            branche: 'Transport & Logistik', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Kontokorrent ausgeglichen'
+        },
+        'K-2024-5734': {
+            name: 'Fischer, Anna', type: 'Privat', rechtsform: 'Privatperson',
+            adresse: 'Gartenweg 8, 70173 Stuttgart', telefon: '+49 711 223344',
+            email: 'a.fischer@outlook.de', ansprechpartner: 'Anna Fischer',
+            branche: 'Beamtin', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Kreditkarte beglichen'
+        },
+        'K-2024-5612': {
+            name: 'Bäckerei Müller', type: 'Gewerbe', rechtsform: 'Einzelunternehmen',
+            adresse: 'Marktplatz 3, 60311 Frankfurt', telefon: '+49 69 445566',
+            email: 'info@baeckerei-mueller.de', ansprechpartner: 'Werner Müller',
+            branche: 'Lebensmittel / Gastronomie', restschuld: 0, status: 'Bezahlt',
+            statusBadge: 'success', statusText: 'Investitionskredit vollständig getilgt'
+        },
+        'K-2024-8847': {
+            name: 'Müller, Hans', type: 'Privat', rechtsform: 'Privatperson',
+            adresse: 'Waldstraße 22, 38100 Braunschweig', telefon: '+49 531 998877',
+            email: 'h.mueller@email.de', ansprechpartner: 'Hans Müller',
+            branche: 'Angestellter', restschuld: 4230, status: 'Offen'
+        },
+        'K-2024-8846': {
+            name: 'Schmidt GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
+            adresse: 'Berliner Allee 100, 30175 Hannover', telefon: '+49 511 665544',
+            email: 'info@schmidt-gmbh.de', ansprechpartner: 'Michael Schmidt',
+            branche: 'IT-Dienstleistungen', restschuld: 12890, status: 'Offen'
+        },
+        'K-2024-8845': {
+            name: 'Weber, Anna', type: 'Privat', rechtsform: 'Privatperson',
+            adresse: 'Blumenweg 15, 50668 Köln', telefon: '+49 221 887766',
+            email: 'a.weber@web.de', ansprechpartner: 'Anna Weber',
+            branche: 'Freiberuflerin', restschuld: 2150, status: 'Offen'
+        }
+    };
+
+    // Return customer or default data
+    return customers[customerId] || {
+        name: customerId, type: 'Unbekannt', rechtsform: '-',
+        adresse: '-', telefon: '-', email: '-', ansprechpartner: '-',
+        branche: '-', restschuld: 0, status: 'Unbekannt'
+    };
+}
+
+// Update Stammdaten fields in modal
+function updateStammdatenFields(modal, customer) {
+    // Find all value spans and update based on customer data
+    const stammdatenTab = modal.querySelector('#tab-stammdaten');
+    if (!stammdatenTab) return;
+
+    // Update Firmenname / Name
+    const nameValue = stammdatenTab.querySelector('.stammdaten-card:first-child .stammdaten-row:first-child .value');
+    if (nameValue) nameValue.textContent = customer.name;
+
+    // Update Rechtsform
+    const rechtsformValue = stammdatenTab.querySelector('.stammdaten-card:first-child .stammdaten-row:nth-child(2) .value');
+    if (rechtsformValue) rechtsformValue.textContent = customer.rechtsform || customer.type;
+
+    // Update Kundentyp badge
+    const kundentypBadge = stammdatenTab.querySelector('.badge');
+    if (kundentypBadge) {
+        kundentypBadge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
+        kundentypBadge.className = customer.type === 'Gewerbe' ? 'badge badge-blue' : 'badge badge-gray';
+    }
+
+    // Update Branche
+    const brancheValue = stammdatenTab.querySelector('.stammdaten-row:nth-child(5) .value');
+    if (brancheValue && customer.branche) brancheValue.textContent = customer.branche;
+
+    // Update Kontaktdaten
+    const kontaktCard = stammdatenTab.querySelectorAll('.stammdaten-card')[1];
+    if (kontaktCard) {
+        const adresseValue = kontaktCard.querySelector('.stammdaten-row:first-child .value');
+        if (adresseValue && customer.adresse) adresseValue.textContent = customer.adresse;
+
+        const emailValue = kontaktCard.querySelector('.stammdaten-row:nth-child(4) .value');
+        if (emailValue && customer.email) emailValue.textContent = customer.email;
+    }
+
+    // Update Geschäftsführung / Ansprechpartner name
+    const gfNameValue = stammdatenTab.querySelector('.geschaeftsfuehrung .stammdaten-row:first-child .value, .kontakt-section .stammdaten-row:first-child .value');
+    if (gfNameValue && customer.ansprechpartner) gfNameValue.textContent = customer.ansprechpartner;
+
+    // Update Restschuld in Kreditdetails
+    const restschuldValue = modal.querySelector('.kreditdetails .value.text-danger, .kreditdetails .stammdaten-row:nth-child(4) .value');
+    if (restschuldValue) {
+        if (customer.restschuld === 0) {
+            restschuldValue.textContent = '€0';
+            restschuldValue.className = 'value text-success';
+        } else {
+            restschuldValue.textContent = '€' + customer.restschuld.toLocaleString('de-DE');
+            restschuldValue.className = 'value text-danger';
+        }
+    }
+
+    // Show status badge for completed cases
+    if (customer.statusBadge === 'success') {
+        // Add a success indicator
+        const headerActions = modal.querySelector('.modal-header-actions');
+        let statusIndicator = modal.querySelector('.status-indicator-success');
+        if (!statusIndicator && headerActions) {
+            statusIndicator = document.createElement('span');
+            statusIndicator.className = 'status-indicator-success';
+            statusIndicator.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" width="20" height="20"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ' + customer.statusText;
+            statusIndicator.style.cssText = 'display: flex; align-items: center; gap: 6px; color: #22c55e; font-size: 13px; font-weight: 500; margin-right: 12px;';
+            headerActions.insertBefore(statusIndicator, headerActions.firstChild);
+        }
+    } else {
+        // Remove success indicator if exists
+        const statusIndicator = modal.querySelector('.status-indicator-success');
+        if (statusIndicator) statusIndicator.remove();
     }
 }
 
