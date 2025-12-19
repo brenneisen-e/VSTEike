@@ -1037,20 +1037,29 @@ function getFullCustomerData(customerId) {
     };
 }
 
-// Update Stammdaten fields in modal - finds fields by label text
+// Update Stammdaten fields in modal - comprehensive update of all fields
 function updateStammdatenFields(modal, customer) {
     const stammdatenTab = modal.querySelector('#tab-stammdaten');
-    if (!stammdatenTab) return;
+    if (!stammdatenTab) {
+        console.log('Stammdaten tab not found');
+        return;
+    }
+
+    console.log('Updating Stammdaten for:', customer.name, customer);
 
     // Helper function to find and update a field by its label text
-    function updateFieldByLabel(labelText, newValue) {
+    function updateFieldByLabel(labelText, newValue, useHTML = false) {
         const rows = stammdatenTab.querySelectorAll('.stammdaten-row');
         for (const row of rows) {
             const label = row.querySelector('.label');
-            if (label && label.textContent.trim().toLowerCase().includes(labelText.toLowerCase())) {
+            if (label && label.textContent.trim().replace(':', '').toLowerCase() === labelText.toLowerCase()) {
                 const value = row.querySelector('.value');
                 if (value) {
-                    value.textContent = newValue;
+                    if (useHTML) {
+                        value.innerHTML = newValue;
+                    } else {
+                        value.textContent = newValue;
+                    }
                     return value;
                 }
             }
@@ -1058,69 +1067,185 @@ function updateStammdatenFields(modal, customer) {
         return null;
     }
 
-    // Update Unternehmensdaten section
+    // Determine if Privat or Gewerbe customer
+    const isPrivat = customer.type === 'Privat';
+
+    // === UNTERNEHMENSDATEN / PERSONENDATEN ===
     updateFieldByLabel('Firmenname', customer.name);
-    updateFieldByLabel('Rechtsform', customer.rechtsform || customer.type);
+    updateFieldByLabel('Rechtsform', customer.rechtsform || (isPrivat ? 'Privatperson' : '-'));
+    updateFieldByLabel('Handelsregister', isPrivat ? '-' : 'HRB ' + Math.floor(Math.random() * 99999) + ' ' + (customer.adresse?.split(',')[1]?.trim() || 'Deutschland'));
+    updateFieldByLabel('USt-ID', isPrivat ? '-' : 'DE' + Math.floor(Math.random() * 999999999));
     updateFieldByLabel('Branche', customer.branche || '-');
+    updateFieldByLabel('Gründungsjahr', isPrivat ? '-' : (2000 + Math.floor(Math.random() * 20)).toString());
+    updateFieldByLabel('Mitarbeiter', isPrivat ? '-' : Math.floor(Math.random() * 50 + 1) + ' (Stand: 2024)');
+    updateFieldByLabel('Jahresumsatz', isPrivat ? '-' : '€' + (Math.floor(Math.random() * 5) + 0.5).toFixed(1) + ' Mio (2023)');
 
-    // Update Kundentyp badge
-    const kundentypValue = updateFieldByLabel('Kundentyp', '');
+    // Kundentyp badge
+    const kundentypValue = updateFieldByLabel('Kundentyp', '', true);
     if (kundentypValue) {
-        const isGewerbe = customer.type === 'Gewerbe';
-        kundentypValue.innerHTML = isGewerbe
-            ? '<span class="badge gewerbe">Gewerbekunde</span>'
-            : '<span class="badge privat">Privatkunde</span>';
+        kundentypValue.innerHTML = isPrivat
+            ? '<span class="badge privat">Privatkunde</span>'
+            : '<span class="badge gewerbe">Gewerbekunde</span>';
     }
 
-    // Update Kontaktdaten section
-    if (customer.adresse) {
-        updateFieldByLabel('Adresse', customer.adresse);
-    }
-    if (customer.telefon) {
-        const telefonValue = updateFieldByLabel('Telefon Zentrale', customer.telefon);
-        if (telefonValue) {
-            telefonValue.className = 'value clickable';
-            telefonValue.setAttribute('onclick', `initiateCall('${customer.telefon}')`);
-        }
-    }
-    if (customer.email) {
-        const emailValue = updateFieldByLabel('E-Mail', customer.email);
-        if (emailValue) {
-            emailValue.className = 'value clickable';
-            emailValue.setAttribute('onclick', `sendEmail('${customer.email}')`);
-        }
-    }
+    updateFieldByLabel('Kunde seit', customer.kundeSeit || '01.01.2020 (5 Jahre)');
+    updateFieldByLabel('Kundenbetreuer', 'Eike Brenneisen');
 
-    // Update Geschäftsführung / Ansprechpartner in subsections
-    const subsections = stammdatenTab.querySelectorAll('.stammdaten-subsection');
-    for (const subsection of subsections) {
-        const subsectionText = subsection.textContent.toLowerCase();
-        if (subsectionText.includes('geschäftsführung') || subsectionText.includes('ansprechpartner')) {
-            const nextRow = subsection.nextElementSibling;
-            if (nextRow && nextRow.classList.contains('stammdaten-row')) {
-                const nameValue = nextRow.querySelector('.value');
-                if (nameValue && customer.ansprechpartner) {
-                    nameValue.textContent = customer.ansprechpartner;
-                }
+    // === KONTAKTDATEN ===
+    const adresseParts = customer.adresse ? customer.adresse.split(',') : ['-', '-'];
+    const adresseFormatted = adresseParts.length > 1
+        ? adresseParts[0].trim() + '<br>' + adresseParts[1].trim()
+        : customer.adresse || '-';
+    updateFieldByLabel('Adresse', adresseFormatted, true);
+
+    updateFieldByLabel('Telefon Zentrale', customer.telefon || '-');
+    updateFieldByLabel('Telefon Mobil', customer.telefonMobil || '+49 170 ' + Math.floor(Math.random() * 9999999));
+
+    // Update all E-Mail fields
+    const emailRows = stammdatenTab.querySelectorAll('.stammdaten-row');
+    let emailCount = 0;
+    emailRows.forEach(row => {
+        const label = row.querySelector('.label');
+        if (label && label.textContent.trim().toLowerCase().includes('e-mail')) {
+            const value = row.querySelector('.value');
+            if (value && emailCount === 0) {
+                value.textContent = customer.email || '-';
+                emailCount++;
             }
         }
-    }
+    });
 
-    // Update Kreditdetails section
-    const restschuldValue = updateFieldByLabel('Restschuld', '');
-    if (restschuldValue) {
-        if (customer.restschuld === 0) {
-            restschuldValue.textContent = '€0';
-            restschuldValue.className = 'value highlight-green';
-            restschuldValue.style.color = '#22c55e';
+    updateFieldByLabel('Website', isPrivat ? '-' : 'www.' + customer.name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.de');
+
+    // === GESCHÄFTSFÜHRUNG / ANSPRECHPARTNER ===
+    const subsections = stammdatenTab.querySelectorAll('.stammdaten-subsection');
+    subsections.forEach(subsection => {
+        const subsectionText = subsection.textContent.toLowerCase();
+        let sibling = subsection.nextElementSibling;
+
+        if (subsectionText.includes('geschäftsführung')) {
+            // Update Geschäftsführung section
+            while (sibling && sibling.classList.contains('stammdaten-row')) {
+                const label = sibling.querySelector('.label');
+                const value = sibling.querySelector('.value');
+                if (label && value) {
+                    const labelText = label.textContent.trim().toLowerCase();
+                    if (labelText.includes('name')) {
+                        value.textContent = customer.ansprechpartner || customer.name;
+                    } else if (labelText.includes('direktwahl')) {
+                        value.textContent = customer.telefon ? customer.telefon + '-10' : '-';
+                    } else if (labelText.includes('e-mail')) {
+                        const emailName = customer.ansprechpartner
+                            ? customer.ansprechpartner.split(' ').map(n => n[0]?.toLowerCase()).join('.')
+                            : 'kontakt';
+                        const domain = customer.email ? customer.email.split('@')[1] : 'email.de';
+                        value.textContent = emailName + '@' + domain;
+                    }
+                }
+                sibling = sibling.nextElementSibling;
+            }
+        } else if (subsectionText.includes('buchhaltung') || subsectionText.includes('ansprechpartner')) {
+            // Update Ansprechpartner Buchhaltung section
+            while (sibling && sibling.classList.contains('stammdaten-row')) {
+                const label = sibling.querySelector('.label');
+                const value = sibling.querySelector('.value');
+                if (label && value) {
+                    const labelText = label.textContent.trim().toLowerCase();
+                    if (labelText.includes('name')) {
+                        value.textContent = isPrivat ? customer.name : 'Buchhaltung ' + customer.name.split(' ')[0];
+                    } else if (labelText.includes('direktwahl')) {
+                        value.textContent = customer.telefon ? customer.telefon + '-20' : '-';
+                    } else if (labelText.includes('e-mail')) {
+                        const domain = customer.email ? customer.email.split('@')[1] : 'email.de';
+                        value.textContent = isPrivat ? customer.email : 'buchhaltung@' + domain;
+                    }
+                }
+                sibling = sibling.nextElementSibling;
+            }
+        }
+    });
+
+    // === BANKVERBINDUNG & BONITÄT ===
+    // Generate realistic IBAN for demo
+    const ibanNumber = 'DE' + Math.floor(Math.random() * 99).toString().padStart(2, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 99).toString().padStart(2, '0');
+    updateFieldByLabel('IBAN', ibanNumber);
+    updateFieldByLabel('BIC', 'DEUTDEDB' + Math.floor(Math.random() * 999).toString().padStart(3, '0'));
+    updateFieldByLabel('Kreditinstitut', ['Deutsche Bank', 'Commerzbank AG', 'Sparkasse', 'Volksbank'][Math.floor(Math.random() * 4)]);
+
+    // SEPA-Mandat based on status
+    const sepaValue = updateFieldByLabel('SEPA-Mandat', '', true);
+    if (sepaValue) {
+        if (customer.status === 'Bezahlt') {
+            sepaValue.innerHTML = '<span class="badge success">Aktiv</span>';
+        } else if (customer.status === 'Inkasso') {
+            sepaValue.innerHTML = '<span class="badge warning">Widerrufen (' + new Date().toLocaleDateString('de-DE') + ')</span>';
         } else {
-            restschuldValue.textContent = '€' + customer.restschuld.toLocaleString('de-DE');
-            restschuldValue.className = 'value highlight-red';
+            sepaValue.innerHTML = '<span class="badge success">Aktiv</span>';
         }
     }
 
-    // Update Stage based on status
-    const stageValue = updateFieldByLabel('Stage', '');
+    // Bonitätsinformationen
+    const rating = customer.status === 'Bezahlt' ? 'A' : (customer.status === 'Inkasso' ? 'C-' : 'B');
+    const ratingClass = customer.status === 'Bezahlt' ? 'rating-good' : (customer.status === 'Inkasso' ? 'rating-bad' : 'rating-medium');
+    const ratingValue = updateFieldByLabel('Internes Rating', '', true);
+    if (ratingValue) {
+        ratingValue.innerHTML = '<span class="' + ratingClass + '">' + rating + '</span>';
+    }
+
+    const creditreformScore = customer.status === 'Bezahlt' ? '180 (geringes Risiko)' : (customer.status === 'Inkasso' ? '312 (hohes Risiko)' : '245 (mittleres Risiko)');
+    updateFieldByLabel('Creditreform-Index', creditreformScore);
+
+    const schufaScore = customer.status === 'Bezahlt' ? '95 / 100' : (customer.status === 'Inkasso' ? '78 / 100' : '85 / 100');
+    updateFieldByLabel('Schufa-Score', schufaScore);
+    updateFieldByLabel('Letzte Prüfung', new Date().toLocaleDateString('de-DE'));
+
+    const zahlungsmoral = customer.status === 'Bezahlt' ? 'Gut' : (customer.status === 'Inkasso' ? 'Mangelhaft' : 'Befriedigend');
+    const zahlungsmoralClass = customer.status === 'Bezahlt' ? 'rating-good' : (customer.status === 'Inkasso' ? 'rating-bad' : 'rating-medium');
+    const zahlungsmoralValue = updateFieldByLabel('Zahlungsmoral', '', true);
+    if (zahlungsmoralValue) {
+        zahlungsmoralValue.innerHTML = '<span class="' + zahlungsmoralClass + '">' + zahlungsmoral + '</span>';
+    }
+
+    const verzug = customer.dpd || 0;
+    updateFieldByLabel('Ø Zahlungsverzug', verzug + ' Tage');
+
+    // === KREDITDETAILS ===
+    const produktTyp = isPrivat
+        ? ['Ratenkredit', 'Dispositionskredit', 'Kreditkarte', 'Autokredit'][Math.floor(Math.random() * 4)]
+        : ['Betriebsmittelkredit', 'Investitionskredit', 'Kontokorrent'][Math.floor(Math.random() * 3)];
+    updateFieldByLabel('Vertragsart', produktTyp);
+
+    const vertragsnummer = (isPrivat ? 'RK-' : 'BMK-') + '20' + (18 + Math.floor(Math.random() * 6)) + '-' + Math.floor(Math.random() * 9999999).toString().padStart(7, '0');
+    updateFieldByLabel('Vertragsnummer', vertragsnummer);
+
+    const ursprungsbetrag = customer.restschuld > 0 ? customer.restschuld * (1 + Math.random() * 0.5) : (Math.random() * 50000 + 5000);
+    updateFieldByLabel('Ursprungsbetrag', '€' + Math.round(ursprungsbetrag).toLocaleString('de-DE'));
+
+    // Restschuld with color
+    const restschuldValue = updateFieldByLabel('Restschuld', '', true);
+    if (restschuldValue) {
+        if (customer.restschuld === 0 || customer.status === 'Bezahlt') {
+            restschuldValue.innerHTML = '<span class="highlight-green" style="color: #22c55e;">€0</span>';
+        } else {
+            restschuldValue.innerHTML = '<span class="highlight-red">€' + customer.restschuld.toLocaleString('de-DE') + '</span>';
+        }
+    }
+
+    updateFieldByLabel('Zinssatz', (3 + Math.random() * 5).toFixed(2) + '% p.a.');
+    updateFieldByLabel('Monatsrate', '€' + (customer.monatsrate || Math.floor(customer.restschuld / 24) || 0).toLocaleString('de-DE'));
+    updateFieldByLabel('Vertragsbeginn', '01.' + String(Math.floor(Math.random() * 12) + 1).padStart(2, '0') + '.20' + (18 + Math.floor(Math.random() * 5)));
+    updateFieldByLabel('Vertragslaufzeit', (60 + Math.floor(Math.random() * 60)) + ' Monate');
+    updateFieldByLabel('Restlaufzeit', Math.floor(Math.random() * 36) + ' Monate');
+    updateFieldByLabel('Sicherheiten', isPrivat ? 'Keine' : 'Bürgschaft GF, Inventar');
+    updateFieldByLabel('Sicherheitenwert', isPrivat ? '-' : '€' + Math.floor(customer.restschuld * 0.7).toLocaleString('de-DE') + ' (geschätzt)');
+
+    // Stage based on status
+    const stageValue = updateFieldByLabel('Stage', '', true);
     if (stageValue) {
         if (customer.status === 'Bezahlt') {
             stageValue.innerHTML = '<span class="badge success">Abgeschlossen</span>';
@@ -1128,6 +1253,17 @@ function updateStammdatenFields(modal, customer) {
             stageValue.innerHTML = '<span class="badge danger">Stage 3 (NPL)</span>';
         } else {
             stageValue.innerHTML = '<span class="badge warning">Stage 2</span>';
+        }
+    }
+
+    // DPD
+    const dpdValue = updateFieldByLabel('DPD', '', true);
+    if (dpdValue) {
+        const dpd = customer.dpd || 0;
+        if (dpd === 0) {
+            dpdValue.innerHTML = '<span class="highlight-green" style="color: #22c55e;">0 Tage</span>';
+        } else {
+            dpdValue.innerHTML = '<span class="highlight-red">' + dpd + ' Tage</span>';
         }
     }
 
@@ -1146,21 +1282,33 @@ function updateStammdatenFields(modal, customer) {
         const statusIndicator = modal.querySelector('.status-indicator-success');
         if (statusIndicator) statusIndicator.remove();
     }
+
+    console.log('Stammdaten update complete for:', customer.name);
 }
 
-// Update Konten & Finanzen tab
+// Update Konten & Finanzen tab - comprehensive update
 function updateKontenFields(modal, customer) {
     const kontenTab = modal.querySelector('#tab-konten');
     if (!kontenTab) return;
 
+    const isPrivat = customer.type === 'Privat';
+    const isBezahlt = customer.status === 'Bezahlt';
+
     // Update KPI values
     const kpis = kontenTab.querySelectorAll('.finanzen-kpi');
     if (kpis.length >= 5) {
-        kpis[0].querySelector('.kpi-value').textContent = customer.krediteAnzahl || 0;
+        kpis[0].querySelector('.kpi-value').textContent = customer.krediteAnzahl || (isBezahlt ? 0 : 1);
         kpis[1].querySelector('.kpi-value').textContent = '€' + (customer.gesamtforderung || 0).toLocaleString('de-DE');
         kpis[2].querySelector('.kpi-value').textContent = '€' + (customer.monatsrate || 0).toLocaleString('de-DE');
         kpis[3].querySelector('.kpi-value').textContent = '€' + (customer.ueberfaellig || 0).toLocaleString('de-DE');
         kpis[4].querySelector('.kpi-value').textContent = (customer.rueckgabequote || 0) + '%';
+
+        // Color coding for bezahlt
+        if (isBezahlt) {
+            kpis[1].querySelector('.kpi-value').style.color = '#22c55e';
+            kpis[3].querySelector('.kpi-value').style.color = '#22c55e';
+            kpis[4].querySelector('.kpi-value').style.color = '#22c55e';
+        }
     }
 
     // Update Forderungen breakdown
@@ -1172,10 +1320,36 @@ function updateKontenFields(modal, customer) {
         forderungRows[3].querySelector('.value').textContent = '€' + (customer.inkassokosten || 0).toLocaleString('de-DE');
     }
 
-    // Update credit product status badge
+    // Update credit product header and details
+    const productName = kontenTab.querySelector('.credit-product-name');
+    const productNumber = kontenTab.querySelector('.credit-product-number');
+    const saldoValue = kontenTab.querySelector('.amount-value.danger, .amount-value.success');
     const statusBadge = kontenTab.querySelector('.credit-status-badge');
+
+    // Product type based on customer
+    const produktTypen = isPrivat
+        ? ['Ratenkredit', 'Kreditkarte', 'Dispositionskredit', 'Autokredit']
+        : ['Betriebsmittelkredit', 'Kontokorrentkredit', 'Investitionskredit'];
+    const produktTyp = produktTypen[Math.floor(Math.random() * produktTypen.length)];
+
+    if (productName) {
+        productName.textContent = produktTyp;
+    }
+    if (productNumber) {
+        const prefix = isPrivat ? 'RK' : 'BMK';
+        productNumber.textContent = prefix + '-****-****-' + Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+    }
+    if (saldoValue) {
+        if (isBezahlt) {
+            saldoValue.textContent = '€0';
+            saldoValue.className = 'amount-value success';
+        } else {
+            saldoValue.textContent = '€' + (customer.restschuld || 0).toLocaleString('de-DE');
+            saldoValue.className = 'amount-value danger';
+        }
+    }
     if (statusBadge) {
-        if (customer.status === 'Bezahlt') {
+        if (isBezahlt) {
             statusBadge.textContent = 'Beglichen';
             statusBadge.className = 'credit-status-badge success';
         } else {
@@ -1183,19 +1357,62 @@ function updateKontenFields(modal, customer) {
             statusBadge.className = 'credit-status-badge ' + (customer.dpd > 30 ? 'danger' : 'warning');
         }
     }
+
+    // Update credit product container class
+    const productContainer = kontenTab.querySelector('.credit-product-large');
+    if (productContainer) {
+        productContainer.className = 'credit-product-large ' + (isBezahlt ? 'success' : (customer.dpd > 30 ? 'danger' : 'warning'));
+    }
+
+    // Update table data
+    const tableRows = kontenTab.querySelectorAll('.credit-tx-table tbody tr');
+    if (tableRows.length > 0 && isBezahlt) {
+        // For paid customers, show payment history instead of transactions
+        const tbody = kontenTab.querySelector('.credit-tx-table tbody');
+        if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td>${customer.statusText?.match(/\\d{2}\\.\\d{2}\\.\\d{4}/)?.[0] || '15.12.2025'}</td>
+                    <td>Schlusszahlung - Kredit vollständig getilgt</td>
+                    <td class="positive">+€${(customer.restschuld || Math.floor(Math.random() * 5000 + 1000)).toLocaleString('de-DE')}</td>
+                    <td>€0</td>
+                    <td><span class="tx-badge success">Abgeschlossen</span></td>
+                </tr>
+                <tr>
+                    <td>01.12.2025</td>
+                    <td>Reguläre Ratenzahlung</td>
+                    <td class="positive">+€${(customer.monatsrate || 250).toLocaleString('de-DE')}</td>
+                    <td>€${Math.floor(Math.random() * 2000 + 500).toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+                <tr>
+                    <td>01.11.2025</td>
+                    <td>Reguläre Ratenzahlung</td>
+                    <td class="positive">+€${(customer.monatsrate || 250).toLocaleString('de-DE')}</td>
+                    <td>€${Math.floor(Math.random() * 3000 + 1000).toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+            `;
+        }
+    }
 }
 
-// Update Kommunikation tab with KI summary
+// Update Kommunikation tab with KI summary and dynamic timeline
 function updateKommunikationFields(modal, customer) {
     const kommTab = modal.querySelector('#tab-kommunikation');
     if (!kommTab) return;
+
+    const isBezahlt = customer.status === 'Bezahlt';
+    const isInkasso = customer.status === 'Inkasso';
+    const anrede = customer.type === 'Gewerbe' ? 'Sehr geehrte Damen und Herren' :
+                   (customer.ansprechpartner?.includes(',') ? 'Sehr geehrte Frau ' + customer.ansprechpartner.split(',')[0] :
+                    'Sehr geehrter Herr ' + (customer.ansprechpartner?.split(' ').pop() || customer.name.split(' ').pop()));
 
     // Update workflow status
     const statusValue = kommTab.querySelector('.status-value');
     if (statusValue) {
         statusValue.textContent = customer.workflowStatus || 'Offen';
-        statusValue.className = 'status-value ' + (customer.status === 'Bezahlt' ? 'success' :
-            customer.status === 'Inkasso' ? 'inkasso' : 'offen');
+        statusValue.className = 'status-value ' + (isBezahlt ? 'success' : isInkasso ? 'inkasso' : 'offen');
     }
 
     // Add or update KI summary at the top of Kommunikation
@@ -1209,91 +1426,122 @@ function updateKommunikationFields(modal, customer) {
         }
     }
 
-    // Generate KI summary based on customer data
-    const mahnstufeText = customer.mahnstufe > 0 ? `Mahnstufe ${customer.mahnstufe}` : 'Keine Mahnungen';
-    const statusClass = customer.status === 'Bezahlt' ? 'success' :
-        customer.status === 'Inkasso' ? 'danger' : 'warning';
+    const mahnstufeText = customer.mahnstufe > 0 ? 'Mahnstufe ' + customer.mahnstufe : 'Keine Mahnungen';
+    const statusClass = isBezahlt ? 'success' : isInkasso ? 'danger' : 'warning';
 
-    kiSummary.innerHTML = `
-        <div class="ki-summary-mini">
-            <div class="ki-summary-header-mini">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"></path>
-                </svg>
-                <span>KI-Zusammenfassung der Kommunikation</span>
-            </div>
-            <div class="ki-summary-content-mini">
-                <p><strong>${customer.name}</strong> - ${customer.kernproblem || 'Keine Analyse verfügbar.'}</p>
-                <div class="ki-summary-stats">
-                    <span class="stat-item ${statusClass}">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <circle cx="12" cy="12" r="10"></circle>
-                        </svg>
-                        ${customer.workflowStatus || 'Offen'}
-                    </span>
-                    <span class="stat-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        ${mahnstufeText}
-                    </span>
-                    <span class="stat-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        ${customer.dpd || 0} DPD
-                    </span>
-                </div>
-            </div>
-        </div>
-    `;
+    kiSummary.innerHTML = '<div class="ki-summary-mini"><div class="ki-summary-header-mini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"></path></svg><span>KI-Zusammenfassung der Kommunikation</span></div><div class="ki-summary-content-mini"><p><strong>' + customer.name + '</strong> - ' + (customer.kernproblem || 'Keine Analyse verfügbar.') + '</p><div class="ki-summary-stats"><span class="stat-item ' + statusClass + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle></svg>' + (customer.workflowStatus || 'Offen') + '</span><span class="stat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>' + mahnstufeText + '</span><span class="stat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>' + (customer.dpd || 0) + ' DPD</span></div></div></div>';
 
-    // Update communication items with customer name
-    const kommItems = kommTab.querySelectorAll('.komm-preview');
-    kommItems.forEach(item => {
-        let text = item.innerHTML;
-        text = text.replace(/Herr Mueller/g, customer.type === 'Gewerbe' ? 'Firma ' + customer.name : customer.ansprechpartner);
-        text = text.replace(/Mueller GmbH/g, customer.name);
-        text = text.replace(/mueller-gmbh\.de/g, customer.email ? customer.email.split('@')[1] : 'kunde.de');
-        item.innerHTML = text;
-    });
+    // Replace entire timeline based on customer status
+    const timeline = kommTab.querySelector('.kommunikation-timeline');
+    if (timeline) {
+        if (isBezahlt) {
+            // Success story timeline
+            timeline.innerHTML = '<h4>Kommunikationshistorie</h4>' +
+                '<div class="komm-item letter success"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12"></polyline></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type success">Zahlungsbestätigung</span><span class="komm-date">' + (customer.statusText?.match(/\\d{2}\\.\\d{2}\\.\\d{4}/)?.[0] || '16.12.2025') + '</span></div><div class="komm-body"><p><strong>Betreff:</strong> Bestätigung vollständiger Zahlung</p><div class="komm-preview">' + anrede + ',<br><br>wir bestätigen den vollständigen Eingang Ihrer Zahlung. Ihr Konto ist damit ausgeglichen.<br><br>Vielen Dank für die Begleichung der offenen Forderung. Der Fall ist hiermit abgeschlossen.</div></div><div class="komm-meta"><span class="meta-item success">Abgeschlossen</span></div></div></div>' +
+                '<div class="komm-item phone success"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">Telefonat</span><span class="komm-date">' + new Date(Date.now() - 7*24*60*60*1000).toLocaleDateString('de-DE') + '</span></div><div class="komm-body"><p>Erfolgreiches Gespräch - Zahlungsvereinbarung getroffen</p><div class="komm-note"><strong>Notiz:</strong> Kunde hat zugesagt, die offene Forderung bis Ende der Woche vollständig zu begleichen.</div></div><div class="komm-meta"><span class="meta-item success">Vereinbarung erzielt</span><span class="meta-item">Bearbeiter: E. Brenneisen</span></div></div></div>';
+        } else if (isInkasso) {
+            // Inkasso timeline - keep existing but update names
+            const kommItems = kommTab.querySelectorAll('.komm-preview');
+            kommItems.forEach(item => {
+                let text = item.innerHTML;
+                text = text.replace(/Herr Mueller/g, customer.type === 'Gewerbe' ? 'Firma ' + customer.name : customer.ansprechpartner || customer.name);
+                text = text.replace(/Mueller GmbH/g, customer.name);
+                text = text.replace(/h\.mueller@mueller-gmbh\.de/g, customer.email || 'kunde@email.de');
+                text = text.replace(/mueller-gmbh\.de/g, customer.email ? customer.email.split('@')[1] : 'email.de');
+                item.innerHTML = text;
+            });
+        } else {
+            // New case timeline
+            timeline.innerHTML = '<h4>Kommunikationshistorie</h4>' +
+                '<div class="komm-item letter"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">Zahlungserinnerung</span><span class="komm-date">' + new Date().toLocaleDateString('de-DE') + '</span></div><div class="komm-body"><p><strong>Betreff:</strong> Freundliche Zahlungserinnerung</p><div class="komm-preview">' + anrede + ',<br><br>bei Überprüfung unserer Konten haben wir festgestellt, dass die fällige Rate noch nicht eingegangen ist. Wir bitten Sie, den offenen Betrag von <strong>€' + (customer.restschuld || 0).toLocaleString('de-DE') + '</strong> zeitnah zu überweisen.<br><br>Sollte sich Ihre Zahlung mit diesem Schreiben überschneiden, betrachten Sie dieses bitte als gegenstandslos.</div></div><div class="komm-meta"><span class="meta-item">Automatisch versendet</span></div></div></div>' +
+                '<div class="komm-item system"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">System</span><span class="komm-date">' + new Date(Date.now() - 3*24*60*60*1000).toLocaleDateString('de-DE') + '</span></div><div class="komm-body"><p>Fall automatisch erstellt - Zahlung überfällig seit ' + (customer.dpd || 0) + ' Tagen</p></div><div class="komm-meta"><span class="meta-item">Automatisch</span></div></div></div>';
+        }
+    }
 
-    // Update email from field
+    // Update email from field if it exists
     const metaFrom = kommTab.querySelector('.komm-item.incoming .komm-meta .meta-item');
     if (metaFrom && customer.email) {
         metaFrom.textContent = 'Von: ' + customer.email;
     }
 }
 
-// Update KI-Analyse tab
+// Update KI-Analyse tab - comprehensive update
 function updateKiAnalyseFields(modal, customer) {
     const kiTab = modal.querySelector('#tab-ki-analyse');
     if (!kiTab) return;
 
-    // Update Kernproblem text
-    const kernproblemP = kiTab.querySelector('.ki-summary-section:first-child p');
-    if (kernproblemP) {
-        kernproblemP.innerHTML = customer.kernproblem || 'Keine Analyse verfügbar.';
+    const isBezahlt = customer.status === 'Bezahlt';
+    const isInkasso = customer.status === 'Inkasso';
+
+    // Update all KI summary sections
+    const summaryContent = kiTab.querySelector('.ki-summary-content');
+    if (summaryContent) {
+        const sections = summaryContent.querySelectorAll('.ki-summary-section');
+
+        // Kernproblem section
+        if (sections[0]) {
+            const p = sections[0].querySelector('p');
+            if (p) {
+                if (isBezahlt) {
+                    p.innerHTML = '<strong>Fall abgeschlossen.</strong> ' + customer.name + ' hat die Forderung vollständig beglichen. Gute Kooperationsbereitschaft nach Kontaktaufnahme.';
+                } else {
+                    p.innerHTML = customer.kernproblem || 'Keine Analyse verfügbar.';
+                }
+            }
+        }
+
+        // Letzte Aktivitäten section
+        if (sections[1]) {
+            const ul = sections[1].querySelector('ul');
+            if (ul) {
+                if (isBezahlt) {
+                    ul.innerHTML = '<li>Zahlungseingang bestätigt (' + (customer.statusText?.match(/\\d{2}\\.\\d{2}\\.\\d{4}/)?.[0] || '16.12.2025') + ')</li><li>Erfolgreiche Zahlungsvereinbarung</li><li>Fall als abgeschlossen markiert</li>';
+                } else if (isInkasso) {
+                    ul.innerHTML = '<li>' + customer.mahnstufe + '. Mahnung versendet</li><li>Telefonversuche nicht erreicht</li><li>Inkasso-Verfahren eingeleitet</li><li>Letzte Teilzahlung vor ' + Math.floor(Math.random() * 60 + 30) + ' Tagen</li>';
+                } else {
+                    ul.innerHTML = '<li>Zahlungserinnerung versendet (' + new Date().toLocaleDateString('de-DE') + ')</li><li>Fall automatisch erstellt</li><li>Wartet auf Zahlungseingang oder Kundenkontakt</li>';
+                }
+            }
+        }
+
+        // Aktuelle Schritte section
+        if (sections[2]) {
+            const ul = sections[2].querySelector('ul');
+            if (ul) {
+                if (isBezahlt) {
+                    ul.innerHTML = '<li><strong>Erledigt:</strong> Keine weiteren Maßnahmen erforderlich</li><li><strong>Optional:</strong> Kundenfeedback einholen</li>';
+                } else if (isInkasso) {
+                    ul.innerHTML = '<li><strong>Sofort:</strong> Gerichtliches Mahnverfahren prüfen</li><li><strong>Diese Woche:</strong> Letzte telefonische Kontaktaufnahme</li><li><strong>Bei Ablehnung:</strong> Forderungsverkauf oder Abschreibung</li>';
+                } else {
+                    ul.innerHTML = '<li><strong>Sofort:</strong> Telefonischen Kontakt herstellen</li><li><strong>Diese Woche:</strong> Zahlungsvereinbarung anbieten</li><li><strong>Bei Erfolg:</strong> Ratenzahlung dokumentieren</li>';
+                }
+            }
+        }
     }
 
     // Update Willingness/Ability scores
     const scoreBars = kiTab.querySelectorAll('.score-bar-visual .bar-fill');
     const scorePercents = kiTab.querySelectorAll('.score-percent');
     if (scoreBars.length >= 2 && scorePercents.length >= 2) {
-        scoreBars[0].style.width = (customer.willingness || 50) + '%';
-        scoreBars[1].style.width = (customer.ability || 50) + '%';
-        scorePercents[0].textContent = (customer.willingness || 50) + '%';
-        scorePercents[1].textContent = (customer.ability || 50) + '%';
+        const willingness = isBezahlt ? 95 : (customer.willingness || 50);
+        const ability = isBezahlt ? 90 : (customer.ability || 50);
+        scoreBars[0].style.width = willingness + '%';
+        scoreBars[1].style.width = ability + '%';
+        scorePercents[0].textContent = willingness + '%';
+        scorePercents[1].textContent = ability + '%';
+
+        // Color coding
+        scoreBars[0].style.background = willingness >= 70 ? '#22c55e' : (willingness >= 40 ? '#f59e0b' : '#ef4444');
+        scoreBars[1].style.background = ability >= 70 ? '#22c55e' : (ability >= 40 ? '#f59e0b' : '#ef4444');
     }
 
     // Update score point position in chart
     const scorePoint = kiTab.querySelector('.score-point');
     if (scorePoint) {
-        scorePoint.style.left = (customer.willingness || 50) + '%';
-        scorePoint.style.bottom = (customer.ability || 50) + '%';
+        const willingness = isBezahlt ? 95 : (customer.willingness || 50);
+        const ability = isBezahlt ? 90 : (customer.ability || 50);
+        scorePoint.style.left = willingness + '%';
+        scorePoint.style.bottom = ability + '%';
     }
 
     // Update segment badge
@@ -1313,7 +1561,7 @@ function updateKiAnalyseFields(modal, customer) {
             'abwicklung': 'writeoff',
             'abgeschlossen': 'success'
         };
-        const segment = customer.segment || 'prioritaet';
+        const segment = isBezahlt ? 'abgeschlossen' : (customer.segment || 'prioritaet');
         segmentBadge.textContent = segmentNames[segment] || segment;
         segmentBadge.className = 'segment-badge large ' + (segmentClasses[segment] || '');
     }
@@ -1321,15 +1569,18 @@ function updateKiAnalyseFields(modal, customer) {
     // Update segment description
     const segmentDesc = kiTab.querySelector('.ki-segment-result p');
     if (segmentDesc) {
-        const segmentDescriptions = {
-            'eskalation': `Basierend auf der Analyse wird ${customer.name} dem Segment <strong>Eskalation</strong> zugeordnet. Empfehlung: Intensivierung der Inkasso-Maßnahmen.`,
-            'prioritaet': `${customer.name} zeigt hohe Kooperationsbereitschaft und Zahlungsfähigkeit. Empfehlung: Schnelle Vereinbarung anstreben.`,
-            'restrukturierung': `${customer.name} benötigt eine Restrukturierung der Schulden. Empfehlung: Ratenzahlung oder Stundung vereinbaren.`,
-            'abwicklung': `Bei ${customer.name} ist die Rückzahlung unwahrscheinlich. Empfehlung: Forderungsverkauf oder Abschreibung prüfen.`,
-            'abgeschlossen': `Der Fall ${customer.name} wurde erfolgreich abgeschlossen. Forderung vollständig beglichen.`
-        };
-        segmentDesc.innerHTML = segmentDescriptions[customer.segment] ||
-            `Basierend auf der Analyse wird ${customer.name} dem entsprechenden Segment zugeordnet.`;
+        if (isBezahlt) {
+            segmentDesc.innerHTML = 'Der Fall <strong>' + customer.name + '</strong> wurde erfolgreich abgeschlossen. Die Forderung wurde vollständig beglichen. Keine weiteren Maßnahmen erforderlich.';
+        } else {
+            const segmentDescriptions = {
+                'eskalation': 'Basierend auf der Analyse wird <strong>' + customer.name + '</strong> dem Segment <strong>Eskalation</strong> zugeordnet. Empfehlung: Intensivierung der Inkasso-Maßnahmen.',
+                'prioritaet': '<strong>' + customer.name + '</strong> zeigt Kooperationsbereitschaft und ausreichende Zahlungsfähigkeit. Empfehlung: Schnelle Vereinbarung anstreben.',
+                'restrukturierung': '<strong>' + customer.name + '</strong> benötigt eine Restrukturierung der Schulden. Empfehlung: Ratenzahlung oder Stundung vereinbaren.',
+                'abwicklung': 'Bei <strong>' + customer.name + '</strong> ist die Rückzahlung unwahrscheinlich. Empfehlung: Forderungsverkauf oder Abschreibung prüfen.'
+            };
+            segmentDesc.innerHTML = segmentDescriptions[customer.segment] ||
+                'Basierend auf der Analyse wird <strong>' + customer.name + '</strong> dem entsprechenden Segment zugeordnet.';
+        }
     }
 
     // Update factors based on customer data
