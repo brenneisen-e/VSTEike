@@ -425,8 +425,8 @@
                 </div>
             </div>
 
-            <!-- Right: Ehemalige Fälle Section (Collapsible) -->
-            <div class="collapsible-section ehemalige-section" id="ehemaligeSection">
+            <!-- Right: Ehemalige Fälle Section (Compact) -->
+            <div class="collapsible-section ehemalige-section ehemalige-compact" id="ehemaligeSection">
                 <div class="collapsible-header" onclick="toggleSection('ehemaligeSection')">
                     <div class="collapsible-header-left">
                         <h3>Ehemalige Fälle</h3>
@@ -438,34 +438,21 @@
                     </div>
                 </div>
                 <div class="collapsible-content" style="padding: 0;">
-                    <div class="ehemalige-tile" onclick="openSegmentFullscreen('ehemalige')">
-                        <div class="ehemalige-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                        </div>
-                        <div class="ehemalige-title">Abgeschlossen</div>
-                        <div class="ehemalige-subtitle">Verzug in letzten 12 Monaten, jetzt regulär</div>
-                        <div class="ehemalige-count">847</div>
-                        <div class="ehemalige-volume">€ 4,2 Mio zurückgezahlt</div>
-                        <div class="ehemalige-strategy">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            Monitoring, Nachbetreuung
+                    <div class="ehemalige-tile-compact" onclick="openSegmentFullscreen('ehemalige')">
+                        <div class="ehemalige-header-row">
+                            <div class="ehemalige-icon-small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div class="ehemalige-count-inline">847</div>
+                            <div class="ehemalige-label">abgeschlossen</div>
+                            <div class="ehemalige-volume-inline">€4,2 Mio</div>
                         </div>
                     </div>
-                    <div class="ehemalige-list">
+                    <div class="ehemalige-list-compact">
                         <div class="ehemalige-list-title">Kürzlich abgeschlossen</div>
-                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-7234')">
-                            <div>
-                                <div class="ehemalige-item-name">Braun, Thomas</div>
-                                <div class="ehemalige-item-info">Ratenkredit • vor 3 Tagen</div>
-                            </div>
-                            <div class="ehemalige-item-amount">€1.890</div>
-                        </div>
                         <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-6891')">
                             <div>
                                 <div class="ehemalige-item-name">Klein KG</div>
@@ -482,27 +469,13 @@
                         </div>
                         <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5876')">
                             <div>
-                                <div class="ehemalige-item-name">Schneider Logistik GmbH</div>
+                                <div class="ehemalige-item-name">Schneider Logistik</div>
                                 <div class="ehemalige-item-info">Kontokorrent • vor 1 Woche</div>
                             </div>
                             <div class="ehemalige-item-amount">€15.200</div>
                         </div>
-                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5734')">
-                            <div>
-                                <div class="ehemalige-item-name">Fischer, Anna</div>
-                                <div class="ehemalige-item-info">Kreditkarte • vor 10 Tagen</div>
-                            </div>
-                            <div class="ehemalige-item-amount">€3.450</div>
-                        </div>
-                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5612')">
-                            <div>
-                                <div class="ehemalige-item-name">Bäckerei Müller</div>
-                                <div class="ehemalige-item-info">Investitionskredit • vor 2 Wochen</div>
-                            </div>
-                            <div class="ehemalige-item-amount">€24.800</div>
-                        </div>
-                        <button class="ehemalige-show-all" onclick="showAllEhemalige()">
-                            Alle 847 Fälle anzeigen
+                        <button class="ehemalige-show-all-compact" onclick="showAllEhemalige()">
+                            Alle anzeigen →
                         </button>
                     </div>
                 </div>
