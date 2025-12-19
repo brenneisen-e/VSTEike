@@ -965,60 +965,102 @@ function getFullCustomerData(customerId) {
     };
 }
 
-// Update Stammdaten fields in modal
+// Update Stammdaten fields in modal - finds fields by label text
 function updateStammdatenFields(modal, customer) {
-    // Find all value spans and update based on customer data
     const stammdatenTab = modal.querySelector('#tab-stammdaten');
     if (!stammdatenTab) return;
 
-    // Update Firmenname / Name
-    const nameValue = stammdatenTab.querySelector('.stammdaten-card:first-child .stammdaten-row:first-child .value');
-    if (nameValue) nameValue.textContent = customer.name;
+    // Helper function to find and update a field by its label text
+    function updateFieldByLabel(labelText, newValue) {
+        const rows = stammdatenTab.querySelectorAll('.stammdaten-row');
+        for (const row of rows) {
+            const label = row.querySelector('.label');
+            if (label && label.textContent.trim().toLowerCase().includes(labelText.toLowerCase())) {
+                const value = row.querySelector('.value');
+                if (value) {
+                    value.textContent = newValue;
+                    return value;
+                }
+            }
+        }
+        return null;
+    }
 
-    // Update Rechtsform
-    const rechtsformValue = stammdatenTab.querySelector('.stammdaten-card:first-child .stammdaten-row:nth-child(2) .value');
-    if (rechtsformValue) rechtsformValue.textContent = customer.rechtsform || customer.type;
+    // Update Unternehmensdaten section
+    updateFieldByLabel('Firmenname', customer.name);
+    updateFieldByLabel('Rechtsform', customer.rechtsform || customer.type);
+    updateFieldByLabel('Branche', customer.branche || '-');
 
     // Update Kundentyp badge
-    const kundentypBadge = stammdatenTab.querySelector('.badge');
-    if (kundentypBadge) {
-        kundentypBadge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
-        kundentypBadge.className = customer.type === 'Gewerbe' ? 'badge badge-blue' : 'badge badge-gray';
+    const kundentypValue = updateFieldByLabel('Kundentyp', '');
+    if (kundentypValue) {
+        const isGewerbe = customer.type === 'Gewerbe';
+        kundentypValue.innerHTML = isGewerbe
+            ? '<span class="badge gewerbe">Gewerbekunde</span>'
+            : '<span class="badge privat">Privatkunde</span>';
     }
 
-    // Update Branche
-    const brancheValue = stammdatenTab.querySelector('.stammdaten-row:nth-child(5) .value');
-    if (brancheValue && customer.branche) brancheValue.textContent = customer.branche;
-
-    // Update Kontaktdaten
-    const kontaktCard = stammdatenTab.querySelectorAll('.stammdaten-card')[1];
-    if (kontaktCard) {
-        const adresseValue = kontaktCard.querySelector('.stammdaten-row:first-child .value');
-        if (adresseValue && customer.adresse) adresseValue.textContent = customer.adresse;
-
-        const emailValue = kontaktCard.querySelector('.stammdaten-row:nth-child(4) .value');
-        if (emailValue && customer.email) emailValue.textContent = customer.email;
+    // Update Kontaktdaten section
+    if (customer.adresse) {
+        updateFieldByLabel('Adresse', customer.adresse);
+    }
+    if (customer.telefon) {
+        const telefonValue = updateFieldByLabel('Telefon Zentrale', customer.telefon);
+        if (telefonValue) {
+            telefonValue.className = 'value clickable';
+            telefonValue.setAttribute('onclick', `initiateCall('${customer.telefon}')`);
+        }
+    }
+    if (customer.email) {
+        const emailValue = updateFieldByLabel('E-Mail', customer.email);
+        if (emailValue) {
+            emailValue.className = 'value clickable';
+            emailValue.setAttribute('onclick', `sendEmail('${customer.email}')`);
+        }
     }
 
-    // Update Geschäftsführung / Ansprechpartner name
-    const gfNameValue = stammdatenTab.querySelector('.geschaeftsfuehrung .stammdaten-row:first-child .value, .kontakt-section .stammdaten-row:first-child .value');
-    if (gfNameValue && customer.ansprechpartner) gfNameValue.textContent = customer.ansprechpartner;
+    // Update Geschäftsführung / Ansprechpartner in subsections
+    const subsections = stammdatenTab.querySelectorAll('.stammdaten-subsection');
+    for (const subsection of subsections) {
+        const subsectionText = subsection.textContent.toLowerCase();
+        if (subsectionText.includes('geschäftsführung') || subsectionText.includes('ansprechpartner')) {
+            const nextRow = subsection.nextElementSibling;
+            if (nextRow && nextRow.classList.contains('stammdaten-row')) {
+                const nameValue = nextRow.querySelector('.value');
+                if (nameValue && customer.ansprechpartner) {
+                    nameValue.textContent = customer.ansprechpartner;
+                }
+            }
+        }
+    }
 
-    // Update Restschuld in Kreditdetails
-    const restschuldValue = modal.querySelector('.kreditdetails .value.text-danger, .kreditdetails .stammdaten-row:nth-child(4) .value');
+    // Update Kreditdetails section
+    const restschuldValue = updateFieldByLabel('Restschuld', '');
     if (restschuldValue) {
         if (customer.restschuld === 0) {
             restschuldValue.textContent = '€0';
-            restschuldValue.className = 'value text-success';
+            restschuldValue.className = 'value highlight-green';
+            restschuldValue.style.color = '#22c55e';
         } else {
             restschuldValue.textContent = '€' + customer.restschuld.toLocaleString('de-DE');
-            restschuldValue.className = 'value text-danger';
+            restschuldValue.className = 'value highlight-red';
+        }
+    }
+
+    // Update Stage based on status
+    const stageValue = updateFieldByLabel('Stage', '');
+    if (stageValue) {
+        if (customer.status === 'Bezahlt') {
+            stageValue.innerHTML = '<span class="badge success">Abgeschlossen</span>';
+        } else if (customer.status === 'Inkasso') {
+            stageValue.innerHTML = '<span class="badge danger">Stage 3 (NPL)</span>';
+        } else {
+            stageValue.innerHTML = '<span class="badge warning">Stage 2</span>';
         }
     }
 
     // Show status badge for completed cases
     if (customer.statusBadge === 'success') {
-        // Add a success indicator
         const headerActions = modal.querySelector('.modal-header-actions');
         let statusIndicator = modal.querySelector('.status-indicator-success');
         if (!statusIndicator && headerActions) {
@@ -1029,7 +1071,6 @@ function updateStammdatenFields(modal, customer) {
             headerActions.insertBefore(statusIndicator, headerActions.firstChild);
         }
     } else {
-        // Remove success indicator if exists
         const statusIndicator = modal.querySelector('.status-indicator-success');
         if (statusIndicator) statusIndicator.remove();
     }
