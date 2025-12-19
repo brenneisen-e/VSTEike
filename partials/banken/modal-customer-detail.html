@@ -1093,34 +1093,11 @@
                     </div>
                 </div>
 
-                <!-- Letzte Transaktionen kompakt -->
+                <!-- Letzte Transaktionen kompakt - dynamisch befüllt -->
                 <div class="transaktionen-compact">
                     <h4>Letzte Transaktionen</h4>
-                    <div class="tx-compact-list">
-                        <div class="tx-compact-item failed">
-                            <span class="tx-date">14.12.2025</span>
-                            <span class="tx-desc">Lastschrift Ratenzahlung</span>
-                            <span class="tx-amount negative">-€2.500</span>
-                            <span class="tx-status-badge failed">Rückgabe</span>
-                        </div>
-                        <div class="tx-compact-item failed">
-                            <span class="tx-date">01.12.2025</span>
-                            <span class="tx-desc">Lastschrift Ratenzahlung</span>
-                            <span class="tx-amount negative">-€2.500</span>
-                            <span class="tx-status-badge failed">Rückgabe</span>
-                        </div>
-                        <div class="tx-compact-item success">
-                            <span class="tx-date">15.11.2025</span>
-                            <span class="tx-desc">Überweisung Teilzahlung</span>
-                            <span class="tx-amount positive">+€1.000</span>
-                            <span class="tx-status-badge success">Gebucht</span>
-                        </div>
-                        <div class="tx-compact-item failed">
-                            <span class="tx-date">01.11.2025</span>
-                            <span class="tx-desc">Lastschrift Ratenzahlung</span>
-                            <span class="tx-amount negative">-€2.500</span>
-                            <span class="tx-status-badge failed">Rückgabe</span>
-                        </div>
+                    <div class="tx-compact-list" id="tx-compact-list">
+                        <!-- Wird dynamisch aus customer.transaktionen befüllt -->
                     </div>
                 </div>
             </div>
