@@ -7140,8 +7140,10 @@ body.modal-open {
 }
 
 .finanzen-kpi .kpi-icon {
-    color: #64748b;
-    margin-bottom: 4px;
+    color: #94a3b8;
+    margin-bottom: 2px;
+    width: 16px;
+    height: 16px;
 }
 
 .finanzen-kpi .kpi-label {

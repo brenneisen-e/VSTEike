@@ -854,15 +854,44 @@ function openCustomerDetail(customerId) {
     const modal = document.getElementById('customerDetailModal');
     if (modal) {
         modal.style.display = 'flex';
-        // Update modal title
-        const customerName = document.getElementById('customerName');
-        if (customerName) {
-            // In real app, would fetch customer data
-            customerName.textContent = customerId;
+
+        // Demo customer data mapping
+        const customerData = {
+            'K-2024-0001': { name: 'Mueller GmbH', type: 'Gewerbe' },
+            'K-2024-0002': { name: 'Schmidt, Peter', type: 'Privat' },
+            'K-2024-0003': { name: 'Weber KG', type: 'Gewerbe' },
+            'K-2024-0004': { name: 'Braun, Maria', type: 'Privat' },
+            'K-2024-0005': { name: 'Hoffmann Bau GmbH', type: 'Gewerbe' },
+            'K-2024-0006': { name: 'Keller, Thomas', type: 'Privat' },
+            'K-2024-0007': { name: 'Autohaus Berger', type: 'Gewerbe' },
+            'K-2024-0008': { name: 'Lehmann, Sandra', type: 'Privat' },
+            'K-2024-0009': { name: 'Meier Elektro OHG', type: 'Gewerbe' },
+            'K-2024-0010': { name: 'Fischer, Hans', type: 'Privat' },
+            'K-2024-0011': { name: 'Bäckerei Schulze', type: 'Gewerbe' },
+            'K-2024-0012': { name: 'Neumann, Klaus', type: 'Privat' },
+            'K-2024-0013': { name: 'Gasthaus zum Löwen', type: 'Gewerbe' },
+            'K-2024-0014': { name: 'Werner, Sabine', type: 'Privat' },
+            'K-2024-0015': { name: 'Maier Transporte', type: 'Gewerbe' },
+            'K-2024-0016': { name: 'Zimmermann, Frank', type: 'Privat' }
+        };
+
+        const customer = customerData[customerId] || { name: customerId, type: 'Unbekannt' };
+
+        // Update modal header
+        const customerNameEl = document.getElementById('customerName');
+        if (customerNameEl) {
+            customerNameEl.textContent = customer.name;
         }
+
+        // Update customer ID display
+        const customerIdEl = modal.querySelector('.customer-id');
+        if (customerIdEl) {
+            customerIdEl.textContent = customerId;
+        }
+
         // Always reset to Stammdaten tab when opening
         showCustomerTab('stammdaten');
-        console.log('Opening customer detail:', customerId);
+        console.log('Opening customer detail:', customerId, customer.name);
     }
 }
 
