@@ -920,28 +920,28 @@ function getFullCustomerData(customerId) {
             name: 'Braun, Thomas', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Lindenweg 45, 30159 Hannover', telefon: '+49 511 987654',
             email: 't.braun@email.de', ansprechpartner: 'Thomas Braun',
-            branche: 'Angestellter', restschuld: 6850, status: 'Aktiv',
+            branche: 'Angestellter', restschuld: 289350, status: 'Aktiv',
             statusBadge: 'warning', statusText: 'Überfällige Forderung beglichen am 16.12.2025',
-            krediteAnzahl: 3, gesamtforderung: 6850, monatsrate: 1425, ueberfaellig: 0,
-            rueckgabequote: 85, hauptforderung: 6850, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            krediteAnzahl: 3, gesamtforderung: 289350, monatsrate: 1765, ueberfaellig: 0,
+            rueckgabequote: 0, hauptforderung: 289350, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 90, ability: 85, segment: 'stabil',
             // Letzte Zahlung (für Zahlungseingänge-Widget)
-            letzteZahlung: { betrag: 1890, datum: '16.12.2025', typ: 'Vollständige Tilgung' },
+            letzteZahlung: { betrag: 1890, datum: '16.12.2025', typ: 'Ratenkredit Tilgung' },
             // Einkommen & Ausgaben (Privat)
-            einkommenMonatlich: 4200, ausgabenMonatlich: 3800, ausgabenDetails: 'Miete: €1.100, Lebensmittel: €450, Auto: €650, Streaming/Abos: €180, Freizeit: €420, Sonstiges: €1.000',
-            kernproblem: 'Ratenkredit vollständig beglichen (€1.890 am 16.12.). Nettoeinkommen €4.200, Ausgaben €3.800. Noch aktiv: Dispo €4.500 + Baufinanzierung €2.350. Monitoring wegen knapper Liquidität.',
+            einkommenMonatlich: 4200, ausgabenMonatlich: 3800, ausgabenDetails: 'Miete: €0 (Eigentum), Baufi-Rate: €1.450, Auto: €650, Versicherungen: €380, Lebensmittel: €520, Sonstiges: €800',
+            kernproblem: 'Ratenkredit vollständig beglichen (€1.890 am 16.12.). Nettoeinkommen €4.200, Ausgaben €3.800. Baufinanzierung €285.000 Restschuld mit €1.450/M Rate. Dispo €4.500 ausgeschöpft.',
             workflowStatus: 'Monitoring', mahnstufe: 0,
-            // Transaktionshistorie
+            // Transaktionshistorie - passend zu den Produkten
             transaktionen: [
                 { datum: '16.12.2025', beschreibung: 'Ratenkredit vollständig getilgt', betrag: 1890, status: 'gebucht' },
-                { datum: '01.12.2025', beschreibung: 'Baufinanzierung Rate', betrag: 450, status: 'gebucht' },
-                { datum: '01.11.2025', beschreibung: 'Baufinanzierung Rate', betrag: 450, status: 'gebucht' },
+                { datum: '01.12.2025', beschreibung: 'Baufinanzierung Monatsrate', betrag: 1450, status: 'gebucht' },
+                { datum: '01.11.2025', beschreibung: 'Baufinanzierung Monatsrate', betrag: 1450, status: 'gebucht' },
                 { datum: '01.10.2025', beschreibung: 'Ratenkredit Rate', betrag: 315, status: 'gebucht' }
             ],
             produkte: [
                 { typ: 'Ratenkredit', nummer: 'RK-2023-8841', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 1890 },
-                { typ: 'Dispositionskredit', nummer: 'DK-2024-1122', saldo: 4500, status: 'Aktiv', badge: 'warning' },
-                { typ: 'Baufinanzierung', nummer: 'BF-2021-5567', saldo: 2350, status: '2 Raten offen', badge: 'warning' }
+                { typ: 'Dispositionskredit', nummer: 'DK-2024-1122', saldo: 4500, limit: 10000, status: 'Aktiv', badge: 'warning' },
+                { typ: 'Baufinanzierung', nummer: 'BF-2021-5567', saldo: 285000, rate: 1450, status: 'Aktiv', badge: 'info' }
             ]
         },
         'K-2024-6891': {
@@ -1408,6 +1408,205 @@ function updateStammdatenFields(modal, customer) {
     console.log('Stammdaten update complete for:', customer.name);
 }
 
+// Generate dynamic transaction rows for a specific product
+function generateProductTransactions(product, customer) {
+    const produktTyp = product.typ.toLowerCase();
+    const saldo = product.saldo || 0;
+    const rate = product.rate || customer.monatsrate || 0;
+    const limit = product.limit || 0;
+    const isBeglichen = product.status === 'Beglichen' || product.status === 'Getilgt' || product.status === 'Ausgeglichen';
+    const dpd = customer.dpd || 0;
+
+    // For Dispo/Kontokorrent: Show account movements
+    if (produktTyp.includes('dispo') || produktTyp.includes('kontokorrent')) {
+        const istUeberLimit = saldo > limit;
+        const ueberLimitBetrag = istUeberLimit ? saldo - limit : 0;
+        const rows = [];
+
+        if (istUeberLimit) {
+            rows.push(`<tr class="highlight-row">
+                <td>16.12.2025</td>
+                <td>Überschreitung Dispolimit</td>
+                <td class="negative">-€${ueberLimitBetrag.toLocaleString('de-DE')}</td>
+                <td class="negative">€${saldo.toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge danger">Über Limit</span></td>
+            </tr>`);
+        }
+
+        rows.push(`<tr>
+            <td>15.12.2025</td>
+            <td>Gehaltseingang</td>
+            <td class="positive">+€${(customer.einkommenMonatlich || 3200).toLocaleString('de-DE')}</td>
+            <td>€${(saldo - (customer.einkommenMonatlich || 3200) + 500).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge success">Eingang</span></td>
+        </tr>`);
+
+        rows.push(`<tr>
+            <td>10.12.2025</td>
+            <td>Lastschrift Stadtwerke</td>
+            <td class="negative">-€285,00</td>
+            <td>€${(saldo + 285).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge">Gebucht</span></td>
+        </tr>`);
+
+        rows.push(`<tr>
+            <td>05.12.2025</td>
+            <td>Lastschrift Miete</td>
+            <td class="negative">-€${Math.round((customer.ausgabenMonatlich || 2500) * 0.35).toLocaleString('de-DE')},00</td>
+            <td>€${(saldo + 285 + Math.round((customer.ausgabenMonatlich || 2500) * 0.35)).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge">Gebucht</span></td>
+        </tr>`);
+
+        return rows.join('');
+    }
+
+    // For Baufinanzierung: Show monthly mortgage payments
+    if (produktTyp.includes('baufinanzierung') || produktTyp.includes('hypothek')) {
+        const monatsrate = product.rate || 1450;
+        const isAusstehend = product.status && product.status.includes('offen');
+        const rows = [];
+
+        rows.push(`<tr ${isAusstehend ? 'class="highlight-row"' : ''}>
+            <td>01.12.2025</td>
+            <td>Monatsrate Dezember</td>
+            <td class="negative">-€${monatsrate.toLocaleString('de-DE')},00</td>
+            <td>€${saldo.toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge ${isAusstehend ? 'warning' : ''}">${isAusstehend ? 'Ausstehend' : 'Gebucht'}</span></td>
+        </tr>`);
+
+        rows.push(`<tr ${isAusstehend ? 'class="highlight-row"' : ''}>
+            <td>01.11.2025</td>
+            <td>Monatsrate November</td>
+            <td class="negative">-€${monatsrate.toLocaleString('de-DE')},00</td>
+            <td>€${(saldo + monatsrate).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge ${isAusstehend ? 'warning' : ''}">${isAusstehend ? 'Ausstehend' : 'Gebucht'}</span></td>
+        </tr>`);
+
+        rows.push(`<tr>
+            <td>01.10.2025</td>
+            <td>Monatsrate Oktober</td>
+            <td class="negative">-€${monatsrate.toLocaleString('de-DE')},00</td>
+            <td>€${(saldo + monatsrate * 2).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge">Gebucht</span></td>
+        </tr>`);
+
+        rows.push(`<tr>
+            <td>01.09.2025</td>
+            <td>Monatsrate September</td>
+            <td class="negative">-€${monatsrate.toLocaleString('de-DE')},00</td>
+            <td>€${(saldo + monatsrate * 3).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge">Gebucht</span></td>
+        </tr>`);
+
+        return rows.join('');
+    }
+
+    // For Ratenkredit: Show monthly installments
+    if (produktTyp.includes('ratenkredit') || produktTyp.includes('betriebsmittel') || produktTyp.includes('investitions')) {
+        const monatsrate = rate || customer.monatsrate || 180;
+        const rows = [];
+
+        if (isBeglichen && product.letzteZahlung) {
+            rows.push(`<tr>
+                <td>${customer.letzteZahlung?.datum || '16.12.2025'}</td>
+                <td>Schlusszahlung - Kredit getilgt</td>
+                <td class="positive">+€${product.letzteZahlung.toLocaleString('de-DE')}</td>
+                <td>€0</td>
+                <td><span class="tx-badge success">Abgeschlossen</span></td>
+            </tr>`);
+
+            rows.push(`<tr>
+                <td>01.12.2025</td>
+                <td>Letzte reguläre Rate</td>
+                <td class="positive">+€${monatsrate.toLocaleString('de-DE')}</td>
+                <td>€${product.letzteZahlung.toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge">Gebucht</span></td>
+            </tr>`);
+        } else {
+            const isUeberfaellig = dpd > 0;
+
+            rows.push(`<tr ${isUeberfaellig ? 'class="highlight-row"' : ''}>
+                <td>01.12.2025</td>
+                <td>Monatliche Rate - Fällig</td>
+                <td class="negative">-€${monatsrate.toLocaleString('de-DE')}</td>
+                <td>€${saldo.toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge ${isUeberfaellig ? 'danger' : ''}">${isUeberfaellig ? 'Überfällig' : 'Gebucht'}</span></td>
+            </tr>`);
+
+            rows.push(`<tr>
+                <td>01.11.2025</td>
+                <td>Monatliche Rate</td>
+                <td class="positive">+€${monatsrate.toLocaleString('de-DE')}</td>
+                <td>€${(saldo + monatsrate).toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge">Gebucht</span></td>
+            </tr>`);
+
+            rows.push(`<tr>
+                <td>01.10.2025</td>
+                <td>Monatliche Rate</td>
+                <td class="positive">+€${monatsrate.toLocaleString('de-DE')}</td>
+                <td>€${(saldo + monatsrate * 2).toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge">Gebucht</span></td>
+            </tr>`);
+        }
+
+        return rows.join('');
+    }
+
+    // For Kreditkarte: Show card transactions
+    if (produktTyp.includes('kreditkarte')) {
+        const minBetrag = rate || 120;
+        const rows = [];
+
+        if (isBeglichen) {
+            rows.push(`<tr>
+                <td>${customer.letzteZahlung?.datum || '18.12.2025'}</td>
+                <td>Vollständige Tilgung</td>
+                <td class="positive">+€${(product.letzteZahlung || saldo).toLocaleString('de-DE')}</td>
+                <td>€0</td>
+                <td><span class="tx-badge success">Abgeschlossen</span></td>
+            </tr>`);
+        } else {
+            const isUeberfaellig = dpd > 0;
+
+            rows.push(`<tr ${isUeberfaellig ? 'class="highlight-row"' : ''}>
+                <td>01.12.2025</td>
+                <td>Mindestbetrag fällig</td>
+                <td class="negative">-€${minBetrag.toLocaleString('de-DE')}</td>
+                <td>€${saldo.toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge ${isUeberfaellig ? 'danger' : ''}">${isUeberfaellig ? 'Überfällig' : 'Fällig'}</span></td>
+            </tr>`);
+
+            rows.push(`<tr>
+                <td>28.11.2025</td>
+                <td>Einkauf Online-Shop</td>
+                <td class="negative">-€89,90</td>
+                <td>€${(saldo - 89.9).toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge">Gebucht</span></td>
+            </tr>`);
+
+            rows.push(`<tr>
+                <td>15.11.2025</td>
+                <td>Restaurant Zahlung</td>
+                <td class="negative">-€45,80</td>
+                <td>€${(saldo - 89.9 - 45.8).toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge">Gebucht</span></td>
+            </tr>`);
+        }
+
+        return rows.join('');
+    }
+
+    // Default: Generic transactions
+    return `<tr>
+        <td>01.12.2025</td>
+        <td>Transaktion</td>
+        <td>€${rate.toLocaleString('de-DE')}</td>
+        <td>€${saldo.toLocaleString('de-DE')}</td>
+        <td><span class="tx-badge">Gebucht</span></td>
+    </tr>`;
+}
+
 // Update Konten & Finanzen tab - comprehensive update
 function updateKontenFields(modal, customer) {
     const kontenTab = modal.querySelector('#tab-konten');
@@ -1667,12 +1866,36 @@ function updateKontenFields(modal, customer) {
                     const label = item.querySelector('.amount-label');
                     if (label && label.textContent === 'Limit') {
                         item.style.display = hasLimit ? '' : 'none';
+                        // Update limit value if product has it
+                        if (hasLimit && matchingProduct.limit) {
+                            const limitValue = item.querySelector('.amount-value');
+                            if (limitValue) limitValue.textContent = '€' + matchingProduct.limit.toLocaleString('de-DE');
+                        }
                     }
                     // Update label for non-limit products: "Saldo" -> "Restschuld" for loans
                     if (label && label.textContent === 'Saldo' && !hasLimit) {
                         label.textContent = 'Restschuld';
                     }
+                    // For loans with rate, show the rate
+                    if (label && label.textContent === 'Rate' && matchingProduct.rate) {
+                        const rateValue = item.querySelector('.amount-value');
+                        if (rateValue) rateValue.textContent = '€' + matchingProduct.rate.toLocaleString('de-DE') + '/M';
+                    }
                 });
+
+                // Dynamically populate transaction table for this product
+                const tableBody = section.querySelector('.credit-tx-table tbody');
+                if (tableBody) {
+                    // Filter transactions relevant to this product
+                    const productTransactions = generateProductTransactions(matchingProduct, customer);
+                    tableBody.innerHTML = productTransactions;
+                }
+
+                // Hide chart view, show table view
+                const chartView = section.querySelector('.chart-view');
+                const tableView = section.querySelector('.table-view');
+                if (chartView) chartView.classList.remove('active');
+                if (tableView) tableView.classList.add('active');
             }
         } else {
             section.style.display = 'none';
