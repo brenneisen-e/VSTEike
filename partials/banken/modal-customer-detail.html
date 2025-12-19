@@ -6,12 +6,22 @@
                 <h2 id="customerName">Mueller GmbH</h2>
                 <span class="customer-id">K-2024-0001</span>
             </div>
-            <button class="modal-close" onclick="closeCustomerDetail()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
+            <div class="modal-header-actions">
+                <button class="btn-open-crm" onclick="openCrmFromModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    CRM Akte öffnen
+                </button>
+                <button class="modal-close" onclick="closeCustomerDetail()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div class="modal-tabs">
@@ -337,12 +347,12 @@
                             <span class="credit-status-badge danger">45 DPD</span>
                             <!-- View Toggle -->
                             <div class="view-toggle">
-                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
+                                <button class="toggle-btn" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                         <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
                                     </svg>
                                 </button>
-                                <button class="toggle-btn" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
+                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                         <line x1="3" y1="9" x2="21" y2="9"></line>
@@ -354,7 +364,7 @@
                         </div>
 
                         <!-- Chart View -->
-                        <div class="credit-view chart-view active">
+                        <div class="credit-view chart-view">
                             <div class="chart-container-large">
                                 <div class="chart-title">Saldo-Verlauf (12 Monate) - Ausgaben ↑ Zahlungen ↓</div>
                                 <div class="chart-with-axes">
@@ -418,7 +428,7 @@
                         </div>
 
                         <!-- Table View -->
-                        <div class="credit-view table-view">
+                        <div class="credit-view table-view active">
                             <table class="credit-tx-table">
                                 <thead>
                                     <tr>
@@ -496,12 +506,12 @@
                             <span class="credit-status-badge danger">+€4.500 über Limit</span>
                             <!-- View Toggle -->
                             <div class="view-toggle">
-                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
+                                <button class="toggle-btn" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                         <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
                                     </svg>
                                 </button>
-                                <button class="toggle-btn" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
+                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                         <line x1="3" y1="9" x2="21" y2="9"></line>
@@ -513,7 +523,7 @@
                         </div>
 
                         <!-- Chart View -->
-                        <div class="credit-view chart-view active">
+                        <div class="credit-view chart-view">
                             <div class="chart-container-large">
                                 <div class="chart-title">Kontostand-Verlauf (12 Monate)</div>
                                 <div class="chart-with-axes">
@@ -567,7 +577,7 @@
                         </div>
 
                         <!-- Table View -->
-                        <div class="credit-view table-view">
+                        <div class="credit-view table-view active">
                             <table class="credit-tx-table">
                                 <thead>
                                     <tr>
@@ -638,12 +648,12 @@
                             <span class="credit-status-badge warning">2 Raten offen</span>
                             <!-- View Toggle -->
                             <div class="view-toggle">
-                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
+                                <button class="toggle-btn" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                         <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
                                     </svg>
                                 </button>
-                                <button class="toggle-btn" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
+                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                         <line x1="3" y1="9" x2="21" y2="9"></line>
@@ -655,7 +665,7 @@
                         </div>
 
                         <!-- Chart View -->
-                        <div class="credit-view chart-view active">
+                        <div class="credit-view chart-view">
                             <div class="chart-container-large">
                                 <div class="chart-title">Tilgungsverlauf - Plan vs. Ist</div>
                                 <div class="chart-with-axes">
@@ -721,7 +731,7 @@
                         </div>
 
                         <!-- Table View -->
-                        <div class="credit-view table-view">
+                        <div class="credit-view table-view active">
                             <table class="credit-tx-table">
                                 <thead>
                                     <tr>
@@ -766,30 +776,271 @@
                         </div>
                     </div>
 
-                    <!-- Weitere Kredite kompakt -->
-                    <div class="credit-products-compact">
-                        <!-- Ratenkredit PKW -->
-                        <div class="credit-product-compact warning">
-                            <div class="compact-header">
-                                <span class="compact-name">Ratenkredit PKW</span>
-                                <span class="credit-status-badge warning">1 Rate</span>
+                    <!-- Ratenkredit PKW -->
+                    <div class="credit-product-large warning" data-product="ratenkredit-pkw">
+                        <div class="credit-product-header-large">
+                            <div class="credit-product-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
                             </div>
-                            <div class="compact-details">
-                                <span>RK-2022-0034521</span>
-                                <span class="compact-amount">€28.750 | €650/M</span>
+                            <div class="credit-product-info-large">
+                                <span class="credit-product-name">Ratenkredit PKW</span>
+                                <span class="credit-product-number">RK-2022-0034521</span>
+                            </div>
+                            <div class="credit-amounts-inline">
+                                <div class="amount-item">
+                                    <span class="amount-label">Restschuld</span>
+                                    <span class="amount-value warning">€28.750</span>
+                                </div>
+                                <div class="amount-item">
+                                    <span class="amount-label">Rate</span>
+                                    <span class="amount-value">€650/M</span>
+                                </div>
+                            </div>
+                            <span class="credit-status-badge warning">1 Rate offen</span>
+                            <!-- View Toggle -->
+                            <div class="view-toggle">
+                                <button class="toggle-btn" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                                    </svg>
+                                </button>
+                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                                        <line x1="3" y1="15" x2="21" y2="15"></line>
+                                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Ratenkredit Möbel -->
-                        <div class="credit-product-compact danger">
-                            <div class="compact-header">
-                                <span class="compact-name">Ratenkredit Möbel</span>
-                                <span class="credit-status-badge danger">60 DPD</span>
+                        <!-- Chart View -->
+                        <div class="credit-view chart-view">
+                            <div class="chart-container-large">
+                                <div class="chart-title">Tilgungsverlauf - Restschuld</div>
+                                <div class="chart-with-axes">
+                                    <div class="y-axis">
+                                        <span>€35k</span>
+                                        <span>€30k</span>
+                                        <span>€25k</span>
+                                        <span>€20k</span>
+                                        <span>€15k</span>
+                                        <span>€10k</span>
+                                    </div>
+                                    <div class="chart-area">
+                                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                                            <!-- Gitterlinien -->
+                                            <line x1="0" y1="8" x2="100" y2="8" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="16" x2="100" y2="16" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="24" x2="100" y2="24" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="32" x2="100" y2="32" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <!-- Restschuld-Linie (fallend) -->
+                                            <polyline
+                                                points="2,5 10,7 18,9 26,11 34,13 42,16 50,18 58,20 66,22 74,24 82,26 98,28"
+                                                fill="none"
+                                                stroke="#f59e0b"
+                                                stroke-width="0.8"/>
+                                        </svg>
+                                    </div>
+                                    <div class="x-axis">
+                                        <span>Jan</span>
+                                        <span>Feb</span>
+                                        <span>Mär</span>
+                                        <span>Apr</span>
+                                        <span>Mai</span>
+                                        <span>Jun</span>
+                                        <span>Jul</span>
+                                        <span>Aug</span>
+                                        <span>Sep</span>
+                                        <span>Okt</span>
+                                        <span>Nov</span>
+                                        <span>Dez</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="compact-details">
-                                <span>RK-2023-0078432</span>
-                                <span class="compact-amount">€9.800 | €280/M</span>
+                        </div>
+
+                        <!-- Table View -->
+                        <div class="credit-view table-view active">
+                            <table class="credit-tx-table">
+                                <thead>
+                                    <tr>
+                                        <th>Datum</th>
+                                        <th>Beschreibung</th>
+                                        <th>Betrag</th>
+                                        <th>Restschuld</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="highlight-row">
+                                        <td>01.12.2025</td>
+                                        <td>Monatsrate Dezember</td>
+                                        <td class="negative">-€650,00</td>
+                                        <td>€28.750</td>
+                                        <td><span class="tx-badge danger">Ausstehend</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>01.11.2025</td>
+                                        <td>Monatsrate November</td>
+                                        <td class="negative">-€650,00</td>
+                                        <td>€29.400</td>
+                                        <td><span class="tx-badge">Gebucht</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>01.10.2025</td>
+                                        <td>Monatsrate Oktober</td>
+                                        <td class="negative">-€650,00</td>
+                                        <td>€30.050</td>
+                                        <td><span class="tx-badge">Gebucht</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>01.09.2025</td>
+                                        <td>Monatsrate September</td>
+                                        <td class="negative">-€650,00</td>
+                                        <td>€30.700</td>
+                                        <td><span class="tx-badge">Gebucht</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Ratenkredit Möbel -->
+                    <div class="credit-product-large danger" data-product="ratenkredit-moebel">
+                        <div class="credit-product-header-large">
+                            <div class="credit-product-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
                             </div>
+                            <div class="credit-product-info-large">
+                                <span class="credit-product-name">Ratenkredit Möbel</span>
+                                <span class="credit-product-number">RK-2023-0078432</span>
+                            </div>
+                            <div class="credit-amounts-inline">
+                                <div class="amount-item">
+                                    <span class="amount-label">Restschuld</span>
+                                    <span class="amount-value danger">€9.800</span>
+                                </div>
+                                <div class="amount-item">
+                                    <span class="amount-label">Rate</span>
+                                    <span class="amount-value">€280/M</span>
+                                </div>
+                            </div>
+                            <span class="credit-status-badge danger">60 DPD</span>
+                            <!-- View Toggle -->
+                            <div class="view-toggle">
+                                <button class="toggle-btn" onclick="toggleCreditView(this, 'chart')" title="Chart-Ansicht">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                                    </svg>
+                                </button>
+                                <button class="toggle-btn active" onclick="toggleCreditView(this, 'table')" title="Tabellen-Ansicht">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                                        <line x1="3" y1="15" x2="21" y2="15"></line>
+                                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Chart View -->
+                        <div class="credit-view chart-view">
+                            <div class="chart-container-large">
+                                <div class="chart-title">Tilgungsverlauf - Restschuld</div>
+                                <div class="chart-with-axes">
+                                    <div class="y-axis">
+                                        <span>€12k</span>
+                                        <span>€10k</span>
+                                        <span>€8k</span>
+                                        <span>€6k</span>
+                                        <span>€4k</span>
+                                        <span>€2k</span>
+                                    </div>
+                                    <div class="chart-area">
+                                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                                            <!-- Gitterlinien -->
+                                            <line x1="0" y1="8" x2="100" y2="8" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="16" x2="100" y2="16" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="24" x2="100" y2="24" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <line x1="0" y1="32" x2="100" y2="32" stroke="#e2e8f0" stroke-width="0.3"/>
+                                            <!-- Restschuld-Linie (steigend wegen versäumter Raten) -->
+                                            <polyline
+                                                points="2,10 10,10 18,10 26,10 34,10 42,10 50,8 58,6 66,6 74,6 82,6 98,6"
+                                                fill="none"
+                                                stroke="#ef4444"
+                                                stroke-width="0.8"/>
+                                        </svg>
+                                    </div>
+                                    <div class="x-axis">
+                                        <span>Jan</span>
+                                        <span>Feb</span>
+                                        <span>Mär</span>
+                                        <span>Apr</span>
+                                        <span>Mai</span>
+                                        <span>Jun</span>
+                                        <span>Jul</span>
+                                        <span>Aug</span>
+                                        <span>Sep</span>
+                                        <span>Okt</span>
+                                        <span>Nov</span>
+                                        <span>Dez</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table View -->
+                        <div class="credit-view table-view active">
+                            <table class="credit-tx-table">
+                                <thead>
+                                    <tr>
+                                        <th>Datum</th>
+                                        <th>Beschreibung</th>
+                                        <th>Betrag</th>
+                                        <th>Restschuld</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="highlight-row">
+                                        <td>01.12.2025</td>
+                                        <td>Monatsrate Dezember</td>
+                                        <td class="negative">-€280,00</td>
+                                        <td>€9.800</td>
+                                        <td><span class="tx-badge danger">Überfällig</span></td>
+                                    </tr>
+                                    <tr class="highlight-row">
+                                        <td>01.11.2025</td>
+                                        <td>Monatsrate November</td>
+                                        <td class="negative">-€280,00</td>
+                                        <td>€9.800</td>
+                                        <td><span class="tx-badge danger">Überfällig</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>01.10.2025</td>
+                                        <td>Monatsrate Oktober</td>
+                                        <td class="negative">-€280,00</td>
+                                        <td>€9.520</td>
+                                        <td><span class="tx-badge">Gebucht</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>01.09.2025</td>
+                                        <td>Monatsrate September</td>
+                                        <td class="negative">-€280,00</td>
+                                        <td>€9.800</td>
+                                        <td><span class="tx-badge">Gebucht</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1022,6 +1273,61 @@
 
             <!-- Tab: KI-Analyse -->
             <div class="customer-tab" id="tab-ki-analyse">
+                <!-- KI Summary Section -->
+                <div class="ki-summary-card">
+                    <div class="ki-summary-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span>KI-Zusammenfassung</span>
+                    </div>
+                    <div class="ki-summary-content">
+                        <div class="ki-summary-section">
+                            <h5>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                Kernproblem
+                            </h5>
+                            <p>Gewerbekunde mit <strong>Liquiditätsengpässen</strong> seit Q3 2025. Gastronomie-Branche mit saisonalen Schwankungen. Mehrfache Lastschriftrückgaben trotz grundsätzlicher Zahlungsfähigkeit - deutet auf <strong>bewusste Zahlungsvermeidung</strong> hin.</p>
+                        </div>
+                        <div class="ki-summary-section">
+                            <h5>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Letzte Aktivitäten
+                            </h5>
+                            <ul>
+                                <li>3. Mahnung versendet (01.12.2025)</li>
+                                <li>Teilzahlung €500 eingegangen (15.11.2025)</li>
+                                <li>E-Mail mit Ratenzahlungsantrag (20.10.2025)</li>
+                                <li>2 Telefonversuche nicht erreicht</li>
+                            </ul>
+                        </div>
+                        <div class="ki-summary-section">
+                            <h5>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                Aktuelle Schritte
+                            </h5>
+                            <ul>
+                                <li><strong>Sofort:</strong> Telefonischen Kontakt herstellen</li>
+                                <li><strong>Diese Woche:</strong> Ratenzahlungsvereinbarung prüfen</li>
+                                <li><strong>Bei Ablehnung:</strong> Gerichtliches Mahnverfahren einleiten</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="ki-matrix-detail">
                     <div class="ki-score-visual">
                         <div class="score-chart">
@@ -1111,8 +1417,8 @@
                 <div class="ki-recommendation-enhanced">
                     <div class="ai-badge">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path>
-                            <path d="M12 6v6l4 2"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                         </svg>
                         KI-Handlungsempfehlung
                     </div>
@@ -1120,7 +1426,9 @@
                         <div class="recommendation-header">
                             <div class="recommendation-title">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                    <path d="M2 17l10 5 10-5"></path>
+                                    <path d="M2 12l10 5 10-5"></path>
                                 </svg>
                                 <span>Empfohlene Maßnahme: <strong>Verstärkte Inkasso-Strategie</strong></span>
                             </div>
