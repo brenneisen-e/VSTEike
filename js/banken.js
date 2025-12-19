@@ -1040,13 +1040,14 @@ function getFullCustomerData(customerId) {
             branche: 'Angestellter', restschuld: 4230, status: 'Offen',
             krediteAnzahl: 1, gesamtforderung: 4230, monatsrate: 180, ueberfaellig: 540,
             rueckgabequote: 0, hauptforderung: 4000, zinsen: 180, mahngebuehren: 50, inkassokosten: 0,
-            dpd: 2, willingness: 85, ability: 70, segment: 'prioritaet',
+            dpd: 18, willingness: 85, ability: 70, segment: 'prioritaet',
+            zahlungsziel: '01.12.2025',
             // Einkommen & Ausgaben (Angestellter)
             einkommenMonatlich: 2850, ausgabenMonatlich: 2680, ausgabenDetails: 'Miete: €780, Lebensmittel: €320, Auto: €380, Versicherungen: €190, Kinder: €450, Sonstiges: €560',
-            kernproblem: 'Neuer Fall. Angestellter mit Einkommen €2.850, Ausgaben €2.680. Knapper Puffer (€170). Verzug vermutlich durch Vergessen nach Umzug. Hohe Erfolgswahrscheinlichkeit.',
-            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1,
+            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Angestellter mit Einkommen €2.850, Ausgaben €2.680. Knapper Puffer (€170). Verzug vermutlich durch Vergessen nach Umzug. Hohe Erfolgswahrscheinlichkeit bei Kontaktaufnahme.',
+            workflowStatus: 'Mahnung', mahnstufe: 2,
             produkte: [
-                { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '2 DPD', badge: 'warning' }
+                { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '18 DPD', badge: 'warning' }
             ]
         },
         'K-2024-8846': {
@@ -1056,13 +1057,14 @@ function getFullCustomerData(customerId) {
             branche: 'IT-Dienstleistungen', restschuld: 12890, status: 'Offen',
             krediteAnzahl: 2, gesamtforderung: 12890, monatsrate: 650, ueberfaellig: 1950,
             rueckgabequote: 0, hauptforderung: 12000, zinsen: 640, mahngebuehren: 150, inkassokosten: 100,
-            dpd: 3, willingness: 75, ability: 80, segment: 'prioritaet',
+            dpd: 18, willingness: 75, ability: 80, segment: 'prioritaet',
+            zahlungsziel: '01.12.2025',
             // Einkommen & Ausgaben (IT-Dienstleister)
             einkommenMonatlich: 95000, ausgabenMonatlich: 82000, ausgabenDetails: 'Personal: €52.000, Miete/Büro: €8.500, Software-Lizenzen: €6.500, Marketing: €4.000, Sonstiges: €11.000',
-            kernproblem: 'Neuer Fall. IT-Dienstleister mit gutem Umsatz (€95.000/Monat), Kosten €82.000. Verzug durch verspätete Kundenzahlungen (Großprojekt-Abrechnung ausstehend).',
-            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1,
+            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. IT-Dienstleister mit gutem Umsatz (€95.000/Monat), Kosten €82.000. Verzug durch verspätete Kundenzahlungen (Großprojekt-Abrechnung ausstehend). Zahlung nach Projektabschluss erwartet.',
+            workflowStatus: 'Mahnung', mahnstufe: 2,
             produkte: [
-                { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-1123', saldo: 8500, status: '3 DPD', badge: 'warning' },
+                { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-1123', saldo: 8500, status: '18 DPD', badge: 'warning' },
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-9945', saldo: 4390, status: 'Aktiv', badge: 'info' }
             ]
         },
@@ -1073,13 +1075,14 @@ function getFullCustomerData(customerId) {
             branche: 'Freiberuflerin', restschuld: 2150, status: 'Offen',
             krediteAnzahl: 1, gesamtforderung: 2150, monatsrate: 120, ueberfaellig: 360,
             rueckgabequote: 0, hauptforderung: 2000, zinsen: 100, mahngebuehren: 50, inkassokosten: 0,
-            dpd: 5, willingness: 70, ability: 55, segment: 'prioritaet',
+            dpd: 18, willingness: 70, ability: 55, segment: 'prioritaet',
+            zahlungsziel: '01.12.2025',
             // Einkommen & Ausgaben (Freiberuflerin - variabel)
             einkommenMonatlich: 2400, ausgabenMonatlich: 2350, ausgabenDetails: 'Miete: €720, Lebensmittel: €290, Krankenversicherung: €420, Büro/Material: €380, Sonstiges: €540',
-            kernproblem: 'Neuer Fall. Freiberuflerin (Grafikdesign) mit variablem Einkommen Ø €2.400, Ausgaben €2.350. Sehr knapper Puffer (€50). Kreditkartenschuld durch Laptop-Ersatzkauf.',
-            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1,
+            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Freiberuflerin (Grafikdesign) mit variablem Einkommen Ø €2.400, Ausgaben €2.350. Sehr knapper Puffer (€50). Kreditkartenschuld durch Laptop-Ersatzkauf. Ratenzahlung anbieten.',
+            workflowStatus: 'Mahnung', mahnstufe: 2,
             produkte: [
-                { typ: 'Kreditkarte', nummer: 'KK-2024-5567', saldo: 2150, status: '5 DPD', badge: 'warning' }
+                { typ: 'Kreditkarte', nummer: 'KK-2024-5567', saldo: 2150, status: '18 DPD', badge: 'warning' }
             ]
         }
     };
@@ -1425,36 +1428,96 @@ function updateKontenFields(modal, customer) {
         productContainer.className = 'credit-product-large ' + containerClass;
     }
 
-    // Update table data
-    const tableRows = kontenTab.querySelectorAll('.credit-tx-table tbody tr');
-    if (tableRows.length > 0 && isBezahlt) {
-        // For paid customers, show payment history instead of transactions
-        const tbody = kontenTab.querySelector('.credit-tx-table tbody');
-        if (tbody) {
+    // Update table data based on product type
+    const tbody = kontenTab.querySelector('.credit-tx-table tbody');
+    if (tbody) {
+        const produktTyp = hauptProdukt ? hauptProdukt.typ : '';
+        const isKreditkarte = produktTyp.toLowerCase().includes('kreditkarte');
+        const isRatenkredit = produktTyp.toLowerCase().includes('ratenkredit') || produktTyp.toLowerCase().includes('baufinanzierung');
+        const isDispo = produktTyp.toLowerCase().includes('dispo');
+        const rate = customer.monatsrate || 250;
+        const saldo = hauptProdukt ? hauptProdukt.saldo : customer.restschuld;
+
+        if (isBezahlt) {
+            // Bezahlt: Show final payment
             tbody.innerHTML = `
                 <tr>
                     <td>${customer.statusText?.match(/\\d{2}\\.\\d{2}\\.\\d{4}/)?.[0] || '15.12.2025'}</td>
                     <td>Schlusszahlung - Kredit vollständig getilgt</td>
-                    <td class="positive">+€${(customer.restschuld || Math.floor(Math.random() * 5000 + 1000)).toLocaleString('de-DE')}</td>
+                    <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
                     <td>€0</td>
                     <td><span class="tx-badge success">Abgeschlossen</span></td>
                 </tr>
                 <tr>
                     <td>01.12.2025</td>
                     <td>Reguläre Ratenzahlung</td>
-                    <td class="positive">+€${(customer.monatsrate || 250).toLocaleString('de-DE')}</td>
-                    <td>€${Math.floor(Math.random() * 2000 + 500).toLocaleString('de-DE')}</td>
+                    <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
+                    <td>€${(rate * 2).toLocaleString('de-DE')}</td>
                     <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+            `;
+        } else if (isRatenkredit) {
+            // Ratenkredit: Show monthly rate payments
+            const dpd = customer.dpd || 0;
+            const ueberfaelligClass = dpd > 0 ? 'highlight-row' : '';
+            const ueberfaelligBadge = dpd > 0 ? '<span class="tx-badge danger">Überfällig</span>' : '<span class="tx-badge">Gebucht</span>';
+            tbody.innerHTML = `
+                <tr class="${ueberfaelligClass}">
+                    <td>01.12.2025</td>
+                    <td>Monatliche Rate - Fällig</td>
+                    <td class="negative">-€${rate.toLocaleString('de-DE')}</td>
+                    <td>€${saldo.toLocaleString('de-DE')}</td>
+                    <td>${ueberfaelligBadge}</td>
                 </tr>
                 <tr>
                     <td>01.11.2025</td>
-                    <td>Reguläre Ratenzahlung</td>
-                    <td class="positive">+€${(customer.monatsrate || 250).toLocaleString('de-DE')}</td>
-                    <td>€${Math.floor(Math.random() * 3000 + 1000).toLocaleString('de-DE')}</td>
+                    <td>Monatliche Rate</td>
+                    <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
+                    <td>€${(saldo + rate).toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+                <tr>
+                    <td>01.10.2025</td>
+                    <td>Monatliche Rate</td>
+                    <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
+                    <td>€${(saldo + rate * 2).toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+                <tr>
+                    <td>01.09.2025</td>
+                    <td>Monatliche Rate</td>
+                    <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
+                    <td>€${(saldo + rate * 3).toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+            `;
+        } else if (isDispo) {
+            // Dispo: Show account movements
+            tbody.innerHTML = `
+                <tr>
+                    <td>18.12.2025</td>
+                    <td>Abhebung Geldautomat</td>
+                    <td class="negative">-€200,00</td>
+                    <td>€${saldo.toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+                <tr>
+                    <td>15.12.2025</td>
+                    <td>Gehaltseingang</td>
+                    <td class="positive">+€${(customer.einkommenMonatlich || 2500).toLocaleString('de-DE')}</td>
+                    <td>€${(saldo - 200).toLocaleString('de-DE')}</td>
+                    <td><span class="tx-badge">Gebucht</span></td>
+                </tr>
+                <tr>
+                    <td>10.12.2025</td>
+                    <td>Lastschrift Miete</td>
+                    <td class="negative">-€950,00</td>
+                    <td>€${(saldo + 2300).toLocaleString('de-DE')}</td>
                     <td><span class="tx-badge">Gebucht</span></td>
                 </tr>
             `;
         }
+        // Kreditkarte: Keep default HTML content (purchases)
     }
 
     // Update Einkommen & Ausgaben section - show/hide based on data availability
