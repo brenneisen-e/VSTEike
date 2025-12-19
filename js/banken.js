@@ -1037,20 +1037,29 @@ function getFullCustomerData(customerId) {
     };
 }
 
-// Update Stammdaten fields in modal - finds fields by label text
+// Update Stammdaten fields in modal - comprehensive update of all fields
 function updateStammdatenFields(modal, customer) {
     const stammdatenTab = modal.querySelector('#tab-stammdaten');
-    if (!stammdatenTab) return;
+    if (!stammdatenTab) {
+        console.log('Stammdaten tab not found');
+        return;
+    }
+
+    console.log('Updating Stammdaten for:', customer.name, customer);
 
     // Helper function to find and update a field by its label text
-    function updateFieldByLabel(labelText, newValue) {
+    function updateFieldByLabel(labelText, newValue, useHTML = false) {
         const rows = stammdatenTab.querySelectorAll('.stammdaten-row');
         for (const row of rows) {
             const label = row.querySelector('.label');
-            if (label && label.textContent.trim().toLowerCase().includes(labelText.toLowerCase())) {
+            if (label && label.textContent.trim().replace(':', '').toLowerCase() === labelText.toLowerCase()) {
                 const value = row.querySelector('.value');
                 if (value) {
-                    value.textContent = newValue;
+                    if (useHTML) {
+                        value.innerHTML = newValue;
+                    } else {
+                        value.textContent = newValue;
+                    }
                     return value;
                 }
             }
@@ -1058,69 +1067,185 @@ function updateStammdatenFields(modal, customer) {
         return null;
     }
 
-    // Update Unternehmensdaten section
+    // Determine if Privat or Gewerbe customer
+    const isPrivat = customer.type === 'Privat';
+
+    // === UNTERNEHMENSDATEN / PERSONENDATEN ===
     updateFieldByLabel('Firmenname', customer.name);
-    updateFieldByLabel('Rechtsform', customer.rechtsform || customer.type);
+    updateFieldByLabel('Rechtsform', customer.rechtsform || (isPrivat ? 'Privatperson' : '-'));
+    updateFieldByLabel('Handelsregister', isPrivat ? '-' : 'HRB ' + Math.floor(Math.random() * 99999) + ' ' + (customer.adresse?.split(',')[1]?.trim() || 'Deutschland'));
+    updateFieldByLabel('USt-ID', isPrivat ? '-' : 'DE' + Math.floor(Math.random() * 999999999));
     updateFieldByLabel('Branche', customer.branche || '-');
+    updateFieldByLabel('Gründungsjahr', isPrivat ? '-' : (2000 + Math.floor(Math.random() * 20)).toString());
+    updateFieldByLabel('Mitarbeiter', isPrivat ? '-' : Math.floor(Math.random() * 50 + 1) + ' (Stand: 2024)');
+    updateFieldByLabel('Jahresumsatz', isPrivat ? '-' : '€' + (Math.floor(Math.random() * 5) + 0.5).toFixed(1) + ' Mio (2023)');
 
-    // Update Kundentyp badge
-    const kundentypValue = updateFieldByLabel('Kundentyp', '');
+    // Kundentyp badge
+    const kundentypValue = updateFieldByLabel('Kundentyp', '', true);
     if (kundentypValue) {
-        const isGewerbe = customer.type === 'Gewerbe';
-        kundentypValue.innerHTML = isGewerbe
-            ? '<span class="badge gewerbe">Gewerbekunde</span>'
-            : '<span class="badge privat">Privatkunde</span>';
+        kundentypValue.innerHTML = isPrivat
+            ? '<span class="badge privat">Privatkunde</span>'
+            : '<span class="badge gewerbe">Gewerbekunde</span>';
     }
 
-    // Update Kontaktdaten section
-    if (customer.adresse) {
-        updateFieldByLabel('Adresse', customer.adresse);
-    }
-    if (customer.telefon) {
-        const telefonValue = updateFieldByLabel('Telefon Zentrale', customer.telefon);
-        if (telefonValue) {
-            telefonValue.className = 'value clickable';
-            telefonValue.setAttribute('onclick', `initiateCall('${customer.telefon}')`);
-        }
-    }
-    if (customer.email) {
-        const emailValue = updateFieldByLabel('E-Mail', customer.email);
-        if (emailValue) {
-            emailValue.className = 'value clickable';
-            emailValue.setAttribute('onclick', `sendEmail('${customer.email}')`);
-        }
-    }
+    updateFieldByLabel('Kunde seit', customer.kundeSeit || '01.01.2020 (5 Jahre)');
+    updateFieldByLabel('Kundenbetreuer', 'Eike Brenneisen');
 
-    // Update Geschäftsführung / Ansprechpartner in subsections
-    const subsections = stammdatenTab.querySelectorAll('.stammdaten-subsection');
-    for (const subsection of subsections) {
-        const subsectionText = subsection.textContent.toLowerCase();
-        if (subsectionText.includes('geschäftsführung') || subsectionText.includes('ansprechpartner')) {
-            const nextRow = subsection.nextElementSibling;
-            if (nextRow && nextRow.classList.contains('stammdaten-row')) {
-                const nameValue = nextRow.querySelector('.value');
-                if (nameValue && customer.ansprechpartner) {
-                    nameValue.textContent = customer.ansprechpartner;
-                }
+    // === KONTAKTDATEN ===
+    const adresseParts = customer.adresse ? customer.adresse.split(',') : ['-', '-'];
+    const adresseFormatted = adresseParts.length > 1
+        ? adresseParts[0].trim() + '<br>' + adresseParts[1].trim()
+        : customer.adresse || '-';
+    updateFieldByLabel('Adresse', adresseFormatted, true);
+
+    updateFieldByLabel('Telefon Zentrale', customer.telefon || '-');
+    updateFieldByLabel('Telefon Mobil', customer.telefonMobil || '+49 170 ' + Math.floor(Math.random() * 9999999));
+
+    // Update all E-Mail fields
+    const emailRows = stammdatenTab.querySelectorAll('.stammdaten-row');
+    let emailCount = 0;
+    emailRows.forEach(row => {
+        const label = row.querySelector('.label');
+        if (label && label.textContent.trim().toLowerCase().includes('e-mail')) {
+            const value = row.querySelector('.value');
+            if (value && emailCount === 0) {
+                value.textContent = customer.email || '-';
+                emailCount++;
             }
         }
-    }
+    });
 
-    // Update Kreditdetails section
-    const restschuldValue = updateFieldByLabel('Restschuld', '');
-    if (restschuldValue) {
-        if (customer.restschuld === 0) {
-            restschuldValue.textContent = '€0';
-            restschuldValue.className = 'value highlight-green';
-            restschuldValue.style.color = '#22c55e';
+    updateFieldByLabel('Website', isPrivat ? '-' : 'www.' + customer.name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.de');
+
+    // === GESCHÄFTSFÜHRUNG / ANSPRECHPARTNER ===
+    const subsections = stammdatenTab.querySelectorAll('.stammdaten-subsection');
+    subsections.forEach(subsection => {
+        const subsectionText = subsection.textContent.toLowerCase();
+        let sibling = subsection.nextElementSibling;
+
+        if (subsectionText.includes('geschäftsführung')) {
+            // Update Geschäftsführung section
+            while (sibling && sibling.classList.contains('stammdaten-row')) {
+                const label = sibling.querySelector('.label');
+                const value = sibling.querySelector('.value');
+                if (label && value) {
+                    const labelText = label.textContent.trim().toLowerCase();
+                    if (labelText.includes('name')) {
+                        value.textContent = customer.ansprechpartner || customer.name;
+                    } else if (labelText.includes('direktwahl')) {
+                        value.textContent = customer.telefon ? customer.telefon + '-10' : '-';
+                    } else if (labelText.includes('e-mail')) {
+                        const emailName = customer.ansprechpartner
+                            ? customer.ansprechpartner.split(' ').map(n => n[0]?.toLowerCase()).join('.')
+                            : 'kontakt';
+                        const domain = customer.email ? customer.email.split('@')[1] : 'email.de';
+                        value.textContent = emailName + '@' + domain;
+                    }
+                }
+                sibling = sibling.nextElementSibling;
+            }
+        } else if (subsectionText.includes('buchhaltung') || subsectionText.includes('ansprechpartner')) {
+            // Update Ansprechpartner Buchhaltung section
+            while (sibling && sibling.classList.contains('stammdaten-row')) {
+                const label = sibling.querySelector('.label');
+                const value = sibling.querySelector('.value');
+                if (label && value) {
+                    const labelText = label.textContent.trim().toLowerCase();
+                    if (labelText.includes('name')) {
+                        value.textContent = isPrivat ? customer.name : 'Buchhaltung ' + customer.name.split(' ')[0];
+                    } else if (labelText.includes('direktwahl')) {
+                        value.textContent = customer.telefon ? customer.telefon + '-20' : '-';
+                    } else if (labelText.includes('e-mail')) {
+                        const domain = customer.email ? customer.email.split('@')[1] : 'email.de';
+                        value.textContent = isPrivat ? customer.email : 'buchhaltung@' + domain;
+                    }
+                }
+                sibling = sibling.nextElementSibling;
+            }
+        }
+    });
+
+    // === BANKVERBINDUNG & BONITÄT ===
+    // Generate realistic IBAN for demo
+    const ibanNumber = 'DE' + Math.floor(Math.random() * 99).toString().padStart(2, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 9999).toString().padStart(4, '0') + ' ' +
+                       Math.floor(Math.random() * 99).toString().padStart(2, '0');
+    updateFieldByLabel('IBAN', ibanNumber);
+    updateFieldByLabel('BIC', 'DEUTDEDB' + Math.floor(Math.random() * 999).toString().padStart(3, '0'));
+    updateFieldByLabel('Kreditinstitut', ['Deutsche Bank', 'Commerzbank AG', 'Sparkasse', 'Volksbank'][Math.floor(Math.random() * 4)]);
+
+    // SEPA-Mandat based on status
+    const sepaValue = updateFieldByLabel('SEPA-Mandat', '', true);
+    if (sepaValue) {
+        if (customer.status === 'Bezahlt') {
+            sepaValue.innerHTML = '<span class="badge success">Aktiv</span>';
+        } else if (customer.status === 'Inkasso') {
+            sepaValue.innerHTML = '<span class="badge warning">Widerrufen (' + new Date().toLocaleDateString('de-DE') + ')</span>';
         } else {
-            restschuldValue.textContent = '€' + customer.restschuld.toLocaleString('de-DE');
-            restschuldValue.className = 'value highlight-red';
+            sepaValue.innerHTML = '<span class="badge success">Aktiv</span>';
         }
     }
 
-    // Update Stage based on status
-    const stageValue = updateFieldByLabel('Stage', '');
+    // Bonitätsinformationen
+    const rating = customer.status === 'Bezahlt' ? 'A' : (customer.status === 'Inkasso' ? 'C-' : 'B');
+    const ratingClass = customer.status === 'Bezahlt' ? 'rating-good' : (customer.status === 'Inkasso' ? 'rating-bad' : 'rating-medium');
+    const ratingValue = updateFieldByLabel('Internes Rating', '', true);
+    if (ratingValue) {
+        ratingValue.innerHTML = '<span class="' + ratingClass + '">' + rating + '</span>';
+    }
+
+    const creditreformScore = customer.status === 'Bezahlt' ? '180 (geringes Risiko)' : (customer.status === 'Inkasso' ? '312 (hohes Risiko)' : '245 (mittleres Risiko)');
+    updateFieldByLabel('Creditreform-Index', creditreformScore);
+
+    const schufaScore = customer.status === 'Bezahlt' ? '95 / 100' : (customer.status === 'Inkasso' ? '78 / 100' : '85 / 100');
+    updateFieldByLabel('Schufa-Score', schufaScore);
+    updateFieldByLabel('Letzte Prüfung', new Date().toLocaleDateString('de-DE'));
+
+    const zahlungsmoral = customer.status === 'Bezahlt' ? 'Gut' : (customer.status === 'Inkasso' ? 'Mangelhaft' : 'Befriedigend');
+    const zahlungsmoralClass = customer.status === 'Bezahlt' ? 'rating-good' : (customer.status === 'Inkasso' ? 'rating-bad' : 'rating-medium');
+    const zahlungsmoralValue = updateFieldByLabel('Zahlungsmoral', '', true);
+    if (zahlungsmoralValue) {
+        zahlungsmoralValue.innerHTML = '<span class="' + zahlungsmoralClass + '">' + zahlungsmoral + '</span>';
+    }
+
+    const verzug = customer.dpd || 0;
+    updateFieldByLabel('Ø Zahlungsverzug', verzug + ' Tage');
+
+    // === KREDITDETAILS ===
+    const produktTyp = isPrivat
+        ? ['Ratenkredit', 'Dispositionskredit', 'Kreditkarte', 'Autokredit'][Math.floor(Math.random() * 4)]
+        : ['Betriebsmittelkredit', 'Investitionskredit', 'Kontokorrent'][Math.floor(Math.random() * 3)];
+    updateFieldByLabel('Vertragsart', produktTyp);
+
+    const vertragsnummer = (isPrivat ? 'RK-' : 'BMK-') + '20' + (18 + Math.floor(Math.random() * 6)) + '-' + Math.floor(Math.random() * 9999999).toString().padStart(7, '0');
+    updateFieldByLabel('Vertragsnummer', vertragsnummer);
+
+    const ursprungsbetrag = customer.restschuld > 0 ? customer.restschuld * (1 + Math.random() * 0.5) : (Math.random() * 50000 + 5000);
+    updateFieldByLabel('Ursprungsbetrag', '€' + Math.round(ursprungsbetrag).toLocaleString('de-DE'));
+
+    // Restschuld with color
+    const restschuldValue = updateFieldByLabel('Restschuld', '', true);
+    if (restschuldValue) {
+        if (customer.restschuld === 0 || customer.status === 'Bezahlt') {
+            restschuldValue.innerHTML = '<span class="highlight-green" style="color: #22c55e;">€0</span>';
+        } else {
+            restschuldValue.innerHTML = '<span class="highlight-red">€' + customer.restschuld.toLocaleString('de-DE') + '</span>';
+        }
+    }
+
+    updateFieldByLabel('Zinssatz', (3 + Math.random() * 5).toFixed(2) + '% p.a.');
+    updateFieldByLabel('Monatsrate', '€' + (customer.monatsrate || Math.floor(customer.restschuld / 24) || 0).toLocaleString('de-DE'));
+    updateFieldByLabel('Vertragsbeginn', '01.' + String(Math.floor(Math.random() * 12) + 1).padStart(2, '0') + '.20' + (18 + Math.floor(Math.random() * 5)));
+    updateFieldByLabel('Vertragslaufzeit', (60 + Math.floor(Math.random() * 60)) + ' Monate');
+    updateFieldByLabel('Restlaufzeit', Math.floor(Math.random() * 36) + ' Monate');
+    updateFieldByLabel('Sicherheiten', isPrivat ? 'Keine' : 'Bürgschaft GF, Inventar');
+    updateFieldByLabel('Sicherheitenwert', isPrivat ? '-' : '€' + Math.floor(customer.restschuld * 0.7).toLocaleString('de-DE') + ' (geschätzt)');
+
+    // Stage based on status
+    const stageValue = updateFieldByLabel('Stage', '', true);
     if (stageValue) {
         if (customer.status === 'Bezahlt') {
             stageValue.innerHTML = '<span class="badge success">Abgeschlossen</span>';
@@ -1128,6 +1253,17 @@ function updateStammdatenFields(modal, customer) {
             stageValue.innerHTML = '<span class="badge danger">Stage 3 (NPL)</span>';
         } else {
             stageValue.innerHTML = '<span class="badge warning">Stage 2</span>';
+        }
+    }
+
+    // DPD
+    const dpdValue = updateFieldByLabel('DPD', '', true);
+    if (dpdValue) {
+        const dpd = customer.dpd || 0;
+        if (dpd === 0) {
+            dpdValue.innerHTML = '<span class="highlight-green" style="color: #22c55e;">0 Tage</span>';
+        } else {
+            dpdValue.innerHTML = '<span class="highlight-red">' + dpd + ' Tage</span>';
         }
     }
 
@@ -1146,6 +1282,8 @@ function updateStammdatenFields(modal, customer) {
         const statusIndicator = modal.querySelector('.status-indicator-success');
         if (statusIndicator) statusIndicator.remove();
     }
+
+    console.log('Stammdaten update complete for:', customer.name);
 }
 
 // Update Konten & Finanzen tab
