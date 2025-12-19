@@ -1048,10 +1048,12 @@ function getFullCustomerData(customerId) {
             rueckgabequote: 0, hauptforderung: 4000, zinsen: 180, mahngebuehren: 50, inkassokosten: 0,
             dpd: 18, willingness: 85, ability: 70, segment: 'prioritaet',
             zahlungsziel: '01.12.2025',
+            // Zahlungszusage aus Telefonat
+            zahlungszusage: { betrag: 540, datum: '23.12.2025', status: 'offen', vereinbart: '17.12.2025', notiz: 'Kunde zahlt überfälligen Betrag nach Gehaltseingang am 23.12.' },
             // Einkommen & Ausgaben (Angestellter)
             einkommenMonatlich: 2850, ausgabenMonatlich: 2680, ausgabenDetails: 'Miete: €780, Lebensmittel: €320, Auto: €380, Versicherungen: €190, Kinder: €450, Sonstiges: €560',
-            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Angestellter mit Einkommen €2.850, Ausgaben €2.680. Knapper Puffer (€170). Verzug vermutlich durch Vergessen nach Umzug. Hohe Erfolgswahrscheinlichkeit bei Kontaktaufnahme.',
-            workflowStatus: 'Mahnung', mahnstufe: 2,
+            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Zahlungszusage €540 bis 23.12. (Gehaltseingang). Angestellter mit Einkommen €2.850, Ausgaben €2.680. Hohe Erfolgswahrscheinlichkeit.',
+            workflowStatus: 'Zahlungszusage', mahnstufe: 2,
             produkte: [
                 { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '18 DPD', badge: 'warning' }
             ]
@@ -1065,10 +1067,12 @@ function getFullCustomerData(customerId) {
             rueckgabequote: 0, hauptforderung: 12000, zinsen: 640, mahngebuehren: 150, inkassokosten: 100,
             dpd: 18, willingness: 75, ability: 80, segment: 'prioritaet',
             zahlungsziel: '01.12.2025',
+            // Zahlungszusage nach Kundenkontakt
+            zahlungszusage: { betrag: 8500, datum: '27.12.2025', status: 'offen', vereinbart: '16.12.2025', notiz: 'GF Schmidt: Großprojekt wird am 23.12. abgerechnet, Zahlung erfolgt nach Zahlungseingang vom Kunden.' },
             // Einkommen & Ausgaben (IT-Dienstleister)
             einkommenMonatlich: 95000, ausgabenMonatlich: 82000, ausgabenDetails: 'Personal: €52.000, Miete/Büro: €8.500, Software-Lizenzen: €6.500, Marketing: €4.000, Sonstiges: €11.000',
-            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. IT-Dienstleister mit gutem Umsatz (€95.000/Monat), Kosten €82.000. Verzug durch verspätete Kundenzahlungen (Großprojekt-Abrechnung ausstehend). Zahlung nach Projektabschluss erwartet.',
-            workflowStatus: 'Mahnung', mahnstufe: 2,
+            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Zahlungszusage €8.500 bis 27.12. (nach Projektabrechnung). IT-Dienstleister mit gutem Umsatz. Gute Bonität.',
+            workflowStatus: 'Zahlungszusage', mahnstufe: 2,
             produkte: [
                 { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-1123', saldo: 8500, status: '18 DPD', badge: 'warning' },
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-9945', saldo: 4390, status: 'Aktiv', badge: 'info' }
@@ -1083,10 +1087,12 @@ function getFullCustomerData(customerId) {
             rueckgabequote: 0, hauptforderung: 2000, zinsen: 100, mahngebuehren: 50, inkassokosten: 0,
             dpd: 18, willingness: 70, ability: 55, segment: 'prioritaet',
             zahlungsziel: '01.12.2025',
+            // Zahlungszusage - Ratenzahlung vereinbart
+            zahlungszusage: { betrag: 360, datum: '28.12.2025', status: 'offen', vereinbart: '18.12.2025', notiz: 'Kundin vereinbart Ratenzahlung: 3x €120 ab 28.12. Großauftrag für Januar erwartet.' },
             // Einkommen & Ausgaben (Freiberuflerin - variabel)
             einkommenMonatlich: 2400, ausgabenMonatlich: 2350, ausgabenDetails: 'Miete: €720, Lebensmittel: €290, Krankenversicherung: €420, Büro/Material: €380, Sonstiges: €540',
-            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Freiberuflerin (Grafikdesign) mit variablem Einkommen Ø €2.400, Ausgaben €2.350. Sehr knapper Puffer (€50). Kreditkartenschuld durch Laptop-Ersatzkauf. Ratenzahlung anbieten.',
-            workflowStatus: 'Mahnung', mahnstufe: 2,
+            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Ratenzahlung vereinbart: 3x €120 ab 28.12. Freiberuflerin mit knappem Budget, aber kooperativ.',
+            workflowStatus: 'Zahlungszusage', mahnstufe: 2,
             produkte: [
                 { typ: 'Kreditkarte', nummer: 'KK-2024-5567', saldo: 2150, status: '18 DPD', badge: 'warning' }
             ]
@@ -1613,8 +1619,15 @@ function updateKommunikationFields(modal, customer) {
                 text = text.replace(/mueller-gmbh\.de/g, customer.email ? customer.email.split('@')[1] : 'email.de');
                 item.innerHTML = text;
             });
+        } else if (customer.zahlungszusage) {
+            // Case with Zahlungszusage - show promise in timeline
+            const zusage = customer.zahlungszusage;
+            timeline.innerHTML = '<h4>Kommunikationshistorie</h4>' +
+                '<div class="komm-item phone success"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" width="18" height="18"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type" style="background: #8b5cf6; color: white;">Zahlungszusage</span><span class="komm-date">' + zusage.vereinbart + '</span></div><div class="komm-body"><p><strong>Vereinbart:</strong> €' + zusage.betrag.toLocaleString('de-DE') + ' bis ' + zusage.datum + '</p><div class="komm-note"><strong>Notiz:</strong> ' + zusage.notiz + '</div></div><div class="komm-meta"><span class="meta-item" style="background: #f3e8ff; color: #7c3aed;">Zusage offen - Fällig am ' + zusage.datum + '</span><span class="meta-item">Bearbeiter: E. Brenneisen</span></div></div></div>' +
+                '<div class="komm-item letter"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">2. Mahnung</span><span class="komm-date">' + new Date(Date.now() - 5*24*60*60*1000).toLocaleDateString('de-DE') + '</span></div><div class="komm-body"><p><strong>Betreff:</strong> Zweite Zahlungserinnerung</p><div class="komm-preview">' + anrede + ',<br><br>trotz unserer ersten Erinnerung ist die fällige Zahlung von <strong>€' + (customer.ueberfaellig || customer.restschuld || 0).toLocaleString('de-DE') + '</strong> noch nicht eingegangen. Bitte begleichen Sie den Betrag umgehend.</div></div><div class="komm-meta"><span class="meta-item">Automatisch versendet</span></div></div></div>' +
+                '<div class="komm-item system"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">System</span><span class="komm-date">' + (customer.zahlungsziel || '01.12.2025') + '</span></div><div class="komm-body"><p>Fall automatisch erstellt - Zahlung überfällig seit Fälligkeit ' + (customer.zahlungsziel || '01.12.2025') + '</p></div><div class="komm-meta"><span class="meta-item">Automatisch</span></div></div></div>';
         } else {
-            // New case timeline
+            // New case timeline without Zahlungszusage
             timeline.innerHTML = '<h4>Kommunikationshistorie</h4>' +
                 '<div class="komm-item letter"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">Zahlungserinnerung</span><span class="komm-date">' + new Date().toLocaleDateString('de-DE') + '</span></div><div class="komm-body"><p><strong>Betreff:</strong> Freundliche Zahlungserinnerung</p><div class="komm-preview">' + anrede + ',<br><br>bei Überprüfung unserer Konten haben wir festgestellt, dass die fällige Rate noch nicht eingegangen ist. Wir bitten Sie, den offenen Betrag von <strong>€' + (customer.restschuld || 0).toLocaleString('de-DE') + '</strong> zeitnah zu überweisen.<br><br>Sollte sich Ihre Zahlung mit diesem Schreiben überschneiden, betrachten Sie dieses bitte als gegenstandslos.</div></div><div class="komm-meta"><span class="meta-item">Automatisch versendet</span></div></div></div>' +
                 '<div class="komm-item system"><div class="komm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><div class="komm-content"><div class="komm-header"><span class="komm-type">System</span><span class="komm-date">' + new Date(Date.now() - 3*24*60*60*1000).toLocaleDateString('de-DE') + '</span></div><div class="komm-body"><p>Fall automatisch erstellt - Zahlung überfällig seit ' + (customer.dpd || 0) + ' Tagen</p></div><div class="komm-meta"><span class="meta-item">Automatisch</span></div></div></div>';
@@ -2447,6 +2460,56 @@ function filterCustomers(filterType, value) {
 // Search Customers
 function searchCustomers(query) {
     console.log('Searching customers:', query);
+
+    const searchTerm = query.toLowerCase().trim();
+    const table = document.querySelector('.customers-table');
+    if (!table) return;
+
+    const rows = table.querySelectorAll('tbody tr');
+    let matchCount = 0;
+
+    rows.forEach(row => {
+        if (!searchTerm) {
+            // Show all rows when search is empty
+            row.style.display = '';
+            matchCount++;
+            return;
+        }
+
+        // Get searchable content from the row
+        const kundenNr = row.querySelector('.customer-id')?.textContent?.toLowerCase() || '';
+        const kundenName = row.querySelector('.customer-name')?.textContent?.toLowerCase() || '';
+        const cells = row.querySelectorAll('td');
+        let rowText = '';
+        cells.forEach(cell => rowText += ' ' + cell.textContent.toLowerCase());
+
+        // Check if any field matches
+        const matches = kundenNr.includes(searchTerm) ||
+                       kundenName.includes(searchTerm) ||
+                       rowText.includes(searchTerm);
+
+        if (matches) {
+            row.style.display = '';
+            matchCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Update pagination text
+    const paginationText = document.querySelector('.pagination-text');
+    if (paginationText) {
+        if (searchTerm) {
+            paginationText.textContent = `${matchCount} Treffer für "${query}"`;
+        } else {
+            paginationText.textContent = 'Zeige 1-10 von 47 Fällen';
+        }
+    }
+
+    // Show notification for search
+    if (searchTerm && matchCount === 0) {
+        showNotification(`Keine Kunden gefunden für "${query}"`, 'warning');
+    }
 }
 
 // ========================================
