@@ -870,8 +870,11 @@ function openCustomerDetail(customerId) {
             customerIdEl.textContent = customerId;
         }
 
-        // Update all Stammdaten fields
+        // Update all tabs with customer data
         updateStammdatenFields(modal, customer);
+        updateKontenFields(modal, customer);
+        updateKommunikationFields(modal, customer);
+        updateKiAnalyseFields(modal, customer);
 
         // Always reset to Stammdaten tab when opening
         showCustomerTab('stammdaten');
@@ -879,146 +882,257 @@ function openCustomerDetail(customerId) {
     }
 }
 
-// Get full customer data for modal display
+// Get full customer data for modal display (all tabs)
 function getFullCustomerData(customerId) {
     const customers = {
         'K-2024-0001': {
+            // Stammdaten
             name: 'Mueller GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
             adresse: 'Musterstraße 123, 38100 Braunschweig', telefon: '+49 531 123456',
             email: 'info@mueller-gmbh.de', ansprechpartner: 'Hans Mueller',
-            branche: 'Maschinenbau', restschuld: 125000, status: 'Inkasso'
+            branche: 'Gastronomie', restschuld: 125000, status: 'Inkasso',
+            // Konten & Finanzen
+            krediteAnzahl: 5, gesamtforderung: 350500, monatsrate: 2380, ueberfaellig: 15000,
+            rueckgabequote: 34, hauptforderung: 110000, zinsen: 8450, mahngebuehren: 350, inkassokosten: 6200,
+            dpd: 35,
+            // KI-Analyse
+            willingness: 25, ability: 60, segment: 'eskalation',
+            kernproblem: 'Gewerbekunde mit Liquiditätsengpässen seit Q3 2025. Gastronomie-Branche mit saisonalen Schwankungen. Mehrfache Lastschriftrückgaben trotz grundsätzlicher Zahlungsfähigkeit.',
+            // Kommunikation
+            workflowStatus: 'Inkasso-Verfahren', mahnstufe: 3
         },
         'K-2024-7234': {
             name: 'Braun, Thomas', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Lindenweg 45, 30159 Hannover', telefon: '+49 511 987654',
             email: 't.braun@email.de', ansprechpartner: 'Thomas Braun',
             branche: 'Angestellter', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Vollständig beglichen am 16.12.2025'
+            statusBadge: 'success', statusText: 'Vollständig beglichen am 16.12.2025',
+            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 90, ability: 85, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Kunde hat Ratenkredit vollständig beglichen. Gute Zahlungsmoral nach Vereinbarung.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-6891': {
             name: 'Klein KG', type: 'Gewerbe', rechtsform: 'KG',
             adresse: 'Industriestraße 78, 40210 Düsseldorf', telefon: '+49 211 456789',
             email: 'info@klein-kg.de', ansprechpartner: 'Peter Klein',
             branche: 'Großhandel', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Vollständig beglichen am 14.12.2025'
+            statusBadge: 'success', statusText: 'Vollständig beglichen am 14.12.2025',
+            krediteAnzahl: 2, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 85, ability: 75, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Betriebsmittelkredit nach Ratenvereinbarung vollständig getilgt.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-6234': {
             name: 'Fischer, Maria', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Rosenstraße 12, 50667 Köln', telefon: '+49 221 334455',
             email: 'm.fischer@web.de', ansprechpartner: 'Maria Fischer',
             branche: 'Rentnerin', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Teilzahlung abgeschlossen'
+            statusBadge: 'success', statusText: 'Teilzahlung abgeschlossen',
+            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 80, ability: 50, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Rentnerin mit eingeschränkter Zahlungsfähigkeit, aber hoher Kooperationsbereitschaft.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-5982': {
             name: 'Meier, Stefan', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Hauptstraße 56, 80331 München', telefon: '+49 89 112233',
             email: 's.meier@gmx.de', ansprechpartner: 'Stefan Meier',
             branche: 'Selbstständig', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Dispo ausgeglichen'
+            statusBadge: 'success', statusText: 'Dispo ausgeglichen',
+            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 75, ability: 70, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Selbstständiger mit Einkommensschwankungen hat Dispo ausgeglichen.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-5876': {
             name: 'Schneider Logistik GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
             adresse: 'Hafenstraße 200, 20457 Hamburg', telefon: '+49 40 778899',
             email: 'info@schneider-logistik.de', ansprechpartner: 'Klaus Schneider',
             branche: 'Transport & Logistik', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Kontokorrent ausgeglichen'
+            statusBadge: 'success', statusText: 'Kontokorrent ausgeglichen',
+            krediteAnzahl: 3, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 80, ability: 85, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Logistikunternehmen hat Kontokorrent nach kurzfristigem Engpass ausgeglichen.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-5734': {
             name: 'Fischer, Anna', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Gartenweg 8, 70173 Stuttgart', telefon: '+49 711 223344',
             email: 'a.fischer@outlook.de', ansprechpartner: 'Anna Fischer',
             branche: 'Beamtin', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Kreditkarte beglichen'
+            statusBadge: 'success', statusText: 'Kreditkarte beglichen',
+            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 95, ability: 90, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Beamtin mit sicherem Einkommen hat Kreditkarte vollständig beglichen.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-5612': {
             name: 'Bäckerei Müller', type: 'Gewerbe', rechtsform: 'Einzelunternehmen',
             adresse: 'Marktplatz 3, 60311 Frankfurt', telefon: '+49 69 445566',
             email: 'info@baeckerei-mueller.de', ansprechpartner: 'Werner Müller',
             branche: 'Lebensmittel / Gastronomie', restschuld: 0, status: 'Bezahlt',
-            statusBadge: 'success', statusText: 'Investitionskredit vollständig getilgt'
+            statusBadge: 'success', statusText: 'Investitionskredit vollständig getilgt',
+            krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+            rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+            dpd: 0, willingness: 85, ability: 80, segment: 'abgeschlossen',
+            kernproblem: 'Fall abgeschlossen. Bäckerei hat Investitionskredit nach Restrukturierung vollständig getilgt.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0
         },
         'K-2024-8847': {
             name: 'Müller, Hans', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Waldstraße 22, 38100 Braunschweig', telefon: '+49 531 998877',
             email: 'h.mueller@email.de', ansprechpartner: 'Hans Müller',
-            branche: 'Angestellter', restschuld: 4230, status: 'Offen'
+            branche: 'Angestellter', restschuld: 4230, status: 'Offen',
+            krediteAnzahl: 1, gesamtforderung: 4230, monatsrate: 180, ueberfaellig: 540,
+            rueckgabequote: 0, hauptforderung: 4000, zinsen: 180, mahngebuehren: 50, inkassokosten: 0,
+            dpd: 2, willingness: 85, ability: 70, segment: 'prioritaet',
+            kernproblem: 'Neuer Fall. Angestellter mit stabilem Einkommen. Verzug vermutlich durch Vergessen/Übersehen. Hohe Erfolgswahrscheinlichkeit.',
+            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1
         },
         'K-2024-8846': {
             name: 'Schmidt GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
             adresse: 'Berliner Allee 100, 30175 Hannover', telefon: '+49 511 665544',
             email: 'info@schmidt-gmbh.de', ansprechpartner: 'Michael Schmidt',
-            branche: 'IT-Dienstleistungen', restschuld: 12890, status: 'Offen'
+            branche: 'IT-Dienstleistungen', restschuld: 12890, status: 'Offen',
+            krediteAnzahl: 2, gesamtforderung: 12890, monatsrate: 650, ueberfaellig: 1950,
+            rueckgabequote: 0, hauptforderung: 12000, zinsen: 640, mahngebuehren: 150, inkassokosten: 100,
+            dpd: 3, willingness: 75, ability: 80, segment: 'prioritaet',
+            kernproblem: 'Neuer Fall. IT-Dienstleister mit guter Auftragslage. Verzug vermutlich durch verspätete Kundenzahlungen.',
+            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1
         },
         'K-2024-8845': {
             name: 'Weber, Anna', type: 'Privat', rechtsform: 'Privatperson',
             adresse: 'Blumenweg 15, 50668 Köln', telefon: '+49 221 887766',
             email: 'a.weber@web.de', ansprechpartner: 'Anna Weber',
-            branche: 'Freiberuflerin', restschuld: 2150, status: 'Offen'
+            branche: 'Freiberuflerin', restschuld: 2150, status: 'Offen',
+            krediteAnzahl: 1, gesamtforderung: 2150, monatsrate: 120, ueberfaellig: 360,
+            rueckgabequote: 0, hauptforderung: 2000, zinsen: 100, mahngebuehren: 50, inkassokosten: 0,
+            dpd: 5, willingness: 70, ability: 55, segment: 'prioritaet',
+            kernproblem: 'Neuer Fall. Freiberuflerin mit schwankendem Einkommen. Kreditkartenschuld durch unerwartete Ausgaben.',
+            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1
         }
     };
 
-    // Return customer or default data
-    return customers[customerId] || {
+    // Return customer or generate default data
+    const customer = customers[customerId];
+    if (customer) return customer;
+
+    // Default fallback for unknown customers
+    return {
         name: customerId, type: 'Unbekannt', rechtsform: '-',
         adresse: '-', telefon: '-', email: '-', ansprechpartner: '-',
-        branche: '-', restschuld: 0, status: 'Unbekannt'
+        branche: '-', restschuld: 0, status: 'Unbekannt',
+        krediteAnzahl: 0, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
+        rueckgabequote: 0, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
+        dpd: 0, willingness: 50, ability: 50, segment: 'unbekannt',
+        kernproblem: 'Keine Daten verfügbar.',
+        workflowStatus: 'Unbekannt', mahnstufe: 0
     };
 }
 
-// Update Stammdaten fields in modal
+// Update Stammdaten fields in modal - finds fields by label text
 function updateStammdatenFields(modal, customer) {
-    // Find all value spans and update based on customer data
     const stammdatenTab = modal.querySelector('#tab-stammdaten');
     if (!stammdatenTab) return;
 
-    // Update Firmenname / Name
-    const nameValue = stammdatenTab.querySelector('.stammdaten-card:first-child .stammdaten-row:first-child .value');
-    if (nameValue) nameValue.textContent = customer.name;
+    // Helper function to find and update a field by its label text
+    function updateFieldByLabel(labelText, newValue) {
+        const rows = stammdatenTab.querySelectorAll('.stammdaten-row');
+        for (const row of rows) {
+            const label = row.querySelector('.label');
+            if (label && label.textContent.trim().toLowerCase().includes(labelText.toLowerCase())) {
+                const value = row.querySelector('.value');
+                if (value) {
+                    value.textContent = newValue;
+                    return value;
+                }
+            }
+        }
+        return null;
+    }
 
-    // Update Rechtsform
-    const rechtsformValue = stammdatenTab.querySelector('.stammdaten-card:first-child .stammdaten-row:nth-child(2) .value');
-    if (rechtsformValue) rechtsformValue.textContent = customer.rechtsform || customer.type;
+    // Update Unternehmensdaten section
+    updateFieldByLabel('Firmenname', customer.name);
+    updateFieldByLabel('Rechtsform', customer.rechtsform || customer.type);
+    updateFieldByLabel('Branche', customer.branche || '-');
 
     // Update Kundentyp badge
-    const kundentypBadge = stammdatenTab.querySelector('.badge');
-    if (kundentypBadge) {
-        kundentypBadge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
-        kundentypBadge.className = customer.type === 'Gewerbe' ? 'badge badge-blue' : 'badge badge-gray';
+    const kundentypValue = updateFieldByLabel('Kundentyp', '');
+    if (kundentypValue) {
+        const isGewerbe = customer.type === 'Gewerbe';
+        kundentypValue.innerHTML = isGewerbe
+            ? '<span class="badge gewerbe">Gewerbekunde</span>'
+            : '<span class="badge privat">Privatkunde</span>';
     }
 
-    // Update Branche
-    const brancheValue = stammdatenTab.querySelector('.stammdaten-row:nth-child(5) .value');
-    if (brancheValue && customer.branche) brancheValue.textContent = customer.branche;
-
-    // Update Kontaktdaten
-    const kontaktCard = stammdatenTab.querySelectorAll('.stammdaten-card')[1];
-    if (kontaktCard) {
-        const adresseValue = kontaktCard.querySelector('.stammdaten-row:first-child .value');
-        if (adresseValue && customer.adresse) adresseValue.textContent = customer.adresse;
-
-        const emailValue = kontaktCard.querySelector('.stammdaten-row:nth-child(4) .value');
-        if (emailValue && customer.email) emailValue.textContent = customer.email;
+    // Update Kontaktdaten section
+    if (customer.adresse) {
+        updateFieldByLabel('Adresse', customer.adresse);
+    }
+    if (customer.telefon) {
+        const telefonValue = updateFieldByLabel('Telefon Zentrale', customer.telefon);
+        if (telefonValue) {
+            telefonValue.className = 'value clickable';
+            telefonValue.setAttribute('onclick', `initiateCall('${customer.telefon}')`);
+        }
+    }
+    if (customer.email) {
+        const emailValue = updateFieldByLabel('E-Mail', customer.email);
+        if (emailValue) {
+            emailValue.className = 'value clickable';
+            emailValue.setAttribute('onclick', `sendEmail('${customer.email}')`);
+        }
     }
 
-    // Update Geschäftsführung / Ansprechpartner name
-    const gfNameValue = stammdatenTab.querySelector('.geschaeftsfuehrung .stammdaten-row:first-child .value, .kontakt-section .stammdaten-row:first-child .value');
-    if (gfNameValue && customer.ansprechpartner) gfNameValue.textContent = customer.ansprechpartner;
+    // Update Geschäftsführung / Ansprechpartner in subsections
+    const subsections = stammdatenTab.querySelectorAll('.stammdaten-subsection');
+    for (const subsection of subsections) {
+        const subsectionText = subsection.textContent.toLowerCase();
+        if (subsectionText.includes('geschäftsführung') || subsectionText.includes('ansprechpartner')) {
+            const nextRow = subsection.nextElementSibling;
+            if (nextRow && nextRow.classList.contains('stammdaten-row')) {
+                const nameValue = nextRow.querySelector('.value');
+                if (nameValue && customer.ansprechpartner) {
+                    nameValue.textContent = customer.ansprechpartner;
+                }
+            }
+        }
+    }
 
-    // Update Restschuld in Kreditdetails
-    const restschuldValue = modal.querySelector('.kreditdetails .value.text-danger, .kreditdetails .stammdaten-row:nth-child(4) .value');
+    // Update Kreditdetails section
+    const restschuldValue = updateFieldByLabel('Restschuld', '');
     if (restschuldValue) {
         if (customer.restschuld === 0) {
             restschuldValue.textContent = '€0';
-            restschuldValue.className = 'value text-success';
+            restschuldValue.className = 'value highlight-green';
+            restschuldValue.style.color = '#22c55e';
         } else {
             restschuldValue.textContent = '€' + customer.restschuld.toLocaleString('de-DE');
-            restschuldValue.className = 'value text-danger';
+            restschuldValue.className = 'value highlight-red';
+        }
+    }
+
+    // Update Stage based on status
+    const stageValue = updateFieldByLabel('Stage', '');
+    if (stageValue) {
+        if (customer.status === 'Bezahlt') {
+            stageValue.innerHTML = '<span class="badge success">Abgeschlossen</span>';
+        } else if (customer.status === 'Inkasso') {
+            stageValue.innerHTML = '<span class="badge danger">Stage 3 (NPL)</span>';
+        } else {
+            stageValue.innerHTML = '<span class="badge warning">Stage 2</span>';
         }
     }
 
     // Show status badge for completed cases
     if (customer.statusBadge === 'success') {
-        // Add a success indicator
         const headerActions = modal.querySelector('.modal-header-actions');
         let statusIndicator = modal.querySelector('.status-indicator-success');
         if (!statusIndicator && headerActions) {
@@ -1029,10 +1143,271 @@ function updateStammdatenFields(modal, customer) {
             headerActions.insertBefore(statusIndicator, headerActions.firstChild);
         }
     } else {
-        // Remove success indicator if exists
         const statusIndicator = modal.querySelector('.status-indicator-success');
         if (statusIndicator) statusIndicator.remove();
     }
+}
+
+// Update Konten & Finanzen tab
+function updateKontenFields(modal, customer) {
+    const kontenTab = modal.querySelector('#tab-konten');
+    if (!kontenTab) return;
+
+    // Update KPI values
+    const kpis = kontenTab.querySelectorAll('.finanzen-kpi');
+    if (kpis.length >= 5) {
+        kpis[0].querySelector('.kpi-value').textContent = customer.krediteAnzahl || 0;
+        kpis[1].querySelector('.kpi-value').textContent = '€' + (customer.gesamtforderung || 0).toLocaleString('de-DE');
+        kpis[2].querySelector('.kpi-value').textContent = '€' + (customer.monatsrate || 0).toLocaleString('de-DE');
+        kpis[3].querySelector('.kpi-value').textContent = '€' + (customer.ueberfaellig || 0).toLocaleString('de-DE');
+        kpis[4].querySelector('.kpi-value').textContent = (customer.rueckgabequote || 0) + '%';
+    }
+
+    // Update Forderungen breakdown
+    const forderungRows = kontenTab.querySelectorAll('.forderung-breakdown-row');
+    if (forderungRows.length >= 4) {
+        forderungRows[0].querySelector('.value').textContent = '€' + (customer.hauptforderung || 0).toLocaleString('de-DE');
+        forderungRows[1].querySelector('.value').textContent = '€' + (customer.zinsen || 0).toLocaleString('de-DE');
+        forderungRows[2].querySelector('.value').textContent = '€' + (customer.mahngebuehren || 0).toLocaleString('de-DE');
+        forderungRows[3].querySelector('.value').textContent = '€' + (customer.inkassokosten || 0).toLocaleString('de-DE');
+    }
+
+    // Update credit product status badge
+    const statusBadge = kontenTab.querySelector('.credit-status-badge');
+    if (statusBadge) {
+        if (customer.status === 'Bezahlt') {
+            statusBadge.textContent = 'Beglichen';
+            statusBadge.className = 'credit-status-badge success';
+        } else {
+            statusBadge.textContent = (customer.dpd || 0) + ' DPD';
+            statusBadge.className = 'credit-status-badge ' + (customer.dpd > 30 ? 'danger' : 'warning');
+        }
+    }
+}
+
+// Update Kommunikation tab with KI summary
+function updateKommunikationFields(modal, customer) {
+    const kommTab = modal.querySelector('#tab-kommunikation');
+    if (!kommTab) return;
+
+    // Update workflow status
+    const statusValue = kommTab.querySelector('.status-value');
+    if (statusValue) {
+        statusValue.textContent = customer.workflowStatus || 'Offen';
+        statusValue.className = 'status-value ' + (customer.status === 'Bezahlt' ? 'success' :
+            customer.status === 'Inkasso' ? 'inkasso' : 'offen');
+    }
+
+    // Add or update KI summary at the top of Kommunikation
+    let kiSummary = kommTab.querySelector('.kommunikation-ki-summary');
+    if (!kiSummary) {
+        kiSummary = document.createElement('div');
+        kiSummary.className = 'kommunikation-ki-summary';
+        const header = kommTab.querySelector('.kommunikation-header');
+        if (header) {
+            header.after(kiSummary);
+        }
+    }
+
+    // Generate KI summary based on customer data
+    const mahnstufeText = customer.mahnstufe > 0 ? `Mahnstufe ${customer.mahnstufe}` : 'Keine Mahnungen';
+    const statusClass = customer.status === 'Bezahlt' ? 'success' :
+        customer.status === 'Inkasso' ? 'danger' : 'warning';
+
+    kiSummary.innerHTML = `
+        <div class="ki-summary-mini">
+            <div class="ki-summary-header-mini">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"></path>
+                </svg>
+                <span>KI-Zusammenfassung der Kommunikation</span>
+            </div>
+            <div class="ki-summary-content-mini">
+                <p><strong>${customer.name}</strong> - ${customer.kernproblem || 'Keine Analyse verfügbar.'}</p>
+                <div class="ki-summary-stats">
+                    <span class="stat-item ${statusClass}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        ${customer.workflowStatus || 'Offen'}
+                    </span>
+                    <span class="stat-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        ${mahnstufeText}
+                    </span>
+                    <span class="stat-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        ${customer.dpd || 0} DPD
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Update communication items with customer name
+    const kommItems = kommTab.querySelectorAll('.komm-preview');
+    kommItems.forEach(item => {
+        let text = item.innerHTML;
+        text = text.replace(/Herr Mueller/g, customer.type === 'Gewerbe' ? 'Firma ' + customer.name : customer.ansprechpartner);
+        text = text.replace(/Mueller GmbH/g, customer.name);
+        text = text.replace(/mueller-gmbh\.de/g, customer.email ? customer.email.split('@')[1] : 'kunde.de');
+        item.innerHTML = text;
+    });
+
+    // Update email from field
+    const metaFrom = kommTab.querySelector('.komm-item.incoming .komm-meta .meta-item');
+    if (metaFrom && customer.email) {
+        metaFrom.textContent = 'Von: ' + customer.email;
+    }
+}
+
+// Update KI-Analyse tab
+function updateKiAnalyseFields(modal, customer) {
+    const kiTab = modal.querySelector('#tab-ki-analyse');
+    if (!kiTab) return;
+
+    // Update Kernproblem text
+    const kernproblemP = kiTab.querySelector('.ki-summary-section:first-child p');
+    if (kernproblemP) {
+        kernproblemP.innerHTML = customer.kernproblem || 'Keine Analyse verfügbar.';
+    }
+
+    // Update Willingness/Ability scores
+    const scoreBars = kiTab.querySelectorAll('.score-bar-visual .bar-fill');
+    const scorePercents = kiTab.querySelectorAll('.score-percent');
+    if (scoreBars.length >= 2 && scorePercents.length >= 2) {
+        scoreBars[0].style.width = (customer.willingness || 50) + '%';
+        scoreBars[1].style.width = (customer.ability || 50) + '%';
+        scorePercents[0].textContent = (customer.willingness || 50) + '%';
+        scorePercents[1].textContent = (customer.ability || 50) + '%';
+    }
+
+    // Update score point position in chart
+    const scorePoint = kiTab.querySelector('.score-point');
+    if (scorePoint) {
+        scorePoint.style.left = (customer.willingness || 50) + '%';
+        scorePoint.style.bottom = (customer.ability || 50) + '%';
+    }
+
+    // Update segment badge
+    const segmentBadge = kiTab.querySelector('.segment-badge.large');
+    if (segmentBadge) {
+        const segmentNames = {
+            'eskalation': 'Eskalation',
+            'prioritaet': 'Priorität',
+            'restrukturierung': 'Restrukturierung',
+            'abwicklung': 'Abwicklung',
+            'abgeschlossen': 'Abgeschlossen'
+        };
+        const segmentClasses = {
+            'eskalation': 'escalate',
+            'prioritaet': 'priority',
+            'restrukturierung': 'restructure',
+            'abwicklung': 'writeoff',
+            'abgeschlossen': 'success'
+        };
+        const segment = customer.segment || 'prioritaet';
+        segmentBadge.textContent = segmentNames[segment] || segment;
+        segmentBadge.className = 'segment-badge large ' + (segmentClasses[segment] || '');
+    }
+
+    // Update segment description
+    const segmentDesc = kiTab.querySelector('.ki-segment-result p');
+    if (segmentDesc) {
+        const segmentDescriptions = {
+            'eskalation': `Basierend auf der Analyse wird ${customer.name} dem Segment <strong>Eskalation</strong> zugeordnet. Empfehlung: Intensivierung der Inkasso-Maßnahmen.`,
+            'prioritaet': `${customer.name} zeigt hohe Kooperationsbereitschaft und Zahlungsfähigkeit. Empfehlung: Schnelle Vereinbarung anstreben.`,
+            'restrukturierung': `${customer.name} benötigt eine Restrukturierung der Schulden. Empfehlung: Ratenzahlung oder Stundung vereinbaren.`,
+            'abwicklung': `Bei ${customer.name} ist die Rückzahlung unwahrscheinlich. Empfehlung: Forderungsverkauf oder Abschreibung prüfen.`,
+            'abgeschlossen': `Der Fall ${customer.name} wurde erfolgreich abgeschlossen. Forderung vollständig beglichen.`
+        };
+        segmentDesc.innerHTML = segmentDescriptions[customer.segment] ||
+            `Basierend auf der Analyse wird ${customer.name} dem entsprechenden Segment zugeordnet.`;
+    }
+
+    // Update factors based on customer data
+    const factorList = kiTab.querySelector('.factor-list');
+    if (factorList && customer.status !== 'Bezahlt') {
+        const factors = generateCustomerFactors(customer);
+        factorList.innerHTML = factors.map(f => `
+            <div class="factor-item ${f.type}">
+                <span class="factor-icon">
+                    ${f.type === 'positive'
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+                        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'}
+                </span>
+                <span class="factor-name">${f.name}</span>
+                <span class="factor-impact">${f.impact}</span>
+            </div>
+        `).join('');
+    } else if (factorList && customer.status === 'Bezahlt') {
+        factorList.innerHTML = `
+            <div class="factor-item positive">
+                <span class="factor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="factor-name">Forderung vollständig beglichen</span>
+                <span class="factor-impact">+100 Punkte</span>
+            </div>
+            <div class="factor-item positive">
+                <span class="factor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="factor-name">Fall erfolgreich abgeschlossen</span>
+                <span class="factor-impact">Kein Risiko</span>
+            </div>
+        `;
+    }
+}
+
+// Generate customer-specific factors
+function generateCustomerFactors(customer) {
+    const factors = [];
+
+    // Negative factors
+    if (customer.dpd > 60) {
+        factors.push({ type: 'negative', name: `Hoher Verzug (${customer.dpd} DPD)`, impact: '-30 Punkte' });
+    } else if (customer.dpd > 30) {
+        factors.push({ type: 'negative', name: `Moderater Verzug (${customer.dpd} DPD)`, impact: '-15 Punkte' });
+    }
+
+    if (customer.mahnstufe >= 3) {
+        factors.push({ type: 'negative', name: `${customer.mahnstufe} Mahnungen ohne Reaktion`, impact: '-20 Punkte' });
+    }
+
+    if (customer.branche && (customer.branche.includes('Gastronomie') || customer.branche.includes('Restaurant'))) {
+        factors.push({ type: 'negative', name: 'Branchenrisiko: Gastronomie', impact: '-15 Punkte' });
+    }
+
+    if (customer.willingness < 40) {
+        factors.push({ type: 'negative', name: 'Geringe Zahlungsbereitschaft erkennbar', impact: '-25 Punkte' });
+    }
+
+    // Positive factors
+    if (customer.willingness >= 70) {
+        factors.push({ type: 'positive', name: 'Hohe Kooperationsbereitschaft', impact: '+20 Punkte' });
+    }
+
+    if (customer.ability >= 70) {
+        factors.push({ type: 'positive', name: 'Gute Zahlungsfähigkeit', impact: '+15 Punkte' });
+    }
+
+    if (customer.type === 'Privat' && customer.branche && customer.branche.includes('Angestellt')) {
+        factors.push({ type: 'positive', name: 'Stabiles Einkommen (Angestellter)', impact: '+10 Punkte' });
+    }
+
+    if (customer.type === 'Privat' && customer.branche && customer.branche.includes('Beamt')) {
+        factors.push({ type: 'positive', name: 'Sichere Einkommensquelle (Beamter)', impact: '+15 Punkte' });
+    }
+
+    if (customer.dpd <= 14) {
+        factors.push({ type: 'positive', name: 'Neuer Fall mit kurzer Verzugsdauer', impact: '+10 Punkte' });
+    }
+
+    return factors.slice(0, 5); // Max 5 factors
 }
 
 // Close customer detail modal
@@ -2057,6 +2432,24 @@ function openCrmProfile(customerId, taskContext = null) {
     if (crmView) {
         crmView.classList.add('active');
 
+        // Get full customer data
+        const customer = getFullCustomerData(customerId);
+
+        // Update CRM header with customer name
+        const crmHeader = crmView.querySelector('.crm-header h2, .crm-customer-name');
+        if (crmHeader) {
+            crmHeader.textContent = customer.name;
+        }
+
+        // Update CRM customer ID
+        const crmCustomerId = crmView.querySelector('.crm-customer-id');
+        if (crmCustomerId) {
+            crmCustomerId.textContent = customerId;
+        }
+
+        // Update CRM fields using the same helper approach
+        updateCrmFields(crmView, customer);
+
         // Show/hide task hint box
         const taskHintBox = document.getElementById('crmTaskHint');
         if (taskHintBox) {
@@ -2087,8 +2480,50 @@ function openCrmProfile(customerId, taskContext = null) {
             }
         }
 
-        console.log('Opening CRM profile for customer:', customerId, taskContext ? 'with task' : '');
+        console.log('Opening CRM profile for customer:', customerId, customer.name, taskContext ? 'with task' : '');
     }
+}
+
+// Update CRM view fields with customer data
+function updateCrmFields(crmView, customer) {
+    // Helper to find and update by label
+    function updateByLabel(labelText, newValue) {
+        const rows = crmView.querySelectorAll('.crm-row, .info-row, .detail-row');
+        for (const row of rows) {
+            const label = row.querySelector('.label, .info-label, .detail-label');
+            if (label && label.textContent.trim().toLowerCase().includes(labelText.toLowerCase())) {
+                const value = row.querySelector('.value, .info-value, .detail-value');
+                if (value) {
+                    value.textContent = newValue;
+                    return value;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Update main fields
+    updateByLabel('Firmenname', customer.name);
+    updateByLabel('Name', customer.name);
+    updateByLabel('Rechtsform', customer.rechtsform);
+    updateByLabel('Branche', customer.branche);
+    updateByLabel('Adresse', customer.adresse);
+    updateByLabel('Telefon', customer.telefon);
+    updateByLabel('E-Mail', customer.email);
+    updateByLabel('Ansprechpartner', customer.ansprechpartner);
+
+    // Update financial data
+    updateByLabel('Restschuld', '€' + (customer.restschuld || 0).toLocaleString('de-DE'));
+    updateByLabel('Gesamtforderung', '€' + (customer.gesamtforderung || 0).toLocaleString('de-DE'));
+
+    // Update status badges
+    const statusBadges = crmView.querySelectorAll('.status-badge, .segment-badge');
+    statusBadges.forEach(badge => {
+        if (customer.status === 'Bezahlt') {
+            badge.textContent = 'Abgeschlossen';
+            badge.className = badge.className.replace(/danger|warning|inkasso/g, 'success');
+        }
+    });
 }
 
 // Show AI Summary for customer
