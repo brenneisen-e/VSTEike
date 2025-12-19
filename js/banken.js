@@ -1115,10 +1115,10 @@ function showFullLetter(letterId) {
     // Create modal overlay
     const overlay = document.createElement('div');
     overlay.className = 'letter-modal-overlay';
-    overlay.innerHTML = \`
+    overlay.innerHTML = `
         <div class="letter-modal">
             <div class="letter-modal-header">
-                <h3>\${letter.title}</h3>
+                <h3>${letter.title}</h3>
                 <button class="letter-modal-close" onclick="closeLetterModal()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -1127,11 +1127,11 @@ function showFullLetter(letterId) {
                 </button>
             </div>
             <div class="letter-modal-body">
-                \${letter.content}
+                ${letter.content}
             </div>
             <div class="letter-modal-footer">
                 <button class="btn-secondary" onclick="closeLetterModal()">Schließen</button>
-                <button class="btn-primary" onclick="printLetter('\${letterId}')">
+                <button class="btn-primary" onclick="printLetter('${letterId}')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                         <polyline points="6 9 6 2 18 2 18 9"></polyline>
                         <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -1141,7 +1141,7 @@ function showFullLetter(letterId) {
                 </button>
             </div>
         </div>
-    \`;
+    `;
 
     document.body.appendChild(overlay);
 
