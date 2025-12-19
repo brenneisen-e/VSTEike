@@ -1008,8 +1008,13 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
             rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 95, ability: 90, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Beamtin mit sicherem Einkommen hat Kreditkarte vollständig beglichen.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            // Einkommen & Ausgaben (Beamtin A12)
+            einkommenMonatlich: 3450, ausgabenMonatlich: 2680, ausgabenDetails: 'Miete: €950, Lebensmittel: €380, Auto: €420, Versicherungen: €280, Sparen: €400, Sonstiges: €250',
+            kernproblem: 'Fall abgeschlossen. Beamtin mit sicherem Einkommen (€3.450 netto) hat Kreditkarte vollständig beglichen. Solide Finanzführung mit €770 monatl. Überschuss.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0,
+            produkte: [
+                { typ: 'Kreditkarte', nummer: 'KK-2024-4421', saldo: 0, status: 'Beglichen', badge: 'success' }
+            ]
         },
         'K-2024-5612': {
             name: 'Bäckerei Müller', type: 'Gewerbe', rechtsform: 'Einzelunternehmen',
@@ -1020,8 +1025,13 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 1, gesamtforderung: 0, monatsrate: 0, ueberfaellig: 0,
             rueckgabequote: 100, hauptforderung: 0, zinsen: 0, mahngebuehren: 0, inkassokosten: 0,
             dpd: 0, willingness: 85, ability: 80, segment: 'abgeschlossen',
-            kernproblem: 'Fall abgeschlossen. Bäckerei hat Investitionskredit nach Restrukturierung vollständig getilgt.',
-            workflowStatus: 'Abgeschlossen', mahnstufe: 0
+            // Einkommen & Ausgaben (Bäckerei)
+            einkommenMonatlich: 38000, ausgabenMonatlich: 34500, ausgabenDetails: 'Personal: €14.000, Rohstoffe: €9.500, Miete: €3.200, Energie: €2.800, Sonstiges: €5.000',
+            kernproblem: 'Fall abgeschlossen. Bäckerei mit stabilem Umsatz (€38.000/Monat) hat Investitionskredit nach Restrukturierung vollständig getilgt. Gewinnmarge ~9%.',
+            workflowStatus: 'Abgeschlossen', mahnstufe: 0,
+            produkte: [
+                { typ: 'Investitionskredit', nummer: 'IK-2022-3345', saldo: 0, status: 'Getilgt', badge: 'success' }
+            ]
         },
         'K-2024-8847': {
             name: 'Müller, Hans', type: 'Privat', rechtsform: 'Privatperson',
@@ -1031,8 +1041,13 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 1, gesamtforderung: 4230, monatsrate: 180, ueberfaellig: 540,
             rueckgabequote: 0, hauptforderung: 4000, zinsen: 180, mahngebuehren: 50, inkassokosten: 0,
             dpd: 2, willingness: 85, ability: 70, segment: 'prioritaet',
-            kernproblem: 'Neuer Fall. Angestellter mit stabilem Einkommen. Verzug vermutlich durch Vergessen/Übersehen. Hohe Erfolgswahrscheinlichkeit.',
-            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1
+            // Einkommen & Ausgaben (Angestellter)
+            einkommenMonatlich: 2850, ausgabenMonatlich: 2680, ausgabenDetails: 'Miete: €780, Lebensmittel: €320, Auto: €380, Versicherungen: €190, Kinder: €450, Sonstiges: €560',
+            kernproblem: 'Neuer Fall. Angestellter mit Einkommen €2.850, Ausgaben €2.680. Knapper Puffer (€170). Verzug vermutlich durch Vergessen nach Umzug. Hohe Erfolgswahrscheinlichkeit.',
+            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1,
+            produkte: [
+                { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '2 DPD', badge: 'warning' }
+            ]
         },
         'K-2024-8846': {
             name: 'Schmidt GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
@@ -1042,8 +1057,14 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 2, gesamtforderung: 12890, monatsrate: 650, ueberfaellig: 1950,
             rueckgabequote: 0, hauptforderung: 12000, zinsen: 640, mahngebuehren: 150, inkassokosten: 100,
             dpd: 3, willingness: 75, ability: 80, segment: 'prioritaet',
-            kernproblem: 'Neuer Fall. IT-Dienstleister mit guter Auftragslage. Verzug vermutlich durch verspätete Kundenzahlungen.',
-            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1
+            // Einkommen & Ausgaben (IT-Dienstleister)
+            einkommenMonatlich: 95000, ausgabenMonatlich: 82000, ausgabenDetails: 'Personal: €52.000, Miete/Büro: €8.500, Software-Lizenzen: €6.500, Marketing: €4.000, Sonstiges: €11.000',
+            kernproblem: 'Neuer Fall. IT-Dienstleister mit gutem Umsatz (€95.000/Monat), Kosten €82.000. Verzug durch verspätete Kundenzahlungen (Großprojekt-Abrechnung ausstehend).',
+            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1,
+            produkte: [
+                { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-1123', saldo: 8500, status: '3 DPD', badge: 'warning' },
+                { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-9945', saldo: 4390, status: 'Aktiv', badge: 'info' }
+            ]
         },
         'K-2024-8845': {
             name: 'Weber, Anna', type: 'Privat', rechtsform: 'Privatperson',
@@ -1053,8 +1074,13 @@ function getFullCustomerData(customerId) {
             krediteAnzahl: 1, gesamtforderung: 2150, monatsrate: 120, ueberfaellig: 360,
             rueckgabequote: 0, hauptforderung: 2000, zinsen: 100, mahngebuehren: 50, inkassokosten: 0,
             dpd: 5, willingness: 70, ability: 55, segment: 'prioritaet',
-            kernproblem: 'Neuer Fall. Freiberuflerin mit schwankendem Einkommen. Kreditkartenschuld durch unerwartete Ausgaben.',
-            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1
+            // Einkommen & Ausgaben (Freiberuflerin - variabel)
+            einkommenMonatlich: 2400, ausgabenMonatlich: 2350, ausgabenDetails: 'Miete: €720, Lebensmittel: €290, Krankenversicherung: €420, Büro/Material: €380, Sonstiges: €540',
+            kernproblem: 'Neuer Fall. Freiberuflerin (Grafikdesign) mit variablem Einkommen Ø €2.400, Ausgaben €2.350. Sehr knapper Puffer (€50). Kreditkartenschuld durch Laptop-Ersatzkauf.',
+            workflowStatus: 'Zahlungserinnerung', mahnstufe: 1,
+            produkte: [
+                { typ: 'Kreditkarte', nummer: 'KK-2024-5567', saldo: 2150, status: '5 DPD', badge: 'warning' }
+            ]
         }
     };
 
@@ -1358,36 +1384,32 @@ function updateKontenFields(modal, customer) {
         forderungRows[3].querySelector('.value').textContent = '€' + (customer.inkassokosten || 0).toLocaleString('de-DE');
     }
 
-    // Update credit product header and details
+    // Update credit product header and details using customer's actual products
     const productName = kontenTab.querySelector('.credit-product-name');
     const productNumber = kontenTab.querySelector('.credit-product-number');
     const saldoValue = kontenTab.querySelector('.amount-value.danger, .amount-value.success');
     const statusBadge = kontenTab.querySelector('.credit-status-badge');
 
-    // Product type based on customer
-    const produktTypen = isPrivat
-        ? ['Ratenkredit', 'Kreditkarte', 'Dispositionskredit', 'Autokredit']
-        : ['Betriebsmittelkredit', 'Kontokorrentkredit', 'Investitionskredit'];
-    const produktTyp = produktTypen[Math.floor(Math.random() * produktTypen.length)];
+    // Use customer's actual products if available
+    const produkte = customer.produkte || [];
+    const hauptProdukt = produkte.length > 0 ? produkte[0] : null;
 
     if (productName) {
-        productName.textContent = produktTyp;
+        productName.textContent = hauptProdukt ? hauptProdukt.typ : (isPrivat ? 'Ratenkredit' : 'Betriebsmittelkredit');
     }
     if (productNumber) {
-        const prefix = isPrivat ? 'RK' : 'BMK';
-        productNumber.textContent = prefix + '-****-****-' + Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+        productNumber.textContent = hauptProdukt ? hauptProdukt.nummer : 'Keine Daten';
     }
     if (saldoValue) {
-        if (isBezahlt) {
-            saldoValue.textContent = '€0';
-            saldoValue.className = 'amount-value success';
-        } else {
-            saldoValue.textContent = '€' + (customer.restschuld || 0).toLocaleString('de-DE');
-            saldoValue.className = 'amount-value danger';
-        }
+        const saldo = hauptProdukt ? hauptProdukt.saldo : customer.restschuld;
+        saldoValue.textContent = '€' + (saldo || 0).toLocaleString('de-DE');
+        saldoValue.className = 'amount-value ' + (saldo === 0 ? 'success' : 'danger');
     }
     if (statusBadge) {
-        if (isBezahlt) {
+        if (hauptProdukt) {
+            statusBadge.textContent = hauptProdukt.status;
+            statusBadge.className = 'credit-status-badge ' + (hauptProdukt.badge || 'info');
+        } else if (isBezahlt) {
             statusBadge.textContent = 'Beglichen';
             statusBadge.className = 'credit-status-badge success';
         } else {
@@ -1396,10 +1418,11 @@ function updateKontenFields(modal, customer) {
         }
     }
 
-    // Update credit product container class
+    // Update credit product container class based on first product
     const productContainer = kontenTab.querySelector('.credit-product-large');
     if (productContainer) {
-        productContainer.className = 'credit-product-large ' + (isBezahlt ? 'success' : (customer.dpd > 30 ? 'danger' : 'warning'));
+        const containerClass = hauptProdukt ? hauptProdukt.badge : (isBezahlt ? 'success' : (customer.dpd > 30 ? 'danger' : 'warning'));
+        productContainer.className = 'credit-product-large ' + containerClass;
     }
 
     // Update table data
@@ -1434,26 +1457,32 @@ function updateKontenFields(modal, customer) {
         }
     }
 
-    // Update Einkommen & Ausgaben section
+    // Update Einkommen & Ausgaben section - show/hide based on data availability
     const eaSection = kontenTab.querySelector('.einkommen-ausgaben-compact');
-    if (eaSection && customer.einkommenMonatlich) {
-        const einkommen = customer.einkommenMonatlich || 0;
-        const ausgaben = customer.ausgabenMonatlich || 0;
-        const differenz = einkommen - ausgaben;
-        const differenzClass = differenz >= 0 ? 'positiv' : 'negativ';
-        const differenzText = differenz >= 0 ? '+€' + differenz.toLocaleString('de-DE') : '-€' + Math.abs(differenz).toLocaleString('de-DE');
+    if (eaSection) {
+        if (customer.einkommenMonatlich) {
+            eaSection.style.display = 'flex';
+            const einkommen = customer.einkommenMonatlich || 0;
+            const ausgaben = customer.ausgabenMonatlich || 0;
+            const differenz = einkommen - ausgaben;
+            const differenzClass = differenz >= 0 ? 'positiv' : 'negativ';
+            const differenzText = differenz >= 0 ? '+€' + differenz.toLocaleString('de-DE') : '-€' + Math.abs(differenz).toLocaleString('de-DE');
 
-        const eaRows = eaSection.querySelectorAll('.ea-row');
-        if (eaRows.length >= 3) {
-            eaRows[0].querySelector('.value').textContent = '€' + einkommen.toLocaleString('de-DE');
-            eaRows[1].querySelector('.value').textContent = '€' + ausgaben.toLocaleString('de-DE');
-            eaRows[2].querySelector('.value').textContent = differenzText;
-            eaRows[2].querySelector('.value').className = 'value ' + differenzClass;
-        }
+            const eaRows = eaSection.querySelectorAll('.ea-row');
+            if (eaRows.length >= 3) {
+                eaRows[0].querySelector('.value').textContent = '€' + einkommen.toLocaleString('de-DE');
+                eaRows[1].querySelector('.value').textContent = '€' + ausgaben.toLocaleString('de-DE');
+                eaRows[2].querySelector('.value').textContent = differenzText;
+                eaRows[2].querySelector('.value').className = 'value ' + differenzClass;
+            }
 
-        const detailsText = eaSection.querySelector('.details-text');
-        if (detailsText && customer.ausgabenDetails) {
-            detailsText.textContent = customer.ausgabenDetails;
+            const detailsText = eaSection.querySelector('.details-text');
+            if (detailsText && customer.ausgabenDetails) {
+                detailsText.textContent = customer.ausgabenDetails;
+            }
+        } else {
+            // Hide section if no income data available
+            eaSection.style.display = 'none';
         }
     }
 }
