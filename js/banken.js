@@ -892,7 +892,7 @@ function getFullCustomerData(customerId) {
             email: 'info@mueller-gmbh.de', ansprechpartner: 'Hans Mueller',
             branche: 'Gastronomie', restschuld: 125000, status: 'Inkasso',
             // Konten & Finanzen
-            krediteAnzahl: 3, gesamtforderung: 350500, monatsrate: 2380, ueberfaellig: 15000,
+            krediteAnzahl: 3, gesamtforderung: 350500, monatsrate: 2380, ueberfaellig: 4760,
             rueckgabequote: 34, hauptforderung: 110000, zinsen: 8450, mahngebuehren: 350, inkassokosten: 6200,
             dpd: 35,
             // Einkommen & Ausgaben (Gewerbe)
@@ -902,6 +902,14 @@ function getFullCustomerData(customerId) {
             kernproblem: 'Gewerbekunde mit Liquiditätsengpässen seit Q3 2025. Gastronomie-Branche mit saisonalen Schwankungen. Monatliche Ausgaben (€52.000) übersteigen Einnahmen (€45.000) um €7.000. Mehrfache Lastschriftrückgaben trotz grundsätzlicher Zahlungsfähigkeit.',
             // Kommunikation
             workflowStatus: 'Inkasso-Verfahren', mahnstufe: 3,
+            // Transaktionshistorie für diesen Kunden (Inkasso)
+            transaktionen: [
+                { datum: '14.11.2025', beschreibung: 'Monatliche Rate - Fällig', betrag: -2380, status: 'ueberfaellig' },
+                { datum: '14.10.2025', beschreibung: 'Monatliche Rate - Fällig', betrag: -2380, status: 'ueberfaellig' },
+                { datum: '18.09.2025', beschreibung: 'Lastschrift zurückgebucht', betrag: -2380, status: 'rueckgabe' },
+                { datum: '01.09.2025', beschreibung: 'Teilzahlung', betrag: 1500, status: 'gebucht' },
+                { datum: '15.08.2025', beschreibung: 'Lastschrift zurückgebucht', betrag: -2380, status: 'rueckgabe' }
+            ],
             produkte: [
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-1001', saldo: 125000, status: '35 DPD', badge: 'danger' },
                 { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-2345', saldo: 85000, status: 'Überzogen', badge: 'danger' },
@@ -923,6 +931,13 @@ function getFullCustomerData(customerId) {
             einkommenMonatlich: 4200, ausgabenMonatlich: 3800, ausgabenDetails: 'Miete: €1.100, Lebensmittel: €450, Auto: €650, Streaming/Abos: €180, Freizeit: €420, Sonstiges: €1.000',
             kernproblem: 'Ratenkredit vollständig beglichen (€1.890 am 16.12.). Nettoeinkommen €4.200, Ausgaben €3.800. Noch aktiv: Dispo €4.500 + Baufinanzierung €2.350. Monitoring wegen knapper Liquidität.',
             workflowStatus: 'Monitoring', mahnstufe: 0,
+            // Transaktionshistorie
+            transaktionen: [
+                { datum: '16.12.2025', beschreibung: 'Ratenkredit vollständig getilgt', betrag: 1890, status: 'gebucht' },
+                { datum: '01.12.2025', beschreibung: 'Baufinanzierung Rate', betrag: 450, status: 'gebucht' },
+                { datum: '01.11.2025', beschreibung: 'Baufinanzierung Rate', betrag: 450, status: 'gebucht' },
+                { datum: '01.10.2025', beschreibung: 'Ratenkredit Rate', betrag: 315, status: 'gebucht' }
+            ],
             produkte: [
                 { typ: 'Ratenkredit', nummer: 'RK-2023-8841', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 1890 },
                 { typ: 'Dispositionskredit', nummer: 'DK-2024-1122', saldo: 4500, status: 'Aktiv', badge: 'warning' },
@@ -963,6 +978,13 @@ function getFullCustomerData(customerId) {
             // Einkommen & Ausgaben (Privat - Rentnerin)
             einkommenMonatlich: 1450, ausgabenMonatlich: 1380, ausgabenDetails: 'Miete: €520, Lebensmittel: €280, Medikamente: €95, Versicherungen: €145, Enkel-Geschenke: €120, Sonstiges: €220',
             kernproblem: 'Teilzahlung €780 gestern eingegangen. Kreditkartenschuld beglichen. Ratenkredit (€3.200) noch offen mit €180/Monat Rate. Knappe Rente €1.450, Ausgaben €1.380. Hohe Kooperationsbereitschaft.',
+            // Transaktionshistorie
+            transaktionen: [
+                { datum: '18.12.2025', beschreibung: 'Kreditkarte vollständig beglichen', betrag: 780, status: 'gebucht' },
+                { datum: '01.12.2025', beschreibung: 'Ratenkredit Rate', betrag: 180, status: 'gebucht' },
+                { datum: '01.11.2025', beschreibung: 'Ratenkredit Rate', betrag: 180, status: 'gebucht' },
+                { datum: '01.10.2025', beschreibung: 'Ratenkredit Rate', betrag: 180, status: 'gebucht' }
+            ],
             workflowStatus: 'Monitoring', mahnstufe: 0,
             produkte: [
                 { typ: 'Kreditkarte', nummer: 'KK-2023-6678', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 780 },
@@ -1044,16 +1066,23 @@ function getFullCustomerData(customerId) {
             adresse: 'Waldstraße 22, 38100 Braunschweig', telefon: '+49 531 998877',
             email: 'h.mueller@email.de', ansprechpartner: 'Hans Müller',
             branche: 'Angestellter', restschuld: 4230, status: 'Offen',
-            krediteAnzahl: 1, gesamtforderung: 4230, monatsrate: 180, ueberfaellig: 540,
+            krediteAnzahl: 1, gesamtforderung: 4230, monatsrate: 180, ueberfaellig: 180,
             rueckgabequote: 0, hauptforderung: 4000, zinsen: 180, mahngebuehren: 50, inkassokosten: 0,
             dpd: 18, willingness: 85, ability: 70, segment: 'prioritaet',
             zahlungsziel: '01.12.2025',
             // Zahlungszusage aus Telefonat
-            zahlungszusage: { betrag: 540, datum: '23.12.2025', status: 'offen', vereinbart: '17.12.2025', notiz: 'Kunde zahlt überfälligen Betrag nach Gehaltseingang am 23.12.' },
+            zahlungszusage: { betrag: 180, datum: '23.12.2025', status: 'offen', vereinbart: '17.12.2025', notiz: 'Kunde zahlt überfällige Dezember-Rate (€180) nach Gehaltseingang am 23.12.' },
             // Einkommen & Ausgaben (Angestellter)
             einkommenMonatlich: 2850, ausgabenMonatlich: 2680, ausgabenDetails: 'Miete: €780, Lebensmittel: €320, Auto: €380, Versicherungen: €190, Kinder: €450, Sonstiges: €560',
-            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Zahlungszusage €540 bis 23.12. (Gehaltseingang). Angestellter mit Einkommen €2.850, Ausgaben €2.680. Hohe Erfolgswahrscheinlichkeit.',
-            workflowStatus: 'Zahlungszusage', mahnstufe: 2,
+            kernproblem: 'Neuer Fall - Dezember-Rate (€180) 18 Tage überfällig. Angestellter mit stabilem Einkommen €2.850. Nach Telefonat: Zahlung vergessen wegen Umzug. Zahlungszusage für 23.12.',
+            workflowStatus: 'Zahlungszusage', mahnstufe: 1,
+            // Transaktionshistorie für diesen Kunden
+            transaktionen: [
+                { datum: '01.12.2025', beschreibung: 'Monatliche Rate - Fällig', betrag: -180, status: 'ueberfaellig' },
+                { datum: '01.11.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' },
+                { datum: '01.10.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' },
+                { datum: '01.09.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' }
+            ],
             produkte: [
                 { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '18 DPD', badge: 'warning' }
             ]
@@ -1063,16 +1092,23 @@ function getFullCustomerData(customerId) {
             adresse: 'Berliner Allee 100, 30175 Hannover', telefon: '+49 511 665544',
             email: 'info@schmidt-gmbh.de', ansprechpartner: 'Michael Schmidt',
             branche: 'IT-Dienstleistungen', restschuld: 12890, status: 'Offen',
-            krediteAnzahl: 2, gesamtforderung: 12890, monatsrate: 650, ueberfaellig: 1950,
+            krediteAnzahl: 2, gesamtforderung: 12890, monatsrate: 650, ueberfaellig: 650,
             rueckgabequote: 0, hauptforderung: 12000, zinsen: 640, mahngebuehren: 150, inkassokosten: 100,
             dpd: 18, willingness: 75, ability: 80, segment: 'prioritaet',
             zahlungsziel: '01.12.2025',
             // Zahlungszusage nach Kundenkontakt
-            zahlungszusage: { betrag: 8500, datum: '27.12.2025', status: 'offen', vereinbart: '16.12.2025', notiz: 'GF Schmidt: Großprojekt wird am 23.12. abgerechnet, Zahlung erfolgt nach Zahlungseingang vom Kunden.' },
+            zahlungszusage: { betrag: 650, datum: '27.12.2025', status: 'offen', vereinbart: '16.12.2025', notiz: 'GF Schmidt: Großprojekt wird am 23.12. abgerechnet, überfällige Rate (€650) wird nach Zahlungseingang vom Kunden beglichen.' },
             // Einkommen & Ausgaben (IT-Dienstleister)
             einkommenMonatlich: 95000, ausgabenMonatlich: 82000, ausgabenDetails: 'Personal: €52.000, Miete/Büro: €8.500, Software-Lizenzen: €6.500, Marketing: €4.000, Sonstiges: €11.000',
-            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Zahlungszusage €8.500 bis 27.12. (nach Projektabrechnung). IT-Dienstleister mit gutem Umsatz. Gute Bonität.',
+            kernproblem: 'Aktiver Fall seit 01.12. - Dezember-Rate (€650) 18 Tage überfällig. Zahlungszusage bis 27.12. (nach Projektabrechnung). IT-Dienstleister mit gutem Umsatz. Gute Bonität.',
             workflowStatus: 'Zahlungszusage', mahnstufe: 2,
+            // Transaktionshistorie für diesen Kunden
+            transaktionen: [
+                { datum: '01.12.2025', beschreibung: 'Monatliche Rate KKK - Fällig', betrag: -650, status: 'ueberfaellig' },
+                { datum: '01.11.2025', beschreibung: 'Monatliche Rate KKK', betrag: 650, status: 'gebucht' },
+                { datum: '15.10.2025', beschreibung: 'Tilgung Betriebsmittelkredit', betrag: 800, status: 'gebucht' },
+                { datum: '01.10.2025', beschreibung: 'Monatliche Rate KKK', betrag: 650, status: 'gebucht' }
+            ],
             produkte: [
                 { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-1123', saldo: 8500, status: '18 DPD', badge: 'warning' },
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-9945', saldo: 4390, status: 'Aktiv', badge: 'info' }
@@ -1083,16 +1119,23 @@ function getFullCustomerData(customerId) {
             adresse: 'Blumenweg 15, 50668 Köln', telefon: '+49 221 887766',
             email: 'a.weber@web.de', ansprechpartner: 'Anna Weber',
             branche: 'Freiberuflerin', restschuld: 2150, status: 'Offen',
-            krediteAnzahl: 1, gesamtforderung: 2150, monatsrate: 120, ueberfaellig: 360,
+            krediteAnzahl: 1, gesamtforderung: 2150, monatsrate: 120, ueberfaellig: 120,
             rueckgabequote: 0, hauptforderung: 2000, zinsen: 100, mahngebuehren: 50, inkassokosten: 0,
             dpd: 18, willingness: 70, ability: 55, segment: 'prioritaet',
             zahlungsziel: '01.12.2025',
-            // Zahlungszusage - Ratenzahlung vereinbart
-            zahlungszusage: { betrag: 360, datum: '28.12.2025', status: 'offen', vereinbart: '18.12.2025', notiz: 'Kundin vereinbart Ratenzahlung: 3x €120 ab 28.12. Großauftrag für Januar erwartet.' },
+            // Zahlungszusage - überfällige Rate
+            zahlungszusage: { betrag: 120, datum: '28.12.2025', status: 'offen', vereinbart: '18.12.2025', notiz: 'Kundin zahlt überfällige Dezember-Rate (€120) am 28.12. nach Honorareingang.' },
             // Einkommen & Ausgaben (Freiberuflerin - variabel)
             einkommenMonatlich: 2400, ausgabenMonatlich: 2350, ausgabenDetails: 'Miete: €720, Lebensmittel: €290, Krankenversicherung: €420, Büro/Material: €380, Sonstiges: €540',
-            kernproblem: 'Aktiver Fall seit 01.12. - 18 Tage überfällig. Ratenzahlung vereinbart: 3x €120 ab 28.12. Freiberuflerin mit knappem Budget, aber kooperativ.',
+            kernproblem: 'Aktiver Fall seit 01.12. - Dezember-Rate (€120) 18 Tage überfällig. Zahlungszusage für 28.12. Freiberuflerin mit knappem Budget, aber kooperativ.',
             workflowStatus: 'Zahlungszusage', mahnstufe: 2,
+            // Transaktionshistorie für diesen Kunden
+            transaktionen: [
+                { datum: '01.12.2025', beschreibung: 'Kreditkarten-Mindestbetrag - Fällig', betrag: -120, status: 'ueberfaellig' },
+                { datum: '01.11.2025', beschreibung: 'Kreditkarten-Zahlung', betrag: 120, status: 'gebucht' },
+                { datum: '01.10.2025', beschreibung: 'Kreditkarten-Zahlung', betrag: 120, status: 'gebucht' },
+                { datum: '01.09.2025', beschreibung: 'Kreditkarten-Zahlung', betrag: 120, status: 'gebucht' }
+            ],
             produkte: [
                 { typ: 'Kreditkarte', nummer: 'KK-2024-5567', saldo: 2150, status: '18 DPD', badge: 'warning' }
             ]
@@ -1635,6 +1678,53 @@ function updateKontenFields(modal, customer) {
             section.style.display = 'none';
         }
     });
+
+    // Populate "Letzte Transaktionen" from customer.transaktionen
+    const txCompactList = kontenTab.querySelector('#tx-compact-list');
+    if (txCompactList) {
+        if (customer.transaktionen && customer.transaktionen.length > 0) {
+            txCompactList.innerHTML = customer.transaktionen.map(tx => {
+                const statusClass = tx.status === 'ueberfaellig' ? 'failed' :
+                                   tx.status === 'rueckgabe' ? 'failed' :
+                                   tx.status === 'gebucht' ? 'success' : '';
+                const statusBadge = tx.status === 'ueberfaellig' ? 'Überfällig' :
+                                   tx.status === 'rueckgabe' ? 'Rückgabe' :
+                                   tx.status === 'gebucht' ? 'Gebucht' : tx.status;
+                const amountClass = tx.betrag < 0 ? 'negative' : 'positive';
+                const amountSign = tx.betrag < 0 ? '-' : '+';
+                const amountValue = Math.abs(tx.betrag).toLocaleString('de-DE');
+
+                return `
+                    <div class="tx-compact-item ${statusClass}">
+                        <span class="tx-date">${tx.datum}</span>
+                        <span class="tx-desc">${tx.beschreibung}</span>
+                        <span class="tx-amount ${amountClass}">${amountSign}€${amountValue}</span>
+                        <span class="tx-status-badge ${statusClass}">${statusBadge}</span>
+                    </div>
+                `;
+            }).join('');
+        } else if (isBezahlt) {
+            // Bezahlte Kunden: Keine ausstehenden Transaktionen
+            txCompactList.innerHTML = `
+                <div class="tx-compact-item success">
+                    <span class="tx-date">${customer.letzteZahlung?.datum || '15.12.2025'}</span>
+                    <span class="tx-desc">${customer.letzteZahlung?.typ || 'Schlusszahlung'}</span>
+                    <span class="tx-amount positive">+€${(customer.letzteZahlung?.betrag || customer.monatsrate || 0).toLocaleString('de-DE')}</span>
+                    <span class="tx-status-badge success">Gebucht</span>
+                </div>
+            `;
+        } else {
+            // Fallback: Generic transaction based on customer data
+            txCompactList.innerHTML = `
+                <div class="tx-compact-item ${customer.dpd > 0 ? 'failed' : 'success'}">
+                    <span class="tx-date">01.12.2025</span>
+                    <span class="tx-desc">Monatliche Zahlung</span>
+                    <span class="tx-amount ${customer.dpd > 0 ? 'negative' : 'positive'}">${customer.dpd > 0 ? '-' : '+'}€${(customer.monatsrate || 0).toLocaleString('de-DE')}</span>
+                    <span class="tx-status-badge ${customer.dpd > 0 ? 'failed' : 'success'}">${customer.dpd > 0 ? 'Überfällig' : 'Gebucht'}</span>
+                </div>
+            `;
+        }
+    }
 }
 
 // Update Kommunikation tab with KI summary and dynamic timeline
