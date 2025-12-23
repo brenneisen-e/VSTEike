@@ -365,6 +365,39 @@ body.tour-active {
     transform: scale(1.05);
 }
 
+/* Inline Demo Button (in settings area) */
+.demo-tour-btn-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    margin-top: 16px;
+    background: linear-gradient(135deg, #86BC25 0%, #6a9a1d 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(134, 188, 37, 0.3);
+    transition: all 0.3s ease;
+}
+
+.demo-tour-btn-inline:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(134, 188, 37, 0.4);
+}
+
+.demo-tour-btn-inline:active {
+    transform: translateY(0);
+}
+
+.demo-tour-btn-inline svg {
+    flex-shrink: 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .tour-tooltip {

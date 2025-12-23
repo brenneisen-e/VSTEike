@@ -14,6 +14,9 @@
     <!-- Firebase SDK für Feedback-System -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- html2canvas für Screenshot-Funktion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css?v=20251216">
@@ -34,15 +37,6 @@
      LANDING PAGE
      ======================================== -->
 <div id="landingPage" class="landing-page">
-
-    <!-- Demo Tour Button (fixed bottom-left) -->
-    <button class="demo-tour-btn" onclick="startDemoTour()" title="Interaktive Demo starten">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polygon points="10 8 16 12 10 16 10 8"></polygon>
-        </svg>
-        Demo starten
-    </button>
 
     <!-- Loading Animation -->
     <div id="loadingAnimation" class="loading-container">
@@ -299,6 +293,15 @@
                         </div>
                         <div id="apiTokenStatus" class="api-token-status"></div>
                     </div>
+
+                    <!-- Demo Tour Button -->
+                    <button class="demo-tour-btn-inline" onclick="startDemoTour()" title="Interaktive Demo starten">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                        </svg>
+                        Interaktive Demo starten
+                    </button>
 
                     <!-- Mock-Modus Toggle -->
                     <div class="settings-item mock-toggle">

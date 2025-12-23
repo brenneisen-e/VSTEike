@@ -76,7 +76,8 @@ async function submitFeedback() {
         type: currentFeedbackType,
         text: text,
         url: window.location.href,
-        userAgent: navigator.userAgent.substring(0, 100)
+        userAgent: navigator.userAgent.substring(0, 100),
+        screenshot: currentScreenshotData || null  // Screenshot hinzufügen
     };
 
     if (USE_CLOUDFLARE) {
@@ -84,6 +85,9 @@ async function submitFeedback() {
     } else {
         saveFeedbackToLocalStorage({ ...feedback, id: Date.now(), timestamp: new Date().toISOString() });
     }
+
+    // Screenshot nach dem Senden zurücksetzen
+    removeScreenshot();
 }
 
 // Cloudflare: Feedback speichern
@@ -183,6 +187,13 @@ function renderFeedbackList(feedbacks) {
         const date = new Date(fb.timestamp);
         const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 
+        // Screenshot HTML (falls vorhanden)
+        const screenshotHtml = fb.screenshot
+            ? `<div class="feedback-item-screenshot">
+                 <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)">
+               </div>`
+            : '';
+
         return `
             <div class="feedback-item ${fb.type}">
                 <div class="feedback-item-header">
@@ -192,9 +203,27 @@ function renderFeedbackList(feedbacks) {
                     <span class="feedback-item-date">${dateStr}</span>
                 </div>
                 <div class="feedback-item-text">${fb.text}</div>
+                ${screenshotHtml}
             </div>
         `;
     }).join('');
+}
+
+// Screenshot-Lightbox öffnen
+function openScreenshotLightbox(src) {
+    // Lightbox erstellen falls noch nicht vorhanden
+    let lightbox = document.getElementById('screenshotLightbox');
+    if (!lightbox) {
+        lightbox = document.createElement('div');
+        lightbox.id = 'screenshotLightbox';
+        lightbox.className = 'screenshot-lightbox';
+        lightbox.innerHTML = '<img src="" alt="Screenshot Vollbild">';
+        lightbox.onclick = () => lightbox.classList.remove('open');
+        document.body.appendChild(lightbox);
+    }
+
+    lightbox.querySelector('img').src = src;
+    lightbox.classList.add('open');
 }
 
 // Badge aktualisieren
@@ -250,6 +279,343 @@ function downloadFeedbackJson(data) {
     a.click();
     URL.revokeObjectURL(url);
 }
+
+// ========================================
+// SCREENSHOT ANNOTATION SYSTEM
+// ========================================
+
+let currentScreenshotData = null;
+let screenshotCanvas = null;
+let screenshotCtx = null;
+let screenshotImage = null;
+let isDrawing = false;
+let currentTool = 'pen';
+let currentColor = '#ef4444';
+let drawHistory = [];
+let startX, startY;
+
+// Screenshot aufnehmen
+async function captureScreenshot() {
+    const btn = document.getElementById('screenshotBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" class="spin"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> Wird aufgenommen...';
+    btn.disabled = true;
+
+    try {
+        // Feedback-Panel kurz ausblenden für sauberen Screenshot
+        const feedbackPanel = document.getElementById('feedbackPanel');
+        const screenshotModal = document.getElementById('screenshotModal');
+        feedbackPanel.style.visibility = 'hidden';
+
+        // Screenshot mit html2canvas erstellen
+        const canvas = await html2canvas(document.body, {
+            scale: 0.5, // Kleinere Auflösung für Performance
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            logging: false
+        });
+
+        feedbackPanel.style.visibility = 'visible';
+
+        // Screenshot im Modal öffnen
+        screenshotImage = new Image();
+        screenshotImage.onload = function() {
+            openScreenshotModal();
+        };
+        screenshotImage.src = canvas.toDataURL('image/jpeg', 0.8);
+
+    } catch (error) {
+        console.error('Screenshot Fehler:', error);
+        showFeedbackNotification('Screenshot konnte nicht erstellt werden');
+    }
+
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+}
+
+// Screenshot-Modal öffnen
+function openScreenshotModal() {
+    const modal = document.getElementById('screenshotModal');
+    const canvas = document.getElementById('screenshotCanvas');
+
+    modal.classList.add('open');
+
+    // Canvas initialisieren
+    screenshotCanvas = canvas;
+    screenshotCtx = canvas.getContext('2d');
+
+    // Canvas-Größe an Bild anpassen
+    canvas.width = screenshotImage.width;
+    canvas.height = screenshotImage.height;
+
+    // Bild zeichnen
+    screenshotCtx.drawImage(screenshotImage, 0, 0);
+
+    // Zeichen-History zurücksetzen
+    drawHistory = [];
+    saveDrawState();
+
+    // Event-Listener für Zeichnen
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Touch-Support
+    canvas.addEventListener('touchstart', handleTouch);
+    canvas.addEventListener('touchmove', handleTouch);
+    canvas.addEventListener('touchend', stopDrawing);
+}
+
+// Screenshot-Modal schließen
+function closeScreenshotModal() {
+    const modal = document.getElementById('screenshotModal');
+    modal.classList.remove('open');
+
+    // Event-Listener entfernen
+    const canvas = document.getElementById('screenshotCanvas');
+    canvas.removeEventListener('mousedown', startDrawing);
+    canvas.removeEventListener('mousemove', draw);
+    canvas.removeEventListener('mouseup', stopDrawing);
+    canvas.removeEventListener('mouseout', stopDrawing);
+    canvas.removeEventListener('touchstart', handleTouch);
+    canvas.removeEventListener('touchmove', handleTouch);
+    canvas.removeEventListener('touchend', stopDrawing);
+}
+
+// Touch-Events handling
+function handleTouch(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = screenshotCanvas.getBoundingClientRect();
+    const scaleX = screenshotCanvas.width / rect.width;
+    const scaleY = screenshotCanvas.height / rect.height;
+
+    const mouseEvent = {
+        offsetX: (touch.clientX - rect.left) * scaleX,
+        offsetY: (touch.clientY - rect.top) * scaleY,
+        type: e.type === 'touchstart' ? 'mousedown' : 'mousemove'
+    };
+
+    if (e.type === 'touchstart') {
+        startDrawing(mouseEvent);
+    } else {
+        draw(mouseEvent);
+    }
+}
+
+// Zeichnen starten
+function startDrawing(e) {
+    isDrawing = true;
+    const rect = screenshotCanvas.getBoundingClientRect();
+    const scaleX = screenshotCanvas.width / rect.width;
+    const scaleY = screenshotCanvas.height / rect.height;
+    startX = (e.offsetX || e.clientX - rect.left) * (e.offsetX ? 1 : scaleX);
+    startY = (e.offsetY || e.clientY - rect.top) * (e.offsetY ? 1 : scaleY);
+
+    if (currentTool === 'pen') {
+        screenshotCtx.beginPath();
+        screenshotCtx.moveTo(startX, startY);
+    }
+}
+
+// Zeichnen
+function draw(e) {
+    if (!isDrawing) return;
+
+    const rect = screenshotCanvas.getBoundingClientRect();
+    const scaleX = screenshotCanvas.width / rect.width;
+    const scaleY = screenshotCanvas.height / rect.height;
+    const x = (e.offsetX || e.clientX - rect.left) * (e.offsetX ? 1 : scaleX);
+    const y = (e.offsetY || e.clientY - rect.top) * (e.offsetY ? 1 : scaleY);
+
+    screenshotCtx.strokeStyle = currentColor;
+    screenshotCtx.lineWidth = 4;
+    screenshotCtx.lineCap = 'round';
+    screenshotCtx.lineJoin = 'round';
+
+    if (currentTool === 'pen') {
+        screenshotCtx.lineTo(x, y);
+        screenshotCtx.stroke();
+    } else if (['rect', 'circle', 'arrow'].includes(currentTool)) {
+        // Für Formen: Bei jedem Move das Canvas wiederherstellen und Form neu zeichnen
+        restoreLastState();
+        drawShape(startX, startY, x, y);
+    }
+}
+
+// Zeichnen beenden
+function stopDrawing(e) {
+    if (isDrawing) {
+        isDrawing = false;
+        saveDrawState();
+    }
+}
+
+// Form zeichnen
+function drawShape(x1, y1, x2, y2) {
+    screenshotCtx.strokeStyle = currentColor;
+    screenshotCtx.lineWidth = 4;
+    screenshotCtx.lineCap = 'round';
+    screenshotCtx.lineJoin = 'round';
+
+    if (currentTool === 'rect') {
+        screenshotCtx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+    } else if (currentTool === 'circle') {
+        const radiusX = Math.abs(x2 - x1) / 2;
+        const radiusY = Math.abs(y2 - y1) / 2;
+        const centerX = x1 + (x2 - x1) / 2;
+        const centerY = y1 + (y2 - y1) / 2;
+
+        screenshotCtx.beginPath();
+        screenshotCtx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        screenshotCtx.stroke();
+    } else if (currentTool === 'arrow') {
+        // Linie zeichnen
+        screenshotCtx.beginPath();
+        screenshotCtx.moveTo(x1, y1);
+        screenshotCtx.lineTo(x2, y2);
+        screenshotCtx.stroke();
+
+        // Pfeilspitze
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        const headLength = 20;
+
+        screenshotCtx.beginPath();
+        screenshotCtx.moveTo(x2, y2);
+        screenshotCtx.lineTo(
+            x2 - headLength * Math.cos(angle - Math.PI / 6),
+            y2 - headLength * Math.sin(angle - Math.PI / 6)
+        );
+        screenshotCtx.moveTo(x2, y2);
+        screenshotCtx.lineTo(
+            x2 - headLength * Math.cos(angle + Math.PI / 6),
+            y2 - headLength * Math.sin(angle + Math.PI / 6)
+        );
+        screenshotCtx.stroke();
+    }
+}
+
+// Zeichenzustand speichern
+function saveDrawState() {
+    drawHistory.push(screenshotCanvas.toDataURL());
+}
+
+// Letzten Zustand wiederherstellen (für Live-Preview von Formen)
+function restoreLastState() {
+    if (drawHistory.length > 0) {
+        const img = new Image();
+        img.src = drawHistory[drawHistory.length - 1];
+        screenshotCtx.clearRect(0, 0, screenshotCanvas.width, screenshotCanvas.height);
+        screenshotCtx.drawImage(img, 0, 0);
+    }
+}
+
+// Rückgängig machen
+function undoDrawing() {
+    if (drawHistory.length > 1) {
+        drawHistory.pop(); // Aktuellen Zustand entfernen
+        const img = new Image();
+        img.onload = function() {
+            screenshotCtx.clearRect(0, 0, screenshotCanvas.width, screenshotCanvas.height);
+            screenshotCtx.drawImage(img, 0, 0);
+        };
+        img.src = drawHistory[drawHistory.length - 1];
+    }
+}
+
+// Alles löschen (zurück zum Original)
+function clearDrawing() {
+    screenshotCtx.clearRect(0, 0, screenshotCanvas.width, screenshotCanvas.height);
+    screenshotCtx.drawImage(screenshotImage, 0, 0);
+    drawHistory = [];
+    saveDrawState();
+}
+
+// Werkzeug wählen
+function setDrawTool(tool) {
+    currentTool = tool;
+    document.querySelectorAll('.screenshot-tool').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.tool === tool) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Bei Text-Tool: Prompt anzeigen
+    if (tool === 'text') {
+        showFeedbackNotification('Klicken Sie auf die Stelle, wo der Text erscheinen soll');
+        screenshotCanvas.onclick = function(e) {
+            if (currentTool === 'text') {
+                const text = prompt('Text eingeben:');
+                if (text) {
+                    const rect = screenshotCanvas.getBoundingClientRect();
+                    const scaleX = screenshotCanvas.width / rect.width;
+                    const scaleY = screenshotCanvas.height / rect.height;
+                    const x = (e.offsetX || e.clientX - rect.left) * scaleX;
+                    const y = (e.offsetY || e.clientY - rect.top) * scaleY;
+
+                    screenshotCtx.font = 'bold 24px Arial';
+                    screenshotCtx.fillStyle = currentColor;
+                    screenshotCtx.fillText(text, x, y);
+                    saveDrawState();
+                }
+            }
+        };
+    } else {
+        screenshotCanvas.onclick = null;
+    }
+}
+
+// Farbe wählen
+function setDrawColor(color) {
+    currentColor = color;
+    document.querySelectorAll('.screenshot-color').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.color === color) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+// Screenshot speichern und zum Feedback hinzufügen
+function saveAnnotatedScreenshot() {
+    currentScreenshotData = screenshotCanvas.toDataURL('image/jpeg', 0.7);
+
+    // Vorschau anzeigen
+    const preview = document.getElementById('screenshotPreview');
+    const thumbnail = document.getElementById('screenshotThumbnail');
+
+    thumbnail.src = currentScreenshotData;
+    preview.style.display = 'flex';
+
+    // Modal schließen
+    closeScreenshotModal();
+
+    showFeedbackNotification('Screenshot hinzugefügt!');
+}
+
+// Screenshot bearbeiten
+function editScreenshot() {
+    if (currentScreenshotData) {
+        screenshotImage = new Image();
+        screenshotImage.onload = function() {
+            openScreenshotModal();
+        };
+        screenshotImage.src = currentScreenshotData;
+    }
+}
+
+// Screenshot entfernen
+function removeScreenshot() {
+    currentScreenshotData = null;
+    const preview = document.getElementById('screenshotPreview');
+    preview.style.display = 'none';
+}
+
+// submitFeedback erweitern für Screenshot
+const originalSubmitFeedback = typeof submitFeedback === 'function' ? submitFeedback : null;
 
 // Feedback System beim Laden initialisieren
 document.addEventListener('DOMContentLoaded', () => {
