@@ -17,6 +17,7 @@ const FEEDBACK_API_URL = 'https://vsteike-feedback.eike-3e2.workers.dev';
 const USE_CLOUDFLARE = !FEEDBACK_API_URL.includes('DEIN-ACCOUNT');
 
 let currentFeedbackType = 'verbesserung';
+let currentFeedbackList = []; // Globale Liste für Edit/Delete-Zugriff
 
 // Feedback System initialisieren
 function initFeedbackSystem() {
@@ -63,7 +64,7 @@ async function submitFeedback() {
     const text = document.getElementById('feedbackText').value.trim();
 
     if (!text) {
-        alert('Bitte geben Sie einen Kommentar ein.');
+        alert('Bitte gib einen Kommentar ein.');
         return;
     }
 
@@ -188,6 +189,9 @@ function renderFeedbackList(feedbacks) {
     const listEl = document.getElementById('feedbackList');
     if (!listEl) return;
 
+    // Global speichern für Edit/Delete-Zugriff
+    currentFeedbackList = feedbacks;
+
     if (feedbacks.length === 0) {
         listEl.innerHTML = '<div class="feedback-empty">Noch keine Kommentare vorhanden.</div>';
         return;
@@ -212,7 +216,7 @@ function renderFeedbackList(feedbacks) {
         'funktion': 'Funktion'
     };
 
-    listEl.innerHTML = feedbacks.map(fb => {
+    listEl.innerHTML = feedbacks.map((fb, index) => {
         const date = new Date(fb.timestamp);
         const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 
@@ -223,9 +227,6 @@ function renderFeedbackList(feedbacks) {
                </div>`
             : '';
 
-        // Feedback-Daten für Edit als JSON (escaped)
-        const feedbackData = encodeURIComponent(JSON.stringify(fb));
-
         return `
             <div class="feedback-item ${fb.type}" data-id="${fb.id}">
                 <div class="feedback-item-header">
@@ -234,7 +235,7 @@ function renderFeedbackList(feedbacks) {
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
                     <span class="feedback-item-date">${dateStr}</span>
                     <div class="feedback-item-actions">
-                        <button class="feedback-action-btn edit" onclick="editFeedback('${feedbackData}')" title="Bearbeiten">
+                        <button class="feedback-action-btn edit" onclick="editFeedbackByIndex(${index})" title="Bearbeiten">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -258,8 +259,21 @@ function renderFeedbackList(feedbacks) {
 // Feedback bearbeiten
 let editingFeedbackId = null;
 
-function editFeedback(encodedData) {
-    const fb = JSON.parse(decodeURIComponent(encodedData));
+// Feedback per Index aus globaler Liste bearbeiten
+function editFeedbackByIndex(index) {
+    const fb = currentFeedbackList[index];
+    if (!fb) {
+        showFeedbackNotification('Kommentar nicht gefunden');
+        return;
+    }
+    editFeedback(fb);
+}
+
+function editFeedback(fb) {
+    // Falls String übergeben wurde (alte Aufrufe), parsen
+    if (typeof fb === 'string') {
+        fb = JSON.parse(decodeURIComponent(fb));
+    }
     editingFeedbackId = fb.id;
 
     // Formularfelder füllen
@@ -302,7 +316,7 @@ function editFeedback(encodedData) {
 
 // Feedback löschen
 async function deleteFeedback(id) {
-    if (!confirm('Möchten Sie diesen Kommentar wirklich löschen?')) {
+    if (!confirm('Möchtest du diesen Kommentar wirklich löschen?')) {
         return;
     }
 
@@ -472,13 +486,22 @@ async function captureScreenshot() {
         const screenshotModal = document.getElementById('screenshotModal');
         feedbackPanel.style.visibility = 'hidden';
 
-        // Screenshot mit html2canvas erstellen
-        const canvas = await html2canvas(document.body, {
-            scale: 0.5, // Kleinere Auflösung für Performance
+        // Screenshot nur vom Banken-Modul erstellen (nicht ganze Seite)
+        const bankenPage = document.querySelector('.banken-page');
+        const targetElement = bankenPage || document.body;
+
+        const canvas = await html2canvas(targetElement, {
+            scale: 2, // Höhere Auflösung für bessere Qualität
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#ffffff',
-            logging: false
+            logging: false,
+            ignoreElements: (element) => {
+                // Feedback-Panel und Chat-Widget nicht mitaufnehmen
+                return element.id === 'feedbackPanel' ||
+                       element.id === 'bankenChatWidget' ||
+                       element.classList?.contains('banken-chat-toggle');
+            }
         });
 
         feedbackPanel.style.visibility = 'visible';
@@ -488,7 +511,7 @@ async function captureScreenshot() {
         screenshotImage.onload = function() {
             openScreenshotModal();
         };
-        screenshotImage.src = canvas.toDataURL('image/jpeg', 0.8);
+        screenshotImage.src = canvas.toDataURL('image/png'); // PNG für beste Qualität
 
     } catch (error) {
         console.error('Screenshot Fehler:', error);
@@ -710,7 +733,7 @@ function setDrawTool(tool) {
 
     // Bei Text-Tool: Prompt anzeigen
     if (tool === 'text') {
-        showFeedbackNotification('Klicken Sie auf die Stelle, wo der Text erscheinen soll');
+        showFeedbackNotification('Klicke auf die Stelle, wo der Text erscheinen soll');
         screenshotCanvas.onclick = function(e) {
             if (currentTool === 'text') {
                 const text = prompt('Text eingeben:');
@@ -746,7 +769,7 @@ function setDrawColor(color) {
 
 // Screenshot speichern und zum Feedback hinzufügen
 function saveAnnotatedScreenshot() {
-    currentScreenshotData = screenshotCanvas.toDataURL('image/jpeg', 0.7);
+    currentScreenshotData = screenshotCanvas.toDataURL('image/jpeg', 0.92); // Höhere Qualität
 
     // Vorschau anzeigen
     const preview = document.getElementById('screenshotPreview');
