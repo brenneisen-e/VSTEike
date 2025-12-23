@@ -5442,6 +5442,16 @@ body.modal-open {
     color: #dc2626;
 }
 
+.status-badge.success {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-badge.warning {
+    background: #fef3c7;
+    color: #d97706;
+}
+
 .dpd-badge {
     font-size: 11px;
     font-weight: 600;
@@ -8518,4 +8528,910 @@ body.modal-open {
 .recommendation-steps-inline .step-item.urgent .step-num {
     background: #ef4444;
     color: white;
+}
+
+/* ========================================
+   FEEDBACK SYSTEM STYLES
+   ======================================== */
+
+/* Floating Feedback Button */
+.feedback-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    transition: all 0.3s ease;
+    z-index: 9998;
+}
+
+.feedback-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 28px rgba(99, 102, 241, 0.5);
+}
+
+.feedback-button svg {
+    color: white;
+}
+
+.feedback-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+}
+
+/* Feedback Panel */
+.feedback-panel {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease;
+}
+
+.feedback-panel.open {
+    right: 0;
+}
+
+.feedback-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+}
+
+.feedback-panel-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.feedback-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s;
+}
+
+.feedback-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.feedback-info {
+    padding: 12px 20px;
+    background: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.feedback-info p {
+    margin: 0;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Feedback Form */
+.feedback-form {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.feedback-form-row {
+    margin-bottom: 12px;
+}
+
+.feedback-form-row label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.feedback-form-row input,
+.feedback-form-row select,
+.feedback-form-row textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.feedback-form-row input:focus,
+.feedback-form-row select:focus,
+.feedback-form-row textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.feedback-form-row textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Type Buttons */
+.feedback-type-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.feedback-type-btn {
+    padding: 6px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.feedback-type-btn:hover {
+    border-color: #6366f1;
+    background: #f8fafc;
+}
+
+.feedback-type-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+/* Submit Button */
+.feedback-submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.feedback-submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Feedback List */
+.feedback-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.feedback-list-header h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.feedback-export-btn {
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.feedback-export-btn:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+}
+
+.feedback-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 20px;
+}
+
+.feedback-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+/* Feedback Items */
+.feedback-item {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-left: 3px solid #e2e8f0;
+}
+
+.feedback-item.verbesserung {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.feedback-item.fehler {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+}
+
+.feedback-item.frage {
+    border-left-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.feedback-item.lob {
+    border-left-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.feedback-item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.feedback-item-type {
+    font-size: 16px;
+}
+
+.feedback-item-author {
+    font-weight: 600;
+    font-size: 13px;
+    color: #334155;
+}
+
+.feedback-item-area {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    color: #64748b;
+}
+
+.feedback-item-date {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-left: auto;
+}
+
+.feedback-item-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #475569;
+    white-space: pre-wrap;
+}
+
+/* Notification Toast */
+.feedback-notification {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    background: #22c55e;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10000;
+}
+
+.feedback-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ========================================
+   HAUSHALTSRECHNUNG TAB STYLES
+   ======================================== */
+
+.haushalt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+}
+
+.haushalt-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.haushalt-title h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.haushalt-title svg {
+    color: #6366f1;
+}
+
+.psd2-badge, .fida-badge {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.haushalt-period {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.haushalt-period select {
+    padding: 6px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.haushalt-info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.haushalt-info-box svg {
+    color: #0284c7;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.haushalt-info-box p {
+    margin: 0;
+    font-size: 13px;
+    color: #0c4a6e;
+    line-height: 1.5;
+}
+
+/* Summary Grid */
+.haushalt-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.haushalt-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.haushalt-summary-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.haushalt-summary-card.income {
+    border-left: 4px solid #22c55e;
+}
+
+.haushalt-summary-card.expense {
+    border-left: 4px solid #ef4444;
+}
+
+.haushalt-summary-card.balance {
+    border-left: 4px solid #3b82f6;
+}
+
+.haushalt-summary-card.ratio {
+    border-left: 4px solid #f59e0b;
+}
+
+.summary-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.haushalt-summary-card.income .summary-icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.haushalt-summary-card.expense .summary-icon {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.haushalt-summary-card.balance .summary-icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.haushalt-summary-card.ratio .summary-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summary-label {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.summary-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.summary-detail {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Details Grid */
+.haushalt-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.haushalt-detail-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.haushalt-detail-card h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.haushalt-detail-card h4 svg {
+    color: #6366f1;
+}
+
+.haushalt-breakdown {
+    padding: 12px 16px;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.breakdown-row:last-child {
+    border-bottom: none;
+}
+
+.breakdown-row.total {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 2px solid #e2e8f0;
+    border-bottom: none;
+}
+
+.breakdown-label {
+    font-size: 13px;
+    color: #475569;
+}
+
+.breakdown-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #22c55e;
+}
+
+.breakdown-value.negative {
+    color: #ef4444;
+}
+
+.breakdown-row.total .breakdown-label,
+.breakdown-row.total .breakdown-value {
+    font-weight: 700;
+}
+
+/* Assessment Section */
+.haushalt-assessment {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.haushalt-assessment h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.haushalt-assessment h4 svg {
+    color: #22c55e;
+}
+
+.assessment-content {
+    padding: 20px;
+}
+
+.assessment-indicator {
+    margin-bottom: 16px;
+}
+
+.indicator-bar {
+    height: 12px;
+    background: linear-gradient(90deg, #ef4444 0%, #f59e0b 33%, #22c55e 66%, #10b981 100%);
+    border-radius: 6px;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.indicator-fill {
+    position: absolute;
+    left: 0;
+    top: -4px;
+    width: 4px;
+    height: 20px;
+    background: #1e293b;
+    border-radius: 2px;
+    transition: left 0.5s ease;
+}
+
+.indicator-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.assessment-text {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+/* ========================================
+   OPEN FINANCE TAB STYLES
+   ======================================== */
+
+.openfinance-header {
+    padding: 16px 0;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+}
+
+.openfinance-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.openfinance-title h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.openfinance-title svg {
+    color: #6366f1;
+}
+
+/* Consent Card */
+.openfinance-consent-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.consent-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.consent-header svg {
+    color: #6366f1;
+}
+
+.consent-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.consent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #e2e8f0;
+}
+
+.consent-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: white;
+}
+
+.consent-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.consent-item.active .consent-status {
+    color: #16a34a;
+}
+
+.consent-item.pending .consent-status {
+    color: #d97706;
+}
+
+.consent-item.inactive .consent-status {
+    color: #dc2626;
+}
+
+.consent-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.consent-detail {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Open Finance Section */
+.openfinance-section {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.openfinance-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.openfinance-section h4 svg {
+    color: #6366f1;
+}
+
+.openfinance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.openfinance-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #64748b;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.openfinance-table td {
+    padding: 12px 16px;
+    color: #475569;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.openfinance-table tr:last-child td {
+    border-bottom: none;
+}
+
+.openfinance-table tr:hover {
+    background: #f8fafc;
+}
+
+.openfinance-table td.positive {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.openfinance-table td.negative {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Debt Overview */
+.openfinance-summary {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.openfinance-summary h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.openfinance-summary h4 svg {
+    color: #ef4444;
+}
+
+.debt-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #e2e8f0;
+}
+
+.debt-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: white;
+    text-align: center;
+}
+
+.debt-card.total {
+    background: #fef2f2;
+}
+
+.debt-card.ratio {
+    background: #fef3c7;
+}
+
+.debt-label {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.debt-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.debt-card.total .debt-value {
+    color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .haushalt-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .haushalt-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .consent-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .debt-overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

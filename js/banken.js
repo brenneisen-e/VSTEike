@@ -5,6 +5,243 @@
 // Track if Banken module has been loaded
 let bankenModuleLoaded = false;
 
+// ========================================
+// FIREBASE FEEDBACK SYSTEM
+// ========================================
+
+// Firebase Konfiguration - BITTE MIT EIGENEN WERTEN ERSETZEN
+// Anleitung: https://console.firebase.google.com → Neues Projekt → Realtime Database
+const firebaseConfig = {
+    apiKey: "AIzaSyDemo-REPLACE-WITH-YOUR-KEY",
+    authDomain: "vsteike-demo.firebaseapp.com",
+    databaseURL: "https://vsteike-demo-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "vsteike-demo",
+    storageBucket: "vsteike-demo.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef123456"
+};
+
+// Firebase initialisieren (wenn SDK geladen)
+let feedbackDb = null;
+let currentFeedbackType = 'verbesserung';
+
+function initFirebase() {
+    try {
+        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            feedbackDb = firebase.database();
+            console.log('✅ Firebase initialisiert');
+            loadFeedbackFromFirebase();
+        } else if (firebase.apps.length) {
+            feedbackDb = firebase.database();
+            loadFeedbackFromFirebase();
+        }
+    } catch (error) {
+        console.warn('Firebase nicht verfügbar, nutze LocalStorage:', error);
+        loadFeedbackFromLocalStorage();
+    }
+}
+
+// Feedback Panel ein/ausblenden
+function toggleFeedbackPanel() {
+    const panel = document.getElementById('feedbackPanel');
+    if (panel) {
+        panel.classList.toggle('open');
+        if (panel.classList.contains('open')) {
+            // Autor aus LocalStorage laden
+            const savedAuthor = localStorage.getItem('feedbackAuthor');
+            if (savedAuthor) {
+                document.getElementById('feedbackAuthor').value = savedAuthor;
+            }
+        }
+    }
+}
+
+// Feedback-Typ setzen
+function setFeedbackType(type) {
+    currentFeedbackType = type;
+    document.querySelectorAll('.feedback-type-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.type === type) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+// Feedback speichern
+function submitFeedback() {
+    const author = document.getElementById('feedbackAuthor').value.trim() || 'Anonym';
+    const area = document.getElementById('feedbackArea').value;
+    const text = document.getElementById('feedbackText').value.trim();
+
+    if (!text) {
+        alert('Bitte geben Sie einen Kommentar ein.');
+        return;
+    }
+
+    // Autor für nächstes Mal speichern
+    localStorage.setItem('feedbackAuthor', author);
+
+    const feedback = {
+        id: Date.now(),
+        author: author,
+        area: area,
+        type: currentFeedbackType,
+        text: text,
+        timestamp: new Date().toISOString(),
+        url: window.location.href,
+        userAgent: navigator.userAgent.substring(0, 100)
+    };
+
+    if (feedbackDb) {
+        // In Firebase speichern
+        feedbackDb.ref('feedback').push(feedback)
+            .then(() => {
+                console.log('✅ Feedback in Firebase gespeichert');
+                document.getElementById('feedbackText').value = '';
+                showFeedbackNotification('Feedback gespeichert!');
+            })
+            .catch(error => {
+                console.error('Firebase Fehler:', error);
+                saveFeedbackToLocalStorage(feedback);
+            });
+    } else {
+        // Fallback: LocalStorage
+        saveFeedbackToLocalStorage(feedback);
+    }
+}
+
+// LocalStorage Fallback
+function saveFeedbackToLocalStorage(feedback) {
+    const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+    feedbacks.unshift(feedback);
+    localStorage.setItem('bankenFeedback', JSON.stringify(feedbacks));
+    loadFeedbackFromLocalStorage();
+    document.getElementById('feedbackText').value = '';
+    showFeedbackNotification('Feedback lokal gespeichert!');
+}
+
+// Feedback aus Firebase laden
+function loadFeedbackFromFirebase() {
+    if (!feedbackDb) return;
+
+    feedbackDb.ref('feedback').orderByChild('timestamp').on('value', (snapshot) => {
+        const feedbacks = [];
+        snapshot.forEach(child => {
+            feedbacks.push({ ...child.val(), firebaseKey: child.key });
+        });
+        feedbacks.reverse(); // Neueste zuerst
+        renderFeedbackList(feedbacks);
+        updateFeedbackBadge(feedbacks.length);
+    });
+}
+
+// Feedback aus LocalStorage laden
+function loadFeedbackFromLocalStorage() {
+    const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+    renderFeedbackList(feedbacks);
+    updateFeedbackBadge(feedbacks.length);
+}
+
+// Feedback-Liste rendern
+function renderFeedbackList(feedbacks) {
+    const listEl = document.getElementById('feedbackList');
+    if (!listEl) return;
+
+    if (feedbacks.length === 0) {
+        listEl.innerHTML = '<div class="feedback-empty">Noch keine Kommentare vorhanden.</div>';
+        return;
+    }
+
+    const typeIcons = {
+        'verbesserung': '💡',
+        'fehler': '🐛',
+        'frage': '❓',
+        'lob': '👍'
+    };
+
+    const areaLabels = {
+        'allgemein': 'Allgemein',
+        'dashboard': 'Dashboard',
+        'kundenakte': 'Kundenakte',
+        'konten-finanzen': 'Konten & Finanzen',
+        'kommunikation': 'Kommunikation',
+        'ki-analyse': 'KI-Analyse',
+        'design': 'Design/UI',
+        'daten': 'Daten',
+        'funktion': 'Funktion'
+    };
+
+    listEl.innerHTML = feedbacks.map(fb => {
+        const date = new Date(fb.timestamp);
+        const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+        return `
+            <div class="feedback-item ${fb.type}">
+                <div class="feedback-item-header">
+                    <span class="feedback-item-type">${typeIcons[fb.type] || '💬'}</span>
+                    <span class="feedback-item-author">${fb.author}</span>
+                    <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
+                    <span class="feedback-item-date">${dateStr}</span>
+                </div>
+                <div class="feedback-item-text">${fb.text}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Badge aktualisieren
+function updateFeedbackBadge(count) {
+    const badge = document.getElementById('feedbackBadge');
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+}
+
+// Benachrichtigung anzeigen
+function showFeedbackNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'feedback-notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 2000);
+}
+
+// Feedback exportieren (JSON Download)
+function exportFeedback() {
+    const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+    if (feedbackDb) {
+        feedbackDb.ref('feedback').once('value', (snapshot) => {
+            const fbData = [];
+            snapshot.forEach(child => fbData.push(child.val()));
+            downloadFeedbackJson(fbData);
+        });
+    } else {
+        downloadFeedbackJson(feedbacks);
+    }
+}
+
+function downloadFeedbackJson(data) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `feedback_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Firebase beim Laden initialisieren
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initFirebase, 500);
+});
+
 // Component registry for the modular Banken system
 const BANKEN_COMPONENTS = [
     'header',
@@ -873,6 +1110,8 @@ function openCustomerDetail(customerId) {
         // Update all tabs with customer data
         updateStammdatenFields(modal, customer);
         updateKontenFields(modal, customer);
+        updateHaushaltFields(modal, customer);
+        updateOpenFinanceFields(modal, customer);
         updateKommunikationFields(modal, customer);
         updateKiAnalyseFields(modal, customer);
 
@@ -914,7 +1153,25 @@ function getFullCustomerData(customerId) {
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-1001', saldo: 125000, status: '35 DPD', badge: 'danger' },
                 { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-2345', saldo: 85000, status: 'Überzogen', badge: 'danger' },
                 { typ: 'Investitionskredit', nummer: 'IK-2022-0891', saldo: 140500, status: '28 DPD', badge: 'warning' }
-            ]
+            ],
+            // Haushaltsrechnung (Gewerbe)
+            haushalt: {
+                einnahmen: { gehalt: 45000, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 8500, nebenkosten: 2200, versicherung: 1800, kredite: 2380, abos: 450 },
+                lebenshaltung: { essen: 0, mobilitaet: 3500, gesundheit: 0, freizeit: 0, sonstige: 33170 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '15.03.2026', versicherungen: false, investments: false },
+                externeKonten: [
+                    { institut: 'Sparkasse Braunschweig', produkt: 'Geschäftskonto', saldo: -12500, rate: 0, status: 'Überzogen' },
+                    { institut: 'Deutsche Bank', produkt: 'Leasing Küchengeräte', saldo: 28000, rate: 850, status: 'Aktiv' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'Allianz', produkt: 'Betriebshaftpflicht', beitrag: 320, beginn: '01.01.2020', hinweis: '' },
+                    { anbieter: 'Signal Iduna', produkt: 'Inhaltsversicherung', beitrag: 180, beginn: '15.06.2018', hinweis: '' }
+                ]
+            }
         },
         'K-2024-7234': {
             name: 'Braun, Thomas', type: 'Privat', rechtsform: 'Privatperson',
@@ -942,7 +1199,25 @@ function getFullCustomerData(customerId) {
                 { typ: 'Ratenkredit', nummer: 'RK-2023-8841', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 1890 },
                 { typ: 'Dispositionskredit', nummer: 'DK-2024-1122', saldo: 4500, limit: 10000, status: 'Aktiv', badge: 'warning' },
                 { typ: 'Baufinanzierung', nummer: 'BF-2021-5567', saldo: 285000, rate: 1450, status: 'Aktiv', badge: 'info' }
-            ]
+            ],
+            // Haushaltsrechnung (Privat - Angestellter)
+            haushalt: {
+                einnahmen: { gehalt: 4200, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 0, nebenkosten: 380, versicherung: 380, kredite: 1450, abos: 85 },
+                lebenshaltung: { essen: 520, mobilitaet: 650, gesundheit: 45, freizeit: 180, sonstige: 110 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '15.12.2026', versicherungen: true, investments: false },
+                externeKonten: [
+                    { institut: 'ING DiBa', produkt: 'Extra-Konto (Tagesgeld)', saldo: 8500, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'HUK-Coburg', produkt: 'KFZ-Versicherung', beitrag: 68, beginn: '01.03.2022', hinweis: '' },
+                    { anbieter: 'ERGO', produkt: 'Hausratversicherung', beitrag: 18, beginn: '01.07.2021', hinweis: '' },
+                    { anbieter: 'Debeka', produkt: 'Risikolebensversicherung', beitrag: 35, beginn: '15.01.2020', hinweis: 'Zur Baufinanzierung' }
+                ]
+            }
         },
         'K-2024-6891': {
             name: 'Klein KG', type: 'Gewerbe', rechtsform: 'KG',
@@ -962,7 +1237,24 @@ function getFullCustomerData(customerId) {
             produkte: [
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2022-4456', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 3400 },
                 { typ: 'Investitionskredit', nummer: 'IK-2021-7823', saldo: 0, status: 'Beglichen', badge: 'success' }
-            ]
+            ],
+            // Haushaltsrechnung (Gewerbe - Großhandel)
+            haushalt: {
+                einnahmen: { gehalt: 125000, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 15000, nebenkosten: 3500, versicherung: 4200, kredite: 0, abos: 1800 },
+                lebenshaltung: { essen: 0, mobilitaet: 28000, gesundheit: 0, freizeit: 0, sonstige: 45500 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.06.2026', versicherungen: true, investments: false },
+                externeKonten: [
+                    { institut: 'Volksbank Düsseldorf', produkt: 'Geschäftskonto', saldo: 45000, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'Gothaer', produkt: 'Geschäftsinhaltsvers.', beitrag: 450, beginn: '01.04.2019', hinweis: '' },
+                    { anbieter: 'AXA', produkt: 'Transportversicherung', beitrag: 680, beginn: '15.02.2020', hinweis: '' }
+                ]
+            }
         },
         'K-2024-6234': {
             name: 'Fischer, Maria', type: 'Privat', rechtsform: 'Privatperson',
@@ -989,7 +1281,21 @@ function getFullCustomerData(customerId) {
             produkte: [
                 { typ: 'Kreditkarte', nummer: 'KK-2023-6678', saldo: 0, status: 'Beglichen', badge: 'success', letzteZahlung: 780 },
                 { typ: 'Ratenkredit', nummer: 'RK-2024-1234', saldo: 3200, status: 'Aktiv', badge: 'warning' }
-            ]
+            ],
+            // Haushaltsrechnung (Privat - Rentnerin)
+            haushalt: {
+                einnahmen: { gehalt: 1450, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 520, nebenkosten: 85, versicherung: 145, kredite: 180, abos: 35 },
+                lebenshaltung: { essen: 280, mobilitaet: 45, gesundheit: 95, freizeit: 25, sonstige: 40 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.09.2026', versicherungen: false, investments: false },
+                externeKonten: [
+                    { institut: 'Sparkasse Köln', produkt: 'Sparkonto', saldo: 3200, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: []
+            }
         },
         'K-2024-5982': {
             name: 'Meier, Stefan', type: 'Privat', rechtsform: 'Privatperson',
@@ -1006,7 +1312,24 @@ function getFullCustomerData(customerId) {
             workflowStatus: 'Abgeschlossen', mahnstufe: 0,
             produkte: [
                 { typ: 'Dispositionskredit', nummer: 'DK-2024-3321', saldo: 0, status: 'Ausgeglichen', badge: 'success' }
-            ]
+            ],
+            // Haushaltsrechnung (Privat - Selbstständig)
+            haushalt: {
+                einnahmen: { gehalt: 5800, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 2200, nebenkosten: 280, versicherung: 480, kredite: 0, abos: 120 },
+                lebenshaltung: { essen: 350, mobilitaet: 580, gesundheit: 65, freizeit: 220, sonstige: 105 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '15.11.2026', versicherungen: true, investments: true },
+                externeKonten: [
+                    { institut: 'N26', produkt: 'Geschäftskonto', saldo: 4200, rate: 0, status: 'Aktiv' },
+                    { institut: 'Trade Republic', produkt: 'Depot', saldo: 12500, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'Hiscox', produkt: 'Berufshaftpflicht', beitrag: 45, beginn: '01.01.2022', hinweis: '' }
+                ]
+            }
         },
         'K-2024-5876': {
             name: 'Schneider Logistik GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
@@ -1025,7 +1348,25 @@ function getFullCustomerData(customerId) {
                 { typ: 'Kontokorrentkredit', nummer: 'KKK-2023-5544', saldo: 0, status: 'Beglichen', badge: 'success' },
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2022-1123', saldo: 0, status: 'Beglichen', badge: 'success' },
                 { typ: 'Leasing LKW-Flotte', nummer: 'LK-2021-8890', saldo: 0, status: 'Beglichen', badge: 'success' }
-            ]
+            ],
+            // Haushaltsrechnung (Gewerbe - Transport & Logistik)
+            haushalt: {
+                einnahmen: { gehalt: 890000, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 45000, nebenkosten: 18000, versicherung: 78000, kredite: 0, abos: 8500 },
+                lebenshaltung: { essen: 0, mobilitaet: 327000, gesundheit: 0, freizeit: 0, sonstige: 318500 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.08.2026', versicherungen: true, investments: false },
+                externeKonten: [
+                    { institut: 'Deutsche Bank', produkt: 'Firmenkonto', saldo: 185000, rate: 0, status: 'Aktiv' },
+                    { institut: 'Commerzbank', produkt: 'Kreditlinie', saldo: 0, rate: 0, status: 'Ungenutzt' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'Zurich', produkt: 'Flottenversicherung', beitrag: 4500, beginn: '01.01.2019', hinweis: '45 Fahrzeuge' },
+                    { anbieter: 'HDI', produkt: 'Betriebshaftpflicht', beitrag: 1200, beginn: '15.03.2018', hinweis: '' }
+                ]
+            }
         },
         'K-2024-5734': {
             name: 'Fischer, Anna', type: 'Privat', rechtsform: 'Privatperson',
@@ -1042,7 +1383,25 @@ function getFullCustomerData(customerId) {
             workflowStatus: 'Abgeschlossen', mahnstufe: 0,
             produkte: [
                 { typ: 'Kreditkarte', nummer: 'KK-2024-4421', saldo: 0, status: 'Beglichen', badge: 'success' }
-            ]
+            ],
+            // Haushaltsrechnung (Privat - Beamtin)
+            haushalt: {
+                einnahmen: { gehalt: 3450, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 950, nebenkosten: 120, versicherung: 280, kredite: 0, abos: 65 },
+                lebenshaltung: { essen: 380, mobilitaet: 420, gesundheit: 35, freizeit: 180, sonstige: 250 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.10.2026', versicherungen: true, investments: true },
+                externeKonten: [
+                    { institut: 'BW-Bank', produkt: 'Sparkonto', saldo: 18500, rate: 0, status: 'Aktiv' },
+                    { institut: 'DKB', produkt: 'Tagesgeld', saldo: 5200, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'Debeka', produkt: 'Private Krankenvers.', beitrag: 180, beginn: '01.01.2018', hinweis: 'Beihilfeergänzung' },
+                    { anbieter: 'R+V', produkt: 'Hausratversicherung', beitrag: 12, beginn: '01.05.2020', hinweis: '' }
+                ]
+            }
         },
         'K-2024-5612': {
             name: 'Bäckerei Müller', type: 'Gewerbe', rechtsform: 'Einzelunternehmen',
@@ -1059,7 +1418,21 @@ function getFullCustomerData(customerId) {
             workflowStatus: 'Abgeschlossen', mahnstufe: 0,
             produkte: [
                 { typ: 'Investitionskredit', nummer: 'IK-2022-3345', saldo: 0, status: 'Getilgt', badge: 'success' }
-            ]
+            ],
+            // Haushaltsrechnung (Gewerbe - Bäckerei)
+            haushalt: {
+                einnahmen: { gehalt: 38000, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 3200, nebenkosten: 2800, versicherung: 580, kredite: 0, abos: 320 },
+                lebenshaltung: { essen: 9500, mobilitaet: 850, gesundheit: 0, freizeit: 0, sonstige: 17250 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '15.07.2026', versicherungen: false, investments: false },
+                externeKonten: [
+                    { institut: 'Frankfurter Sparkasse', produkt: 'Geschäftskonto', saldo: 12400, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: []
+            }
         },
         'K-2024-8847': {
             name: 'Müller, Hans', type: 'Privat', rechtsform: 'Privatperson',
@@ -1085,7 +1458,21 @@ function getFullCustomerData(customerId) {
             ],
             produkte: [
                 { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '18 DPD', badge: 'warning' }
-            ]
+            ],
+            // Haushaltsrechnung (Privat - Angestellter)
+            haushalt: {
+                einnahmen: { gehalt: 2850, neben: 0, sozial: 450, sonstige: 0 },
+                fixkosten: { miete: 780, nebenkosten: 145, versicherung: 190, kredite: 180, abos: 55 },
+                lebenshaltung: { essen: 320, mobilitaet: 380, gesundheit: 40, freizeit: 120, sonstige: 640 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.11.2026', versicherungen: false, investments: false },
+                externeKonten: [
+                    { institut: 'Sparkasse Braunschweig', produkt: 'Girokonto', saldo: 450, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: []
+            }
         },
         'K-2024-8846': {
             name: 'Schmidt GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
@@ -1112,7 +1499,25 @@ function getFullCustomerData(customerId) {
             produkte: [
                 { typ: 'Kontokorrentkredit', nummer: 'KKK-2024-1123', saldo: 8500, status: '18 DPD', badge: 'warning' },
                 { typ: 'Betriebsmittelkredit', nummer: 'BMK-2023-9945', saldo: 4390, status: 'Aktiv', badge: 'info' }
-            ]
+            ],
+            // Haushaltsrechnung (Gewerbe - IT-Dienstleister)
+            haushalt: {
+                einnahmen: { gehalt: 95000, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 8500, nebenkosten: 1200, versicherung: 2800, kredite: 650, abos: 6500 },
+                lebenshaltung: { essen: 0, mobilitaet: 4000, gesundheit: 0, freizeit: 0, sonstige: 58350 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.05.2026', versicherungen: true, investments: false },
+                externeKonten: [
+                    { institut: 'Commerzbank', produkt: 'Firmenkonto', saldo: 28500, rate: 0, status: 'Aktiv' },
+                    { institut: 'ING', produkt: 'Tagesgeld Geschäft', saldo: 45000, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: [
+                    { anbieter: 'Hiscox', produkt: 'IT-Haftpflicht', beitrag: 380, beginn: '01.06.2020', hinweis: 'Cyber-Zusatz' },
+                    { anbieter: 'Allianz', produkt: 'D&O Versicherung', beitrag: 520, beginn: '01.01.2021', hinweis: '' }
+                ]
+            }
         },
         'K-2024-8845': {
             name: 'Weber, Anna', type: 'Privat', rechtsform: 'Privatperson',
@@ -1138,7 +1543,21 @@ function getFullCustomerData(customerId) {
             ],
             produkte: [
                 { typ: 'Kreditkarte', nummer: 'KK-2024-5567', saldo: 2150, status: '18 DPD', badge: 'warning' }
-            ]
+            ],
+            // Haushaltsrechnung (Privat - Freiberuflerin)
+            haushalt: {
+                einnahmen: { gehalt: 2400, neben: 0, sozial: 0, sonstige: 0 },
+                fixkosten: { miete: 720, nebenkosten: 95, versicherung: 420, kredite: 120, abos: 45 },
+                lebenshaltung: { essen: 290, mobilitaet: 180, gesundheit: 85, freizeit: 120, sonstige: 275 }
+            },
+            // Open Finance Daten
+            openFinance: {
+                consent: { psd2: true, psd2Bis: '01.12.2026', versicherungen: false, investments: false },
+                externeKonten: [
+                    { institut: 'GLS Bank', produkt: 'Girokonto', saldo: 850, rate: 0, status: 'Aktiv' }
+                ],
+                externeVersicherungen: []
+            }
         }
     };
 
@@ -2172,6 +2591,228 @@ function updateKiAnalyseFields(modal, customer) {
             </div>
         `;
     }
+}
+
+// Update Haushaltsrechnung tab fields
+function updateHaushaltFields(modal, customer) {
+    const haushaltTab = modal.querySelector('#tab-haushalt');
+    if (!haushaltTab || !customer.haushalt) {
+        console.log('Haushalt tab not found or no haushalt data');
+        return;
+    }
+
+    const h = customer.haushalt;
+    const isGewerbe = customer.type === 'Gewerbe';
+
+    // Calculate totals
+    const einnahmenGesamt = (h.einnahmen.gehalt || 0) + (h.einnahmen.neben || 0) + (h.einnahmen.sozial || 0) + (h.einnahmen.sonstige || 0);
+    const fixkostenGesamt = (h.fixkosten.miete || 0) + (h.fixkosten.nebenkosten || 0) + (h.fixkosten.versicherung || 0) + (h.fixkosten.kredite || 0) + (h.fixkosten.abos || 0);
+    const lebenshaltungGesamt = (h.lebenshaltung.essen || 0) + (h.lebenshaltung.mobilitaet || 0) + (h.lebenshaltung.gesundheit || 0) + (h.lebenshaltung.freizeit || 0) + (h.lebenshaltung.sonstige || 0);
+    const ausgabenGesamt = fixkostenGesamt + lebenshaltungGesamt;
+    const freiVerfuegbar = einnahmenGesamt - ausgabenGesamt;
+    const sparquote = einnahmenGesamt > 0 ? Math.round((freiVerfuegbar / einnahmenGesamt) * 100) : 0;
+
+    // Helper to format currency
+    const formatEuro = (val) => '€' + val.toLocaleString('de-DE');
+
+    // Update summary cards
+    const summaryEinnahmen = haushaltTab.querySelector('#haushaltEinnahmen');
+    const summaryAusgaben = haushaltTab.querySelector('#haushaltAusgaben');
+    const summaryVerfuegbar = haushaltTab.querySelector('#haushaltVerfuegbar');
+    const summarySparquote = haushaltTab.querySelector('#haushaltSparquote');
+
+    if (summaryEinnahmen) summaryEinnahmen.textContent = formatEuro(einnahmenGesamt);
+    if (summaryAusgaben) summaryAusgaben.textContent = formatEuro(ausgabenGesamt);
+    if (summaryVerfuegbar) {
+        summaryVerfuegbar.textContent = formatEuro(freiVerfuegbar);
+        summaryVerfuegbar.style.color = freiVerfuegbar >= 0 ? '#22c55e' : '#ef4444';
+    }
+    if (summarySparquote) {
+        summarySparquote.textContent = sparquote + '%';
+        summarySparquote.style.color = sparquote >= 10 ? '#22c55e' : (sparquote >= 0 ? '#f59e0b' : '#ef4444');
+    }
+
+    // Update summary detail text
+    const einnahmenDetail = haushaltTab.querySelector('#haushaltEinnahmenDetail');
+    const ausgabenDetail = haushaltTab.querySelector('#haushaltAusgabenDetail');
+    if (einnahmenDetail) einnahmenDetail.textContent = isGewerbe ? 'Betriebseinnahmen' : 'Nettoeinkommen';
+    if (ausgabenDetail) ausgabenDetail.textContent = 'Fixkosten + Lebenshaltung';
+
+    // Update Einnahmen breakdown
+    haushaltTab.querySelector('#einnahmenGehalt').textContent = formatEuro(h.einnahmen.gehalt || 0);
+    haushaltTab.querySelector('#einnahmenNeben').textContent = formatEuro(h.einnahmen.neben || 0);
+    haushaltTab.querySelector('#einnahmenSozial').textContent = formatEuro(h.einnahmen.sozial || 0);
+    haushaltTab.querySelector('#einnahmenSonstige').textContent = formatEuro(h.einnahmen.sonstige || 0);
+    haushaltTab.querySelector('#einnahmenGesamt').textContent = formatEuro(einnahmenGesamt);
+
+    // Update Fixkosten breakdown
+    haushaltTab.querySelector('#fixkostenMiete').textContent = formatEuro(h.fixkosten.miete || 0);
+    haushaltTab.querySelector('#fixkostenNebenkosten').textContent = formatEuro(h.fixkosten.nebenkosten || 0);
+    haushaltTab.querySelector('#fixkostenVersicherung').textContent = formatEuro(h.fixkosten.versicherung || 0);
+    haushaltTab.querySelector('#fixkostenKredite').textContent = formatEuro(h.fixkosten.kredite || 0);
+    haushaltTab.querySelector('#fixkostenAbos').textContent = formatEuro(h.fixkosten.abos || 0);
+    haushaltTab.querySelector('#fixkostenGesamt').textContent = formatEuro(fixkostenGesamt);
+
+    // Update Lebenshaltung breakdown
+    haushaltTab.querySelector('#lebenshaltungEssen').textContent = formatEuro(h.lebenshaltung.essen || 0);
+    haushaltTab.querySelector('#lebenshaltungMobilitaet').textContent = formatEuro(h.lebenshaltung.mobilitaet || 0);
+    haushaltTab.querySelector('#lebenshaltungGesundheit').textContent = formatEuro(h.lebenshaltung.gesundheit || 0);
+    haushaltTab.querySelector('#lebenshaltungFreizeit').textContent = formatEuro(h.lebenshaltung.freizeit || 0);
+    haushaltTab.querySelector('#lebenshaltungSonstige').textContent = formatEuro(h.lebenshaltung.sonstige || 0);
+    haushaltTab.querySelector('#lebenshaltungGesamt').textContent = formatEuro(lebenshaltungGesamt);
+
+    // Update Zahlungsfähigkeitsbewertung
+    const assessmentFill = haushaltTab.querySelector('#assessmentFill');
+    const assessmentText = haushaltTab.querySelector('#assessmentText');
+
+    let assessmentLevel = 0;
+    let assessmentMessage = '';
+    let assessmentColor = '';
+
+    if (sparquote >= 20) {
+        assessmentLevel = 90;
+        assessmentMessage = `<strong>Gut:</strong> ${customer.name} verfügt über einen soliden finanziellen Spielraum (${sparquote}% Sparquote). Ratenzahlungen können problemlos bedient werden.`;
+        assessmentColor = '#22c55e';
+    } else if (sparquote >= 10) {
+        assessmentLevel = 70;
+        assessmentMessage = `<strong>Stabil:</strong> ${customer.name} hat ausreichend frei verfügbares Einkommen (${formatEuro(freiVerfuegbar)}/Monat). Moderate Raten sind tragbar.`;
+        assessmentColor = '#3b82f6';
+    } else if (sparquote >= 0) {
+        assessmentLevel = 45;
+        assessmentMessage = `<strong>Eingeschränkt:</strong> ${customer.name} hat nur ${formatEuro(freiVerfuegbar)} frei verfügbar. Niedrige Raten oder Stundung empfohlen.`;
+        assessmentColor = '#f59e0b';
+    } else {
+        assessmentLevel = 20;
+        assessmentMessage = `<strong>Kritisch:</strong> ${customer.name} hat ein monatliches Defizit von ${formatEuro(Math.abs(freiVerfuegbar))}. Restrukturierung oder Härtefallprüfung erforderlich.`;
+        assessmentColor = '#ef4444';
+    }
+
+    if (assessmentFill) {
+        assessmentFill.style.width = assessmentLevel + '%';
+        assessmentFill.style.background = `linear-gradient(90deg, ${assessmentColor}, ${assessmentColor}80)`;
+    }
+    if (assessmentText) {
+        assessmentText.innerHTML = assessmentMessage;
+    }
+
+    console.log('Haushalt fields updated for:', customer.name);
+}
+
+// Update Open Finance tab fields
+function updateOpenFinanceFields(modal, customer) {
+    const openfinanceTab = modal.querySelector('#tab-openfinance');
+    if (!openfinanceTab || !customer.openFinance) {
+        console.log('Open Finance tab not found or no openFinance data');
+        return;
+    }
+
+    const of = customer.openFinance;
+
+    // Update Consent Grid
+    const consentGrid = openfinanceTab.querySelector('#consentGrid');
+    if (consentGrid && of.consent) {
+        const psd2Status = of.consent.psd2 ? 'active' : 'inactive';
+        const versicherungenStatus = of.consent.versicherungen ? 'active' : 'pending';
+        const investmentsStatus = of.consent.investments ? 'active' : 'inactive';
+
+        const psd2Icon = of.consent.psd2
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+
+        const versicherungenIcon = of.consent.versicherungen
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
+
+        const investmentsIcon = of.consent.investments
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+
+        consentGrid.innerHTML = `
+            <div class="consent-item ${psd2Status}">
+                <span class="consent-status">${psd2Icon} ${of.consent.psd2 ? 'Aktiv' : 'Nicht erteilt'}</span>
+                <span class="consent-label">Konten (PSD2)</span>
+                <span class="consent-detail">${of.consent.psd2 ? 'Gültig bis ' + of.consent.psd2Bis : 'Keine Freigabe'}</span>
+            </div>
+            <div class="consent-item ${versicherungenStatus}">
+                <span class="consent-status">${versicherungenIcon} ${of.consent.versicherungen ? 'Aktiv' : 'Ausstehend'}</span>
+                <span class="consent-label">Versicherungen</span>
+                <span class="consent-detail">${of.consent.versicherungen ? 'Freigabe erteilt' : 'Einwilligung angefragt'}</span>
+            </div>
+            <div class="consent-item ${investmentsStatus}">
+                <span class="consent-status">${investmentsIcon} ${of.consent.investments ? 'Aktiv' : 'Nicht erteilt'}</span>
+                <span class="consent-label">Investments</span>
+                <span class="consent-detail">${of.consent.investments ? 'Freigabe erteilt' : 'Keine Freigabe'}</span>
+            </div>
+        `;
+    }
+
+    // Update Externe Konten table
+    const externeKontenBody = openfinanceTab.querySelector('#externeKontenBody');
+    if (externeKontenBody && of.externeKonten) {
+        if (of.externeKonten.length === 0) {
+            externeKontenBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Keine externen Konten gefunden</td></tr>';
+        } else {
+            externeKontenBody.innerHTML = of.externeKonten.map(konto => {
+                const saldoClass = konto.saldo < 0 ? 'negative' : (konto.saldo > 0 ? 'positive' : '');
+                const statusBadge = konto.status === 'Aktiv' ? 'success' : (konto.status === 'Überzogen' ? 'danger' : 'warning');
+                return `
+                    <tr>
+                        <td>${konto.institut}</td>
+                        <td>${konto.produkt}</td>
+                        <td class="${saldoClass}">€${Math.abs(konto.saldo).toLocaleString('de-DE')}</td>
+                        <td>${konto.rate > 0 ? '€' + konto.rate.toLocaleString('de-DE') : '-'}</td>
+                        <td><span class="status-badge ${statusBadge}">${konto.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+
+    // Update Externe Versicherungen table
+    const externeVersicherungenBody = openfinanceTab.querySelector('#externeVersicherungenBody');
+    if (externeVersicherungenBody && of.externeVersicherungen) {
+        if (of.externeVersicherungen.length === 0) {
+            externeVersicherungenBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Keine externen Versicherungen erkannt (kein Consent oder keine Daten)</td></tr>';
+        } else {
+            externeVersicherungenBody.innerHTML = of.externeVersicherungen.map(vers => `
+                <tr>
+                    <td>${vers.anbieter}</td>
+                    <td>${vers.produkt}</td>
+                    <td>€${vers.beitrag.toLocaleString('de-DE')}/M</td>
+                    <td>${vers.beginn}</td>
+                    <td>${vers.hinweis || '-'}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    // Calculate and update Gesamtverschuldung
+    const produkteSaldo = customer.produkte ? customer.produkte.reduce((sum, p) => sum + (p.saldo || 0), 0) : 0;
+    const externeSaldo = of.externeKonten ? of.externeKonten.filter(k => k.saldo < 0 || k.produkt.toLowerCase().includes('kredit') || k.produkt.toLowerCase().includes('leasing'))
+        .reduce((sum, k) => sum + Math.abs(k.saldo), 0) : 0;
+    const gesamtVerschuldung = produkteSaldo + externeSaldo;
+
+    // Calculate DTI (Debt-to-Income Ratio) based on monthly income
+    const monatlichesEinkommen = customer.haushalt ?
+        (customer.haushalt.einnahmen.gehalt || 0) + (customer.haushalt.einnahmen.neben || 0) +
+        (customer.haushalt.einnahmen.sozial || 0) + (customer.haushalt.einnahmen.sonstige || 0) :
+        (customer.einkommenMonatlich || 1);
+    const dtiRatio = monatlichesEinkommen > 0 ? Math.round((gesamtVerschuldung / (monatlichesEinkommen * 12)) * 100) : 0;
+
+    const debtEigeneBank = openfinanceTab.querySelector('#debtEigeneBank');
+    const debtExtern = openfinanceTab.querySelector('#debtExtern');
+    const debtGesamt = openfinanceTab.querySelector('#debtGesamt');
+    const debtRatio = openfinanceTab.querySelector('#debtRatio');
+
+    if (debtEigeneBank) debtEigeneBank.textContent = '€' + produkteSaldo.toLocaleString('de-DE');
+    if (debtExtern) debtExtern.textContent = '€' + externeSaldo.toLocaleString('de-DE');
+    if (debtGesamt) debtGesamt.textContent = '€' + gesamtVerschuldung.toLocaleString('de-DE');
+    if (debtRatio) {
+        debtRatio.textContent = dtiRatio + '%';
+        debtRatio.style.color = dtiRatio <= 35 ? '#22c55e' : (dtiRatio <= 50 ? '#f59e0b' : '#ef4444');
+    }
+
+    console.log('Open Finance fields updated for:', customer.name);
 }
 
 // Generate customer-specific factors

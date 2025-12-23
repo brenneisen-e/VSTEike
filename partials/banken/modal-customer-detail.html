@@ -27,6 +27,8 @@
         <div class="modal-tabs">
             <button class="modal-tab active" onclick="showCustomerTab('stammdaten')">Stammdaten</button>
             <button class="modal-tab" onclick="showCustomerTab('konten')">Konten & Finanzen</button>
+            <button class="modal-tab" onclick="showCustomerTab('haushalt')">Haushaltsrechnung</button>
+            <button class="modal-tab" onclick="showCustomerTab('openfinance')">Open Finance</button>
             <button class="modal-tab" onclick="showCustomerTab('kommunikation')">Kommunikation</button>
             <button class="modal-tab" onclick="showCustomerTab('ki-analyse')">KI-Analyse</button>
         </div>
@@ -1098,6 +1100,371 @@
                     <h4>Letzte Transaktionen</h4>
                     <div class="tx-compact-list" id="tx-compact-list">
                         <!-- Wird dynamisch aus customer.transaktionen befüllt -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Haushaltsrechnung (PSD2) -->
+            <div class="customer-tab" id="tab-haushalt">
+                <div class="haushalt-header">
+                    <div class="haushalt-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        <h3>Haushaltsrechnung</h3>
+                        <span class="psd2-badge">PSD2 Kontoabfrage</span>
+                    </div>
+                    <div class="haushalt-period">
+                        <span>Analysezeitraum:</span>
+                        <select id="haushaltPeriod" onchange="updateHaushaltPeriod(this.value)">
+                            <option value="3">Letzte 3 Monate</option>
+                            <option value="6" selected>Letzte 6 Monate</option>
+                            <option value="12">Letzte 12 Monate</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="haushalt-info-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <p><strong>PSD2 Kontoinformationsdienst:</strong> Auf Basis der erteilten Einwilligung werden Kontobewegungen automatisch kategorisiert und analysiert. Letzte Aktualisierung: <span id="haushaltLastUpdate">19.12.2025, 08:30 Uhr</span></p>
+                </div>
+
+                <!-- Zusammenfassung Cards -->
+                <div class="haushalt-summary-grid">
+                    <div class="haushalt-summary-card income">
+                        <div class="summary-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <line x1="12" y1="19" x2="12" y2="5"></line>
+                                <polyline points="5 12 12 5 19 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-label">Einnahmen (Ø/Monat)</span>
+                            <span class="summary-value" id="haushaltEinnahmen">€0</span>
+                            <span class="summary-detail" id="haushaltEinnahmenDetail">-</span>
+                        </div>
+                    </div>
+                    <div class="haushalt-summary-card expense">
+                        <div class="summary-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <polyline points="19 12 12 19 5 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-label">Ausgaben (Ø/Monat)</span>
+                            <span class="summary-value" id="haushaltAusgaben">€0</span>
+                            <span class="summary-detail" id="haushaltAusgabenDetail">-</span>
+                        </div>
+                    </div>
+                    <div class="haushalt-summary-card balance">
+                        <div class="summary-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8"></path>
+                                <line x1="12" y1="6" x2="12" y2="8"></line>
+                                <line x1="12" y1="16" x2="12" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-label">Frei verfügbar</span>
+                            <span class="summary-value" id="haushaltVerfuegbar">€0</span>
+                            <span class="summary-detail" id="haushaltVerfuegbarDetail">Nach Abzug aller Kosten</span>
+                        </div>
+                    </div>
+                    <div class="haushalt-summary-card ratio">
+                        <div class="summary-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <path d="M21.21 15.89A10 10 0 118 2.83"></path>
+                                <path d="M22 12A10 10 0 0012 2v10z"></path>
+                            </svg>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-label">Sparquote</span>
+                            <span class="summary-value" id="haushaltSparquote">0%</span>
+                            <span class="summary-detail" id="haushaltSparquoteDetail">Anteil vom Einkommen</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detaillierte Aufschlüsselung -->
+                <div class="haushalt-details-grid">
+                    <!-- Einnahmen Details -->
+                    <div class="haushalt-detail-card">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <line x1="12" y1="19" x2="12" y2="5"></line>
+                                <polyline points="5 12 12 5 19 12"></polyline>
+                            </svg>
+                            Einnahmen
+                        </h4>
+                        <div class="haushalt-breakdown" id="einnahmenBreakdown">
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Gehalt/Lohn (netto)</span>
+                                <span class="breakdown-value" id="einnahmenGehalt">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Nebeneinkünfte</span>
+                                <span class="breakdown-value" id="einnahmenNeben">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Kindergeld/Sozialleist.</span>
+                                <span class="breakdown-value" id="einnahmenSozial">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Sonstige Einnahmen</span>
+                                <span class="breakdown-value" id="einnahmenSonstige">€0</span>
+                            </div>
+                            <div class="breakdown-row total">
+                                <span class="breakdown-label">Gesamt</span>
+                                <span class="breakdown-value" id="einnahmenGesamt">€0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fixkosten Details -->
+                    <div class="haushalt-detail-card">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Fixkosten
+                        </h4>
+                        <div class="haushalt-breakdown" id="fixkostenBreakdown">
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Miete/Wohnen</span>
+                                <span class="breakdown-value negative" id="fixkostenMiete">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Nebenkosten/Energie</span>
+                                <span class="breakdown-value negative" id="fixkostenNebenkosten">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Versicherungen</span>
+                                <span class="breakdown-value negative" id="fixkostenVersicherung">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Kredite/Finanzierungen</span>
+                                <span class="breakdown-value negative" id="fixkostenKredite">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Abonnements/Verträge</span>
+                                <span class="breakdown-value negative" id="fixkostenAbos">€0</span>
+                            </div>
+                            <div class="breakdown-row total">
+                                <span class="breakdown-label">Gesamt Fixkosten</span>
+                                <span class="breakdown-value negative" id="fixkostenGesamt">€0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lebenshaltung Details -->
+                    <div class="haushalt-detail-card">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 01-8 0"></path>
+                            </svg>
+                            Lebenshaltung
+                        </h4>
+                        <div class="haushalt-breakdown" id="lebenshaltungBreakdown">
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Lebensmittel</span>
+                                <span class="breakdown-value negative" id="lebenshaltungEssen">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Mobilität/Auto</span>
+                                <span class="breakdown-value negative" id="lebenshaltungMobilitaet">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Gesundheit/Medizin</span>
+                                <span class="breakdown-value negative" id="lebenshaltungGesundheit">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Freizeit/Unterhaltung</span>
+                                <span class="breakdown-value negative" id="lebenshaltungFreizeit">€0</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span class="breakdown-label">Sonstige Ausgaben</span>
+                                <span class="breakdown-value negative" id="lebenshaltungSonstige">€0</span>
+                            </div>
+                            <div class="breakdown-row total">
+                                <span class="breakdown-label">Gesamt Lebenshaltung</span>
+                                <span class="breakdown-value negative" id="lebenshaltungGesamt">€0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zahlungsfähigkeits-Bewertung -->
+                <div class="haushalt-assessment">
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Zahlungsfähigkeitsbewertung
+                    </h4>
+                    <div class="assessment-content" id="haushaltAssessment">
+                        <div class="assessment-indicator">
+                            <div class="indicator-bar">
+                                <div class="indicator-fill" id="assessmentFill" style="width: 50%;"></div>
+                            </div>
+                            <div class="indicator-labels">
+                                <span>Kritisch</span>
+                                <span>Eingeschränkt</span>
+                                <span>Stabil</span>
+                                <span>Gut</span>
+                            </div>
+                        </div>
+                        <div class="assessment-text" id="assessmentText">
+                            Bewertung wird berechnet...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Open Finance -->
+            <div class="customer-tab" id="tab-openfinance">
+                <div class="openfinance-header">
+                    <div class="openfinance-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"></path>
+                        </svg>
+                        <h3>Open Finance</h3>
+                        <span class="fida-badge">FIDA Datenabgleich</span>
+                    </div>
+                </div>
+
+                <!-- Consent Status -->
+                <div class="openfinance-consent-card">
+                    <div class="consent-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <h4>Consent-Status</h4>
+                    </div>
+                    <div class="consent-grid" id="consentGrid">
+                        <div class="consent-item active">
+                            <span class="consent-status">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                Aktiv
+                            </span>
+                            <span class="consent-label">Konten (PSD2)</span>
+                            <span class="consent-detail">Gültig bis 15.12.2026</span>
+                        </div>
+                        <div class="consent-item pending">
+                            <span class="consent-status">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                Ausstehend
+                            </span>
+                            <span class="consent-label">Versicherungen</span>
+                            <span class="consent-detail">Einwilligung angefragt</span>
+                        </div>
+                        <div class="consent-item inactive">
+                            <span class="consent-status">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                                Nicht erteilt
+                            </span>
+                            <span class="consent-label">Investments</span>
+                            <span class="consent-detail">Keine Freigabe</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Externe Konten & Verbindlichkeiten -->
+                <div class="openfinance-section">
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                        Externe Konten & Verbindlichkeiten
+                    </h4>
+                    <table class="openfinance-table" id="externeKontenTable">
+                        <thead>
+                            <tr>
+                                <th>Institut</th>
+                                <th>Produktart</th>
+                                <th>Saldo/Restschuld</th>
+                                <th>Rate/Monat</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="externeKontenBody">
+                            <!-- Wird dynamisch befüllt -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Externe Versicherungen (falls Consent) -->
+                <div class="openfinance-section">
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        Versicherungen (extern erkannt)
+                    </h4>
+                    <table class="openfinance-table" id="externeVersicherungenTable">
+                        <thead>
+                            <tr>
+                                <th>Anbieter</th>
+                                <th>Produkt</th>
+                                <th>Beitrag</th>
+                                <th>Vertragsbeginn</th>
+                                <th>Hinweis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="externeVersicherungenBody">
+                            <!-- Wird dynamisch befüllt -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Gesamtverschuldung Übersicht -->
+                <div class="openfinance-summary">
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M21.21 15.89A10 10 0 118 2.83"></path>
+                            <path d="M22 12A10 10 0 0012 2v10z"></path>
+                        </svg>
+                        Gesamtverschuldung (alle Institute)
+                    </h4>
+                    <div class="debt-overview-grid">
+                        <div class="debt-card">
+                            <span class="debt-label">Eigene Bank</span>
+                            <span class="debt-value" id="debtEigeneBank">€0</span>
+                        </div>
+                        <div class="debt-card">
+                            <span class="debt-label">Externe Institute</span>
+                            <span class="debt-value" id="debtExtern">€0</span>
+                        </div>
+                        <div class="debt-card total">
+                            <span class="debt-label">Gesamtverschuldung</span>
+                            <span class="debt-value" id="debtGesamt">€0</span>
+                        </div>
+                        <div class="debt-card ratio">
+                            <span class="debt-label">Debt-to-Income Ratio</span>
+                            <span class="debt-value" id="debtRatio">0%</span>
+                        </div>
                     </div>
                 </div>
             </div>
