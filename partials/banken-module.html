@@ -106,7 +106,15 @@
         <div class="feedback-form">
         <div class="feedback-form-row">
             <label>Autor:</label>
-            <input type="text" id="feedbackAuthor" placeholder="Dein Name" value="">
+            <div class="feedback-author-select">
+                <select id="feedbackAuthorSelect" onchange="handleAuthorSelect()">
+                    <option value="">-- Wähle --</option>
+                    <option value="Eike">Eike</option>
+                    <option value="Bianca">Bianca</option>
+                    <option value="custom">Anderer Name...</option>
+                </select>
+                <input type="text" id="feedbackAuthor" placeholder="Dein Name" value="" style="display: none;">
+            </div>
         </div>
         <div class="feedback-form-row">
             <label>Bereich:</label>

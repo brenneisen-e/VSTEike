@@ -17,7 +17,7 @@
 // CORS Headers für Cross-Origin Requests
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
 };
@@ -83,8 +83,54 @@ export default {
                 }), { status: 201, headers: corsHeaders });
             }
 
+            // POST /feedback/:id/reply - Antwort hinzufügen
+            if (request.method === 'POST' && path.match(/^\/feedback\/[^/]+\/reply$/)) {
+                const id = path.split('/')[2];
+                const body = await request.json();
+
+                if (!body.text || body.text.trim() === '') {
+                    return new Response(JSON.stringify({
+                        success: false,
+                        error: 'Antwort darf nicht leer sein'
+                    }), { status: 400, headers: corsHeaders });
+                }
+
+                const feedbackList = await env.FEEDBACK.get('feedbacks', 'json') || [];
+                const feedbackIndex = feedbackList.findIndex(f => f.id === id);
+
+                if (feedbackIndex === -1) {
+                    return new Response(JSON.stringify({
+                        success: false,
+                        error: 'Feedback nicht gefunden'
+                    }), { status: 404, headers: corsHeaders });
+                }
+
+                // Reply erstellen
+                const reply = {
+                    id: Date.now().toString(),
+                    author: body.author || 'Anonym',
+                    text: body.text.trim(),
+                    timestamp: body.timestamp || new Date().toISOString()
+                };
+
+                // Replies Array initialisieren falls nicht vorhanden
+                if (!feedbackList[feedbackIndex].replies) {
+                    feedbackList[feedbackIndex].replies = [];
+                }
+
+                feedbackList[feedbackIndex].replies.push(reply);
+
+                await env.FEEDBACK.put('feedbacks', JSON.stringify(feedbackList));
+
+                return new Response(JSON.stringify({
+                    success: true,
+                    data: reply,
+                    message: 'Antwort hinzugefügt'
+                }), { status: 201, headers: corsHeaders });
+            }
+
             // DELETE /feedback/:id - Feedback löschen
-            if (request.method === 'DELETE' && path.startsWith('/feedback/')) {
+            if (request.method === 'DELETE' && path.startsWith('/feedback/') && !path.includes('/reply')) {
                 const id = path.split('/')[2];
 
                 if (!id) {
@@ -141,6 +187,7 @@ export default {
                 availableRoutes: [
                     'GET /feedback',
                     'POST /feedback',
+                    'POST /feedback/:id/reply',
                     'DELETE /feedback/:id',
                     'GET /stats'
                 ]
