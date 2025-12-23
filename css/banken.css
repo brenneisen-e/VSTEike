@@ -467,6 +467,48 @@
     margin: 4px 0;
 }
 
+/* Header Feedback Button */
+.header-feedback-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.header-feedback-btn:hover {
+    background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    transform: translateY(-1px);
+}
+
+.header-feedback-btn svg {
+    color: white;
+    flex-shrink: 0;
+}
+
+.header-feedback-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: white;
+    color: #8b5cf6;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
 .banken-header-right {
     display: flex;
     align-items: center;
