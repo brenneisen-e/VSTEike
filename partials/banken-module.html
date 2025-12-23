@@ -146,6 +146,37 @@
             <label>Kommentar:</label>
             <textarea id="feedbackText" placeholder="Beschreiben Sie Ihr Feedback..." rows="4"></textarea>
         </div>
+
+        <!-- Screenshot Section -->
+        <div class="feedback-form-row">
+            <label>Screenshot:</label>
+            <div class="feedback-screenshot-section">
+                <button class="feedback-screenshot-btn" onclick="captureScreenshot()" id="screenshotBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Screenshot aufnehmen
+                </button>
+                <div class="feedback-screenshot-preview" id="screenshotPreview" style="display: none;">
+                    <img id="screenshotThumbnail" alt="Screenshot Vorschau">
+                    <button class="screenshot-edit-btn" onclick="editScreenshot()" title="Bearbeiten">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
+                    <button class="screenshot-remove-btn" onclick="removeScreenshot()" title="Entfernen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <button class="feedback-submit-btn" onclick="submitFeedback()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -168,6 +199,96 @@
 
     <div class="feedback-list" id="feedbackList">
         <!-- Kommentare werden hier dynamisch eingefügt -->
+    </div>
+</div>
+
+<!-- Screenshot Annotation Modal -->
+<div class="screenshot-modal" id="screenshotModal">
+    <div class="screenshot-modal-content">
+        <div class="screenshot-modal-header">
+            <h3>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                Screenshot bearbeiten
+            </h3>
+            <button class="screenshot-modal-close" onclick="closeScreenshotModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="screenshot-toolbar">
+            <div class="screenshot-tools">
+                <button class="screenshot-tool active" data-tool="pen" onclick="setDrawTool('pen')" title="Stift">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                        <path d="M2 2l7.586 7.586"></path>
+                    </svg>
+                </button>
+                <button class="screenshot-tool" data-tool="arrow" onclick="setDrawTool('arrow')" title="Pfeil">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+                <button class="screenshot-tool" data-tool="rect" onclick="setDrawTool('rect')" title="Rechteck">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    </svg>
+                </button>
+                <button class="screenshot-tool" data-tool="circle" onclick="setDrawTool('circle')" title="Kreis">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                </button>
+                <button class="screenshot-tool" data-tool="text" onclick="setDrawTool('text')" title="Text">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                        <line x1="9" y1="20" x2="15" y2="20"></line>
+                        <line x1="12" y1="4" x2="12" y2="20"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="screenshot-colors">
+                <button class="screenshot-color active" data-color="#ef4444" onclick="setDrawColor('#ef4444')" style="background: #ef4444;" title="Rot"></button>
+                <button class="screenshot-color" data-color="#f97316" onclick="setDrawColor('#f97316')" style="background: #f97316;" title="Orange"></button>
+                <button class="screenshot-color" data-color="#eab308" onclick="setDrawColor('#eab308')" style="background: #eab308;" title="Gelb"></button>
+                <button class="screenshot-color" data-color="#22c55e" onclick="setDrawColor('#22c55e')" style="background: #22c55e;" title="Grün"></button>
+                <button class="screenshot-color" data-color="#3b82f6" onclick="setDrawColor('#3b82f6')" style="background: #3b82f6;" title="Blau"></button>
+                <button class="screenshot-color" data-color="#000000" onclick="setDrawColor('#000000')" style="background: #000000;" title="Schwarz"></button>
+            </div>
+            <div class="screenshot-actions-left">
+                <button class="screenshot-undo" onclick="undoDrawing()" title="Rückgängig">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                </button>
+                <button class="screenshot-clear" onclick="clearDrawing()" title="Alles löschen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="screenshot-canvas-container">
+            <canvas id="screenshotCanvas"></canvas>
+        </div>
+        <div class="screenshot-modal-footer">
+            <button class="screenshot-cancel-btn" onclick="closeScreenshotModal()">Abbrechen</button>
+            <button class="screenshot-save-btn" onclick="saveAnnotatedScreenshot()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Übernehmen
+            </button>
+        </div>
     </div>
 </div>
 
