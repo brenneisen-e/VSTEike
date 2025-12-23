@@ -8844,6 +8844,9 @@ body.modal-open {
 }
 
 .feedback-type-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     padding: 6px 12px;
     border: 1px solid #e2e8f0;
     border-radius: 20px;
@@ -8851,6 +8854,11 @@ body.modal-open {
     font-size: 12px;
     cursor: pointer;
     transition: all 0.2s;
+}
+
+.feedback-type-btn svg {
+    flex-shrink: 0;
+    color: #64748b;
 }
 
 .feedback-type-btn:hover {
@@ -8862,6 +8870,10 @@ body.modal-open {
     background: #6366f1;
     color: white;
     border-color: #6366f1;
+}
+
+.feedback-type-btn.active svg {
+    color: white;
 }
 
 /* Submit Button */
@@ -8970,7 +8982,14 @@ body.modal-open {
 }
 
 .feedback-item-type {
-    font-size: 16px;
+    display: flex;
+    align-items: center;
+    color: #64748b;
+}
+
+.feedback-item-type svg {
+    width: 14px;
+    height: 14px;
 }
 
 .feedback-item-author {

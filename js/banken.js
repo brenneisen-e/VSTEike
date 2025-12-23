@@ -159,10 +159,10 @@ function renderFeedbackList(feedbacks) {
     }
 
     const typeIcons = {
-        'verbesserung': '💡',
-        'fehler': '🐛',
-        'frage': '❓',
-        'lob': '👍'
+        'verbesserung': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+        'fehler': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        'frage': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+        'lob': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"></path></svg>'
     };
 
     const areaLabels = {
@@ -184,7 +184,7 @@ function renderFeedbackList(feedbacks) {
         return `
             <div class="feedback-item ${fb.type}">
                 <div class="feedback-item-header">
-                    <span class="feedback-item-type">${typeIcons[fb.type] || '💬'}</span>
+                    <span class="feedback-item-type">${typeIcons[fb.type] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>'}</span>
                     <span class="feedback-item-author">${fb.author}</span>
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
                     <span class="feedback-item-date">${dateStr}</span>
