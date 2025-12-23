@@ -18,50 +18,106 @@
     z-index: 10000;
 }
 
-/* Loading Animation */
+/* Loading Animation with Progress Bar */
 .loading-container {
     text-align: center;
     animation: fadeIn 0.5s ease-in;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
 }
 
-.dashboard-icon-animated {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 12px;
+.loading-logo {
+    width: 100px;
+    height: 100px;
     background: white;
-    border-radius: 16px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    margin-bottom: 24px;
+    animation: logoPulse 2s ease-in-out infinite;
 }
 
-.icon-bar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 4px;
-    animation: barPulse 1.5s ease-in-out infinite;
+.loading-logo svg {
+    color: #6366f1;
 }
 
-.icon-bar.bar-1 { animation-delay: 0s; height: 100%; }
-.icon-bar.bar-2 { animation-delay: 0.2s; height: 100%; }
-.icon-bar.bar-3 { animation-delay: 0.4s; height: 100%; }
-.icon-bar.bar-4 { animation-delay: 0.6s; height: 100%; }
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 25px 70px rgba(99, 102, 241, 0.4); }
+}
 
-.loading-text {
+.loading-brand {
     color: white;
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 12px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    background: rgba(0, 0, 0, 0.2);
-    padding: 8px 20px;
-    border-radius: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 32px 0;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.5px;
 }
 
-@keyframes barPulse {
-    0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
-    50% { transform: scaleY(1); opacity: 1; }
+.loading-progress-wrapper {
+    width: 100%;
+    max-width: 320px;
+}
+
+.loading-progress-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+}
+
+.loading-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.loading-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.loading-progress-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.loading-status {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.loading-percent {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 12px;
+    border-radius: 12px;
 }
 
 @keyframes fadeIn {

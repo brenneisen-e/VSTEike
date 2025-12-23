@@ -148,6 +148,15 @@ async function saveFeedbackToCloudflare(feedback) {
 
 // Cloudflare: Feedback laden
 async function loadFeedbackFromCloudflare() {
+    // Verwende vorgeladene Daten falls verfügbar
+    if (window.preloadedFeedback && !window.feedbackAlreadyLoaded) {
+        console.log('📦 Verwende vorgeladene Feedback-Daten');
+        renderFeedbackList(window.preloadedFeedback);
+        updateFeedbackBadge(window.preloadedFeedback.length);
+        window.feedbackAlreadyLoaded = true;
+        return;
+    }
+
     try {
         console.log('📡 Lade Feedback von Cloudflare:', FEEDBACK_API_URL);
         const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
@@ -220,40 +229,132 @@ function renderFeedbackList(feedbacks) {
         const date = new Date(fb.timestamp);
         const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 
-        // Screenshot HTML (falls vorhanden)
-        const screenshotHtml = fb.screenshot
-            ? `<div class="feedback-item-screenshot">
-                 <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)" title="Klicken zum Vergrößern">
-               </div>`
+        // Bild-Indikator (falls Screenshot vorhanden)
+        const hasImageIndicator = fb.screenshot
+            ? `<span class="feedback-has-image" title="Mit Screenshot">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                   <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                   <polyline points="21 15 16 10 5 21"></polyline>
+                 </svg>
+               </span>`
             : '';
 
+        // Text kürzen für Vorschau
+        const shortText = fb.text.length > 80 ? fb.text.substring(0, 80) + '...' : fb.text;
+
         return `
-            <div class="feedback-item ${fb.type}" data-id="${fb.id}">
+            <div class="feedback-item ${fb.type}" data-id="${fb.id}" onclick="openFeedbackDetail(${index})">
                 <div class="feedback-item-header">
                     <span class="feedback-item-type">${typeIcons[fb.type] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>'}</span>
                     <span class="feedback-item-author">${fb.author}</span>
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
+                    ${hasImageIndicator}
                     <span class="feedback-item-date">${dateStr}</span>
-                    <div class="feedback-item-actions">
-                        <button class="feedback-action-btn edit" onclick="editFeedbackByIndex(${index})" title="Bearbeiten">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                        </button>
-                        <button class="feedback-action-btn delete" onclick="deleteFeedback('${fb.id}')" title="Löschen">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
-                <div class="feedback-item-text">${fb.text}</div>
-                ${screenshotHtml}
+                <div class="feedback-item-text">${shortText}</div>
             </div>
         `;
     }).join('');
+}
+
+// Feedback-Detail-Ansicht öffnen
+function openFeedbackDetail(index) {
+    const fb = currentFeedbackList[index];
+    if (!fb) return;
+
+    const typeLabels = {
+        'verbesserung': 'Verbesserung',
+        'fehler': 'Fehler',
+        'frage': 'Frage',
+        'lob': 'Lob'
+    };
+
+    const areaLabels = {
+        'allgemein': 'Allgemein',
+        'dashboard': 'Dashboard',
+        'kundenakte': 'Kundenakte',
+        'konten-finanzen': 'Konten & Finanzen',
+        'kommunikation': 'Kommunikation',
+        'ki-analyse': 'KI-Analyse',
+        'design': 'Design/UI',
+        'daten': 'Daten',
+        'funktion': 'Funktion'
+    };
+
+    const date = new Date(fb.timestamp);
+    const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+    // Screenshot HTML für Detail-Ansicht
+    const screenshotHtml = fb.screenshot
+        ? `<div class="feedback-detail-screenshot">
+             <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)">
+           </div>`
+        : '';
+
+    // Modal erstellen oder wiederverwenden
+    let modal = document.getElementById('feedbackDetailModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'feedbackDetailModal';
+        modal.className = 'feedback-detail-modal';
+        document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+        <div class="feedback-detail-content">
+            <div class="feedback-detail-header">
+                <h3>Kommentar Details</h3>
+                <button class="feedback-detail-close" onclick="closeFeedbackDetail()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="feedback-detail-body">
+                <div class="feedback-detail-meta">
+                    <span class="feedback-detail-author">${fb.author}</span>
+                    <span class="feedback-detail-type ${fb.type}">${typeLabels[fb.type] || fb.type}</span>
+                    <span class="feedback-detail-area">${areaLabels[fb.area] || fb.area}</span>
+                    <span class="feedback-detail-date">${dateStr}</span>
+                </div>
+                <div class="feedback-detail-text">${fb.text}</div>
+                ${screenshotHtml}
+            </div>
+            <div class="feedback-detail-actions">
+                <button class="feedback-detail-btn edit" onclick="closeFeedbackDetail(); editFeedbackByIndex(${index});">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Bearbeiten
+                </button>
+                <button class="feedback-detail-btn delete" onclick="closeFeedbackDetail(); deleteFeedback('${fb.id}');">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Löschen
+                </button>
+            </div>
+        </div>
+    `;
+
+    modal.classList.add('open');
+
+    // Klick außerhalb schließt Modal
+    modal.onclick = (e) => {
+        if (e.target === modal) closeFeedbackDetail();
+    };
+}
+
+// Feedback-Detail schließen
+function closeFeedbackDetail() {
+    const modal = document.getElementById('feedbackDetailModal');
+    if (modal) {
+        modal.classList.remove('open');
+    }
 }
 
 // Feedback bearbeiten
@@ -859,6 +960,44 @@ async function loadBankenComponents(container) {
     console.log(`Loaded ${componentPlaceholders.length} components`);
 }
 
+// Show loading progress bar
+function showLoadingProgress(container) {
+    container.innerHTML = `
+        <div class="banken-loading-screen">
+            <div class="loading-content">
+                <div class="loading-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                </div>
+                <h2 class="loading-title">Collections Management</h2>
+                <div class="loading-progress-container">
+                    <div class="loading-progress-bar">
+                        <div class="loading-progress-fill" id="loadingProgressFill"></div>
+                    </div>
+                    <div class="loading-progress-info">
+                        <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
+                        <span class="loading-progress-percent" id="loadingProgressPercent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Update loading progress
+function updateLoadingProgress(percent, text) {
+    const fill = document.getElementById('loadingProgressFill');
+    const percentEl = document.getElementById('loadingProgressPercent');
+    const textEl = document.getElementById('loadingProgressText');
+
+    if (fill) fill.style.width = `${percent}%`;
+    if (percentEl) percentEl.textContent = `${percent}%`;
+    if (textEl) textEl.textContent = text;
+}
+
 // Load Banken module from partial (modular version)
 async function loadBankenModule() {
     if (bankenModuleLoaded) return;
@@ -866,18 +1005,39 @@ async function loadBankenModule() {
     const container = document.getElementById('bankenModule');
     if (!container) return;
 
+    // Show loading screen
+    showLoadingProgress(container);
+    await new Promise(r => setTimeout(r, 100)); // Allow DOM to render
+
     try {
+        updateLoadingProgress(10, 'Lade Hauptstruktur...');
+
         // First load the main shell template
         const response = await fetch('partials/banken-module.html');
         if (response.ok) {
+            updateLoadingProgress(20, 'Verarbeite Template...');
             const html = await response.text();
-            container.innerHTML = html;
 
-            // Then load all components into placeholders
-            await loadBankenComponents(container);
+            // Create temporary container to load components
+            const tempContainer = document.createElement('div');
+            tempContainer.innerHTML = html;
+
+            updateLoadingProgress(30, 'Lade Komponenten...');
+
+            // Load components with progress tracking
+            await loadBankenComponentsWithProgress(tempContainer);
+
+            updateLoadingProgress(90, 'Initialisiere Dashboard...');
+            await new Promise(r => setTimeout(r, 200));
+
+            // Replace loading screen with actual content
+            container.innerHTML = tempContainer.innerHTML;
 
             bankenModuleLoaded = true;
             console.log('Banken-Modul modular geladen');
+
+            updateLoadingProgress(100, 'Fertig!');
+            await new Promise(r => setTimeout(r, 300));
 
             // Initialize charts after all content is loaded
             setTimeout(() => {
@@ -886,20 +1046,68 @@ async function loadBankenModule() {
                 if (typeof initBankenChat === 'function') {
                     initBankenChat();
                 }
+                // Initialize Feedback System
+                initFeedbackSystem();
             }, 100);
         } else {
             throw new Error('Failed to load module');
         }
     } catch (error) {
         console.warn('Banken-Modul konnte nicht geladen werden, verwende Fallback');
-        // If fetch fails (e.g., file:// protocol), the module stays with loading state
         container.innerHTML = `
-            <div class="module-loading">
-                <p style="color: #ef4444;">Modul konnte nicht geladen werden.</p>
-                <p style="font-size: 12px;">Bitte starten Sie die Anwendung über einen Webserver.</p>
+            <div class="banken-loading-screen error">
+                <div class="loading-content">
+                    <div class="loading-icon error">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h2 class="loading-title">Fehler beim Laden</h2>
+                    <p class="loading-error-text">Bitte starte die Anwendung über einen Webserver.</p>
+                </div>
             </div>
         `;
     }
+}
+
+// Load components with progress tracking
+async function loadBankenComponentsWithProgress(container) {
+    const componentPlaceholders = container.querySelectorAll('[data-component]');
+    const totalComponents = componentPlaceholders.length;
+    let loadedCount = 0;
+
+    const componentLabels = {
+        'header': 'Header & Navigation',
+        'section-segmentierung': 'Kundensegmentierung',
+        'section-npl': 'NPL Dashboard',
+        'section-stage2': 'Stage 2 Analyse',
+        'section-aufgaben': 'Aufgaben',
+        'modal-customer-detail': 'Kundendetails',
+        'modal-document-scanner': 'Dokumenten-Scanner',
+        'crm-profile-view': 'CRM Profil'
+    };
+
+    // Load components sequentially for better progress display
+    for (const placeholder of componentPlaceholders) {
+        const componentName = placeholder.getAttribute('data-component');
+        const label = componentLabels[componentName] || componentName;
+
+        updateLoadingProgress(
+            30 + Math.round((loadedCount / totalComponents) * 55),
+            `Lade ${label}...`
+        );
+
+        const html = await loadComponent(componentName);
+        placeholder.outerHTML = html;
+        loadedCount++;
+
+        // Small delay between components for visual feedback
+        await new Promise(r => setTimeout(r, 50));
+    }
+
+    console.log(`Loaded ${totalComponents} components`);
 }
 
 function switchModule(moduleName) {
