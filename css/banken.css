@@ -236,7 +236,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 20px;
     flex: 1;
 }
 
@@ -8792,6 +8792,12 @@ body.modal-open {
     right: 0;
 }
 
+.feedback-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .feedback-panel-header {
     display: flex;
     align-items: center;
@@ -8975,8 +8981,6 @@ body.modal-open {
 }
 
 .feedback-list {
-    flex: 1;
-    overflow-y: auto;
     padding: 12px 20px;
 }
 
