@@ -8982,6 +8982,7 @@ body.modal-open {
 
 .feedback-list {
     padding: 12px 20px;
+    padding-bottom: 40px; /* Extra Platz am Ende für besseres Scrollen */
 }
 
 .feedback-empty {

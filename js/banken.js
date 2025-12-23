@@ -308,10 +308,13 @@ function editFeedback(fb) {
         `;
     }
 
-    // Zum Formular scrollen
-    document.querySelector('.feedback-form')?.scrollIntoView({ behavior: 'smooth' });
+    // Zum Formular scrollen (innerhalb des Feedback-Panels)
+    const panelContent = document.querySelector('.feedback-panel-content');
+    if (panelContent) {
+        panelContent.scrollTop = 0; // Nach oben scrollen
+    }
 
-    showFeedbackNotification('Kommentar wird bearbeitet...');
+    showFeedbackNotification('Formular wurde ausgefüllt - jetzt bearbeiten und speichern');
 }
 
 // Feedback löschen
