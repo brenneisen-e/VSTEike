@@ -9090,6 +9090,218 @@ body.modal-open {
     opacity: 1;
 }
 
+/* Feedback Item - Clickable */
+.feedback-item {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feedback-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Indicator */
+.feedback-has-image {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #6366f1;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-left: 4px;
+}
+
+/* Feedback Detail Modal */
+.feedback-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.feedback-detail-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.feedback-detail-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.feedback-detail-modal.open .feedback-detail-content {
+    transform: scale(1);
+}
+
+.feedback-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+}
+
+.feedback-detail-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.feedback-detail-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s;
+}
+
+.feedback-detail-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.feedback-detail-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.feedback-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.feedback-detail-author {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.feedback-detail-type {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.feedback-detail-type.verbesserung {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.feedback-detail-type.fehler {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.feedback-detail-type.frage {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.feedback-detail-type.lob {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.feedback-detail-area {
+    padding: 2px 8px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.feedback-detail-date {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-left: auto;
+}
+
+.feedback-detail-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #334155;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+}
+
+.feedback-detail-screenshot {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.feedback-detail-screenshot img {
+    width: 100%;
+    display: block;
+    cursor: pointer;
+}
+
+.feedback-detail-actions {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.feedback-detail-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.feedback-detail-btn.edit {
+    background: #6366f1;
+    color: white;
+}
+
+.feedback-detail-btn.edit:hover {
+    background: #4f46e5;
+}
+
+.feedback-detail-btn.delete {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+.feedback-detail-btn.delete:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
 /* ========================================
    HAUSHALTSRECHNUNG TAB STYLES
    ======================================== */

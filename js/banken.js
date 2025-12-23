@@ -220,40 +220,132 @@ function renderFeedbackList(feedbacks) {
         const date = new Date(fb.timestamp);
         const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 
-        // Screenshot HTML (falls vorhanden)
-        const screenshotHtml = fb.screenshot
-            ? `<div class="feedback-item-screenshot">
-                 <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)" title="Klicken zum Vergrößern">
-               </div>`
+        // Bild-Indikator (falls Screenshot vorhanden)
+        const hasImageIndicator = fb.screenshot
+            ? `<span class="feedback-has-image" title="Mit Screenshot">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                   <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                   <polyline points="21 15 16 10 5 21"></polyline>
+                 </svg>
+               </span>`
             : '';
 
+        // Text kürzen für Vorschau
+        const shortText = fb.text.length > 80 ? fb.text.substring(0, 80) + '...' : fb.text;
+
         return `
-            <div class="feedback-item ${fb.type}" data-id="${fb.id}">
+            <div class="feedback-item ${fb.type}" data-id="${fb.id}" onclick="openFeedbackDetail(${index})">
                 <div class="feedback-item-header">
                     <span class="feedback-item-type">${typeIcons[fb.type] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>'}</span>
                     <span class="feedback-item-author">${fb.author}</span>
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
+                    ${hasImageIndicator}
                     <span class="feedback-item-date">${dateStr}</span>
-                    <div class="feedback-item-actions">
-                        <button class="feedback-action-btn edit" onclick="editFeedbackByIndex(${index})" title="Bearbeiten">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                        </button>
-                        <button class="feedback-action-btn delete" onclick="deleteFeedback('${fb.id}')" title="Löschen">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
-                <div class="feedback-item-text">${fb.text}</div>
-                ${screenshotHtml}
+                <div class="feedback-item-text">${shortText}</div>
             </div>
         `;
     }).join('');
+}
+
+// Feedback-Detail-Ansicht öffnen
+function openFeedbackDetail(index) {
+    const fb = currentFeedbackList[index];
+    if (!fb) return;
+
+    const typeLabels = {
+        'verbesserung': 'Verbesserung',
+        'fehler': 'Fehler',
+        'frage': 'Frage',
+        'lob': 'Lob'
+    };
+
+    const areaLabels = {
+        'allgemein': 'Allgemein',
+        'dashboard': 'Dashboard',
+        'kundenakte': 'Kundenakte',
+        'konten-finanzen': 'Konten & Finanzen',
+        'kommunikation': 'Kommunikation',
+        'ki-analyse': 'KI-Analyse',
+        'design': 'Design/UI',
+        'daten': 'Daten',
+        'funktion': 'Funktion'
+    };
+
+    const date = new Date(fb.timestamp);
+    const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+    // Screenshot HTML für Detail-Ansicht
+    const screenshotHtml = fb.screenshot
+        ? `<div class="feedback-detail-screenshot">
+             <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)">
+           </div>`
+        : '';
+
+    // Modal erstellen oder wiederverwenden
+    let modal = document.getElementById('feedbackDetailModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'feedbackDetailModal';
+        modal.className = 'feedback-detail-modal';
+        document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+        <div class="feedback-detail-content">
+            <div class="feedback-detail-header">
+                <h3>Kommentar Details</h3>
+                <button class="feedback-detail-close" onclick="closeFeedbackDetail()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="feedback-detail-body">
+                <div class="feedback-detail-meta">
+                    <span class="feedback-detail-author">${fb.author}</span>
+                    <span class="feedback-detail-type ${fb.type}">${typeLabels[fb.type] || fb.type}</span>
+                    <span class="feedback-detail-area">${areaLabels[fb.area] || fb.area}</span>
+                    <span class="feedback-detail-date">${dateStr}</span>
+                </div>
+                <div class="feedback-detail-text">${fb.text}</div>
+                ${screenshotHtml}
+            </div>
+            <div class="feedback-detail-actions">
+                <button class="feedback-detail-btn edit" onclick="closeFeedbackDetail(); editFeedbackByIndex(${index});">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Bearbeiten
+                </button>
+                <button class="feedback-detail-btn delete" onclick="closeFeedbackDetail(); deleteFeedback('${fb.id}');">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Löschen
+                </button>
+            </div>
+        </div>
+    `;
+
+    modal.classList.add('open');
+
+    // Klick außerhalb schließt Modal
+    modal.onclick = (e) => {
+        if (e.target === modal) closeFeedbackDetail();
+    };
+}
+
+// Feedback-Detail schließen
+function closeFeedbackDetail() {
+    const modal = document.getElementById('feedbackDetailModal');
+    if (modal) {
+        modal.classList.remove('open');
+    }
 }
 
 // Feedback bearbeiten
