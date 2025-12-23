@@ -21,6 +21,9 @@ let currentFeedbackList = []; // Globale Liste für Edit/Delete-Zugriff
 
 // Feedback System initialisieren
 function initFeedbackSystem() {
+    // Autor-Auswahl initialisieren
+    initAuthorSelect();
+
     if (USE_CLOUDFLARE) {
         console.log('✅ Cloudflare Feedback System aktiv');
         loadFeedbackFromCloudflare();
@@ -55,6 +58,59 @@ function setFeedbackType(type) {
             btn.classList.add('active');
         }
     });
+}
+
+// Autor-Auswahl Handler
+function handleAuthorSelect() {
+    const select = document.getElementById('feedbackAuthorSelect');
+    const input = document.getElementById('feedbackAuthor');
+
+    if (select.value === 'custom') {
+        input.style.display = 'block';
+        input.focus();
+    } else if (select.value) {
+        input.style.display = 'none';
+        input.value = select.value;
+    } else {
+        input.style.display = 'none';
+        input.value = '';
+    }
+}
+
+// Autor-Auswahl initialisieren (bei Laden)
+function initAuthorSelect() {
+    const savedAuthor = localStorage.getItem('feedbackAuthor');
+    const select = document.getElementById('feedbackAuthorSelect');
+    const input = document.getElementById('feedbackAuthor');
+
+    if (!select || !input) return;
+
+    if (savedAuthor === 'Eike' || savedAuthor === 'Bianca') {
+        select.value = savedAuthor;
+        input.value = savedAuthor;
+        input.style.display = 'none';
+    } else if (savedAuthor) {
+        select.value = 'custom';
+        input.value = savedAuthor;
+        input.style.display = 'block';
+    }
+}
+
+// Antwort-Autor-Auswahl Handler
+function handleReplyAuthorSelect() {
+    const select = document.getElementById('replyAuthorSelect');
+    const input = document.getElementById('replyAuthor');
+
+    if (select.value === 'custom') {
+        input.style.display = 'block';
+        input.focus();
+    } else if (select.value) {
+        input.style.display = 'none';
+        input.value = select.value;
+    } else {
+        input.style.display = 'none';
+        input.value = '';
+    }
 }
 
 // Feedback speichern
@@ -244,6 +300,17 @@ function renderFeedbackList(feedbacks) {
                </span>`
             : '';
 
+        // Antworten-Indikator
+        const replyCount = fb.replies ? fb.replies.length : 0;
+        const hasRepliesIndicator = replyCount > 0
+            ? `<span class="feedback-has-replies" title="${replyCount} Antwort${replyCount !== 1 ? 'en' : ''}">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                 </svg>
+                 ${replyCount}
+               </span>`
+            : '';
+
         // Text kürzen für Vorschau
         const shortText = fb.text.length > 80 ? fb.text.substring(0, 80) + '...' : fb.text;
 
@@ -254,6 +321,7 @@ function renderFeedbackList(feedbacks) {
                     <span class="feedback-item-author">${fb.author}</span>
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
                     ${hasImageIndicator}
+                    ${hasRepliesIndicator}
                     <span class="feedback-item-date">${dateStr}</span>
                 </div>
                 <div class="feedback-item-text">${shortText}</div>
@@ -298,6 +366,32 @@ function openFeedbackDetail(index) {
            </div>`
         : '';
 
+    // Antworten HTML
+    const replies = fb.replies || [];
+    const repliesHtml = replies.length > 0
+        ? `<div class="feedback-replies">
+             <h4 class="replies-title">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                 </svg>
+                 ${replies.length} Antwort${replies.length !== 1 ? 'en' : ''}
+             </h4>
+             ${replies.map(reply => {
+                 const replyDate = new Date(reply.timestamp);
+                 const replyDateStr = replyDate.toLocaleDateString('de-DE') + ' ' + replyDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                 return `
+                     <div class="feedback-reply">
+                         <div class="reply-header">
+                             <span class="reply-author">${reply.author}</span>
+                             <span class="reply-date">${replyDateStr}</span>
+                         </div>
+                         <div class="reply-text">${reply.text}</div>
+                     </div>
+                 `;
+             }).join('')}
+           </div>`
+        : '';
+
     // Modal erstellen oder wiederverwenden
     let modal = document.getElementById('feedbackDetailModal');
     if (!modal) {
@@ -306,6 +400,9 @@ function openFeedbackDetail(index) {
         modal.className = 'feedback-detail-modal';
         document.body.appendChild(modal);
     }
+
+    // Gespeicherten Autor laden
+    const savedAuthor = localStorage.getItem('feedbackAuthor') || '';
 
     modal.innerHTML = `
         <div class="feedback-detail-content">
@@ -327,6 +424,27 @@ function openFeedbackDetail(index) {
                 </div>
                 <div class="feedback-detail-text">${fb.text}</div>
                 ${screenshotHtml}
+                ${repliesHtml}
+                <div class="feedback-reply-form">
+                    <h4 class="reply-form-title">Antworten</h4>
+                    <div class="reply-author-wrapper">
+                        <select id="replyAuthorSelect" onchange="handleReplyAuthorSelect()" class="reply-author-select">
+                            <option value="">-- Wähle --</option>
+                            <option value="Eike" ${savedAuthor === 'Eike' ? 'selected' : ''}>Eike</option>
+                            <option value="Bianca" ${savedAuthor === 'Bianca' ? 'selected' : ''}>Bianca</option>
+                            <option value="custom" ${savedAuthor && savedAuthor !== 'Eike' && savedAuthor !== 'Bianca' ? 'selected' : ''}>Anderer Name...</option>
+                        </select>
+                        <input type="text" id="replyAuthor" placeholder="Dein Name" value="${savedAuthor}" class="reply-author-input" style="display: ${savedAuthor && savedAuthor !== 'Eike' && savedAuthor !== 'Bianca' ? 'block' : 'none'};">
+                    </div>
+                    <textarea id="replyText" placeholder="Deine Antwort..." class="reply-text-input"></textarea>
+                    <button class="reply-submit-btn" onclick="submitReply('${fb.id}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        Antwort senden
+                    </button>
+                </div>
             </div>
             <div class="feedback-detail-actions">
                 <button class="feedback-detail-btn edit" onclick="closeFeedbackDetail(); editFeedbackByIndex(${index});">
@@ -360,6 +478,75 @@ function closeFeedbackDetail() {
     const modal = document.getElementById('feedbackDetailModal');
     if (modal) {
         modal.classList.remove('open');
+    }
+}
+
+// Antwort auf Kommentar senden
+async function submitReply(feedbackId) {
+    const authorInput = document.getElementById('replyAuthor');
+    const textInput = document.getElementById('replyText');
+
+    const author = authorInput.value.trim() || 'Anonym';
+    const text = textInput.value.trim();
+
+    if (!text) {
+        showFeedbackNotification('Bitte gib eine Antwort ein');
+        return;
+    }
+
+    // Autor speichern
+    localStorage.setItem('feedbackAuthor', author);
+
+    const reply = {
+        id: Date.now(),
+        author: author,
+        text: text,
+        timestamp: new Date().toISOString()
+    };
+
+    if (USE_CLOUDFLARE) {
+        try {
+            const response = await fetch(`${FEEDBACK_API_URL}/feedback/${feedbackId}/reply`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reply)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showFeedbackNotification('Antwort gesendet!');
+                textInput.value = '';
+                // Modal schließen und neu laden
+                closeFeedbackDetail();
+                loadFeedbackFromCloudflare();
+            } else {
+                throw new Error(result.error || 'Antwort konnte nicht gesendet werden');
+            }
+        } catch (error) {
+            console.error('Reply Fehler:', error);
+            // Fallback: Lokal speichern
+            addReplyToLocalStorage(feedbackId, reply);
+        }
+    } else {
+        addReplyToLocalStorage(feedbackId, reply);
+    }
+}
+
+// Antwort lokal speichern (Fallback)
+function addReplyToLocalStorage(feedbackId, reply) {
+    const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+    const feedback = feedbacks.find(f => f.id === feedbackId || f.id === parseInt(feedbackId));
+
+    if (feedback) {
+        if (!feedback.replies) feedback.replies = [];
+        feedback.replies.push(reply);
+        localStorage.setItem('bankenFeedback', JSON.stringify(feedbacks));
+        showFeedbackNotification('Antwort lokal gespeichert');
+        closeFeedbackDetail();
+        loadFeedbackFromLocalStorage();
+    } else {
+        showFeedbackNotification('Kommentar nicht gefunden');
     }
 }
 
