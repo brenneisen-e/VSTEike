@@ -1059,6 +1059,15 @@ function showBankenSection(sectionName) {
         }
     });
 
+    // Update dropdown items
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.remove('active');
+        const onclickAttr = item.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${sectionName}'`)) {
+            item.classList.add('active');
+        }
+    });
+
     // Update section content
     document.querySelectorAll('.banken-section').forEach(section => {
         section.classList.remove('active');
@@ -1071,6 +1080,45 @@ function showBankenSection(sectionName) {
 
     console.log('Showing Banken section:', sectionName);
 }
+
+// ========================================
+// HEADER DROPDOWN MENU FUNCTIONS
+// ========================================
+
+// Toggle dropdown menu
+function toggleHeaderDropdown(menuId) {
+    const dropdown = document.getElementById(`dropdown-${menuId}`);
+    const trigger = dropdown?.previousElementSibling;
+
+    // Close all other dropdowns
+    document.querySelectorAll('.header-dropdown-menu').forEach(menu => {
+        if (menu.id !== `dropdown-${menuId}`) {
+            menu.classList.remove('open');
+            menu.previousElementSibling?.classList.remove('active');
+        }
+    });
+
+    // Toggle current dropdown
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+        trigger?.classList.toggle('active');
+    }
+}
+
+// Close all header dropdowns
+function closeHeaderDropdowns() {
+    document.querySelectorAll('.header-dropdown-menu').forEach(menu => {
+        menu.classList.remove('open');
+        menu.previousElementSibling?.classList.remove('active');
+    });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.header-dropdown-container')) {
+        closeHeaderDropdowns();
+    }
+});
 
 // Show overdue cases - navigates to Aufgaben section
 function showOverdueCases() {
