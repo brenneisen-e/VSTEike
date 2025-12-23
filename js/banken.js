@@ -3875,7 +3875,8 @@ function updateHaushaltGuvTab(customer) {
 
     if (!tabButton || !haushaltSection || !guvSection) return;
 
-    const isGewerbe = customer.type === 'Gewerbe' || customer.rechtsform;
+    // Only show GuV for explicitly marked business customers (type === 'Gewerbe')
+    const isGewerbe = customer.type === 'Gewerbe';
 
     if (isGewerbe) {
         // Show GuV for business customers
