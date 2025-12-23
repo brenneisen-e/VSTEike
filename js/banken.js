@@ -2377,6 +2377,9 @@ function openCustomerDetail(customerId, options = {}) {
         updateKommunikationFields(modal, customer);
         updateKiAnalyseFields(modal, customer);
 
+        // Switch between Haushaltsrechnung (Privat) and GuV (Gewerbe)
+        updateHaushaltGuvTab(customer);
+
         // Render custom activities from localStorage
         setTimeout(() => renderCustomerActivities(customerId), 100);
 
@@ -3862,6 +3865,76 @@ function updateKiAnalyseFields(modal, customer) {
             </div>
         `;
     }
+}
+
+// Update Haushalt/GuV tab based on customer type (Privat vs Gewerbe)
+function updateHaushaltGuvTab(customer) {
+    const tabButton = document.getElementById('tabHaushaltGuv');
+    const haushaltSection = document.getElementById('haushaltSection');
+    const guvSection = document.getElementById('guvSection');
+
+    if (!tabButton || !haushaltSection || !guvSection) return;
+
+    const isGewerbe = customer.type === 'Gewerbe' || customer.rechtsform;
+
+    if (isGewerbe) {
+        // Show GuV for business customers
+        tabButton.textContent = 'GuV';
+        haushaltSection.style.display = 'none';
+        guvSection.style.display = 'block';
+
+        // Update GuV values based on customer data
+        if (customer.guv) {
+            updateGuvFields(customer);
+        }
+    } else {
+        // Show Haushaltsrechnung for private customers
+        tabButton.textContent = 'Haushaltsrechnung';
+        haushaltSection.style.display = 'block';
+        guvSection.style.display = 'none';
+    }
+}
+
+// Update GuV fields with customer data
+function updateGuvFields(customer) {
+    const guv = customer.guv || {};
+
+    // Update summary cards
+    const umsatzEl = document.getElementById('guvUmsatz');
+    const aufwendungenEl = document.getElementById('guvAufwendungen');
+    const gewinnEl = document.getElementById('guvGewinn');
+    const ebitdaEl = document.getElementById('guvEbitda');
+
+    if (umsatzEl && guv.umsatz) {
+        umsatzEl.textContent = formatCurrency(guv.umsatz);
+    }
+    if (aufwendungenEl && guv.aufwendungen) {
+        aufwendungenEl.textContent = formatCurrency(guv.aufwendungen);
+    }
+    if (gewinnEl && guv.gewinn !== undefined) {
+        gewinnEl.textContent = formatCurrency(guv.gewinn);
+        gewinnEl.classList.toggle('negative', guv.gewinn < 0);
+    }
+    if (ebitdaEl && guv.ebitda) {
+        ebitdaEl.textContent = guv.ebitda + '%';
+    }
+
+    // Update detail fields
+    const guvUmsatzDetail = document.getElementById('guvUmsatzDetail');
+    const guvGewinnDetail = document.getElementById('guvGewinnDetail');
+    if (guvUmsatzDetail && guv.umsatzChange) {
+        guvUmsatzDetail.textContent = guv.umsatzChange;
+    }
+    if (guvGewinnDetail && guv.gewinnText) {
+        guvGewinnDetail.textContent = guv.gewinnText;
+    }
+}
+
+// Helper to format currency
+function formatCurrency(amount) {
+    if (amount === undefined || amount === null) return '€0';
+    const formatted = Math.abs(amount).toLocaleString('de-DE');
+    return (amount < 0 ? '-' : '') + '€' + formatted;
 }
 
 // Update Haushaltsrechnung tab fields
