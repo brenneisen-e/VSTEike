@@ -977,24 +977,19 @@ function showLoadingProgress(container) {
                     <div class="loading-progress-bar">
                         <div class="loading-progress-fill" id="loadingProgressFill"></div>
                     </div>
-                    <div class="loading-progress-info">
-                        <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
-                        <span class="loading-progress-percent" id="loadingProgressPercent">0%</span>
-                    </div>
+                    <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
                 </div>
             </div>
         </div>
     `;
 }
 
-// Update loading progress
-function updateLoadingProgress(percent, text) {
+// Update loading progress for Banken module
+function updateBankenLoadingProgress(percent, text) {
     const fill = document.getElementById('loadingProgressFill');
-    const percentEl = document.getElementById('loadingProgressPercent');
     const textEl = document.getElementById('loadingProgressText');
 
     if (fill) fill.style.width = `${percent}%`;
-    if (percentEl) percentEl.textContent = `${percent}%`;
     if (textEl) textEl.textContent = text;
 }
 
@@ -1010,24 +1005,24 @@ async function loadBankenModule() {
     await new Promise(r => setTimeout(r, 100)); // Allow DOM to render
 
     try {
-        updateLoadingProgress(10, 'Lade Hauptstruktur...');
+        updateBankenLoadingProgress(10, 'Lade Hauptstruktur...');
 
         // First load the main shell template
         const response = await fetch('partials/banken-module.html');
         if (response.ok) {
-            updateLoadingProgress(20, 'Verarbeite Template...');
+            updateBankenLoadingProgress(20, 'Verarbeite Template...');
             const html = await response.text();
 
             // Create temporary container to load components
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = html;
 
-            updateLoadingProgress(30, 'Lade Komponenten...');
+            updateBankenLoadingProgress(30, 'Lade Komponenten...');
 
             // Load components with progress tracking
             await loadBankenComponentsWithProgress(tempContainer);
 
-            updateLoadingProgress(90, 'Initialisiere Dashboard...');
+            updateBankenLoadingProgress(90, 'Initialisiere Dashboard...');
             await new Promise(r => setTimeout(r, 200));
 
             // Replace loading screen with actual content
@@ -1036,7 +1031,7 @@ async function loadBankenModule() {
             bankenModuleLoaded = true;
             console.log('Banken-Modul modular geladen');
 
-            updateLoadingProgress(100, 'Fertig!');
+            updateBankenLoadingProgress(100, 'Fertig!');
             await new Promise(r => setTimeout(r, 300));
 
             // Initialize charts after all content is loaded
@@ -1094,7 +1089,7 @@ async function loadBankenComponentsWithProgress(container) {
         const componentName = placeholder.getAttribute('data-component');
         const label = componentLabels[componentName] || componentName;
 
-        updateLoadingProgress(
+        updateBankenLoadingProgress(
             30 + Math.round((loadedCount / totalComponents) * 55),
             `Lade ${label}...`
         );

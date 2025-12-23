@@ -1185,14 +1185,20 @@ function sleep(ms) {
 /**
  * Aktualisiert den Ladefortschritt (Balken + Text + Prozent)
  */
-function updateLoadingProgress(percent, text) {
+function updateMainLoadingProgress(percent, text) {
     const progressBar = document.getElementById('mainProgressBar');
     const statusText = document.getElementById('loadingStatus');
     const percentText = document.getElementById('loadingPercent');
 
+    console.log(`📊 Loading: ${percent}% - ${text}`);
     if (progressBar) progressBar.style.width = `${percent}%`;
     if (statusText) statusText.textContent = text;
     if (percentText) percentText.textContent = `${percent}%`;
+}
+
+// Alias for backwards compatibility
+function updateLoadingProgress(percent, text) {
+    updateMainLoadingProgress(percent, text);
 }
 
 // Legacy function for backwards compatibility
