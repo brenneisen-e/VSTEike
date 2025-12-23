@@ -115,18 +115,20 @@ async function saveFeedbackToCloudflare(feedback) {
 // Cloudflare: Feedback laden
 async function loadFeedbackFromCloudflare() {
     try {
+        console.log('📡 Lade Feedback von Cloudflare:', FEEDBACK_API_URL);
         const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
         const result = await response.json();
 
         if (result.success) {
+            console.log(`✅ ${result.count} Feedbacks von Cloudflare geladen`);
             renderFeedbackList(result.data);
             updateFeedbackBadge(result.count);
         } else {
             throw new Error(result.error || 'Laden fehlgeschlagen');
         }
     } catch (error) {
-        console.error('Cloudflare Laden Fehler:', error);
-        // Fallback zu LocalStorage
+        console.error('❌ Cloudflare Laden Fehler:', error);
+        console.log('⚠️ Fallback zu LocalStorage...');
         loadFeedbackFromLocalStorage();
     }
 }
@@ -197,10 +199,17 @@ function renderFeedbackList(feedbacks) {
 
 // Badge aktualisieren
 function updateFeedbackBadge(count) {
+    // Original floating badge
     const badge = document.getElementById('feedbackBadge');
     if (badge) {
         badge.textContent = count;
         badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+    // Header badge
+    const headerBadge = document.getElementById('headerFeedbackBadge');
+    if (headerBadge) {
+        headerBadge.textContent = count;
+        headerBadge.style.display = count > 0 ? 'flex' : 'none';
     }
 }
 
