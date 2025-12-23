@@ -148,6 +148,15 @@ async function saveFeedbackToCloudflare(feedback) {
 
 // Cloudflare: Feedback laden
 async function loadFeedbackFromCloudflare() {
+    // Verwende vorgeladene Daten falls verfügbar
+    if (window.preloadedFeedback && !window.feedbackAlreadyLoaded) {
+        console.log('📦 Verwende vorgeladene Feedback-Daten');
+        renderFeedbackList(window.preloadedFeedback);
+        updateFeedbackBadge(window.preloadedFeedback.length);
+        window.feedbackAlreadyLoaded = true;
+        return;
+    }
+
     try {
         console.log('📡 Lade Feedback von Cloudflare:', FEEDBACK_API_URL);
         const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
@@ -951,6 +960,44 @@ async function loadBankenComponents(container) {
     console.log(`Loaded ${componentPlaceholders.length} components`);
 }
 
+// Show loading progress bar
+function showLoadingProgress(container) {
+    container.innerHTML = `
+        <div class="banken-loading-screen">
+            <div class="loading-content">
+                <div class="loading-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                </div>
+                <h2 class="loading-title">Collections Management</h2>
+                <div class="loading-progress-container">
+                    <div class="loading-progress-bar">
+                        <div class="loading-progress-fill" id="loadingProgressFill"></div>
+                    </div>
+                    <div class="loading-progress-info">
+                        <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
+                        <span class="loading-progress-percent" id="loadingProgressPercent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Update loading progress
+function updateLoadingProgress(percent, text) {
+    const fill = document.getElementById('loadingProgressFill');
+    const percentEl = document.getElementById('loadingProgressPercent');
+    const textEl = document.getElementById('loadingProgressText');
+
+    if (fill) fill.style.width = `${percent}%`;
+    if (percentEl) percentEl.textContent = `${percent}%`;
+    if (textEl) textEl.textContent = text;
+}
+
 // Load Banken module from partial (modular version)
 async function loadBankenModule() {
     if (bankenModuleLoaded) return;
@@ -958,18 +1005,39 @@ async function loadBankenModule() {
     const container = document.getElementById('bankenModule');
     if (!container) return;
 
+    // Show loading screen
+    showLoadingProgress(container);
+    await new Promise(r => setTimeout(r, 100)); // Allow DOM to render
+
     try {
+        updateLoadingProgress(10, 'Lade Hauptstruktur...');
+
         // First load the main shell template
         const response = await fetch('partials/banken-module.html');
         if (response.ok) {
+            updateLoadingProgress(20, 'Verarbeite Template...');
             const html = await response.text();
-            container.innerHTML = html;
 
-            // Then load all components into placeholders
-            await loadBankenComponents(container);
+            // Create temporary container to load components
+            const tempContainer = document.createElement('div');
+            tempContainer.innerHTML = html;
+
+            updateLoadingProgress(30, 'Lade Komponenten...');
+
+            // Load components with progress tracking
+            await loadBankenComponentsWithProgress(tempContainer);
+
+            updateLoadingProgress(90, 'Initialisiere Dashboard...');
+            await new Promise(r => setTimeout(r, 200));
+
+            // Replace loading screen with actual content
+            container.innerHTML = tempContainer.innerHTML;
 
             bankenModuleLoaded = true;
             console.log('Banken-Modul modular geladen');
+
+            updateLoadingProgress(100, 'Fertig!');
+            await new Promise(r => setTimeout(r, 300));
 
             // Initialize charts after all content is loaded
             setTimeout(() => {
@@ -978,20 +1046,68 @@ async function loadBankenModule() {
                 if (typeof initBankenChat === 'function') {
                     initBankenChat();
                 }
+                // Initialize Feedback System
+                initFeedbackSystem();
             }, 100);
         } else {
             throw new Error('Failed to load module');
         }
     } catch (error) {
         console.warn('Banken-Modul konnte nicht geladen werden, verwende Fallback');
-        // If fetch fails (e.g., file:// protocol), the module stays with loading state
         container.innerHTML = `
-            <div class="module-loading">
-                <p style="color: #ef4444;">Modul konnte nicht geladen werden.</p>
-                <p style="font-size: 12px;">Bitte starten Sie die Anwendung über einen Webserver.</p>
+            <div class="banken-loading-screen error">
+                <div class="loading-content">
+                    <div class="loading-icon error">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h2 class="loading-title">Fehler beim Laden</h2>
+                    <p class="loading-error-text">Bitte starte die Anwendung über einen Webserver.</p>
+                </div>
             </div>
         `;
     }
+}
+
+// Load components with progress tracking
+async function loadBankenComponentsWithProgress(container) {
+    const componentPlaceholders = container.querySelectorAll('[data-component]');
+    const totalComponents = componentPlaceholders.length;
+    let loadedCount = 0;
+
+    const componentLabels = {
+        'header': 'Header & Navigation',
+        'section-segmentierung': 'Kundensegmentierung',
+        'section-npl': 'NPL Dashboard',
+        'section-stage2': 'Stage 2 Analyse',
+        'section-aufgaben': 'Aufgaben',
+        'modal-customer-detail': 'Kundendetails',
+        'modal-document-scanner': 'Dokumenten-Scanner',
+        'crm-profile-view': 'CRM Profil'
+    };
+
+    // Load components sequentially for better progress display
+    for (const placeholder of componentPlaceholders) {
+        const componentName = placeholder.getAttribute('data-component');
+        const label = componentLabels[componentName] || componentName;
+
+        updateLoadingProgress(
+            30 + Math.round((loadedCount / totalComponents) * 55),
+            `Lade ${label}...`
+        );
+
+        const html = await loadComponent(componentName);
+        placeholder.outerHTML = html;
+        loadedCount++;
+
+        // Small delay between components for visual feedback
+        await new Promise(r => setTimeout(r, 50));
+    }
+
+    console.log(`Loaded ${totalComponents} components`);
 }
 
 function switchModule(moduleName) {

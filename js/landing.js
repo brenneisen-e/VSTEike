@@ -1111,41 +1111,95 @@ function closeBestandsuebertragung() {
 async function loadDefaultCSVData() {
     console.log('📊 Lade Standard-CSV-Daten...');
 
-    // Update Loading-Text
-    updateLoadingText('Lade Daten...');
+    // Start loading animation
+    updateLoadingProgress(10, 'Initialisiere Anwendung...');
+    await sleep(200);
+
+    updateLoadingProgress(25, 'Lade Ressourcen...');
+    await sleep(300);
 
     // Lokale CSV-Datei (im data-Ordner)
     const localCsvPath = 'data/mock-data.csv';
 
     try {
-        updateLoadingText('Lade CSV-Datei...');
+        updateLoadingProgress(40, 'Lade Kundendaten...');
         const response = await fetch(localCsvPath);
 
         if (!response.ok) {
             throw new Error('Lokale CSV nicht gefunden');
         }
 
-        updateLoadingText('Verarbeite Daten...');
+        updateLoadingProgress(60, 'Verarbeite Datensätze...');
+        await sleep(200);
         const csvText = await response.text();
+
+        updateLoadingProgress(75, 'Analysiere Daten...');
+        await sleep(200);
         processCSVData(csvText);
 
-        updateLoadingText('Fertig!');
-        console.log('✅ CSV aus lokalem data/-Ordner geladen');
+        updateLoadingProgress(80, 'Lade Feedback-Kommentare...');
+        await loadFeedbackData();
+
+        updateLoadingProgress(95, 'Erstelle Dashboard...');
+        await sleep(300);
+
+        updateLoadingProgress(100, 'Fertig!');
+        await sleep(400);
+
+        console.log('✅ Alle Daten geladen');
 
     } catch (error) {
         console.warn('⚠️ Fehler beim Laden der CSV-Daten:', error);
-        updateLoadingText('Daten manuell laden');
+        updateLoadingProgress(90, 'Lade Feedback-Kommentare...');
+        await loadFeedbackData();
+        updateLoadingProgress(100, 'Bereit');
+        await sleep(500);
         console.log('ℹ️ Daten können manuell über Settings > CSV Upload geladen werden');
     }
 }
 
 /**
- * Aktualisiert den Text der Ladeanimation
+ * Lädt die Feedback-Kommentare von Cloudflare
  */
+async function loadFeedbackData() {
+    const FEEDBACK_API_URL = 'https://vsteike-feedback.eike-3e2.workers.dev';
+    try {
+        const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success && result.data) {
+                window.preloadedFeedback = result.data;
+                console.log(`✅ ${result.data.length} Feedback-Kommentare geladen`);
+            }
+        }
+    } catch (error) {
+        console.warn('Feedback konnte nicht vorgeladen werden:', error);
+    }
+}
+
+// Helper function for delays
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Aktualisiert den Ladefortschritt (Balken + Text + Prozent)
+ */
+function updateLoadingProgress(percent, text) {
+    const progressBar = document.getElementById('mainProgressBar');
+    const statusText = document.getElementById('loadingStatus');
+    const percentText = document.getElementById('loadingPercent');
+
+    if (progressBar) progressBar.style.width = `${percent}%`;
+    if (statusText) statusText.textContent = text;
+    if (percentText) percentText.textContent = `${percent}%`;
+}
+
+// Legacy function for backwards compatibility
 function updateLoadingText(text) {
-    const loadingText = document.querySelector('.loading-text');
-    if (loadingText) {
-        loadingText.textContent = text;
+    const statusText = document.getElementById('loadingStatus');
+    if (statusText) {
+        statusText.textContent = text;
     }
 }
 
