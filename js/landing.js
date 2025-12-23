@@ -1112,47 +1112,47 @@ async function loadDefaultCSVData() {
     console.log('📊 Lade Standard-CSV-Daten...');
 
     // Start loading animation
-    updateLoadingProgress(10, 'Initialisiere Anwendung...');
+    updateMainLoadingProgress(10, 'Initialisiere Anwendung...');
     await sleep(200);
 
-    updateLoadingProgress(25, 'Lade Ressourcen...');
+    updateMainLoadingProgress(25, 'Lade Ressourcen...');
     await sleep(300);
 
     // Lokale CSV-Datei (im data-Ordner)
     const localCsvPath = 'data/mock-data.csv';
 
     try {
-        updateLoadingProgress(40, 'Lade Kundendaten...');
+        updateMainLoadingProgress(40, 'Lade Kundendaten...');
         const response = await fetch(localCsvPath);
 
         if (!response.ok) {
             throw new Error('Lokale CSV nicht gefunden');
         }
 
-        updateLoadingProgress(60, 'Verarbeite Datensätze...');
+        updateMainLoadingProgress(60, 'Verarbeite Datensätze...');
         await sleep(200);
         const csvText = await response.text();
 
-        updateLoadingProgress(75, 'Analysiere Daten...');
+        updateMainLoadingProgress(75, 'Analysiere Daten...');
         await sleep(200);
         processCSVData(csvText);
 
-        updateLoadingProgress(80, 'Lade Feedback-Kommentare...');
+        updateMainLoadingProgress(80, 'Lade Feedback-Kommentare...');
         await loadFeedbackData();
 
-        updateLoadingProgress(95, 'Erstelle Dashboard...');
+        updateMainLoadingProgress(95, 'Erstelle Dashboard...');
         await sleep(300);
 
-        updateLoadingProgress(100, 'Fertig!');
+        updateMainLoadingProgress(100, 'Fertig!');
         await sleep(400);
 
         console.log('✅ Alle Daten geladen');
 
     } catch (error) {
         console.warn('⚠️ Fehler beim Laden der CSV-Daten:', error);
-        updateLoadingProgress(90, 'Lade Feedback-Kommentare...');
+        updateMainLoadingProgress(90, 'Lade Feedback-Kommentare...');
         await loadFeedbackData();
-        updateLoadingProgress(100, 'Bereit');
+        updateMainLoadingProgress(100, 'Bereit');
         await sleep(500);
         console.log('ℹ️ Daten können manuell über Settings > CSV Upload geladen werden');
     }
@@ -1194,11 +1194,6 @@ function updateMainLoadingProgress(percent, text) {
     if (progressBar) progressBar.style.width = `${percent}%`;
     if (statusText) statusText.textContent = text;
     if (percentText) percentText.textContent = `${percent}%`;
-}
-
-// Alias for backwards compatibility
-function updateLoadingProgress(percent, text) {
-    updateMainLoadingProgress(percent, text);
 }
 
 // Legacy function for backwards compatibility

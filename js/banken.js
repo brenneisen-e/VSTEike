@@ -993,46 +993,31 @@ function updateBankenLoadingProgress(percent, text) {
     if (textEl) textEl.textContent = text;
 }
 
-// Load Banken module from partial (modular version)
+// Load Banken module from partial (modular version) - loads in background
 async function loadBankenModule() {
     if (bankenModuleLoaded) return;
 
     const container = document.getElementById('bankenModule');
     if (!container) return;
 
-    // Show loading screen
-    showLoadingProgress(container);
-    await new Promise(r => setTimeout(r, 100)); // Allow DOM to render
-
     try {
-        updateBankenLoadingProgress(10, 'Lade Hauptstruktur...');
-
-        // First load the main shell template
+        // Load main shell template
         const response = await fetch('partials/banken-module.html');
         if (response.ok) {
-            updateBankenLoadingProgress(20, 'Verarbeite Template...');
             const html = await response.text();
 
             // Create temporary container to load components
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = html;
 
-            updateBankenLoadingProgress(30, 'Lade Komponenten...');
+            // Load all components in background
+            await loadBankenComponents(tempContainer);
 
-            // Load components with progress tracking
-            await loadBankenComponentsWithProgress(tempContainer);
-
-            updateBankenLoadingProgress(90, 'Initialisiere Dashboard...');
-            await new Promise(r => setTimeout(r, 200));
-
-            // Replace loading screen with actual content
+            // Set the content once everything is loaded
             container.innerHTML = tempContainer.innerHTML;
 
             bankenModuleLoaded = true;
-            console.log('Banken-Modul modular geladen');
-
-            updateBankenLoadingProgress(100, 'Fertig!');
-            await new Promise(r => setTimeout(r, 300));
+            console.log('Banken-Modul geladen');
 
             // Initialize charts after all content is loaded
             setTimeout(() => {
@@ -1048,61 +1033,28 @@ async function loadBankenModule() {
             throw new Error('Failed to load module');
         }
     } catch (error) {
-        console.warn('Banken-Modul konnte nicht geladen werden, verwende Fallback');
+        console.error('Banken-Modul Fehler:', error);
         container.innerHTML = `
-            <div class="banken-loading-screen error">
-                <div class="loading-content">
-                    <div class="loading-icon error">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                    </div>
-                    <h2 class="loading-title">Fehler beim Laden</h2>
-                    <p class="loading-error-text">Bitte starte die Anwendung über einen Webserver.</p>
-                </div>
+            <div class="banken-error-screen">
+                <p>Fehler beim Laden. Bitte starte die Anwendung über einen Webserver.</p>
             </div>
         `;
     }
 }
 
-// Load components with progress tracking
-async function loadBankenComponentsWithProgress(container) {
+// Load all components in parallel (no progress display)
+async function loadBankenComponents(container) {
     const componentPlaceholders = container.querySelectorAll('[data-component]');
-    const totalComponents = componentPlaceholders.length;
-    let loadedCount = 0;
 
-    const componentLabels = {
-        'header': 'Header & Navigation',
-        'section-segmentierung': 'Kundensegmentierung',
-        'section-npl': 'NPL Dashboard',
-        'section-stage2': 'Stage 2 Analyse',
-        'section-aufgaben': 'Aufgaben',
-        'modal-customer-detail': 'Kundendetails',
-        'modal-document-scanner': 'Dokumenten-Scanner',
-        'crm-profile-view': 'CRM Profil'
-    };
-
-    // Load components sequentially for better progress display
-    for (const placeholder of componentPlaceholders) {
+    // Load all components in parallel for faster loading
+    const loadPromises = Array.from(componentPlaceholders).map(async (placeholder) => {
         const componentName = placeholder.getAttribute('data-component');
-        const label = componentLabels[componentName] || componentName;
-
-        updateBankenLoadingProgress(
-            30 + Math.round((loadedCount / totalComponents) * 55),
-            `Lade ${label}...`
-        );
-
         const html = await loadComponent(componentName);
         placeholder.outerHTML = html;
-        loadedCount++;
+    });
 
-        // Small delay between components for visual feedback
-        await new Promise(r => setTimeout(r, 50));
-    }
-
-    console.log(`Loaded ${totalComponents} components`);
+    await Promise.all(loadPromises);
+    console.log(`Loaded ${componentPlaceholders.length} components`);
 }
 
 function switchModule(moduleName) {
