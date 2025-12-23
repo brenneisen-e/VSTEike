@@ -977,10 +977,7 @@ function showLoadingProgress(container) {
                     <div class="loading-progress-bar">
                         <div class="loading-progress-fill" id="loadingProgressFill"></div>
                     </div>
-                    <div class="loading-progress-info">
-                        <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
-                        <span class="loading-progress-percent" id="loadingProgressPercent">0%</span>
-                    </div>
+                    <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
                 </div>
             </div>
         </div>
@@ -990,11 +987,9 @@ function showLoadingProgress(container) {
 // Update loading progress for Banken module
 function updateBankenLoadingProgress(percent, text) {
     const fill = document.getElementById('loadingProgressFill');
-    const percentEl = document.getElementById('loadingProgressPercent');
     const textEl = document.getElementById('loadingProgressText');
 
     if (fill) fill.style.width = `${percent}%`;
-    if (percentEl) percentEl.textContent = `${percent}%`;
     if (textEl) textEl.textContent = text;
 }
 
