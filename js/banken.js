@@ -201,6 +201,10 @@ function renderFeedbackList(feedbacks) {
     // Global speichern für Edit/Delete-Zugriff
     currentFeedbackList = feedbacks;
 
+    // Debug: Anzahl Feedbacks mit Screenshots
+    const withScreenshots = feedbacks.filter(f => f.screenshot).length;
+    console.log(`📋 Rendere ${feedbacks.length} Feedbacks (${withScreenshots} mit Screenshot)`);
+
     if (feedbacks.length === 0) {
         listEl.innerHTML = '<div class="feedback-empty">Noch keine Kommentare vorhanden.</div>';
         return;
@@ -262,6 +266,8 @@ function renderFeedbackList(feedbacks) {
 function openFeedbackDetail(index) {
     const fb = currentFeedbackList[index];
     if (!fb) return;
+
+    console.log(`📝 Öffne Feedback Detail #${index}:`, fb.id, 'Screenshot:', fb.screenshot ? 'Ja (' + fb.screenshot.length + ' bytes)' : 'Nein');
 
     const typeLabels = {
         'verbesserung': 'Verbesserung',
@@ -707,8 +713,12 @@ function startDrawing(e) {
     const rect = screenshotCanvas.getBoundingClientRect();
     const scaleX = screenshotCanvas.width / rect.width;
     const scaleY = screenshotCanvas.height / rect.height;
-    startX = (e.offsetX || e.clientX - rect.left) * (e.offsetX ? 1 : scaleX);
-    startY = (e.offsetY || e.clientY - rect.top) * (e.offsetY ? 1 : scaleY);
+
+    // Immer skalieren - offsetX/offsetY sind relativ zur Anzeigegröße
+    const clientX = e.offsetX !== undefined ? e.offsetX : (e.clientX - rect.left);
+    const clientY = e.offsetY !== undefined ? e.offsetY : (e.clientY - rect.top);
+    startX = clientX * scaleX;
+    startY = clientY * scaleY;
 
     if (currentTool === 'pen') {
         screenshotCtx.beginPath();
@@ -723,8 +733,12 @@ function draw(e) {
     const rect = screenshotCanvas.getBoundingClientRect();
     const scaleX = screenshotCanvas.width / rect.width;
     const scaleY = screenshotCanvas.height / rect.height;
-    const x = (e.offsetX || e.clientX - rect.left) * (e.offsetX ? 1 : scaleX);
-    const y = (e.offsetY || e.clientY - rect.top) * (e.offsetY ? 1 : scaleY);
+
+    // Immer skalieren - offsetX/offsetY sind relativ zur Anzeigegröße
+    const clientX = e.offsetX !== undefined ? e.offsetX : (e.clientX - rect.left);
+    const clientY = e.offsetY !== undefined ? e.offsetY : (e.clientY - rect.top);
+    const x = clientX * scaleX;
+    const y = clientY * scaleY;
 
     screenshotCtx.strokeStyle = currentColor;
     screenshotCtx.lineWidth = 4;
@@ -849,8 +863,11 @@ function setDrawTool(tool) {
                     const rect = screenshotCanvas.getBoundingClientRect();
                     const scaleX = screenshotCanvas.width / rect.width;
                     const scaleY = screenshotCanvas.height / rect.height;
-                    const x = (e.offsetX || e.clientX - rect.left) * scaleX;
-                    const y = (e.offsetY || e.clientY - rect.top) * scaleY;
+                    // Immer skalieren
+                    const clientX = e.offsetX !== undefined ? e.offsetX : (e.clientX - rect.left);
+                    const clientY = e.offsetY !== undefined ? e.offsetY : (e.clientY - rect.top);
+                    const x = clientX * scaleX;
+                    const y = clientY * scaleY;
 
                     screenshotCtx.font = 'bold 24px Arial';
                     screenshotCtx.fillStyle = currentColor;
