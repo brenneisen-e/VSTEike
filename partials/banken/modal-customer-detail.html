@@ -27,7 +27,7 @@
         <div class="modal-tabs">
             <button class="modal-tab active" onclick="showCustomerTab('stammdaten')">Stammdaten</button>
             <button class="modal-tab" onclick="showCustomerTab('konten')">Konten & Finanzen</button>
-            <button class="modal-tab" onclick="showCustomerTab('haushalt')">Haushaltsrechnung</button>
+            <button class="modal-tab" id="tabHaushaltGuv" onclick="showCustomerTab('haushalt')">Haushaltsrechnung</button>
             <button class="modal-tab" onclick="showCustomerTab('openfinance')">Open Finance</button>
             <button class="modal-tab" onclick="showCustomerTab('kommunikation')">Kommunikation</button>
             <button class="modal-tab" onclick="showCustomerTab('ki-analyse')">KI-Analyse</button>
@@ -1113,8 +1113,200 @@
                 </div>
             </div>
 
-            <!-- Tab: Haushaltsrechnung (PSD2) -->
+            <!-- Tab: Haushaltsrechnung (Privat) / GuV (Gewerbe) -->
             <div class="customer-tab" id="tab-haushalt">
+                <!-- GuV Section für Gewerbekunden -->
+                <div id="guvSection" style="display: none;">
+                    <div class="guv-header">
+                        <div class="guv-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                            <h3>Gewinn- und Verlustrechnung</h3>
+                            <span class="guv-badge">Jahresabschluss + Kontoanalyse</span>
+                        </div>
+                        <div class="guv-period">
+                            <span>Geschäftsjahr:</span>
+                            <select id="guvPeriod">
+                                <option value="2025">2025 (vorläufig)</option>
+                                <option value="2024" selected>2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="guv-info-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <p><strong>Datenquellen:</strong> Jahresabschluss 2024 (eingereicht), BWA Q3/2025, PSD2 Kontoauszüge (letzte 6 Monate). Stand: <span id="guvLastUpdate">19.12.2025</span></p>
+                    </div>
+
+                    <!-- GuV Kennzahlen -->
+                    <div class="guv-summary-grid">
+                        <div class="guv-summary-card revenue">
+                            <div class="summary-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                                    <polyline points="5 12 12 5 19 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <span class="summary-label">Umsatzerlöse</span>
+                                <span class="summary-value" id="guvUmsatz">€540.000</span>
+                                <span class="summary-detail" id="guvUmsatzDetail">+8% ggü. Vorjahr</span>
+                            </div>
+                        </div>
+                        <div class="guv-summary-card expense">
+                            <div class="summary-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <span class="summary-label">Betriebsaufwendungen</span>
+                                <span class="summary-value" id="guvAufwendungen">€498.000</span>
+                                <span class="summary-detail" id="guvAufwendungenDetail">+12% ggü. Vorjahr</span>
+                            </div>
+                        </div>
+                        <div class="guv-summary-card profit">
+                            <div class="summary-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8"></path>
+                                    <line x1="12" y1="6" x2="12" y2="8"></line>
+                                    <line x1="12" y1="16" x2="12" y2="18"></line>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <span class="summary-label">Jahresüberschuss</span>
+                                <span class="summary-value negative" id="guvGewinn">-€42.000</span>
+                                <span class="summary-detail" id="guvGewinnDetail">Verlust (Vorjahr: +€18.000)</span>
+                            </div>
+                        </div>
+                        <div class="guv-summary-card ratio">
+                            <div class="summary-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <path d="M21.21 15.89A10 10 0 118 2.83"></path>
+                                    <path d="M22 12A10 10 0 0012 2v10z"></path>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <span class="summary-label">EBITDA-Marge</span>
+                                <span class="summary-value" id="guvEbitda">3,2%</span>
+                                <span class="summary-detail" id="guvEbitdaDetail">Branchenschnitt: 8%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GuV Detailaufstellung -->
+                    <div class="guv-details-grid">
+                        <div class="guv-detail-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                                    <polyline points="5 12 12 5 19 12"></polyline>
+                                </svg>
+                                Erträge
+                            </h4>
+                            <div class="guv-breakdown">
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Umsatzerlöse</span>
+                                    <span class="breakdown-value">€540.000</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Sonstige betr. Erträge</span>
+                                    <span class="breakdown-value">€12.500</span>
+                                </div>
+                                <div class="breakdown-row total">
+                                    <span class="breakdown-label">Gesamterträge</span>
+                                    <span class="breakdown-value">€552.500</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guv-detail-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <polyline points="19 12 12 19 5 12"></polyline>
+                                </svg>
+                                Aufwendungen
+                            </h4>
+                            <div class="guv-breakdown">
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Materialaufwand</span>
+                                    <span class="breakdown-value negative">€144.000</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Personalaufwand</span>
+                                    <span class="breakdown-value negative">€252.000</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Miete/Pacht</span>
+                                    <span class="breakdown-value negative">€102.000</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Sonstige betr. Aufwendungen</span>
+                                    <span class="breakdown-value negative">€78.500</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Abschreibungen</span>
+                                    <span class="breakdown-value negative">€18.000</span>
+                                </div>
+                                <div class="breakdown-row total">
+                                    <span class="breakdown-label">Gesamtaufwendungen</span>
+                                    <span class="breakdown-value negative">€594.500</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aktuelle Liquidität aus Kontoauszügen -->
+                    <div class="guv-liquidity-section">
+                        <h4>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                            Aktuelle Liquidität (Kontoauszüge letzte 3 Monate)
+                        </h4>
+                        <div class="liquidity-grid">
+                            <div class="liquidity-item">
+                                <span class="liquidity-label">Ø Kontostand</span>
+                                <span class="liquidity-value negative">-€8.450</span>
+                            </div>
+                            <div class="liquidity-item">
+                                <span class="liquidity-label">Ø Zahlungseingänge/M</span>
+                                <span class="liquidity-value">€45.000</span>
+                            </div>
+                            <div class="liquidity-item">
+                                <span class="liquidity-label">Ø Zahlungsausgänge/M</span>
+                                <span class="liquidity-value negative">€52.000</span>
+                            </div>
+                            <div class="liquidity-item warning">
+                                <span class="liquidity-label">Liquiditätslücke/M</span>
+                                <span class="liquidity-value negative">-€7.000</span>
+                            </div>
+                        </div>
+                        <div class="liquidity-warning">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <span>Negativer Cashflow: Monatliche Ausgaben übersteigen Einnahmen um ca. €7.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Haushaltsrechnung Section für Privatkunden -->
+                <div id="haushaltSection">
                 <div class="haushalt-header">
                     <div class="haushalt-title">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
@@ -1338,6 +1530,7 @@
                         </div>
                     </div>
                 </div>
+                </div><!-- Ende haushaltSection -->
             </div>
 
             <!-- Tab: Open Finance -->

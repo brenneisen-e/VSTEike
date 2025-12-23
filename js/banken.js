@@ -1953,7 +1953,7 @@ function scheduleCallback(customerId) {
     console.log('Scheduling callback for:', customerId);
 }
 
-// Complete task - opens customer profile and adds activity
+// Complete task - opens dialog for problem/solution documentation
 function completeTask(taskId) {
     // Find the task element to get task info
     const taskElement = document.querySelector(`.aufgabe-item [onclick*="completeTask('${taskId}')"]`)?.closest('.aufgabe-item');
@@ -1969,44 +1969,276 @@ function completeTask(taskId) {
         // Get customer ID from the task
         const customerEl = taskElement.querySelector('.aufgabe-customer');
         if (customerEl) customerId = customerEl.textContent.trim();
+    }
 
-        // Mark task as completed visually
+    // Open completion dialog
+    openTaskCompletionDialog(taskId, taskTitle, customerId, taskElement);
+}
+
+// Open task completion dialog
+function openTaskCompletionDialog(taskId, taskTitle, customerId, taskElement) {
+    let modal = document.getElementById('taskCompletionModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'taskCompletionModal';
+        modal.className = 'task-completion-modal';
+        modal.innerHTML = `
+            <div class="task-completion-content">
+                <div class="task-completion-header">
+                    <h3>Aufgabe abschließen</h3>
+                    <button class="task-completion-close" onclick="closeTaskCompletionDialog()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="task-completion-body">
+                    <div class="task-info-display">
+                        <span class="task-info-label">Aufgabe:</span>
+                        <span class="task-info-value" id="completionTaskTitle"></span>
+                    </div>
+                    <div class="task-form-group">
+                        <label>Was war das Problem?</label>
+                        <textarea id="taskProblem" placeholder="Beschreiben Sie das ursprüngliche Problem..."></textarea>
+                    </div>
+                    <div class="task-form-group">
+                        <label>Wie wurde es gelöst?</label>
+                        <textarea id="taskSolution" placeholder="Beschreiben Sie die durchgeführte Lösung..."></textarea>
+                    </div>
+                </div>
+                <div class="task-completion-footer">
+                    <button class="task-cancel-btn" onclick="closeTaskCompletionDialog()">Abbrechen</button>
+                    <button class="task-complete-btn" onclick="submitTaskCompletion()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Als erledigt markieren
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        addTaskCompletionStyles();
+    }
+
+    // Store task info for submission
+    modal.dataset.taskId = taskId;
+    modal.dataset.taskTitle = taskTitle;
+    modal.dataset.customerId = customerId || '';
+
+    // Update display
+    document.getElementById('completionTaskTitle').textContent = taskTitle;
+    document.getElementById('taskProblem').value = '';
+    document.getElementById('taskSolution').value = '';
+
+    modal.style.display = 'flex';
+    setTimeout(() => document.getElementById('taskProblem').focus(), 100);
+}
+
+// Close task completion dialog
+function closeTaskCompletionDialog() {
+    const modal = document.getElementById('taskCompletionModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Submit task completion
+function submitTaskCompletion() {
+    const modal = document.getElementById('taskCompletionModal');
+    const taskId = modal.dataset.taskId;
+    const taskTitle = modal.dataset.taskTitle;
+    const customerId = modal.dataset.customerId;
+    const problem = document.getElementById('taskProblem').value.trim();
+    const solution = document.getElementById('taskSolution').value.trim();
+
+    if (!problem || !solution) {
+        showNotification('Bitte füllen Sie beide Felder aus', 'error');
+        return;
+    }
+
+    // Find and mark task element as completed
+    const taskElement = document.querySelector(`.aufgabe-item [onclick*="completeTask('${taskId}')"]`)?.closest('.aufgabe-item');
+    if (taskElement) {
         taskElement.classList.add('completed');
         taskElement.style.opacity = '0.5';
         taskElement.style.textDecoration = 'line-through';
     }
 
-    // If we found a customer, add activity and open profile
+    // If we have a customer, add detailed activity
     if (customerId) {
-        // First set the current customer ID
         currentCustomerId = customerId;
 
-        // Create completion activity
+        // Create detailed completion activity
         const activity = {
             id: Date.now().toString(),
             type: 'aufgabe',
             typeLabel: 'Aufgabe erledigt',
-            text: taskTitle,
+            text: `**${taskTitle}**\n\n**Problem:** ${problem}\n\n**Lösung:** ${solution}\n\n✅ Status: Erledigt`,
             author: localStorage.getItem('feedbackAuthor') || 'Eike',
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            isCompleted: true
         };
 
-        // Save the activity
         saveCustomerActivity(customerId, activity);
 
-        // Open customer detail with Kommunikation tab
+        closeTaskCompletionDialog();
         showNotification(`Aufgabe "${taskTitle}" erledigt`, 'success');
 
-        // Small delay to let the notification show, then open customer
+        // Open customer profile
         setTimeout(() => {
             openCustomerDetail(customerId, { showKommunikation: true });
         }, 500);
     } else {
+        closeTaskCompletionDialog();
         showNotification(`Aufgabe ${taskId} abgeschlossen`, 'success');
     }
 
     console.log('Completing task:', taskId, 'Customer:', customerId);
 }
+
+// Add styles for task completion modal
+function addTaskCompletionStyles() {
+    if (document.getElementById('task-completion-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'task-completion-styles';
+    styles.textContent = `
+        .task-completion-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-completion-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .task-completion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .task-completion-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .task-completion-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: #64748b;
+        }
+        .task-completion-close:hover { color: #1e293b; }
+        .task-completion-body {
+            padding: 20px;
+        }
+        .task-info-display {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+        .task-info-label {
+            font-size: 12px;
+            color: #0369a1;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .task-info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0c4a6e;
+        }
+        .task-form-group {
+            margin-bottom: 16px;
+        }
+        .task-form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .task-form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .task-form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .task-completion-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .task-cancel-btn {
+            padding: 10px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .task-complete-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #10b981;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .task-complete-btn:hover { background: #059669; }
+
+        /* Completed activity styling */
+        .komm-item.aufgabe.custom-activity {
+            background: #f0fdf4;
+            border-left: 3px solid #10b981;
+        }
+        .komm-item.aufgabe .komm-icon { color: #10b981; }
+        .komm-item.custom-activity .komm-body p {
+            white-space: pre-line;
+        }
+    `;
+    document.head.appendChild(styles);
+}
+
+// Export task completion functions
+window.openTaskCompletionDialog = openTaskCompletionDialog;
+window.closeTaskCompletionDialog = closeTaskCompletionDialog;
+window.submitTaskCompletion = submitTaskCompletion;
 
 // Export report
 function exportReport(reportType) {
@@ -2144,6 +2376,9 @@ function openCustomerDetail(customerId, options = {}) {
         updateOpenFinanceFields(modal, customer);
         updateKommunikationFields(modal, customer);
         updateKiAnalyseFields(modal, customer);
+
+        // Switch between Haushaltsrechnung (Privat) and GuV (Gewerbe)
+        updateHaushaltGuvTab(customer);
 
         // Render custom activities from localStorage
         setTimeout(() => renderCustomerActivities(customerId), 100);
@@ -3630,6 +3865,76 @@ function updateKiAnalyseFields(modal, customer) {
             </div>
         `;
     }
+}
+
+// Update Haushalt/GuV tab based on customer type (Privat vs Gewerbe)
+function updateHaushaltGuvTab(customer) {
+    const tabButton = document.getElementById('tabHaushaltGuv');
+    const haushaltSection = document.getElementById('haushaltSection');
+    const guvSection = document.getElementById('guvSection');
+
+    if (!tabButton || !haushaltSection || !guvSection) return;
+
+    const isGewerbe = customer.type === 'Gewerbe' || customer.rechtsform;
+
+    if (isGewerbe) {
+        // Show GuV for business customers
+        tabButton.textContent = 'GuV';
+        haushaltSection.style.display = 'none';
+        guvSection.style.display = 'block';
+
+        // Update GuV values based on customer data
+        if (customer.guv) {
+            updateGuvFields(customer);
+        }
+    } else {
+        // Show Haushaltsrechnung for private customers
+        tabButton.textContent = 'Haushaltsrechnung';
+        haushaltSection.style.display = 'block';
+        guvSection.style.display = 'none';
+    }
+}
+
+// Update GuV fields with customer data
+function updateGuvFields(customer) {
+    const guv = customer.guv || {};
+
+    // Update summary cards
+    const umsatzEl = document.getElementById('guvUmsatz');
+    const aufwendungenEl = document.getElementById('guvAufwendungen');
+    const gewinnEl = document.getElementById('guvGewinn');
+    const ebitdaEl = document.getElementById('guvEbitda');
+
+    if (umsatzEl && guv.umsatz) {
+        umsatzEl.textContent = formatCurrency(guv.umsatz);
+    }
+    if (aufwendungenEl && guv.aufwendungen) {
+        aufwendungenEl.textContent = formatCurrency(guv.aufwendungen);
+    }
+    if (gewinnEl && guv.gewinn !== undefined) {
+        gewinnEl.textContent = formatCurrency(guv.gewinn);
+        gewinnEl.classList.toggle('negative', guv.gewinn < 0);
+    }
+    if (ebitdaEl && guv.ebitda) {
+        ebitdaEl.textContent = guv.ebitda + '%';
+    }
+
+    // Update detail fields
+    const guvUmsatzDetail = document.getElementById('guvUmsatzDetail');
+    const guvGewinnDetail = document.getElementById('guvGewinnDetail');
+    if (guvUmsatzDetail && guv.umsatzChange) {
+        guvUmsatzDetail.textContent = guv.umsatzChange;
+    }
+    if (guvGewinnDetail && guv.gewinnText) {
+        guvGewinnDetail.textContent = guv.gewinnText;
+    }
+}
+
+// Helper to format currency
+function formatCurrency(amount) {
+    if (amount === undefined || amount === null) return '€0';
+    const formatted = Math.abs(amount).toLocaleString('de-DE');
+    return (amount < 0 ? '-' : '') + '€' + formatted;
 }
 
 // Update Haushaltsrechnung tab fields
