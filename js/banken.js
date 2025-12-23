@@ -77,8 +77,24 @@ async function submitFeedback() {
         text: text,
         url: window.location.href,
         userAgent: navigator.userAgent.substring(0, 100),
-        screenshot: currentScreenshotData || null  // Screenshot hinzufügen
+        screenshot: currentScreenshotData || null
     };
+
+    // Falls wir bearbeiten: erst löschen, dann neu erstellen
+    if (editingFeedbackId) {
+        if (USE_CLOUDFLARE) {
+            try {
+                await fetch(`${FEEDBACK_API_URL}/feedback/${editingFeedbackId}`, { method: 'DELETE' });
+            } catch (e) {
+                console.log('Altes Feedback löschen fehlgeschlagen:', e);
+            }
+        } else {
+            const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+            const filtered = feedbacks.filter(f => f.id !== editingFeedbackId && f.id !== parseInt(editingFeedbackId));
+            localStorage.setItem('bankenFeedback', JSON.stringify(filtered));
+        }
+        editingFeedbackId = null;
+    }
 
     if (USE_CLOUDFLARE) {
         await saveFeedbackToCloudflare(feedback);
@@ -86,8 +102,21 @@ async function submitFeedback() {
         saveFeedbackToLocalStorage({ ...feedback, id: Date.now(), timestamp: new Date().toISOString() });
     }
 
-    // Screenshot nach dem Senden zurücksetzen
+    // Formular zurücksetzen
+    document.getElementById('feedbackText').value = '';
     removeScreenshot();
+
+    // Button-Text zurücksetzen
+    const submitBtn = document.querySelector('.feedback-submit-btn');
+    if (submitBtn) {
+        submitBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Feedback speichern
+        `;
+    }
 }
 
 // Cloudflare: Feedback speichern
@@ -190,23 +219,139 @@ function renderFeedbackList(feedbacks) {
         // Screenshot HTML (falls vorhanden)
         const screenshotHtml = fb.screenshot
             ? `<div class="feedback-item-screenshot">
-                 <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)">
+                 <img src="${fb.screenshot}" alt="Screenshot" onclick="openScreenshotLightbox(this.src)" title="Klicken zum Vergrößern">
                </div>`
             : '';
 
+        // Feedback-Daten für Edit als JSON (escaped)
+        const feedbackData = encodeURIComponent(JSON.stringify(fb));
+
         return `
-            <div class="feedback-item ${fb.type}">
+            <div class="feedback-item ${fb.type}" data-id="${fb.id}">
                 <div class="feedback-item-header">
                     <span class="feedback-item-type">${typeIcons[fb.type] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>'}</span>
                     <span class="feedback-item-author">${fb.author}</span>
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
                     <span class="feedback-item-date">${dateStr}</span>
+                    <div class="feedback-item-actions">
+                        <button class="feedback-action-btn edit" onclick="editFeedback('${feedbackData}')" title="Bearbeiten">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button class="feedback-action-btn delete" onclick="deleteFeedback('${fb.id}')" title="Löschen">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="feedback-item-text">${fb.text}</div>
                 ${screenshotHtml}
             </div>
         `;
     }).join('');
+}
+
+// Feedback bearbeiten
+let editingFeedbackId = null;
+
+function editFeedback(encodedData) {
+    const fb = JSON.parse(decodeURIComponent(encodedData));
+    editingFeedbackId = fb.id;
+
+    // Formularfelder füllen
+    document.getElementById('feedbackAuthor').value = fb.author || '';
+    document.getElementById('feedbackArea').value = fb.area || 'allgemein';
+    document.getElementById('feedbackText').value = fb.text || '';
+
+    // Feedback-Typ setzen
+    setFeedbackType(fb.type || 'verbesserung');
+
+    // Screenshot laden falls vorhanden
+    if (fb.screenshot) {
+        currentScreenshotData = fb.screenshot;
+        const preview = document.getElementById('screenshotPreview');
+        const thumbnail = document.getElementById('screenshotThumbnail');
+        if (preview && thumbnail) {
+            thumbnail.src = fb.screenshot;
+            preview.style.display = 'flex';
+        }
+    } else {
+        removeScreenshot();
+    }
+
+    // Button-Text ändern
+    const submitBtn = document.querySelector('.feedback-submit-btn');
+    if (submitBtn) {
+        submitBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Änderungen speichern
+        `;
+    }
+
+    // Zum Formular scrollen
+    document.querySelector('.feedback-form')?.scrollIntoView({ behavior: 'smooth' });
+
+    showFeedbackNotification('Kommentar wird bearbeitet...');
+}
+
+// Feedback löschen
+async function deleteFeedback(id) {
+    if (!confirm('Möchten Sie diesen Kommentar wirklich löschen?')) {
+        return;
+    }
+
+    if (USE_CLOUDFLARE) {
+        try {
+            const response = await fetch(`${FEEDBACK_API_URL}/feedback/${id}`, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showFeedbackNotification('Kommentar gelöscht!');
+                loadFeedbackFromCloudflare();
+            } else {
+                throw new Error(result.error || 'Löschen fehlgeschlagen');
+            }
+        } catch (error) {
+            console.error('Löschen Fehler:', error);
+            showFeedbackNotification('Fehler beim Löschen');
+        }
+    } else {
+        // LocalStorage Fallback
+        const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+        const filtered = feedbacks.filter(f => f.id !== id && f.id !== parseInt(id));
+        localStorage.setItem('bankenFeedback', JSON.stringify(filtered));
+        loadFeedbackFromLocalStorage();
+        showFeedbackNotification('Kommentar gelöscht!');
+    }
+}
+
+// Bearbeitung abbrechen
+function cancelEditFeedback() {
+    editingFeedbackId = null;
+
+    // Formular zurücksetzen
+    document.getElementById('feedbackText').value = '';
+    removeScreenshot();
+
+    // Button-Text zurücksetzen
+    const submitBtn = document.querySelector('.feedback-submit-btn');
+    if (submitBtn) {
+        submitBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Feedback speichern
+        `;
+    }
 }
 
 // Screenshot-Lightbox öffnen
@@ -256,16 +401,36 @@ function showFeedbackNotification(message) {
     }, 2000);
 }
 
-// Feedback exportieren (JSON Download)
-function exportFeedback() {
-    const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
-    if (feedbackDb) {
-        feedbackDb.ref('feedback').once('value', (snapshot) => {
-            const fbData = [];
-            snapshot.forEach(child => fbData.push(child.val()));
-            downloadFeedbackJson(fbData);
-        });
+// Feedback-Liste aktualisieren
+async function refreshFeedbackList() {
+    showFeedbackNotification('Aktualisiere...');
+    if (USE_CLOUDFLARE) {
+        await loadFeedbackFromCloudflare();
     } else {
+        loadFeedbackFromLocalStorage();
+    }
+    showFeedbackNotification('Liste aktualisiert!');
+}
+
+// Feedback exportieren (JSON Download)
+async function exportFeedback() {
+    if (USE_CLOUDFLARE) {
+        try {
+            const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
+            const result = await response.json();
+            if (result.success) {
+                downloadFeedbackJson(result.data);
+            } else {
+                throw new Error('Export fehlgeschlagen');
+            }
+        } catch (error) {
+            console.error('Export Fehler:', error);
+            // Fallback zu LocalStorage
+            const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+            downloadFeedbackJson(feedbacks);
+        }
+    } else {
+        const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
         downloadFeedbackJson(feedbacks);
     }
 }
