@@ -486,16 +486,20 @@ async function captureScreenshot() {
         const screenshotModal = document.getElementById('screenshotModal');
         feedbackPanel.style.visibility = 'hidden';
 
-        // Screenshot nur vom Banken-Modul erstellen (nicht ganze Seite)
-        const bankenPage = document.querySelector('.banken-page');
-        const targetElement = bankenPage || document.body;
-
-        const canvas = await html2canvas(targetElement, {
+        // Screenshot vom sichtbaren Viewport erstellen (was der User gerade sieht)
+        const canvas = await html2canvas(document.body, {
             scale: 2, // Höhere Auflösung für bessere Qualität
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#ffffff',
             logging: false,
+            // Nur den sichtbaren Viewport erfassen
+            x: window.scrollX,
+            y: window.scrollY,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            windowWidth: window.innerWidth,
+            windowHeight: window.innerHeight,
             ignoreElements: (element) => {
                 // Feedback-Panel und Chat-Widget nicht mitaufnehmen
                 return element.id === 'feedbackPanel' ||
