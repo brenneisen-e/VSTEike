@@ -6,38 +6,26 @@
 let bankenModuleLoaded = false;
 
 // ========================================
-// FIREBASE FEEDBACK SYSTEM
+// CLOUDFLARE FEEDBACK SYSTEM
 // ========================================
 
-// Firebase Konfiguration - BITTE MIT EIGENEN WERTEN ERSETZEN
-// Anleitung: https://console.firebase.google.com → Neues Projekt → Realtime Database
-const firebaseConfig = {
-    apiKey: "AIzaSyDemo-REPLACE-WITH-YOUR-KEY",
-    authDomain: "vsteike-demo.firebaseapp.com",
-    databaseURL: "https://vsteike-demo-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "vsteike-demo",
-    storageBucket: "vsteike-demo.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef123456"
-};
+// Cloudflare Worker API URL - BITTE MIT EIGENER WORKER-URL ERSETZEN
+// Anleitung: Siehe cloudflare/feedback-worker.js
+const FEEDBACK_API_URL = 'https://vsteike-feedback.DEIN-ACCOUNT.workers.dev';
 
-// Firebase initialisieren (wenn SDK geladen)
-let feedbackDb = null;
+// Alternative: Wenn keine Cloudflare-URL konfiguriert, nutze LocalStorage
+const USE_CLOUDFLARE = !FEEDBACK_API_URL.includes('DEIN-ACCOUNT');
+
 let currentFeedbackType = 'verbesserung';
 
-function initFirebase() {
-    try {
-        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            feedbackDb = firebase.database();
-            console.log('✅ Firebase initialisiert');
-            loadFeedbackFromFirebase();
-        } else if (firebase.apps.length) {
-            feedbackDb = firebase.database();
-            loadFeedbackFromFirebase();
-        }
-    } catch (error) {
-        console.warn('Firebase nicht verfügbar, nutze LocalStorage:', error);
+// Feedback System initialisieren
+function initFeedbackSystem() {
+    if (USE_CLOUDFLARE) {
+        console.log('✅ Cloudflare Feedback System aktiv');
+        loadFeedbackFromCloudflare();
+    } else {
+        console.log('⚠️ Cloudflare nicht konfiguriert, nutze LocalStorage');
+        console.log('📝 Konfiguriere FEEDBACK_API_URL in banken.js für persistente Speicherung');
         loadFeedbackFromLocalStorage();
     }
 }
@@ -69,7 +57,7 @@ function setFeedbackType(type) {
 }
 
 // Feedback speichern
-function submitFeedback() {
+async function submitFeedback() {
     const author = document.getElementById('feedbackAuthor').value.trim() || 'Anonym';
     const area = document.getElementById('feedbackArea').value;
     const text = document.getElementById('feedbackText').value.trim();
@@ -83,31 +71,63 @@ function submitFeedback() {
     localStorage.setItem('feedbackAuthor', author);
 
     const feedback = {
-        id: Date.now(),
         author: author,
         area: area,
         type: currentFeedbackType,
         text: text,
-        timestamp: new Date().toISOString(),
         url: window.location.href,
         userAgent: navigator.userAgent.substring(0, 100)
     };
 
-    if (feedbackDb) {
-        // In Firebase speichern
-        feedbackDb.ref('feedback').push(feedback)
-            .then(() => {
-                console.log('✅ Feedback in Firebase gespeichert');
-                document.getElementById('feedbackText').value = '';
-                showFeedbackNotification('Feedback gespeichert!');
-            })
-            .catch(error => {
-                console.error('Firebase Fehler:', error);
-                saveFeedbackToLocalStorage(feedback);
-            });
+    if (USE_CLOUDFLARE) {
+        await saveFeedbackToCloudflare(feedback);
     } else {
-        // Fallback: LocalStorage
-        saveFeedbackToLocalStorage(feedback);
+        saveFeedbackToLocalStorage({ ...feedback, id: Date.now(), timestamp: new Date().toISOString() });
+    }
+}
+
+// Cloudflare: Feedback speichern
+async function saveFeedbackToCloudflare(feedback) {
+    try {
+        const response = await fetch(`${FEEDBACK_API_URL}/feedback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(feedback)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            document.getElementById('feedbackText').value = '';
+            showFeedbackNotification('Feedback gespeichert!');
+            loadFeedbackFromCloudflare();
+        } else {
+            throw new Error(result.error || 'Unbekannter Fehler');
+        }
+    } catch (error) {
+        console.error('Cloudflare Fehler:', error);
+        showFeedbackNotification('Fehler: ' + error.message, 'error');
+        // Fallback zu LocalStorage
+        saveFeedbackToLocalStorage({ ...feedback, id: Date.now(), timestamp: new Date().toISOString() });
+    }
+}
+
+// Cloudflare: Feedback laden
+async function loadFeedbackFromCloudflare() {
+    try {
+        const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
+        const result = await response.json();
+
+        if (result.success) {
+            renderFeedbackList(result.data);
+            updateFeedbackBadge(result.count);
+        } else {
+            throw new Error(result.error || 'Laden fehlgeschlagen');
+        }
+    } catch (error) {
+        console.error('Cloudflare Laden Fehler:', error);
+        // Fallback zu LocalStorage
+        loadFeedbackFromLocalStorage();
     }
 }
 
@@ -118,22 +138,7 @@ function saveFeedbackToLocalStorage(feedback) {
     localStorage.setItem('bankenFeedback', JSON.stringify(feedbacks));
     loadFeedbackFromLocalStorage();
     document.getElementById('feedbackText').value = '';
-    showFeedbackNotification('Feedback lokal gespeichert!');
-}
-
-// Feedback aus Firebase laden
-function loadFeedbackFromFirebase() {
-    if (!feedbackDb) return;
-
-    feedbackDb.ref('feedback').orderByChild('timestamp').on('value', (snapshot) => {
-        const feedbacks = [];
-        snapshot.forEach(child => {
-            feedbacks.push({ ...child.val(), firebaseKey: child.key });
-        });
-        feedbacks.reverse(); // Neueste zuerst
-        renderFeedbackList(feedbacks);
-        updateFeedbackBadge(feedbacks.length);
-    });
+    showFeedbackNotification('Feedback lokal gespeichert (nur in diesem Browser)');
 }
 
 // Feedback aus LocalStorage laden
@@ -154,10 +159,10 @@ function renderFeedbackList(feedbacks) {
     }
 
     const typeIcons = {
-        'verbesserung': '💡',
-        'fehler': '🐛',
-        'frage': '❓',
-        'lob': '👍'
+        'verbesserung': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>',
+        'fehler': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        'frage': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+        'lob': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"></path></svg>'
     };
 
     const areaLabels = {
@@ -179,7 +184,7 @@ function renderFeedbackList(feedbacks) {
         return `
             <div class="feedback-item ${fb.type}">
                 <div class="feedback-item-header">
-                    <span class="feedback-item-type">${typeIcons[fb.type] || '💬'}</span>
+                    <span class="feedback-item-type">${typeIcons[fb.type] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>'}</span>
                     <span class="feedback-item-author">${fb.author}</span>
                     <span class="feedback-item-area">${areaLabels[fb.area] || fb.area}</span>
                     <span class="feedback-item-date">${dateStr}</span>
@@ -237,9 +242,9 @@ function downloadFeedbackJson(data) {
     URL.revokeObjectURL(url);
 }
 
-// Firebase beim Laden initialisieren
+// Feedback System beim Laden initialisieren
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initFirebase, 500);
+    setTimeout(initFeedbackSystem, 500);
 });
 
 // Component registry for the modular Banken system
@@ -1054,6 +1059,15 @@ function showBankenSection(sectionName) {
         }
     });
 
+    // Update dropdown items
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.remove('active');
+        const onclickAttr = item.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${sectionName}'`)) {
+            item.classList.add('active');
+        }
+    });
+
     // Update section content
     document.querySelectorAll('.banken-section').forEach(section => {
         section.classList.remove('active');
@@ -1066,6 +1080,45 @@ function showBankenSection(sectionName) {
 
     console.log('Showing Banken section:', sectionName);
 }
+
+// ========================================
+// HEADER DROPDOWN MENU FUNCTIONS
+// ========================================
+
+// Toggle dropdown menu
+function toggleHeaderDropdown(menuId) {
+    const dropdown = document.getElementById(`dropdown-${menuId}`);
+    const trigger = dropdown?.previousElementSibling;
+
+    // Close all other dropdowns
+    document.querySelectorAll('.header-dropdown-menu').forEach(menu => {
+        if (menu.id !== `dropdown-${menuId}`) {
+            menu.classList.remove('open');
+            menu.previousElementSibling?.classList.remove('active');
+        }
+    });
+
+    // Toggle current dropdown
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+        trigger?.classList.toggle('active');
+    }
+}
+
+// Close all header dropdowns
+function closeHeaderDropdowns() {
+    document.querySelectorAll('.header-dropdown-menu').forEach(menu => {
+        menu.classList.remove('open');
+        menu.previousElementSibling?.classList.remove('active');
+    });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.header-dropdown-container')) {
+        closeHeaderDropdowns();
+    }
+});
 
 // Show overdue cases - navigates to Aufgaben section
 function showOverdueCases() {
