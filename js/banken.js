@@ -6,38 +6,26 @@
 let bankenModuleLoaded = false;
 
 // ========================================
-// FIREBASE FEEDBACK SYSTEM
+// CLOUDFLARE FEEDBACK SYSTEM
 // ========================================
 
-// Firebase Konfiguration - BITTE MIT EIGENEN WERTEN ERSETZEN
-// Anleitung: https://console.firebase.google.com → Neues Projekt → Realtime Database
-const firebaseConfig = {
-    apiKey: "AIzaSyDemo-REPLACE-WITH-YOUR-KEY",
-    authDomain: "vsteike-demo.firebaseapp.com",
-    databaseURL: "https://vsteike-demo-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "vsteike-demo",
-    storageBucket: "vsteike-demo.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef123456"
-};
+// Cloudflare Worker API URL - BITTE MIT EIGENER WORKER-URL ERSETZEN
+// Anleitung: Siehe cloudflare/feedback-worker.js
+const FEEDBACK_API_URL = 'https://vsteike-feedback.DEIN-ACCOUNT.workers.dev';
 
-// Firebase initialisieren (wenn SDK geladen)
-let feedbackDb = null;
+// Alternative: Wenn keine Cloudflare-URL konfiguriert, nutze LocalStorage
+const USE_CLOUDFLARE = !FEEDBACK_API_URL.includes('DEIN-ACCOUNT');
+
 let currentFeedbackType = 'verbesserung';
 
-function initFirebase() {
-    try {
-        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            feedbackDb = firebase.database();
-            console.log('✅ Firebase initialisiert');
-            loadFeedbackFromFirebase();
-        } else if (firebase.apps.length) {
-            feedbackDb = firebase.database();
-            loadFeedbackFromFirebase();
-        }
-    } catch (error) {
-        console.warn('Firebase nicht verfügbar, nutze LocalStorage:', error);
+// Feedback System initialisieren
+function initFeedbackSystem() {
+    if (USE_CLOUDFLARE) {
+        console.log('✅ Cloudflare Feedback System aktiv');
+        loadFeedbackFromCloudflare();
+    } else {
+        console.log('⚠️ Cloudflare nicht konfiguriert, nutze LocalStorage');
+        console.log('📝 Konfiguriere FEEDBACK_API_URL in banken.js für persistente Speicherung');
         loadFeedbackFromLocalStorage();
     }
 }
@@ -69,7 +57,7 @@ function setFeedbackType(type) {
 }
 
 // Feedback speichern
-function submitFeedback() {
+async function submitFeedback() {
     const author = document.getElementById('feedbackAuthor').value.trim() || 'Anonym';
     const area = document.getElementById('feedbackArea').value;
     const text = document.getElementById('feedbackText').value.trim();
@@ -83,31 +71,63 @@ function submitFeedback() {
     localStorage.setItem('feedbackAuthor', author);
 
     const feedback = {
-        id: Date.now(),
         author: author,
         area: area,
         type: currentFeedbackType,
         text: text,
-        timestamp: new Date().toISOString(),
         url: window.location.href,
         userAgent: navigator.userAgent.substring(0, 100)
     };
 
-    if (feedbackDb) {
-        // In Firebase speichern
-        feedbackDb.ref('feedback').push(feedback)
-            .then(() => {
-                console.log('✅ Feedback in Firebase gespeichert');
-                document.getElementById('feedbackText').value = '';
-                showFeedbackNotification('Feedback gespeichert!');
-            })
-            .catch(error => {
-                console.error('Firebase Fehler:', error);
-                saveFeedbackToLocalStorage(feedback);
-            });
+    if (USE_CLOUDFLARE) {
+        await saveFeedbackToCloudflare(feedback);
     } else {
-        // Fallback: LocalStorage
-        saveFeedbackToLocalStorage(feedback);
+        saveFeedbackToLocalStorage({ ...feedback, id: Date.now(), timestamp: new Date().toISOString() });
+    }
+}
+
+// Cloudflare: Feedback speichern
+async function saveFeedbackToCloudflare(feedback) {
+    try {
+        const response = await fetch(`${FEEDBACK_API_URL}/feedback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(feedback)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            document.getElementById('feedbackText').value = '';
+            showFeedbackNotification('Feedback gespeichert!');
+            loadFeedbackFromCloudflare();
+        } else {
+            throw new Error(result.error || 'Unbekannter Fehler');
+        }
+    } catch (error) {
+        console.error('Cloudflare Fehler:', error);
+        showFeedbackNotification('Fehler: ' + error.message, 'error');
+        // Fallback zu LocalStorage
+        saveFeedbackToLocalStorage({ ...feedback, id: Date.now(), timestamp: new Date().toISOString() });
+    }
+}
+
+// Cloudflare: Feedback laden
+async function loadFeedbackFromCloudflare() {
+    try {
+        const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
+        const result = await response.json();
+
+        if (result.success) {
+            renderFeedbackList(result.data);
+            updateFeedbackBadge(result.count);
+        } else {
+            throw new Error(result.error || 'Laden fehlgeschlagen');
+        }
+    } catch (error) {
+        console.error('Cloudflare Laden Fehler:', error);
+        // Fallback zu LocalStorage
+        loadFeedbackFromLocalStorage();
     }
 }
 
@@ -118,22 +138,7 @@ function saveFeedbackToLocalStorage(feedback) {
     localStorage.setItem('bankenFeedback', JSON.stringify(feedbacks));
     loadFeedbackFromLocalStorage();
     document.getElementById('feedbackText').value = '';
-    showFeedbackNotification('Feedback lokal gespeichert!');
-}
-
-// Feedback aus Firebase laden
-function loadFeedbackFromFirebase() {
-    if (!feedbackDb) return;
-
-    feedbackDb.ref('feedback').orderByChild('timestamp').on('value', (snapshot) => {
-        const feedbacks = [];
-        snapshot.forEach(child => {
-            feedbacks.push({ ...child.val(), firebaseKey: child.key });
-        });
-        feedbacks.reverse(); // Neueste zuerst
-        renderFeedbackList(feedbacks);
-        updateFeedbackBadge(feedbacks.length);
-    });
+    showFeedbackNotification('Feedback lokal gespeichert (nur in diesem Browser)');
 }
 
 // Feedback aus LocalStorage laden
@@ -237,9 +242,9 @@ function downloadFeedbackJson(data) {
     URL.revokeObjectURL(url);
 }
 
-// Firebase beim Laden initialisieren
+// Feedback System beim Laden initialisieren
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initFirebase, 500);
+    setTimeout(initFeedbackSystem, 500);
 });
 
 // Component registry for the modular Banken system
