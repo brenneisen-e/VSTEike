@@ -3603,6 +3603,38 @@ body.modal-open {
     display: block;
 }
 
+/* Stammdaten Header Actions */
+.stammdaten-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.btn-edit-stammdaten {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: white;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-edit-stammdaten:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-edit-stammdaten svg {
+    width: 14px;
+    height: 14px;
+}
+
 /* Stammdaten */
 .stammdaten-grid {
     display: grid;

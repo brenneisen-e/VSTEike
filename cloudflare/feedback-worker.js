@@ -67,7 +67,8 @@ export default {
                     text: body.text.trim(),
                     timestamp: new Date().toISOString(),
                     url: body.url || '',
-                    userAgent: (body.userAgent || '').substring(0, 100)
+                    userAgent: (body.userAgent || '').substring(0, 100),
+                    screenshot: body.screenshot || null
                 };
 
                 // Am Anfang hinzufügen (neueste zuerst)
