@@ -10028,3 +10028,79 @@ body.modal-open {
 .spin {
     animation: spin 1s linear infinite;
 }
+
+/* Feedback Item Actions */
+.feedback-item-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.feedback-item:hover .feedback-item-actions {
+    opacity: 1;
+}
+
+.feedback-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+.feedback-action-btn.edit:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.feedback-action-btn.delete:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* Feedback Item Header Update */
+.feedback-item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Feedback List Header Actions */
+.feedback-list-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.feedback-refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+.feedback-refresh-btn:hover {
+    background: #e2e8f0;
+    color: #3b82f6;
+}
+
+.feedback-refresh-btn:active svg {
+    animation: spin 0.5s ease;
+}
