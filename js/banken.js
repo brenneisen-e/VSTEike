@@ -11,7 +11,7 @@ let bankenModuleLoaded = false;
 
 // Cloudflare Worker API URL - BITTE MIT EIGENER WORKER-URL ERSETZEN
 // Anleitung: Siehe cloudflare/feedback-worker.js
-const FEEDBACK_API_URL = 'https://vsteike-feedback.DEIN-ACCOUNT.workers.dev';
+const FEEDBACK_API_URL = 'https://vsteike-feedback.eike-3e2.workers.dev';
 
 // Alternative: Wenn keine Cloudflare-URL konfiguriert, nutze LocalStorage
 const USE_CLOUDFLARE = !FEEDBACK_API_URL.includes('DEIN-ACCOUNT');
