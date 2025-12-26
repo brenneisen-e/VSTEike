@@ -4,9 +4,9 @@
 // CLAUDE API CONFIGURATION
 // ========================================
 
-// Claude API via Cloudflare Worker
-const CLAUDE_WORKER_URL = 'https://vst-claude-api.eike-3e2.workers.dev';
-const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
+// Claude API via Cloudflare Worker (nutze window, um Konflikte mit chat.js zu vermeiden)
+window.CLAUDE_WORKER_URL = window.CLAUDE_WORKER_URL || 'https://vst-claude-api.eike-3e2.workers.dev';
+window.CLAUDE_MODEL = window.CLAUDE_MODEL || 'claude-sonnet-4-5-20250514';
 
 // Fallback: API-Key aus localStorage
 function getApiToken() {
@@ -28,11 +28,11 @@ function clearApiToken() {
 }
 
 // Prüfe ob Worker oder API-Key vorhanden
-const USE_WORKER = CLAUDE_WORKER_URL !== '';
+window.USE_WORKER = window.CLAUDE_WORKER_URL !== '';
 
 // Mock-Modus nur wenn weder Worker noch API-Key
 function isUsingMockMode() {
-    return !USE_WORKER && !getApiToken();
+    return !window.USE_WORKER && !getApiToken();
 }
 
 // Setup API Token Input
@@ -45,7 +45,7 @@ function setupApiTokenInput() {
     if (!tokenInput || !toggleBtn || !saveBtn) return;
 
     // Worker-Modus Status anzeigen
-    if (USE_WORKER) {
+    if (window.USE_WORKER) {
         statusDiv.className = 'api-token-status success';
         statusDiv.textContent = '✅ Claude AI aktiv (via Worker)';
     } else {
@@ -574,11 +574,11 @@ USER FRAGE: ${message}`
     ];
 
     // API URL (Worker or direct)
-    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+    const apiUrl = window.USE_WORKER ? window.CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
 
     // Headers
     const headers = { "Content-Type": "application/json" };
-    if (!USE_WORKER) {
+    if (!window.USE_WORKER) {
         headers["x-api-key"] = getApiToken();
         headers["anthropic-version"] = "2023-06-01";
         headers["anthropic-dangerous-direct-browser-access"] = "true";
@@ -589,7 +589,7 @@ USER FRAGE: ${message}`
         method: "POST",
         headers: headers,
         body: JSON.stringify({
-            model: CLAUDE_MODEL,
+            model: window.CLAUDE_MODEL,
             max_tokens: 2000,
             system: systemPrompt,
             messages: messages
