@@ -37,10 +37,8 @@ export function initFeedbackSystem() {
     initAuthorSelect();
 
     if (USE_CLOUDFLARE) {
-        console.log('✅ Cloudflare Feedback System aktiv');
         loadFeedbackFromCloudflare();
     } else {
-        console.log('⚠️ Cloudflare nicht konfiguriert, nutze LocalStorage');
         loadFeedbackFromLocalStorage();
     }
 }
@@ -157,7 +155,6 @@ export async function submitFeedback() {
             try {
                 await fetch(`${FEEDBACK_API_URL}/feedback/${editingFeedbackId}`, { method: 'DELETE' });
             } catch (e) {
-                console.log('Altes Feedback löschen fehlgeschlagen:', e);
             }
         } else {
             const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
@@ -221,7 +218,6 @@ async function saveFeedbackToCloudflare(feedback) {
 
 async function loadFeedbackFromCloudflare() {
     if (window.preloadedFeedback && !window.feedbackAlreadyLoaded) {
-        console.log('📦 Verwende vorgeladene Feedback-Daten');
         renderFeedbackList(window.preloadedFeedback);
         updateFeedbackBadge(window.preloadedFeedback.length);
         window.feedbackAlreadyLoaded = true;
@@ -229,12 +225,10 @@ async function loadFeedbackFromCloudflare() {
     }
 
     try {
-        console.log('📡 Lade Feedback von Cloudflare:', FEEDBACK_API_URL);
         const response = await fetch(`${FEEDBACK_API_URL}/feedback`);
         const result = await response.json();
 
         if (result.success) {
-            console.log(`✅ ${result.count} Feedbacks von Cloudflare geladen`);
             renderFeedbackList(result.data);
             updateFeedbackBadge(result.count);
         } else {
@@ -242,7 +236,6 @@ async function loadFeedbackFromCloudflare() {
         }
     } catch (error) {
         console.error('❌ Cloudflare Laden Fehler:', error);
-        console.log('⚠️ Fallback zu LocalStorage...');
         loadFeedbackFromLocalStorage();
     }
 }

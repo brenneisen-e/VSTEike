@@ -190,9 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (loadingAnim) loadingAnim.style.display = 'none';
             if (welcomeChat) welcomeChat.style.display = 'block';
 
-            console.log('Welcome Chat angezeigt');
         });
     }, 500);
 });
 
-console.log('Versicherung ES6 modules loaded (ES2024)');

@@ -94,7 +94,6 @@ const getDataContext = () => {
 // ========================================
 
 const sendToClaude = async (message) => {
-    console.log('🤖 Sende Anfrage an Claude API...');
 
     const dataContext = getDataContext();
     const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
@@ -317,13 +316,11 @@ export const askSampleQuestion = (question) => {
 export const initChat = () => {
     if (chatInitialized) return;
 
-    console.log('🤖 initChat() aufgerufen');
 
     const chatWidget = document.getElementById('chatWidget');
     const chatToggle = document.getElementById('chatToggle');
 
     if (!chatWidget || !chatToggle) {
-        console.log('ℹ️ Chat Elemente nicht gefunden');
         return;
     }
 
@@ -391,7 +388,6 @@ export const initChat = () => {
         chatWidget.style.display = 'none';
     }
 
-    console.log('✅ Chat erfolgreich initialisiert!');
 };
 
 // ========================================
@@ -487,4 +483,3 @@ Object.assign(window, {
     hideAIResponse
 });
 
-console.log('✅ Chat ES6 modules loaded (ES2024)');

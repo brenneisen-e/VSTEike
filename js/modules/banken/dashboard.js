@@ -30,7 +30,6 @@ export function showBankenTab(tabName) {
     });
 
     document.getElementById(`banken-tab-${tabName}`)?.classList.add('active');
-    console.log('Banken tab switched to:', tabName);
 }
 
 // ========================================
@@ -59,7 +58,6 @@ export function showBankenSection(sectionName) {
     });
 
     document.getElementById(`section-${sectionName}`)?.classList.add('active');
-    console.log('Showing Banken section:', sectionName);
 }
 
 // ========================================
@@ -77,7 +75,6 @@ const segmentConfig = {
 export function filterBySegment(segment) {
     const config = segmentConfig[segment];
     if (!config) {
-        console.warn('Unknown segment:', segment);
         return;
     }
 

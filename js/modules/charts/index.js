@@ -300,4 +300,3 @@ Object.assign(window, {
     switchToDaily
 });
 
-console.log('✅ Charts ES6 modules loaded (ES2024)');

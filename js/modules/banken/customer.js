@@ -81,7 +81,6 @@ export function openCustomerDetail(customerId, options = {}) {
         showCustomerTab('stammdaten');
     }
 
-    console.log('Opening customer detail:', customerId, customer.name);
 }
 
 export function closeCustomerDetail() {
@@ -141,7 +140,6 @@ export function openCrmProfile(customerId, taskContext = null) {
     const crmCustomerId = crmView.querySelector('.crm-customer-id');
     if (crmCustomerId) crmCustomerId.textContent = customerId;
 
-    console.log('Opening CRM profile:', customerId);
 }
 
 export function closeCrmProfile() {

@@ -1,0 +1,14 @@
+/**
+ * Bestandsuebertragung Module - CSS Entry Point
+ * Modular CSS Architecture
+ */
+
+@import '_variables.css';
+@import '_base.css';
+@import '_layout.css';
+@import '_toolbar.css';
+@import '_tables.css';
+@import '_modals.css';
+@import '_features.css';
+@import '_case-detail.css';
+@import '_responsive.css';

@@ -591,6 +591,5 @@ window.showAgenturTab = function(tabName) {
     }
 };
 
-console.log('✅ Provisionssimulation ES6 modules loaded (ES2024)');
 
 export { provisionState, COMMISSION_RATES, REVERS_TIERS };

@@ -11,7 +11,6 @@ import { openDashboard } from './data.js';
 // ========================================
 
 export function setAgenturFilter(vermittlerId) {
-    console.log('setAgenturFilter:', vermittlerId);
 
     if (typeof window.state !== 'undefined') {
         const currentYear = window.state.filters.year;
@@ -23,7 +22,6 @@ export function setAgenturFilter(vermittlerId) {
             products: ['alle'],
             bundeslaender: []
         };
-        console.log('Filter zurückgesetzt und Agentur-Filter gesetzt:', window.state.filters);
     } else {
         localStorage.removeItem('pendingSiloFilter');
         localStorage.removeItem('pendingSegmentFilter');
@@ -33,7 +31,6 @@ export function setAgenturFilter(vermittlerId) {
 }
 
 export function setSiloFilter(silo) {
-    console.log('setSiloFilter:', silo);
 
     if (typeof window.state !== 'undefined') {
         window.state.filters.silo = silo;
@@ -43,7 +40,6 @@ export function setSiloFilter(silo) {
 }
 
 export function setSegmentFilter(segments) {
-    console.log('setSegmentFilter:', segments);
 
     if (typeof window.state !== 'undefined') {
         window.state.filters.segments = segments;
@@ -53,7 +49,6 @@ export function setSegmentFilter(segments) {
 }
 
 export function setBundeslandFilter(laender) {
-    console.log('setBundeslandFilter:', laender);
 
     if (typeof window.state !== 'undefined') {
         window.state.filters.bundeslaender = laender;
@@ -63,7 +58,6 @@ export function setBundeslandFilter(laender) {
 }
 
 export function clearAllFilters() {
-    console.log('clearAllFilters');
 
     if (typeof window.state !== 'undefined') {
         window.state.filters = {
@@ -86,7 +80,6 @@ export function clearAllFilters() {
 // ========================================
 
 export async function parseAndExecuteCommands(message) {
-    console.log('Parse KI-Antwort nach Befehlen...');
 
     let hasExecutedCommands = false;
 
@@ -94,7 +87,6 @@ export async function parseAndExecuteCommands(message) {
     const overviewMatch = message.match(/showAgenturOverview\(['"]([^'"]+)['"]\)/);
     if (overviewMatch) {
         const vermittlerId = overviewMatch[1];
-        console.log('Gefunden: showAgenturOverview für', vermittlerId);
 
         if (typeof window.showAgenturOverview === 'function') {
             window.showAgenturOverview(vermittlerId);
@@ -143,7 +135,6 @@ export async function parseAndExecuteCommands(message) {
     }
 
     if (hasExecutedCommands) {
-        console.log('Filter wurden gesetzt - navigiere zum Dashboard...');
         addLandingChatMessage('system', 'Filter wurden angewendet. Öffne Dashboard...');
 
         setTimeout(() => {
@@ -197,13 +188,11 @@ Klicke auf "Zur Gesamtübersicht" um loszulegen!`,
 };
 
 export function askLandingSampleQuestion(question) {
-    console.log('Landing Sample Question clicked:', question);
 
     const sampleQuestions = document.getElementById('landingSampleQuestions');
     if (sampleQuestions) sampleQuestions.style.display = 'none';
 
     if (standardAnswers[question]) {
-        console.log('Using predefined answer (no AI)');
         addLandingChatMessage('user', question);
 
         setTimeout(() => {

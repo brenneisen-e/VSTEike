@@ -14,7 +14,6 @@ let currentPotentialFilter = null;
 // ========================================
 
 export function openPotentialAnalyse() {
-    console.log('Potentialanalyse öffnen...');
 
     document.getElementById('landingPage')?.style.setProperty('display', 'none');
     document.getElementById('mainApp')?.style.setProperty('display', 'none');
@@ -28,7 +27,6 @@ export function openPotentialAnalyse() {
 }
 
 export function openPotentialAnalyseWithFilter(productId, productName) {
-    console.log('Potentialanalyse öffnen mit Filter:', productId);
 
     document.getElementById('landingPage')?.style.setProperty('display', 'none');
     document.getElementById('mainApp')?.style.setProperty('display', 'none');

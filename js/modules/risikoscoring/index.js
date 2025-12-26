@@ -758,4 +758,3 @@ Object.assign(window, {
     initRisikoscoring
 });
 
-console.log('✅ Risikoscoring ES6 modules loaded (ES2024)');

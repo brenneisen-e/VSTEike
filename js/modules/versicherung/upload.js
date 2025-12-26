@@ -107,7 +107,6 @@ export function handleQuickUpload(file) {
                 }
             }
 
-            console.log('✅ Daten erfolgreich geladen:', parsedData.length, 'Zeilen');
 
         } catch (error) {
             console.error('Fehler beim Parsen:', error);

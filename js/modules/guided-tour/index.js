@@ -213,4 +213,3 @@ export const startDemoTour = () => guidedTour.start();
 
 Object.assign(window, { guidedTour, startDemoTour });
 
-console.log('✅ Guided Tour ES6 modules loaded (ES2024)');

@@ -167,4 +167,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 });
 
-console.log('✅ Banken ES6 modules loaded (ES2024)');

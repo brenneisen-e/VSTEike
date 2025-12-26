@@ -146,7 +146,6 @@ export const loadDemoData = (force = false) => {
     const demoCases = generateDemoCases();
     Object.values(demoCases).forEach(c => storage.saveCase(c));
 
-    console.log(`${Object.keys(demoCases).length} Demo-Vorgänge geladen`);
     return true;
 };
 

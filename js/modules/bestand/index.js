@@ -225,7 +225,6 @@ Object.assign(window, {
 document.addEventListener('DOMContentLoaded', () => {
     // App initialization is handled by app.js
     // This is just for backward compatibility
-    console.log('✅ Bestand ES6 modules loaded (ES2024)');
 });
 
 export { Storage, Extractor, Matcher, UI, Export, DemoData, App };
