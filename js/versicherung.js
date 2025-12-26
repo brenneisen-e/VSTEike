@@ -1,4 +1,4 @@
-// js/landing.js - Landing Page Logic
+// js/versicherung.js - Versicherung Module Logic
 
 // ========================================
 // CLAUDE API CONFIGURATION
@@ -3418,4 +3418,4 @@ window.handleUserProfileUploadDropdown = handleUserProfileUploadDropdown;
 window.loadUserProfileImages = loadUserProfileImages;
 
 
-console.log('✅ landing.js geladen');
+console.log('✅ versicherung.js geladen');

@@ -1,0 +1,10 @@
+/**
+ * Versicherung Module CSS
+ * Imports all insurance-specific styles from modular files
+ */
+
+@import 'modules/versicherung/_welcome.css';
+@import 'modules/versicherung/_dashboard.css';
+@import 'modules/versicherung/_tables-maps.css';
+@import 'modules/versicherung/_chat.css';
+@import 'modules/versicherung/_misc.css';
