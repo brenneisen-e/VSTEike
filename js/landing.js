@@ -1,22 +1,22 @@
 // js/landing.js - Landing Page Logic
 
 // ========================================
-// API TOKEN MANAGEMENT
+// CLAUDE API CONFIGURATION
 // ========================================
 
-// Default API Key (Base64 encoded für Demo-Zwecke)
-const _k = 'c2stcHJvai1uUDZHcjVlSzc0amoyVzhEc0k4RE9sT2t6emVyQnNQaXdNVFZwd3RyWHlIVVJEaTZaVWp4V2NWZVl3ZXhSa2dGWXVuSWsxY2RXY1QzQmxia0ZKbUNUWVFFWEtYSVlTUE9KYXkxXzF3VzNCbHQxanliVVRuOGJtcURXNFFpZzR3ZGRBNDZCSlRhYU5YTkxEVWV6bnBnLUZOWnoxb0E=';
-const DEFAULT_OPENAI_KEY = atob(_k);
+// Claude API via Cloudflare Worker
+const CLAUDE_WORKER_URL = 'https://vst-claude-api.eike-3e2.workers.dev';
+const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
 
-// Get API token from localStorage (mit Default-Fallback)
+// Fallback: API-Key aus localStorage
 function getApiToken() {
-    return localStorage.getItem('openai_api_token') || DEFAULT_OPENAI_KEY;
+    return localStorage.getItem('claude_api_token') || '';
 }
 
 // Save API token to localStorage
 function saveApiToken(token) {
     if (token && token.trim()) {
-        localStorage.setItem('openai_api_token', token.trim());
+        localStorage.setItem('claude_api_token', token.trim());
         return true;
     }
     return false;
@@ -24,15 +24,15 @@ function saveApiToken(token) {
 
 // Clear API token from localStorage
 function clearApiToken() {
-    localStorage.removeItem('openai_api_token');
+    localStorage.removeItem('claude_api_token');
 }
 
-// Check if using mock mode (no token = mock mode)
+// Prüfe ob Worker oder API-Key vorhanden
+const USE_WORKER = CLAUDE_WORKER_URL !== '';
+
+// Mock-Modus nur wenn weder Worker noch API-Key
 function isUsingMockMode() {
-    const token = getApiToken();
-    // Mit Default-Key ist Mock-Mode aus
-    if (token === DEFAULT_OPENAI_KEY) return false;
-    return !token || token === 'YOUR_OPENAI_API_KEY_HERE';
+    return !USE_WORKER && !getApiToken();
 }
 
 // Setup API Token Input
@@ -44,15 +44,20 @@ function setupApiTokenInput() {
 
     if (!tokenInput || !toggleBtn || !saveBtn) return;
 
-    // Load existing token
-    const existingToken = getApiToken();
-    if (existingToken && existingToken !== 'YOUR_OPENAI_API_KEY_HERE') {
-        tokenInput.value = existingToken;
+    // Worker-Modus Status anzeigen
+    if (USE_WORKER) {
         statusDiv.className = 'api-token-status success';
-        statusDiv.textContent = '✅ API-Key gespeichert (KI-Modus aktiv)';
+        statusDiv.textContent = '✅ Claude AI aktiv (via Worker)';
     } else {
-        statusDiv.className = 'api-token-status';
-        statusDiv.textContent = 'ℹ️ Mock-Modus aktiv (vorgefertigte Antworten)';
+        const existingToken = getApiToken();
+        if (existingToken) {
+            tokenInput.value = existingToken;
+            statusDiv.className = 'api-token-status success';
+            statusDiv.textContent = '✅ API-Key gespeichert (KI-Modus aktiv)';
+        } else {
+            statusDiv.className = 'api-token-status';
+            statusDiv.textContent = 'ℹ️ Mock-Modus aktiv (vorgefertigte Antworten)';
+        }
     }
 
     // Toggle password visibility
@@ -88,11 +93,8 @@ function setupApiTokenInput() {
             statusDiv.className = 'api-token-status success';
             statusDiv.textContent = '✅ API-Key gespeichert! KI-Modus ist jetzt aktiv.';
 
-            // Update chat.js if already loaded
-            if (typeof OPENAI_API_KEY !== 'undefined') {
-                window.OPENAI_API_KEY = token;
-                window.USE_MOCK_MODE = false;
-            }
+            // Update mock mode status
+            window.USE_MOCK_MODE = false;
         } else {
             statusDiv.className = 'api-token-status error';
             statusDiv.textContent = '❌ Fehler beim Speichern';
@@ -499,11 +501,7 @@ async function sendLandingChatMessage() {
     isLandingChatProcessing = true;
     
     try {
-        // Get API token from localStorage
-        const OPENAI_API_KEY = getApiToken();
-        const USE_MOCK_MODE = isUsingMockMode();
-
-        if (USE_MOCK_MODE) {
+        if (isUsingMockMode()) {
             // Mock response
             console.log('🎭 Mock-Modus - Generiere Test-Antwort');
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -511,9 +509,9 @@ async function sendLandingChatMessage() {
             hideLandingChatTyping();
             addLandingChatMessage('assistant', mockResponse);
         } else {
-            // Real API call - GLEICHE FUNKTION WIE DASHBOARD
-            console.log('🚀 Rufe OpenAI API auf...');
-            await sendLandingMessageToOpenAI(message, OPENAI_API_KEY);
+            // Real API call via Claude
+            console.log('🚀 Rufe Claude API auf...');
+            await sendLandingMessageToClaude(message);
         }
         
     } catch (error) {
@@ -525,18 +523,15 @@ async function sendLandingChatMessage() {
     isLandingChatProcessing = false;
 }
 
-// Send to OpenAI API - GLEICHE LOGIK WIE DASHBOARD CHAT
-async function sendLandingMessageToOpenAI(message, apiKey) {
-    console.log('🔑 Verwende OpenAI API-Key:', apiKey.substring(0, 10) + '...');
-    
-    // Prepare context about current data - GLEICH WIE DASHBOARD
+// Send to Claude API via Worker
+async function sendLandingMessageToClaude(message) {
+    console.log('🤖 Sende Anfrage an Claude API...');
+
+    // Prepare context about current data
     const dataContext = getLandingDataContext();
-    
-    // Build messages array - GLEICHE STRUKTUR WIE DASHBOARD
-    const messages = [
-        {
-            role: 'system',
-            content: `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
+
+    // System prompt for Claude
+    const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
 
 VERFÜGBARE FUNKTIONEN:
 1. setAgenturFilter(vermittler_id) - Filtert Dashboard nach Agentur
@@ -565,8 +560,10 @@ WICHTIG:
 - Formatiere große Zahlen lesbar (z.B. "€45.2 Mio")
 - Sei präzise und konkret
 - Antworte auf Deutsch und sei freundlich
-- Wenn keine Daten vorhanden sind, erkläre dass der User zuerst eine CSV hochladen oder zum Dashboard gehen sollte`
-        },
+- Wenn keine Daten vorhanden sind, erkläre dass der User zuerst eine CSV hochladen oder zum Dashboard gehen sollte`;
+
+    // Build messages array for Claude
+    const messages = [
         {
             role: 'user',
             content: `AKTUELLE DATEN:
@@ -575,30 +572,38 @@ ${dataContext}
 USER FRAGE: ${message}`
         }
     ];
-    
-    // Call OpenAI API - GLEICH WIE DASHBOARD
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+
+    // API URL (Worker or direct)
+    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+
+    // Headers
+    const headers = { "Content-Type": "application/json" };
+    if (!USE_WORKER) {
+        headers["x-api-key"] = getApiToken();
+        headers["anthropic-version"] = "2023-06-01";
+        headers["anthropic-dangerous-direct-browser-access"] = "true";
+    }
+
+    // Call Claude API
+    const response = await fetch(apiUrl, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        },
+        headers: headers,
         body: JSON.stringify({
-            model: "gpt-4o",
+            model: CLAUDE_MODEL,
             max_tokens: 2000,
-            temperature: 0.7,
+            system: systemPrompt,
             messages: messages
         })
     });
-    
+
     if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API Fehler:', response.status, errorText);
+        console.error('❌ Claude API Fehler:', response.status, errorText);
         throw new Error(`API request failed: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    const assistantMessage = data.choices[0].message.content;
+    const assistantMessage = data.content[0].text;
     
     console.log('✅ API Antwort erhalten:', assistantMessage.substring(0, 100) + '...');
     
@@ -731,7 +736,7 @@ function generateLandingMockResponse(message) {
         return 'Hallo! 👋 Ich kann dir beim Einstieg ins Dashboard helfen. Möchtest du eine CSV hochladen oder direkt zum Dashboard?';
     }
     
-    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Um echte KI-Analyse zu aktivieren:\n\n1. Besorge einen API-Key von OpenAI\n2. Öffne \`js/landing.js\`\n3. Ersetze den API-Key\n4. Setze \`USE_MOCK_MODE = false\`\n\n**Verfügbare Mock-Befehle:**\n• "Wie viele Daten haben wir?"\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"`;
+    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Claude AI wird über den Worker konfiguriert.\n\n**Verfügbare Mock-Befehle:**\n• "Wie viele Daten haben wir?"\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"`;
 }
 
 // Add message to chat - GLEICH WIE DASHBOARD
@@ -1433,7 +1438,7 @@ Hier kannst du:
 • **Dashboard öffnen** - Visualisiere deine Versicherungsdaten mit interaktiven Charts
 • **CSV-Daten hochladen** - Lade deine eigenen Daten hoch oder nutze den Generator
 • **Daten generieren** - Erstelle realistische Testdaten mit dem CSV-Generator
-• **KI-Analysen** - Stelle Fragen zu deinen Daten (mit OpenAI API-Key)
+• **KI-Analysen** - Stelle Fragen zu deinen Daten (powered by Claude AI)
 
 Klicke auf "Zur Gesamtübersicht" um loszulegen!`,
 

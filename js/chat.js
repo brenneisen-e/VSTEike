@@ -1,25 +1,26 @@
-// js/chat.js - AI Chat Logic with OpenAI API (mit automatischer Datenanalyse nach Filtern)
+// js/chat.js - AI Chat Logic with Claude API (mit automatischer Datenanalyse nach Filtern)
 
 let chatHistory = [];
 let isProcessing = false;
-let chatInitialized = false; // ✨ v15: Flag to prevent multiple initializations
+let chatInitialized = false;
 
-// ⚠️ CONFIGURATION - API-Key wird aus localStorage geladen
-// User kann den Key auf der Landing Page eingeben
+// ⚠️ CONFIGURATION - Claude API via Cloudflare Worker
+const CLAUDE_WORKER_URL = 'https://vst-claude-api.eike-3e2.workers.dev';
+const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
 
-// Dynamische Funktion um aktuellen API-Key zu holen
-function getOpenAIApiKey() {
-    return localStorage.getItem('openai_api_token') || 'YOUR_OPENAI_API_KEY_HERE';
+// Fallback: API-Key aus localStorage (falls kein Worker)
+function getClaudeApiKey() {
+    return localStorage.getItem('claude_api_token') || '';
 }
 
-// Dynamische Funktion um Mock-Modus zu prüfen
+// Prüfe ob Worker oder direkter Zugriff verwendet wird
+const USE_WORKER = CLAUDE_WORKER_URL !== '';
+
+// Mock-Modus nur wenn weder Worker noch API-Key vorhanden
 function shouldUseMockMode() {
-    const key = getOpenAIApiKey();
-    return !key || key === 'YOUR_OPENAI_API_KEY_HERE';
+    return !USE_WORKER && !getClaudeApiKey();
 }
 
-// Legacy Variablen für Kompatibilität (werden nicht mehr direkt verwendet)
-let OPENAI_API_KEY = getOpenAIApiKey();
 let USE_MOCK_MODE = shouldUseMockMode();
 
 // Initialize chat widget
@@ -122,7 +123,7 @@ function initChat() {
 
         // Show API warning if needed
         if (shouldUseMockMode()) {
-            addMessage('assistant', '⚠️ **Mock-Modus aktiv** - Für echte KI-Antworten gib deinen OpenAI API-Key auf der Landing Page ein.\n\nStelle trotzdem gerne Fragen - ich zeige dir wie die Integration funktioniert!');
+            addMessage('assistant', '⚠️ **Mock-Modus aktiv** - Claude AI ist über den Worker konfiguriert.\n\nStelle trotzdem gerne Fragen - ich zeige dir wie die Integration funktioniert!');
         }
     } else {
         console.log('ℹ️ Keine CSV Daten - Chat bleibt verborgen bis Daten geladen werden');
@@ -153,7 +154,7 @@ function activateChat() {
 // Make activateChat globally available
 window.activateChat = activateChat;
 
-// Send message to OpenAI (or Mock)
+// Send message to Claude (or Mock)
 async function sendMessage() {
     const chatInput = document.getElementById('chatInput');
     const message = chatInput.value.trim();
@@ -191,8 +192,8 @@ async function sendMessage() {
             addMessage('assistant', mockResponse);
         } else {
             // Real API call
-            console.log('🚀 Rufe OpenAI API auf...');
-            await sendToOpenAI(message);
+            console.log('🚀 Rufe Claude API auf...');
+            await sendToClaude(message);
         }
         
     } catch (error) {
@@ -320,22 +321,18 @@ function generateMockResponse(message) {
     }
     
     // Default response
-    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Um echte KI-Analyse zu aktivieren:\n\n1. Besorge einen API-Key von [OpenAI](https://platform.openai.com/)\n2. Öffne \`js/chat.js\`\n3. Ersetze \`DEIN_API_KEY_HIER\` mit deinem Key\n4. Setze \`USE_MOCK_MODE = false\`\n\n**Verfügbare Mock-Befehle:**\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"\n• "Welche Vermittler sind +10% besser bei KV?"\n• "Vergleiche BW vs Bayern"\n• "Welche Bundesländer haben besten NPS?"\n• "Filtere nach Max Mustermann"\n• "Wie viele Daten haben wir?"`;
+    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Claude AI wird über den Worker konfiguriert.\n\n**Verfügbare Mock-Befehle:**\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"\n• "Welche Vermittler sind +10% besser bei KV?"\n• "Vergleiche BW vs Bayern"\n• "Welche Bundesländer haben besten NPS?"\n• "Filtere nach Max Mustermann"\n• "Wie viele Daten haben wir?"`;
 }
 
-// Send to real OpenAI API
-async function sendToOpenAI(message) {
-    const apiKey = getOpenAIApiKey();
-    console.log('🔑 Verwende OpenAI API-Key:', apiKey.substring(0, 10) + '...');
-    
+// Send to Claude API (via Worker or direct)
+async function sendToClaude(message) {
+    console.log('🤖 Sende Anfrage an Claude API...');
+
     // Prepare context about current data
     const dataContext = getDataContext();
-    
-    // Build messages array
-    const messages = [
-        {
-            role: 'system',
-            content: `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
+
+    // System prompt for Claude
+    const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
 
 VERFÜGBARE FUNKTIONEN:
 1. setAgenturFilter(vermittler_id) - Filtert Dashboard nach Agentur
@@ -379,8 +376,10 @@ WICHTIG bei Analysen:
 - Berechne Summen/Durchschnitte aus den echten Zahlen
 - Formatiere große Zahlen lesbar (z.B. "€45.2 Mio")
 - Sei präzise und konkret
-- Antworte auf Deutsch und sei freundlich`
-        },
+- Antworte auf Deutsch und sei freundlich`;
+
+    // Build messages array for Claude
+    const messages = [
         {
             role: 'user',
             content: `AKTUELLE DATEN:
@@ -389,30 +388,41 @@ ${dataContext}
 USER FRAGE: ${message}`
         }
     ];
-    
-    // Call OpenAI API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+
+    // API URL (Worker or direct)
+    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+
+    // Headers
+    const headers = {
+        "Content-Type": "application/json"
+    };
+
+    if (!USE_WORKER) {
+        headers["x-api-key"] = getClaudeApiKey();
+        headers["anthropic-version"] = "2023-06-01";
+        headers["anthropic-dangerous-direct-browser-access"] = "true";
+    }
+
+    // Call Claude API
+    const response = await fetch(apiUrl, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        },
+        headers: headers,
         body: JSON.stringify({
-            model: "gpt-4o",
+            model: CLAUDE_MODEL,
             max_tokens: 2000,
-            temperature: 0.7,
+            system: systemPrompt,
             messages: messages
         })
     });
-    
+
     if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API Fehler:', response.status, errorText);
+        console.error('❌ Claude API Fehler:', response.status, errorText);
         throw new Error(`API request failed: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    const assistantMessage = data.choices[0].message.content;
+    const assistantMessage = data.content[0].text;
     
     console.log('✅ API Antwort erhalten:', assistantMessage.substring(0, 100) + '...');
     console.log('📝 VOLLSTÄNDIGE API-Antwort:', assistantMessage);  // DEBUG
@@ -735,17 +745,15 @@ async function processFilterCommands(message) {
                     // Get fresh filtered context
                     const filteredContext = getDataContext();
 
-                    console.log('📊 DEBUG: Filtered Context wird an OpenAI gesendet:');
+                    console.log('📊 DEBUG: Filtered Context wird an Claude gesendet:');
                     console.log('📊 Context Länge:', filteredContext.length);
                     console.log('📊 Context erste 500 Zeichen:', filteredContext.substring(0, 500));
                     console.log('📊 Aktuelle Filter:', JSON.stringify(state.filters));
 
-                    // Send analysis request to OpenAI
+                    // Send analysis request to Claude
+                    const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Analysiere die gefilterten Daten und gib konkrete Insights.`;
+
                     const messages = [
-                        {
-                            role: 'system',
-                            content: `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Analysiere die gefilterten Daten und gib konkrete Insights.`
-                        },
                         {
                             role: 'user',
                             content: `GEFILTERTE DATEN:
@@ -761,27 +769,32 @@ Analysiere diese Daten und gib eine detaillierte Performance-Bewertung. Berechne
 Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den echten Zahlen aus den Daten.`
                         }
                     ];
-                    
-                    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+
+                    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+                    const headers = { "Content-Type": "application/json" };
+                    if (!USE_WORKER) {
+                        headers["x-api-key"] = getClaudeApiKey();
+                        headers["anthropic-version"] = "2023-06-01";
+                        headers["anthropic-dangerous-direct-browser-access"] = "true";
+                    }
+
+                    const response = await fetch(apiUrl, {
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${getOpenAIApiKey()}`
-                        },
+                        headers: headers,
                         body: JSON.stringify({
-                            model: "gpt-4o",
+                            model: CLAUDE_MODEL,
                             max_tokens: 2000,
-                            temperature: 0.7,
+                            system: systemPrompt,
                             messages: messages
                         })
                     });
-                    
+
                     if (!response.ok) {
                         throw new Error(`API request failed: ${response.status}`);
                     }
-                    
+
                     const data = await response.json();
-                    const analysisMessage = data.choices[0].message.content;
+                    const analysisMessage = data.content[0].text;
                     
                     hideTyping();
                     addMessage('assistant', analysisMessage);
