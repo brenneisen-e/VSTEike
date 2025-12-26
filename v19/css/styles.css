@@ -2349,3 +2349,35 @@ select:focus, .dropdown-button:focus {
 .landing-sample-questions {
     margin-top: 16px; /* Nach Input */
 }
+
+/* Inline Sample Questions after AI responses */
+.sample-questions-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 16px 40px;
+    padding-left: 8px;
+}
+
+.sample-btn-small {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.sample-btn-small:hover {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.sample-btn-small:active {
+    transform: translateY(0);
+}

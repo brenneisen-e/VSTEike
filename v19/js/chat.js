@@ -1,13 +1,20 @@
-// js/chat.js - AI Chat Logic with OpenAI API (mit automatischer Datenanalyse nach Filtern)
+// js/chat.js - AI Chat Logic with Claude API (mit automatischer Datenanalyse nach Filtern)
 
 let chatHistory = [];
 let isProcessing = false;
-let chatInitialized = false; // ✨ v15: Flag to prevent multiple initializations
+let chatInitialized = false;
 
-// ⚠️ CONFIGURATION - API-Key wird aus localStorage geladen
-// User kann den Key auf der Landing Page eingeben
-let OPENAI_API_KEY = localStorage.getItem('openai_api_token') || 'YOUR_OPENAI_API_KEY_HERE';
-let USE_MOCK_MODE = !OPENAI_API_KEY || OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY_HERE';
+// ⚠️ CONFIGURATION
+// Option 1: Cloudflare Worker URL (empfohlen - API Key sicher serverseitig)
+const CLAUDE_WORKER_URL = ''; // z.B. 'https://claude-proxy.dein-account.workers.dev'
+
+// Option 2: Direkter API-Zugriff (API Key im localStorage)
+const CLAUDE_API_KEY = localStorage.getItem('claude_api_token') || '';
+const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
+
+// Nutze Worker wenn URL gesetzt, sonst direkten Zugriff
+const USE_WORKER = CLAUDE_WORKER_URL !== '';
+let USE_MOCK_MODE = !USE_WORKER && !CLAUDE_API_KEY;
 
 // Initialize chat widget
 function initChat() {
@@ -107,13 +114,8 @@ function initChat() {
             chatToggle.style.display = 'none';
         }, 1000);
 
-        // Show API warning if needed
-        if (USE_MOCK_MODE) {
-            const existingToken = localStorage.getItem('openai_api_token');
-            if (!existingToken || existingToken === 'YOUR_OPENAI_API_KEY_HERE') {
-                addMessage('assistant', '⚠️ **Mock-Modus aktiv** - Für echte KI-Antworten gib deinen OpenAI API-Key auf der Landing Page ein.\n\nStelle trotzdem gerne Fragen - ich zeige dir wie die Integration funktioniert!');
-            }
-        }
+        // Show welcome message - Claude is always active
+        addMessage('assistant', '**Claude AI aktiv** – Bereit für deine Datenanalyse.\n\nStelle mir Fragen zu deinem Dashboard oder nutze die Beispielfragen oben.');
     } else {
         console.log('ℹ️ Keine CSV Daten - Chat bleibt verborgen bis Daten geladen werden');
         // Chat ist initialisiert, aber versteckt
@@ -168,18 +170,9 @@ async function sendMessage() {
     isProcessing = true;
     
     try {
-        if (USE_MOCK_MODE) {
-            // Mock response for testing
-            console.log('🎭 Mock-Modus - Generiere Test-Antwort');
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
-            const mockResponse = generateMockResponse(message);
-            hideTyping();
-            addMessage('assistant', mockResponse);
-        } else {
-            // Real API call
-            console.log('🚀 Rufe OpenAI API auf...');
-            await sendToOpenAI(message);
-        }
+        // Real Claude API call - always active
+        console.log('🚀 Rufe Claude API auf...');
+        await sendToClaude(message);
         
     } catch (error) {
         console.error('❌ Chat Fehler:', error);
@@ -309,33 +302,30 @@ function generateMockResponse(message) {
     return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Um echte KI-Analyse zu aktivieren:\n\n1. Besorge einen API-Key von [OpenAI](https://platform.openai.com/)\n2. Öffne \`js/chat.js\`\n3. Ersetze \`DEIN_API_KEY_HIER\` mit deinem Key\n4. Setze \`USE_MOCK_MODE = false\`\n\n**Verfügbare Mock-Befehle:**\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"\n• "Welche Vermittler sind +10% besser bei KV?"\n• "Vergleiche BW vs Bayern"\n• "Welche Bundesländer haben besten NPS?"\n• "Filtere nach Eike Brenneisen"\n• "Wie viele Daten haben wir?"`;
 }
 
-// Send to real OpenAI API
-async function sendToOpenAI(message) {
-    console.log('🔑 Verwende OpenAI API-Key:', OPENAI_API_KEY.substring(0, 10) + '...');
-    
+// Send to Claude API
+async function sendToClaude(message) {
+    console.log('🔑 Verwende Claude API-Key:', CLAUDE_API_KEY.substring(0, 20) + '...');
+
     // Prepare context about current data
     const dataContext = getDataContext();
-    
-    // Build messages array
-    const messages = [
-        {
-            role: 'system',
-            content: `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
+
+    // System prompt for Claude
+    const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
 
 VERFÜGBARE FUNKTIONEN:
 1. setAgenturFilter(vermittler_id) - Filtert Dashboard nach Agentur
    - Verwende IMMER die Vermittler-ID (z.B. 'VM00001'), NIEMALS den Namen!
    - Beispiel: setAgenturFilter('VM00001') für Eike Brenneisen
    - Nach dem Filtern erhältst du automatisch die gefilterten Daten zur Analyse
-   
+
 2. setSiloFilter(silo) - Filtert nach Silo
    - Gültige Werte: 'Ausschließlichkeit', 'Makler', 'Direktvertrieb', 'Banken'
-   
+
 3. setSegmentFilter(segments) - Filtert nach Segmenten
    - Gültige Werte: 'Leben', 'Kranken', 'Schaden', 'Kfz'
-   
+
 4. setBundeslandFilter(bundeslaender) - Filtert nach Bundesländern
-   
+
 5. clearAllFilters() - Setzt alle Filter zurück
 
 WICHTIG beim Filtern:
@@ -349,8 +339,10 @@ WICHTIG bei Analysen:
 - Berechne Summen/Durchschnitte aus den echten Zahlen
 - Formatiere große Zahlen lesbar (z.B. "€45.2 Mio")
 - Sei präzise und konkret
-- Antworte auf Deutsch und sei freundlich`
-        },
+- Antworte auf Deutsch und sei freundlich`;
+
+    // Build messages array for Claude
+    const messages = [
         {
             role: 'user',
             content: `AKTUELLE DATEN:
@@ -359,39 +351,47 @@ ${dataContext}
 USER FRAGE: ${message}`
         }
     ];
-    
-    // Call OpenAI API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
+
+    // Call Claude API (via Worker oder direkt)
+    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+    const headers = USE_WORKER
+        ? { "Content-Type": "application/json" }
+        : {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${OPENAI_API_KEY}`
-        },
+            "x-api-key": CLAUDE_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true"
+        };
+
+    const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: headers,
         body: JSON.stringify({
-            model: "gpt-4o",
+            model: CLAUDE_MODEL,
             max_tokens: 2000,
-            temperature: 0.7,
+            system: systemPrompt,
             messages: messages
         })
     });
-    
+
     if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API Fehler:', response.status, errorText);
-        throw new Error(`API request failed: ${response.status}`);
+        console.error('❌ Claude API Fehler:', response.status, errorText);
+        throw new Error(`Claude API request failed: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    const assistantMessage = data.choices[0].message.content;
-    
-    console.log('✅ API Antwort erhalten:', assistantMessage.substring(0, 100) + '...');
-    
+    // Claude returns content as an array of content blocks
+    const assistantMessage = data.content[0].text;
+
+    console.log('✅ Claude Antwort erhalten:', assistantMessage.substring(0, 100) + '...');
+
     hideTyping();
     addMessage('assistant', assistantMessage);
-    
+
     // Check if response contains filter commands and process them
     const filterWasSet = await processFilterCommands(assistantMessage);
-    
+
     // Add to history
     chatHistory.push(
         { role: 'user', content: message },
@@ -636,17 +636,15 @@ async function processFilterCommands(message) {
                     // Get fresh filtered context
                     const filteredContext = getDataContext();
 
-                    console.log('📊 DEBUG: Filtered Context wird an OpenAI gesendet:');
+                    console.log('📊 DEBUG: Filtered Context wird an Claude gesendet:');
                     console.log('📊 Context Länge:', filteredContext.length);
                     console.log('📊 Context erste 500 Zeichen:', filteredContext.substring(0, 500));
                     console.log('📊 Aktuelle Filter:', JSON.stringify(state.filters));
 
-                    // Send analysis request to OpenAI
+                    // Send analysis request to Claude
+                    const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Analysiere die gefilterten Daten und gib konkrete Insights.`;
+
                     const messages = [
-                        {
-                            role: 'system',
-                            content: `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Analysiere die gefilterten Daten und gib konkrete Insights.`
-                        },
                         {
                             role: 'user',
                             content: `GEFILTERTE DATEN:
@@ -662,27 +660,34 @@ Analysiere diese Daten und gib eine detaillierte Performance-Bewertung. Berechne
 Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den echten Zahlen aus den Daten.`
                         }
                     ];
-                    
-                    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                        method: "POST",
-                        headers: {
+
+                    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+                    const headers = USE_WORKER
+                        ? { "Content-Type": "application/json" }
+                        : {
                             "Content-Type": "application/json",
-                            "Authorization": `Bearer ${OPENAI_API_KEY}`
-                        },
+                            "x-api-key": CLAUDE_API_KEY,
+                            "anthropic-version": "2023-06-01",
+                            "anthropic-dangerous-direct-browser-access": "true"
+                        };
+
+                    const response = await fetch(apiUrl, {
+                        method: "POST",
+                        headers: headers,
                         body: JSON.stringify({
-                            model: "gpt-4o",
+                            model: CLAUDE_MODEL,
                             max_tokens: 2000,
-                            temperature: 0.7,
+                            system: systemPrompt,
                             messages: messages
                         })
                     });
-                    
+
                     if (!response.ok) {
-                        throw new Error(`API request failed: ${response.status}`);
+                        throw new Error(`Claude API request failed: ${response.status}`);
                     }
-                    
+
                     const data = await response.json();
-                    const analysisMessage = data.choices[0].message.content;
+                    const analysisMessage = data.content[0].text;
                     
                     hideTyping();
                     addMessage('assistant', analysisMessage);
@@ -761,7 +766,7 @@ function addMessage(role, content) {
     
     const avatar = document.createElement('div');
     avatar.className = 'chat-avatar';
-    avatar.textContent = role === 'user' ? '👤' : '🤖';
+    avatar.innerHTML = role === 'user' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>';
     
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
@@ -778,24 +783,33 @@ function addMessage(role, content) {
     messageDiv.appendChild(bubble);
 
     chatBody.appendChild(messageDiv);
-    chatBody.scrollTop = chatBody.scrollHeight;
 
-    // ✨ v14: Zeige Antwort auch im AI Response Panel
+    // Add sample questions after assistant response
     if (role === 'assistant') {
+        const sampleQuestionsDiv = document.createElement('div');
+        sampleQuestionsDiv.className = 'sample-questions-inline';
+        sampleQuestionsDiv.innerHTML = `
+            <button class="sample-btn-small" onclick="askSampleQuestion('Top 5 Vermittler nach Neugeschäft')">Top 5 Vermittler</button>
+            <button class="sample-btn-small" onclick="askSampleQuestion('Zeige mir die Stornoquoten')">Stornoquoten</button>
+            <button class="sample-btn-small" onclick="askSampleQuestion('Vergleiche die Bundesländer')">Bundesländer vergleichen</button>
+        `;
+        chatBody.appendChild(sampleQuestionsDiv);
         showAIResponse(content);
     }
+
+    chatBody.scrollTop = chatBody.scrollHeight;
 }
 
 function showTyping() {
     const chatBody = document.getElementById('chatBody');
-    
+
     const typingDiv = document.createElement('div');
     typingDiv.className = 'chat-message assistant';
     typingDiv.id = 'typingIndicator';
-    
+
     const avatar = document.createElement('div');
     avatar.className = 'chat-avatar';
-    avatar.textContent = '🤖';
+    avatar.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>';
     
     const typing = document.createElement('div');
     typing.className = 'chat-typing';
