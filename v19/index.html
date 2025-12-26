@@ -34,19 +34,19 @@
     <div id="welcomeChat" class="welcome-chat" style="display: none;">
         <div class="welcome-chat-header">
             <div class="chat-header-info">
-                <span class="chat-icon">🤖</span>
+                <span class="chat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg></span>
                 <div>
                     <div class="chat-title">Dashboard Assistent</div>
-                    <div class="chat-subtitle">Willkommen zurück!</div>
+                    <div class="chat-subtitle">Claude AI</div>
                 </div>
             </div>
         </div>
 
         <div class="welcome-chat-body">
             <div class="welcome-message">
-                <div class="chat-avatar">🤖</div>
+                <div class="chat-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg></div>
                 <div class="chat-bubble">
-                    <p><strong>Hallo! 👋</strong></p>
+                    <p><strong>Hallo!</strong></p>
                     <p class="typewriter-text">Ich bin dein KI-Assistent für das Vertriebssteuerungs-Cockpit.</p>
                     <p class="typewriter-text-2">Was möchtest du tun?</p>
                 </div>
@@ -66,16 +66,19 @@
                     </button>
                 </div>
 
-                <!-- ✨ v18.3: Probefragen nach dem Input -->
+                <!-- Schnellauswahl-Buttons -->
                 <div class="landing-sample-questions" id="landingSampleQuestions">
-                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Was kann ich hier machen?')">
-                        💡 Was kann ich hier machen?
+                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Was kann dieses Tool?')">
+                        Tool-Funktionen
                     </button>
-                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Zeige mir ein Beispiel Dashboard')">
-                        📊 Zeige mir ein Beispiel Dashboard
+                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Welche Module gibt es?')">
+                        Alle Module
                     </button>
-                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Wie lade ich Daten hoch?')">
-                        📤 Wie lade ich Daten hoch?
+                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Was zeigt die Banken-Ansicht?')">
+                        Banken-Ansicht
+                    </button>
+                    <button class="sample-question-btn" onclick="askLandingSampleQuestion('Wie funktioniert die KI-Analyse?')">
+                        KI-Analyse
                     </button>
                 </div>
 
@@ -87,7 +90,7 @@
             <!-- Action Buttons -->
             <div class="welcome-actions">
                 <button class="action-button primary" onclick="openDashboard()">
-                    <span class="action-icon">📊</span>
+                    <span class="action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></span>
                     <div class="action-content">
                         <div class="action-title">Zur Gesamtübersicht</div>
                         <div class="action-description">Dashboard mit allen KPIs öffnen</div>
@@ -95,7 +98,7 @@
                 </button>
 
                 <button class="action-button" onclick="openGenerator()">
-                    <span class="action-icon">⚙️</span>
+                    <span class="action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
                     <div class="action-content">
                         <div class="action-title">Test-Daten generieren</div>
                         <div class="action-description">CSV-Generator öffnen</div>
@@ -107,32 +110,32 @@
             <div class="quick-upload">
                 <label class="upload-box" for="quickCsvUpload">
                     <input type="file" id="quickCsvUpload" accept=".csv" style="display: none;">
-                    <span class="upload-icon">📤</span>
+                    <span class="upload-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg></span>
                     <span class="upload-text">Oder ziehe eine CSV-Datei hierher</span>
                 </label>
                 <div id="quickUploadStatus" class="upload-status"></div>
             </div>
 
-            <!-- ✨ v15: API Token Eingabe ganz unten -->
+            <!-- API Token Eingabe für Claude -->
             <div class="api-token-section">
                 <div class="api-token-header">
-                    <span class="api-icon">🔑</span>
-                    <span class="api-title">OpenAI API-Key (Optional)</span>
+                    <span class="api-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg></span>
+                    <span class="api-title">Claude API-Key (Optional)</span>
                 </div>
                 <div class="api-token-input-wrapper">
                     <input
                         type="password"
                         id="apiTokenInput"
                         class="api-token-input"
-                        placeholder="sk-proj-..."
+                        placeholder="sk-ant-..."
                     />
-                    <button id="apiTokenToggle" class="api-token-toggle" title="Anzeigen/Verbergen">👁️</button>
+                    <button id="apiTokenToggle" class="api-token-toggle" title="Anzeigen/Verbergen">show</button>
                     <button id="apiTokenSave" class="api-token-save">Speichern</button>
                 </div>
                 <div id="apiTokenStatus" class="api-token-status"></div>
                 <div class="api-token-hint">
-                    💡 Für echte KI-Analysen. Im Mock-Modus sind vorgefertigte Antworten aktiv.
-                    <a href="https://platform.openai.com/api-keys" target="_blank">API-Key erhalten</a>
+                    Für echte KI-Analysen mit Claude Sonnet 4.5. Im Mock-Modus sind vorgefertigte Antworten aktiv.
+                    <a href="https://console.anthropic.com/settings/keys" target="_blank">API-Key erhalten</a>
                 </div>
             </div>
         </div>
@@ -255,10 +258,10 @@
                 <button class="clear-button" id="clearStates" disabled>Alle abwählen</button>
             </div>
 
-            <!-- ✨ v14: KI-Antwort Display unter der Karte -->
+            <!-- KI-Antwort Display unter der Karte -->
             <div class="ai-response-panel" id="aiResponsePanel" style="display: none;">
                 <div class="ai-response-header">
-                    <h3>🤖 KI-Analyse</h3>
+                    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>KI-Analyse</h3>
                     <button class="ai-response-close" id="aiResponseClose">✕</button>
                 </div>
                 <div class="ai-response-content" id="aiResponseContent">
@@ -322,10 +325,10 @@
     <div class="chat-widget" id="chatWidget" style="display: none;">
         <div class="chat-header">
             <div class="chat-header-info">
-                <span class="chat-icon">🤖</span>
+                <span class="chat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg></span>
                 <div>
                     <div class="chat-title">Dashboard Assistent</div>
-                    <div class="chat-subtitle">KI-gestützte Datenanalyse</div>
+                    <div class="chat-subtitle">Claude AI</div>
                 </div>
             </div>
             <div class="chat-header-actions">
@@ -336,29 +339,25 @@
         
         <div class="chat-body" id="chatBody">
             <div class="chat-welcome">
-                <div class="welcome-icon">👋</div>
                 <h3>Willkommen!</h3>
                 <p>Ich kann dir bei der Analyse deiner Dashboard-Daten helfen.</p>
 
-                <!-- ✨ v14: Probefragen als anklickbare Buttons -->
+                <!-- Probefragen als anklickbare Buttons -->
                 <div class="sample-questions">
                     <button class="sample-question-btn" onclick="askSampleQuestion('Zeige mir die Top 5 Vermittler nach Neugeschäft')">
-                        📊 Top 5 Vermittler nach Neugeschäft
+                        Top 5 Vermittler
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Welches Bundesland hat die beste Performance?')">
-                        🗺️ Beste Performance nach Bundesland
-                    </button>
-                    <button class="sample-question-btn" onclick="askSampleQuestion('Filtere nach Eike Brenneisen')">
-                        🔍 Nach Eike Brenneisen filtern
+                        Beste Bundesländer
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Wie entwickelt sich der NPS Score?')">
-                        📈 NPS Score Entwicklung
+                        NPS Entwicklung
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Vergleiche Makler vs. Ausschließlichkeit')">
-                        ⚖️ Makler vs. Ausschließlichkeit
+                        Silo-Vergleich
                     </button>
                     <button class="sample-question-btn" onclick="askSampleQuestion('Zeige mir die Stornoquoten nach Segment')">
-                        ⚠️ Stornoquoten nach Segment
+                        Stornoquoten
                     </button>
                 </div>
             </div>
@@ -380,7 +379,7 @@
     <!-- Chat Toggle Button -->
     <button class="chat-toggle" id="chatToggle" style="display: none;">
         <span class="chat-badge" id="chatBadge">1</span>
-        <span>💬</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
     </button>
 
     <!-- Info Tooltip -->

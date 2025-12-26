@@ -1,35 +1,35 @@
 // js/landing.js - Landing Page Logic
 
 // ========================================
-// API TOKEN MANAGEMENT
+// CLAUDE API CONFIGURATION
 // ========================================
+
+// Claude API Key wird aus localStorage geladen
+let CLAUDE_API_KEY = localStorage.getItem('claude_api_token') || '';
+const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
 
 // Get API token from localStorage
 function getApiToken() {
-    return localStorage.getItem('openai_api_token') || '';
+    return localStorage.getItem('claude_api_token') || '';
 }
 
 // Save API token to localStorage
 function saveApiToken(token) {
     if (token && token.trim()) {
-        localStorage.setItem('openai_api_token', token.trim());
+        localStorage.setItem('claude_api_token', token.trim());
+        CLAUDE_API_KEY = token.trim();
         return true;
     }
     return false;
 }
 
-// Clear API token from localStorage
-function clearApiToken() {
-    localStorage.removeItem('openai_api_token');
-}
-
 // Check if using mock mode (no token = mock mode)
 function isUsingMockMode() {
     const token = getApiToken();
-    return !token || token === 'YOUR_OPENAI_API_KEY_HERE';
+    return !token;
 }
 
-// Setup API Token Input
+// Setup API Token Input for Claude
 function setupApiTokenInput() {
     const tokenInput = document.getElementById('apiTokenInput');
     const toggleBtn = document.getElementById('apiTokenToggle');
@@ -40,23 +40,23 @@ function setupApiTokenInput() {
 
     // Load existing token
     const existingToken = getApiToken();
-    if (existingToken && existingToken !== 'YOUR_OPENAI_API_KEY_HERE') {
+    if (existingToken) {
         tokenInput.value = existingToken;
         statusDiv.className = 'api-token-status success';
-        statusDiv.textContent = '✅ API-Key gespeichert (KI-Modus aktiv)';
+        statusDiv.textContent = 'API-Key gespeichert (Claude AI aktiv)';
     } else {
         statusDiv.className = 'api-token-status';
-        statusDiv.textContent = 'ℹ️ Mock-Modus aktiv (vorgefertigte Antworten)';
+        statusDiv.textContent = 'Mock-Modus aktiv (vorgefertigte Antworten)';
     }
 
     // Toggle password visibility
     toggleBtn.addEventListener('click', () => {
         if (tokenInput.type === 'password') {
             tokenInput.type = 'text';
-            toggleBtn.textContent = '🙈';
+            toggleBtn.textContent = 'hide';
         } else {
             tokenInput.type = 'password';
-            toggleBtn.textContent = '👁️';
+            toggleBtn.textContent = 'show';
         }
     });
 
@@ -65,31 +65,25 @@ function setupApiTokenInput() {
         const token = tokenInput.value.trim();
 
         if (!token) {
-            // Clear token
-            clearApiToken();
+            localStorage.removeItem('claude_api_token');
+            CLAUDE_API_KEY = '';
             statusDiv.className = 'api-token-status';
-            statusDiv.textContent = 'ℹ️ Mock-Modus aktiv (vorgefertigte Antworten)';
+            statusDiv.textContent = 'Mock-Modus aktiv (vorgefertigte Antworten)';
             return;
         }
 
-        if (!token.startsWith('sk-')) {
+        if (!token.startsWith('sk-ant-')) {
             statusDiv.className = 'api-token-status error';
-            statusDiv.textContent = '❌ Ungültiger API-Key (muss mit "sk-" beginnen)';
+            statusDiv.textContent = 'Ungültiger API-Key (muss mit "sk-ant-" beginnen)';
             return;
         }
 
         if (saveApiToken(token)) {
             statusDiv.className = 'api-token-status success';
-            statusDiv.textContent = '✅ API-Key gespeichert! KI-Modus ist jetzt aktiv.';
-
-            // Update chat.js if already loaded
-            if (typeof OPENAI_API_KEY !== 'undefined') {
-                window.OPENAI_API_KEY = token;
-                window.USE_MOCK_MODE = false;
-            }
+            statusDiv.textContent = 'API-Key gespeichert! Claude AI ist jetzt aktiv.';
         } else {
             statusDiv.className = 'api-token-status error';
-            statusDiv.textContent = '❌ Fehler beim Speichern';
+            statusDiv.textContent = 'Fehler beim Speichern';
         }
     });
 
@@ -406,83 +400,76 @@ function initLandingChat() {
     console.log('✅ Landing Chat initialisiert');
 }
 
-// Send message in landing chat - NUTZT GLEICHE LOGIK WIE DASHBOARD
+// Send message in landing chat - Uses Claude API
 async function sendLandingChatMessage() {
     const chatInput = document.getElementById('landingChatInput');
     const message = chatInput.value.trim();
-    
-    console.log('📤 Landing Nachricht senden:', message);
-    
+
+    console.log('Sending landing message:', message);
+
     if (!message || isLandingChatProcessing) {
-        console.log('⚠️ Leere Nachricht oder bereits in Verarbeitung');
+        console.log('Empty message or already processing');
         return;
     }
-    
+
     // Clear input
     chatInput.value = '';
     chatInput.style.height = 'auto';
-    
+
     // Add user message
     addLandingChatMessage('user', message);
-    
+
     // Show typing indicator
     showLandingChatTyping();
-    
-    isLandingChatProcessing = true;
-    
-    try {
-        // Get API token from localStorage
-        const OPENAI_API_KEY = getApiToken();
-        const USE_MOCK_MODE = isUsingMockMode();
 
-        if (USE_MOCK_MODE) {
+    isLandingChatProcessing = true;
+
+    try {
+        if (isUsingMockMode()) {
             // Mock response
-            console.log('🎭 Mock-Modus - Generiere Test-Antwort');
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.log('Mock mode - generating test response');
+            await new Promise(resolve => setTimeout(resolve, 800));
             const mockResponse = generateLandingMockResponse(message);
             hideLandingChatTyping();
             addLandingChatMessage('assistant', mockResponse);
         } else {
-            // Real API call - GLEICHE FUNKTION WIE DASHBOARD
-            console.log('🚀 Rufe OpenAI API auf...');
-            await sendLandingMessageToOpenAI(message, OPENAI_API_KEY);
+            // Real Claude API call
+            console.log('Calling Claude API...');
+            await sendLandingMessageToClaude(message);
         }
-        
+
     } catch (error) {
-        console.error('❌ Landing Chat Fehler:', error);
+        console.error('Landing Chat Error:', error);
         hideLandingChatTyping();
-        addLandingChatMessage('assistant', '❌ Entschuldigung, es gab einen Fehler. Bitte versuche es erneut.');
+        addLandingChatMessage('assistant', 'Entschuldigung, es gab einen Fehler. Bitte versuche es erneut.');
     }
-    
+
     isLandingChatProcessing = false;
 }
 
-// Send to OpenAI API - GLEICHE LOGIK WIE DASHBOARD CHAT
-async function sendLandingMessageToOpenAI(message, apiKey) {
-    console.log('🔑 Verwende OpenAI API-Key:', apiKey.substring(0, 10) + '...');
-    
-    // Prepare context about current data - GLEICH WIE DASHBOARD
+// Send to Claude API
+async function sendLandingMessageToClaude(message) {
+    console.log('Using Claude API Key:', CLAUDE_API_KEY.substring(0, 20) + '...');
+
+    // Prepare context about current data
     const dataContext = getLandingDataContext();
-    
-    // Build messages array - GLEICHE STRUKTUR WIE DASHBOARD
-    const messages = [
-        {
-            role: 'system',
-            content: `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
+
+    // System prompt for Claude
+    const systemPrompt = `Du bist ein KI-Assistent für ein Versicherungs-Dashboard. Du hast Zugriff auf CSV-Daten und kannst Dashboard-Filter steuern.
 
 VERFÜGBARE FUNKTIONEN:
 1. setAgenturFilter(vermittler_id) - Filtert Dashboard nach Agentur
    - Verwende IMMER die Vermittler-ID (z.B. 'VM00001'), NIEMALS den Namen!
    - Beispiel: setAgenturFilter('VM00001') für Eike Brenneisen
-   
+
 2. setSiloFilter(silo) - Filtert nach Silo
    - Gültige Werte: 'Ausschließlichkeit', 'Makler', 'Direktvertrieb', 'Banken'
-   
+
 3. setSegmentFilter(segments) - Filtert nach Segmenten
    - Gültige Werte: 'Leben', 'Kranken', 'Schaden', 'Kfz'
-   
+
 4. setBundeslandFilter(bundeslaender) - Filtert nach Bundesländern
-   
+
 5. clearAllFilters() - Setzt alle Filter zurück
 
 WICHTIG:
@@ -491,8 +478,10 @@ WICHTIG:
 - Formatiere große Zahlen lesbar (z.B. "€45.2 Mio")
 - Sei präzise und konkret
 - Antworte auf Deutsch und sei freundlich
-- Wenn keine Daten vorhanden sind, erkläre dass der User zuerst eine CSV hochladen oder zum Dashboard gehen sollte`
-        },
+- Wenn keine Daten vorhanden sind, erkläre dass der User zuerst eine CSV hochladen oder zum Dashboard gehen sollte`;
+
+    // Build messages array for Claude
+    const messages = [
         {
             role: 'user',
             content: `AKTUELLE DATEN:
@@ -501,33 +490,36 @@ ${dataContext}
 USER FRAGE: ${message}`
         }
     ];
-    
-    // Call OpenAI API - GLEICH WIE DASHBOARD
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+
+    // Call Claude API
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
+            "x-api-key": CLAUDE_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true"
         },
         body: JSON.stringify({
-            model: "gpt-4o",
+            model: CLAUDE_MODEL,
             max_tokens: 2000,
-            temperature: 0.7,
+            system: systemPrompt,
             messages: messages
         })
     });
-    
+
     if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API Fehler:', response.status, errorText);
-        throw new Error(`API request failed: ${response.status}`);
+        console.error('Claude API Error:', response.status, errorText);
+        throw new Error(`Claude API request failed: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    const assistantMessage = data.choices[0].message.content;
-    
-    console.log('✅ API Antwort erhalten:', assistantMessage.substring(0, 100) + '...');
-    
+    // Claude returns content as an array of content blocks
+    const assistantMessage = data.content[0].text;
+
+    console.log('Claude response received:', assistantMessage.substring(0, 100) + '...');
+
     hideLandingChatTyping();
     addLandingChatMessage('assistant', assistantMessage);
 
@@ -536,7 +528,7 @@ USER FRAGE: ${message}`
         { role: 'assistant', content: assistantMessage }
     );
 
-    // ✨ NEU: Parse und führe Filter-Befehle aus
+    // Parse and execute filter commands
     await parseAndExecuteCommands(assistantMessage);
 }
 
@@ -660,16 +652,16 @@ function generateLandingMockResponse(message) {
     return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Um echte KI-Analyse zu aktivieren:\n\n1. Besorge einen API-Key von OpenAI\n2. Öffne \`js/landing.js\`\n3. Ersetze den API-Key\n4. Setze \`USE_MOCK_MODE = false\`\n\n**Verfügbare Mock-Befehle:**\n• "Wie viele Daten haben wir?"\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"`;
 }
 
-// Add message to chat - GLEICH WIE DASHBOARD
+// Add message to chat
 function addLandingChatMessage(role, content) {
     const chatMessages = document.getElementById('landingChatMessages');
-    
+
     const messageDiv = document.createElement('div');
     messageDiv.className = `landing-chat-message ${role}`;
-    
+
     const avatar = document.createElement('div');
     avatar.className = 'chat-avatar';
-    avatar.textContent = role === 'user' ? '👤' : '🤖';
+    avatar.innerHTML = role === 'user' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>';
     
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
@@ -684,22 +676,36 @@ function addLandingChatMessage(role, content) {
     
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(bubble);
-    
+
     chatMessages.appendChild(messageDiv);
+
+    // Add sample questions after assistant response
+    if (role === 'assistant') {
+        const sampleQuestionsDiv = document.createElement('div');
+        sampleQuestionsDiv.className = 'sample-questions-inline';
+        sampleQuestionsDiv.innerHTML = `
+            <button class="sample-btn-small" onclick="askLandingSampleQuestion('Was kann dieses Tool?')">Tool-Funktionen</button>
+            <button class="sample-btn-small" onclick="askLandingSampleQuestion('Welche Module gibt es?')">Alle Module</button>
+            <button class="sample-btn-small" onclick="askLandingSampleQuestion('Was zeigt die Banken-Ansicht?')">Banken-Ansicht</button>
+            <button class="sample-btn-small" onclick="askLandingSampleQuestion('Wie funktioniert die KI-Analyse?')">KI-Analyse</button>
+        `;
+        chatMessages.appendChild(sampleQuestionsDiv);
+    }
+
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 // Show typing indicator
 function showLandingChatTyping() {
     const chatMessages = document.getElementById('landingChatMessages');
-    
+
     const typingDiv = document.createElement('div');
     typingDiv.className = 'landing-chat-message assistant';
     typingDiv.id = 'landingTypingIndicator';
-    
+
     const avatar = document.createElement('div');
     avatar.className = 'chat-avatar';
-    avatar.textContent = '🤖';
+    avatar.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>';
     
     const typing = document.createElement('div');
     typing.className = 'landing-chat-typing';
@@ -894,45 +900,107 @@ function clearAllFilters() {
     }
 }
 
-// ✨ v16: Predefined answers for standard questions (no AI needed)
+// Predefined answers for standard questions (instant response without AI)
 const standardAnswers = {
-    'Was kann ich hier machen?': `**Willkommen im Vertriebssteuerungs-Cockpit!** 🎯
+    'Was kann dieses Tool?': `**Vertriebssteuerungs-Cockpit – Komplettübersicht**
 
-Hier kannst du:
-• **Dashboard öffnen** - Visualisiere deine Versicherungsdaten mit interaktiven Charts
-• **CSV-Daten hochladen** - Lade deine eigenen Daten hoch oder nutze den Generator
-• **Daten generieren** - Erstelle realistische Testdaten mit dem CSV-Generator
-• **KI-Analysen** - Stelle Fragen zu deinen Daten (mit OpenAI API-Key)
+Das Tool umfasst mehrere Module:
 
-Klicke auf "Zur Gesamtübersicht" um loszulegen!`,
+**KPI-Dashboard (9 Kennzahlen)**
+• Neugeschäft, Bestand, Stornoquote, NPS
+• Risikoscore, Combined Ratio, Ergebnis
+• Underwriting-Qualität, Deckungsbeitrag
 
-    'Zeige mir ein Beispiel Dashboard': `**So funktioniert das Dashboard:** 📊
+**Agenturansicht**
+• Individuelle Agentur-Performance
+• Vertriebspotentiale je Vermittler
+• Vergleich mit Benchmark
 
-1. **Klicke auf "Zur Gesamtübersicht"** oben
-2. Das Dashboard lädt automatisch mit Beispieldaten
-3. Du siehst:
-   - KPI-Kacheln (Neugeschäft, Bestand, etc.)
-   - Interaktive Charts
-   - Deutschland-Karte mit Regionen
-   - Filter-Optionen
+**Bestandsübertragung**
+• Simulation von Bestandsübertragungen
+• Auswirkungsanalyse auf KPIs
 
-**Oder:** Generiere eigene Daten mit dem CSV-Generator!`,
+**Provisionssimulation**
+• Provisionsmodelle berechnen
+• Auswirkungen auf Ergebnis simulieren
 
-    'Wie lade ich Daten hoch?': `**Daten hochladen - 2 Optionen:** 📤
+**Bankkredite-Modul**
+• Nicht gezahlte Bankkredite überwachen
+• Risikoanalyse für Kreditportfolio
 
-**Option 1: Direkt hier**
-• Ziehe eine CSV-Datei in das Upload-Feld oben
-• Oder klicke drauf zum Auswählen
+**Geografische Analyse**
+• Deutschland-Karte mit Landkreisen
+• Regionale Performance-Vergleiche`,
 
-**Option 2: Im Dashboard**
-• Öffne das Dashboard
-• Nutze den Upload-Button oben
-• Wähle deine CSV-Datei
+    'Welche Module gibt es?': `**Alle Module im Überblick**
 
-**Oder generiere Testdaten:**
-• Klicke auf "Test-Daten generieren"
-• Wähle Unternehmensgröße
-• Download CSV und lade sie hoch`
+**1. Gesamtübersicht (Dashboard)**
+• 9 KPI-Kacheln mit Trend-Charts
+• Filterbar nach Silo, Segment, Region
+
+**2. Agenturansicht**
+• Einzelne Vermittler analysieren
+• Vertriebspotentiale identifizieren
+• Ranking und Vergleiche
+
+**3. Bestandsübertragung**
+• Bestände zwischen Agenturen übertragen
+• Simulationen und Auswirkungen
+
+**4. Provisionssimulation**
+• Provisionsmodelle durchrechnen
+• Was-wäre-wenn-Szenarien
+
+**5. Bankkredite**
+• Überwachung nicht gezahlter Kredite
+• Risikobewertung
+
+**6. Tabellenansicht**
+• Detaildaten nach Bundesland
+• Landkreis-Ebene
+• Agentur-Übersicht`,
+
+    'Was zeigt die Banken-Ansicht?': `**Banken-Silo – Spezifische Analyse**
+
+Wenn du nach "Banken" filterst, siehst du:
+
+**Performance-Metriken**
+• Neugeschäft und Bestand speziell für Bankvertrieb
+• Stornoquoten im Vergleich zu anderen Silos
+• NPS der Bankkunden
+
+**Bankkredite-Modul**
+• Nicht gezahlte Bankkredite überwachen
+• Risikoanalyse für Kreditportfolio
+• Frühwarnindikatoren
+
+**Typische Erkenntnisse**
+• Banken haben oft höheres Volumen pro Vermittler
+• Anderer Produktmix (mehr Leben/Altersvorsorge)
+• Unterschiedliche Stornomuster
+
+Nutze den Silo-Filter im Dashboard um die Banken-Daten zu analysieren.`,
+
+    'Wie funktioniert die KI-Analyse?': `**KI-Assistent – So nutzt du ihn**
+
+Der KI-Assistent (Claude AI) kann:
+
+**Daten analysieren**
+• "Zeige mir die Top 5 Vermittler"
+• "Welches Bundesland performt am besten?"
+• "Vergleiche Makler vs. Ausschließlichkeit"
+
+**Filter setzen**
+• "Filtere nach Agentur XY"
+• "Zeige nur Leben-Segment"
+• "Nur Baden-Württemberg"
+
+**Module erkunden**
+• Fragen zur Agenturansicht
+• Provisionssimulation verstehen
+• Bestandsübertragung erklären
+
+Stelle mir einfach deine Frage – ich helfe dir!`
 };
 
 // ✨ v16 FEATURE: Landing Page Sample Questions with instant answers
