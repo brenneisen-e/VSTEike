@@ -4,9 +4,15 @@
 // CLAUDE API CONFIGURATION
 // ========================================
 
-// Claude API Key wird aus localStorage geladen
+// Option 1: Cloudflare Worker URL (empfohlen - API Key sicher serverseitig)
+const CLAUDE_WORKER_URL = ''; // z.B. 'https://claude-proxy.dein-account.workers.dev'
+
+// Option 2: Direkter API-Zugriff (API Key im localStorage)
 let CLAUDE_API_KEY = localStorage.getItem('claude_api_token') || '';
 const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
+
+// Nutze Worker wenn URL gesetzt
+const USE_WORKER = CLAUDE_WORKER_URL !== '';
 
 // Get API token from localStorage
 function getApiToken() {
@@ -23,8 +29,9 @@ function saveApiToken(token) {
     return false;
 }
 
-// Check if using mock mode (no token = mock mode)
+// Check if using mock mode (no worker and no token = mock mode)
 function isUsingMockMode() {
+    if (USE_WORKER) return false;
     const token = getApiToken();
     return !token;
 }
@@ -491,15 +498,20 @@ USER FRAGE: ${message}`
         }
     ];
 
-    // Call Claude API
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
+    // Call Claude API (via Worker oder direkt)
+    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+    const headers = USE_WORKER
+        ? { "Content-Type": "application/json" }
+        : {
             "Content-Type": "application/json",
             "x-api-key": CLAUDE_API_KEY,
             "anthropic-version": "2023-06-01",
             "anthropic-dangerous-direct-browser-access": "true"
-        },
+        };
+
+    const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: headers,
         body: JSON.stringify({
             model: CLAUDE_MODEL,
             max_tokens: 2000,

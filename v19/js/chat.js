@@ -2,13 +2,19 @@
 
 let chatHistory = [];
 let isProcessing = false;
-let chatInitialized = false; // ✨ v15: Flag to prevent multiple initializations
+let chatInitialized = false;
 
-// ⚠️ CONFIGURATION - Claude API Key wird aus localStorage geladen
-// User kann den Key auf der Landing Page eingeben
+// ⚠️ CONFIGURATION
+// Option 1: Cloudflare Worker URL (empfohlen - API Key sicher serverseitig)
+const CLAUDE_WORKER_URL = ''; // z.B. 'https://claude-proxy.dein-account.workers.dev'
+
+// Option 2: Direkter API-Zugriff (API Key im localStorage)
 const CLAUDE_API_KEY = localStorage.getItem('claude_api_token') || '';
 const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
-let USE_MOCK_MODE = !CLAUDE_API_KEY;
+
+// Nutze Worker wenn URL gesetzt, sonst direkten Zugriff
+const USE_WORKER = CLAUDE_WORKER_URL !== '';
+let USE_MOCK_MODE = !USE_WORKER && !CLAUDE_API_KEY;
 
 // Initialize chat widget
 function initChat() {
@@ -346,15 +352,20 @@ USER FRAGE: ${message}`
         }
     ];
 
-    // Call Claude API
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
+    // Call Claude API (via Worker oder direkt)
+    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+    const headers = USE_WORKER
+        ? { "Content-Type": "application/json" }
+        : {
             "Content-Type": "application/json",
             "x-api-key": CLAUDE_API_KEY,
             "anthropic-version": "2023-06-01",
             "anthropic-dangerous-direct-browser-access": "true"
-        },
+        };
+
+    const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: headers,
         body: JSON.stringify({
             model: CLAUDE_MODEL,
             max_tokens: 2000,
@@ -650,14 +661,19 @@ Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den ech
                         }
                     ];
 
-                    const response = await fetch("https://api.anthropic.com/v1/messages", {
-                        method: "POST",
-                        headers: {
+                    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+                    const headers = USE_WORKER
+                        ? { "Content-Type": "application/json" }
+                        : {
                             "Content-Type": "application/json",
                             "x-api-key": CLAUDE_API_KEY,
                             "anthropic-version": "2023-06-01",
                             "anthropic-dangerous-direct-browser-access": "true"
-                        },
+                        };
+
+                    const response = await fetch(apiUrl, {
+                        method: "POST",
+                        headers: headers,
                         body: JSON.stringify({
                             model: CLAUDE_MODEL,
                             max_tokens: 2000,
