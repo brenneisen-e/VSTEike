@@ -6,7 +6,7 @@ let chatInitialized = false;
 
 // ⚠️ CONFIGURATION
 // Option 1: Cloudflare Worker URL (empfohlen - API Key sicher serverseitig)
-const CLAUDE_WORKER_URL = ''; // z.B. 'https://claude-proxy.dein-account.workers.dev'
+const CLAUDE_WORKER_URL = 'https://vst-claude-api.eike-3e2.workers.dev';
 
 // Option 2: Direkter API-Zugriff (API Key im localStorage)
 const CLAUDE_API_KEY = localStorage.getItem('claude_api_token') || '';
