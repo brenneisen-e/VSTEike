@@ -1,0 +1,377 @@
+/* ========================================
+   POTENTIALANALYSE PAGE
+   ======================================== */
+
+.potential-page {
+    min-height: 100vh;
+    background: white;
+    padding: 24px;
+}
+
+.potential-header {
+    max-width: 1400px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.potential-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+    flex: 1;
+}
+
+.potential-toggle-container {
+    display: flex;
+    gap: 8px;
+}
+
+.potential-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+.potential-toggle-btn:hover {
+    border-color: #86BC25;
+    color: #86BC25;
+}
+
+.potential-toggle-btn.active {
+    border-color: #86BC25;
+    background: #86BC25;
+    color: white;
+}
+
+.potential-toggle-btn.fida-btn.active {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.potential-content {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.potential-table-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.potential-info-box {
+    padding: 20px 24px;
+    background: #f8fdf5;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.potential-info-box.fida {
+    background: #eff6ff;
+}
+
+.potential-info-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.potential-info-box p {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.potential-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.potential-table thead {
+    background: #f8fafc;
+}
+
+.potential-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.potential-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.potential-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.potential-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Potential Badges */
+.potential-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.potential-badge.hausrat {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.potential-badge.kfz {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.potential-badge.leben {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.potential-badge.unfall {
+    background: #fce7f3;
+    color: #9d174d;
+}
+
+.potential-badge.rechtsschutz {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.potential-badge.pflege {
+    background: #f3e8ff;
+    color: #6b21a8;
+}
+
+.potential-badge.bu {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.potential-badge.sach {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.potential-badge.altersvorsorge {
+    background: #cffafe;
+    color: #0e7490;
+}
+
+.potential-badge.kranken {
+    background: #fdf2f8;
+    color: #be185d;
+}
+
+.potential-badge.haftpflicht {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.potential-badge.wohngebaeude {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+/* Potential Group Rows (collapsible) */
+.potential-group-row {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.potential-group-row:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+
+.potential-group-row td {
+    padding: 14px 16px !important;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.potential-group-row .group-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.potential-group-row .group-toggle svg {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    color: #64748b;
+}
+
+.potential-group-row.expanded .group-toggle svg {
+    transform: rotate(90deg);
+}
+
+/* Segment Badges - Einfarbig mit Icons */
+.segment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    width: 220px;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Überschreibe alle segment-spezifischen Farben */
+.segment-badge.segment-leben,
+.segment-badge.segment-kranken,
+.segment-badge.segment-shu,
+.segment-badge.segment-kfz {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.segment-badge svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+    fill: none;
+    flex-shrink: 0;
+}
+
+.potential-group-row .group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #334155;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 14px;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+.potential-group-row .group-priorities {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    align-items: center;
+    min-width: 180px;
+    justify-content: flex-end;
+}
+
+.potential-group-row .priority-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+    min-width: 70px;
+    justify-content: center;
+}
+
+.potential-group-row .priority-count.high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.potential-group-row .priority-count.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.potential-group-row .priority-count.low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.potential-detail-row {
+    display: none;
+}
+
+.potential-detail-row.visible {
+    display: table-row;
+}
+
+.potential-detail-row td:first-child {
+    padding-left: 40px !important;
+}
+
+/* Priority Tags */
+.priority {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.priority.high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.priority.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.priority.low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* Consent Tags */
+.consent {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.consent.yes {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* DORA Table Styling */
+.fida-table thead {
+    background: #eff6ff;
+}
+
