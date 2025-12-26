@@ -1,0 +1,81 @@
+/**
+ * Finanzplanung - Vertriebsimpuls
+ */
+
+.impuls-card .kunden-card-header.highlight {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.impuls-card .kunden-card-header.highlight h2 { color: #92400e; }
+
+.finanz-impuls-content {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 24px;
+}
+
+.impuls-situation h4,
+.impuls-empfehlungen h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.impuls-situation ul { margin: 0; padding: 0; list-style: none; }
+
+.impuls-situation li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.impuls-situation li:last-child { border-bottom: none; }
+
+.empfehlung-items { display: flex; flex-direction: column; gap: 10px; }
+
+.empfehlung-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 4px solid;
+}
+
+.empfehlung-item.prio-high { border-left-color: #ef4444; background: #fef2f2; }
+.empfehlung-item.prio-medium { border-left-color: #f59e0b; background: #fffbeb; }
+.empfehlung-item.prio-low { border-left-color: #10b981; background: #f0fdf4; }
+
+.prio-badge {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.prio-high .prio-badge { background: #ef4444; }
+.prio-medium .prio-badge { background: #f59e0b; }
+.prio-low .prio-badge { background: #10b981; }
+
+.empfehlung-text { display: flex; flex-direction: column; gap: 2px; }
+.empfehlung-text strong { font-size: 14px; color: #1e293b; }
+.empfehlung-text span { font-size: 12px; color: #64748b; }
+
+.impuls-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}

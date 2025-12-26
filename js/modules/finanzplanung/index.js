@@ -1,12 +1,22 @@
+/**
+ * Finanzplanung Module - ES2024
+ * Retirement simulator and scenario chart
+ */
+
 // ========================================
-// FINANZPLANUNG - SIMULATOR & CHART
+// STATE
 // ========================================
 
-// Rentenlücken-Simulator
-function updateRentenSimulator() {
-    const rentenAlter = parseInt(document.getElementById('rentenAlter')?.value || 63);
-    const wunschRente = parseInt(document.getElementById('wunschRente')?.value || 2500);
-    const rendite = parseFloat(document.getElementById('rendite')?.value || 4);
+let szenarioChart = null;
+
+// ========================================
+// RENTEN SIMULATOR
+// ========================================
+
+export const updateRentenSimulator = () => {
+    const rentenAlter = parseInt(document.getElementById('rentenAlter')?.value ?? 63);
+    const wunschRente = parseInt(document.getElementById('wunschRente')?.value ?? 2500);
+    const rendite = parseFloat(document.getElementById('rendite')?.value ?? 4);
 
     // Update slider values
     const rentenAlterValue = document.getElementById('rentenAlterValue');
@@ -17,24 +27,21 @@ function updateRentenSimulator() {
     if (wunschRenteValue) wunschRenteValue.textContent = `${wunschRente.toLocaleString('de-DE')} €/Monat`;
     if (renditeValue) renditeValue.textContent = `${rendite.toFixed(1).replace('.', ',')}%`;
 
-    // Berechnungen
-    const aktuellesAlter = 39; // Peter Schmidt ist 39
+    // Calculations
+    const aktuellesAlter = 39;
     const jahreBisRente = rentenAlter - aktuellesAlter;
-    const gesetzlicheRente = 1650; // Geschätzt
+    const gesetzlicheRente = 1650;
     const luecke = Math.max(0, wunschRente - gesetzlicheRente);
 
-    // Kapitalbedarfberechnung (vereinfacht: 20 Jahre Rentenbezug)
+    // Capital calculation
     const rentenJahre = 20;
-    const inflationsBereinigt = 0.98; // Vereinfacht
+    const inflationsBereinigt = 0.98;
     const kapitalBedarf = Math.round(luecke * 12 * rentenJahre * inflationsBereinigt);
 
-    // Bereits angespart
     const bereitsAngespart = 42000;
-
-    // Noch benötigtes Kapital
     const nochBenötigt = kapitalBedarf - bereitsAngespart;
 
-    // Sparrate berechnen (Annuität)
+    // Savings rate calculation
     const monatlicheRendite = rendite / 100 / 12;
     const monate = jahreBisRente * 12;
     let sparrate;
@@ -44,7 +51,7 @@ function updateRentenSimulator() {
         sparrate = Math.round(nochBenötigt / monate);
     }
 
-    // UI updaten
+    // Update UI
     const gesetzlichValue = document.getElementById('gesetzlichValue');
     const wunschValue = document.getElementById('wunschValue');
     const lueckeValue = document.getElementById('lueckeValue');
@@ -60,26 +67,24 @@ function updateRentenSimulator() {
     if (bereitsAngespartEl) bereitsAngespartEl.textContent = `${bereitsAngespart.toLocaleString('de-DE')} €`;
     if (sparrateBedarfEl) sparrateBedarfEl.textContent = `${Math.max(0, sparrate).toLocaleString('de-DE')} €/Monat`;
 
-    // Bar height
     if (gesetzlichBar) {
         const percentage = Math.min(100, (gesetzlicheRente / wunschRente) * 100);
         gesetzlichBar.style.height = `${percentage}%`;
     }
 
-    // Update Szenario Chart
     updateSzenarioChart(sparrate, jahreBisRente, bereitsAngespart);
-}
+};
 
-// Szenario Chart
-let szenarioChart = null;
+// ========================================
+// SCENARIO CHART
+// ========================================
 
-function updateSzenarioChart(monatlicheSparrate, jahre, startkapital) {
+const updateSzenarioChart = (monatlicheSparrate, jahre, startkapital) => {
     const canvas = document.getElementById('szenarioChart');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
 
-    // Berechne Szenarien
     const szenarien = {
         konservativ: { rendite: 0.03, color: '#94a3b8', label: 'Konservativ (3%)' },
         moderat: { rendite: 0.05, color: '#3b82f6', label: 'Moderat (5%)' },
@@ -101,18 +106,10 @@ function updateSzenarioChart(monatlicheSparrate, jahre, startkapital) {
 
         for (let i = 0; i <= jahre; i++) {
             data.push(Math.round(kapital));
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
-            kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
+            // 12 months of growth
+            for (let m = 0; m < 12; m++) {
+                kapital = kapital * (1 + szenario.rendite / 12) + monatlicheSparrate;
+            }
         }
 
         datasets.push({
@@ -126,65 +123,47 @@ function updateSzenarioChart(monatlicheSparrate, jahre, startkapital) {
             pointHoverRadius: 6
         });
 
-        // Update legend values
         const legendEl = document.getElementById('szenario' + key.charAt(0).toUpperCase() + key.slice(1));
         if (legendEl) {
             legendEl.textContent = `${data[data.length - 1].toLocaleString('de-DE')} €`;
         }
     });
 
-    // Destroy existing chart
-    if (szenarioChart) {
-        szenarioChart.destroy();
-    }
+    szenarioChart?.destroy();
 
-    // Create new chart
     szenarioChart = new Chart(ctx, {
         type: 'line',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
+        data: { labels, datasets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            },
+            interaction: { intersect: false, mode: 'index' },
             plugins: {
-                legend: {
-                    display: false
-                },
+                legend: { display: false },
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + context.raw.toLocaleString('de-DE') + ' €';
-                        }
+                        label: (context) => context.dataset.label + ': ' + context.raw.toLocaleString('de-DE') + ' €'
                     }
                 }
             },
             scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                },
+                x: { grid: { display: false } },
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: function(value) {
-                            return value.toLocaleString('de-DE') + ' €';
-                        }
+                        callback: (value) => value.toLocaleString('de-DE') + ' €'
                     }
                 }
             }
         }
     });
-}
+};
 
-// Rentenlücken-Simulator öffnen
-function openRentenSimulator() {
+// ========================================
+// UI ACTIONS
+// ========================================
+
+export const openRentenSimulator = () => {
     const card = document.getElementById('rentenSimulatorCard');
     if (card) {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -193,50 +172,44 @@ function openRentenSimulator() {
             card.style.boxShadow = '';
         }, 2000);
     }
-}
+};
 
-// Dummy-Funktionen für Buttons
-function openAddGoalModal() {
+export const openAddGoalModal = () => {
     alert('Neues Sparziel anlegen – Feature in Entwicklung');
-}
+};
 
-function createAngebot(produkt) {
+export const createAngebot = (produkt) => {
     alert('Angebot erstellen für: ' + produkt + ' – Feature in Entwicklung');
-}
+};
 
-function scheduleTermin(thema) {
+export const scheduleTermin = (thema) => {
     alert('Termin vereinbaren: ' + thema + ' – Feature in Entwicklung');
-}
+};
 
-function prepareBeratung() {
+export const prepareBeratung = () => {
     alert('Beratungsgespräch vorbereiten – Feature in Entwicklung');
-}
+};
 
-function contactKunde() {
+export const contactKunde = () => {
     alert('Kunde kontaktieren – Feature in Entwicklung');
-}
+};
 
-// Initialize Finanzplanung on tab switch
-function initFinanzplanung() {
-    // Initial update
+// ========================================
+// INITIALIZATION
+// ========================================
+
+export const initFinanzplanung = () => {
     setTimeout(() => {
         updateRentenSimulator();
     }, 100);
-}
+};
 
-// Export functions
-window.updateRentenSimulator = updateRentenSimulator;
-window.openRentenSimulator = openRentenSimulator;
-window.openAddGoalModal = openAddGoalModal;
-window.createAngebot = createAngebot;
-window.scheduleTermin = scheduleTermin;
-window.prepareBeratung = prepareBeratung;
-window.contactKunde = contactKunde;
-window.initFinanzplanung = initFinanzplanung;
+// ========================================
+// TAB SWITCH HOOK
+// ========================================
 
-// Auto-init when switching to Finanzplanung tab
 const originalSwitchKundenTab = window.switchKundenTab;
-window.switchKundenTab = function(tabName) {
+window.switchKundenTab = (tabName) => {
     if (typeof originalSwitchKundenTab === 'function') {
         originalSwitchKundenTab(tabName);
     }
@@ -245,4 +218,17 @@ window.switchKundenTab = function(tabName) {
     }
 };
 
-console.log('✅ finanzplanung.js geladen');
+// ========================================
+// WINDOW EXPORTS
+// ========================================
+
+Object.assign(window, {
+    updateRentenSimulator,
+    openRentenSimulator,
+    openAddGoalModal,
+    createAngebot,
+    scheduleTermin,
+    prepareBeratung,
+    contactKunde,
+    initFinanzplanung
+});

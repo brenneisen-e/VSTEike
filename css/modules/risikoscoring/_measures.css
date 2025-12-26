@@ -1,0 +1,125 @@
+/**
+ * Risikoscoring - Measures & Comparison
+ */
+
+.risikoscoring-page .measures-container {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.risikoscoring-page .measures-toggle-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.risikoscoring-page .measures-toggle-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+.risikoscoring-page .measures-toggle-button.active {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.risikoscoring-page .measures-content { display: none; }
+.risikoscoring-page .measures-content.active { display: block; }
+
+.risikoscoring-page .measures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.risikoscoring-page .measure-item {
+    padding: 15px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.risikoscoring-page .measure-item:hover {
+    border-color: #2563eb;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.risikoscoring-page .measure-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.risikoscoring-page .measure-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.risikoscoring-page .measure-info { flex: 1; }
+.risikoscoring-page .measure-title { font-weight: 600; color: #1f2937; margin-bottom: 4px; }
+.risikoscoring-page .measure-description { font-size: 0.85em; color: #6b7280; margin-bottom: 8px; }
+.risikoscoring-page .measure-effect { font-size: 0.8em; color: #059669; font-weight: 600; }
+
+/* Comparison */
+.risikoscoring-page .comparison-container {
+    margin-top: 25px;
+    padding: 25px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+}
+
+.risikoscoring-page .comparison-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.risikoscoring-page .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.risikoscoring-page .comparison-column {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+.risikoscoring-page .comparison-label { font-size: 0.9em; color: #6b7280; margin-bottom: 10px; }
+
+.risikoscoring-page .comparison-value {
+    font-size: 2.5em;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.risikoscoring-page .comparison-detail { font-size: 0.85em; color: #6b7280; }
+
+.risikoscoring-page .improvement-badge {
+    display: inline-block;
+    background: #d1fae5;
+    color: #065f46;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}

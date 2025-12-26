@@ -1,0 +1,200 @@
+/**
+ * Provisionssimulation - Responsive Styles
+ */
+
+@media (max-width: 1200px) {
+    .segment-sliders-grid { grid-template-columns: repeat(2, 1fr); }
+    .provision-kpi-comparison { grid-template-columns: repeat(2, 1fr); }
+    .company-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .company-simulator { grid-template-columns: 1fr; }
+    .company-roi-section { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1024px) {
+    .provision-kpi-value { font-size: 20px; }
+    .provision-simulation-section { padding: 16px; }
+}
+
+@media (max-width: 768px) {
+    .segment-sliders-grid { grid-template-columns: 1fr; }
+    .provision-kpi-comparison { grid-template-columns: 1fr; }
+    .perspective-toggle { flex-direction: column; }
+    .company-kpi-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .provision-simulation-section { padding: 12px !important; margin-top: 16px !important; }
+
+    .provision-simulation-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding-bottom: 12px !important;
+    }
+
+    .provision-simulation-header h3 { font-size: 16px !important; }
+    .provision-simulation-header .header-badge { font-size: 10px !important; }
+
+    .model-toggle-container {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 12px !important;
+    }
+
+    .model-toggle { width: 100% !important; }
+
+    .model-toggle-btn {
+        flex: 1 !important;
+        padding: 10px 12px !important;
+        font-size: 12px !important;
+        min-height: 44px !important;
+    }
+
+    .segment-sliders-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .segment-slider-card { padding: 12px !important; }
+
+    .segment-slider-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .segment-slider-title { font-size: 13px !important; }
+    .provision-slider { height: 8px !important; }
+
+    .provision-slider::-webkit-slider-thumb { width: 20px !important; height: 20px !important; }
+    .provision-slider::-moz-range-thumb { width: 20px !important; height: 20px !important; }
+
+    .provision-kpi-comparison { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+    .provision-kpi-card { padding: 12px !important; }
+    .provision-kpi-value { font-size: 18px !important; }
+    .provision-kpi-label { font-size: 11px !important; }
+
+    .provision-rates-section { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    .provision-rates-table { min-width: 500px !important; font-size: 12px !important; }
+
+    .provision-rates-table thead th,
+    .provision-rates-table tbody td { padding: 8px 10px !important; }
+
+    .provision-chart-section { padding: 12px !important; }
+
+    .provision-chart-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .provision-chart-legend { gap: 10px !important; }
+    .legend-item { font-size: 11px !important; }
+    .provision-chart-container { height: 180px !important; }
+
+    .revers-tier-section { padding: 12px !important; }
+
+    .revers-tier-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+    }
+
+    .revers-tier-title { font-size: 13px !important; }
+    .revers-labels { font-size: 10px !important; }
+
+    .provision-actions { flex-direction: column !important; gap: 8px !important; }
+
+    .provision-action-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+        padding: 12px 16px !important;
+    }
+
+    .perspective-toggle { flex-direction: column !important; width: 100% !important; }
+
+    .perspective-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+    }
+
+    .company-intro {
+        flex-direction: column !important;
+        padding: 14px !important;
+        text-align: center !important;
+    }
+
+    .company-intro-icon { margin: 0 auto !important; }
+    .company-intro-text h4 { font-size: 14px !important; }
+    .company-intro-text p { font-size: 13px !important; }
+    .company-kpi-grid { gap: 10px !important; }
+
+    .company-kpi-card {
+        padding: 14px !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 10px !important;
+    }
+
+    .company-kpi-icon { margin: 0 auto !important; }
+    .company-kpi-value { font-size: 20px !important; }
+    .company-simulator { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .simulator-section { padding: 14px !important; }
+    .simulator-section h4 { font-size: 14px !important; }
+    .simulator-control input[type="number"] { min-height: 44px !important; font-size: 16px !important; }
+    .simulator-control input[type="range"] { height: 8px !important; }
+    .projection-chart-container { height: 160px !important; }
+    .company-breakdown-section { padding: 14px !important; overflow-x: auto !important; }
+    .company-breakdown-table { min-width: 400px !important; }
+
+    .company-breakdown-table th,
+    .company-breakdown-table td { padding: 10px 8px !important; font-size: 12px !important; }
+
+    .company-roi-section { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .roi-card { padding: 14px !important; }
+    .roi-header h5 { font-size: 13px !important; }
+
+    .roi-metric {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 4px !important;
+    }
+
+    .fullscreen-btn { width: 44px !important; height: 44px !important; }
+}
+
+@media (max-width: 360px) {
+    .provision-simulation-section { padding: 10px !important; }
+    .provision-kpi-comparison { grid-template-columns: 1fr !important; }
+    .provision-kpi-value { font-size: 16px !important; }
+    .model-toggle-btn { padding: 8px 10px !important; font-size: 11px !important; }
+    .provision-action-btn { font-size: 12px !important; }
+    .company-kpi-value { font-size: 18px !important; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .model-toggle-btn,
+    .perspective-btn,
+    .provision-action-btn,
+    .fullscreen-btn { min-height: 44px !important; }
+
+    .provision-slider { height: 10px !important; }
+
+    .provision-slider::-webkit-slider-thumb { width: 24px !important; height: 24px !important; }
+    .provision-slider::-moz-range-thumb { width: 24px !important; height: 24px !important; }
+
+    .model-toggle-btn:hover,
+    .perspective-btn:hover,
+    .provision-action-btn:hover { transform: none !important; }
+
+    .provision-action-btn:active { transform: scale(0.98) !important; opacity: 0.9 !important; }
+
+    .provision-rates-section,
+    .company-breakdown-section { -webkit-overflow-scrolling: touch !important; }
+
+    .simulator-control input[type="number"] { font-size: 16px !important; }
+}
+
+@media print {
+    .provision-simulation-section { break-inside: avoid; box-shadow: none; border: 1px solid #e2e8f0; }
+    .provision-action-btn { display: none; }
+}

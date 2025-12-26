@@ -1,0 +1,182 @@
+/**
+ * Finanzplanung - Sparziele
+ */
+
+.sparziele-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sparziel-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.sparziel-item:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.sparziel-item.highlight {
+    background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+    border-color: #fbbf24;
+}
+
+.sparziel-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.sparziel-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sparziel-icon.auto { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #2563eb; }
+.sparziel-icon.immo { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #16a34a; }
+.sparziel-icon.rente { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #d97706; }
+
+.sparziel-title { flex: 1; }
+.sparziel-title h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #1e293b; }
+.sparziel-date { font-size: 13px; color: #64748b; }
+
+.sparziel-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sparziel-status.on-track { background: #dcfce7; color: #166534; }
+.sparziel-status.warning { background: #fef3c7; color: #92400e; }
+
+.sparziel-progress { margin-bottom: 16px; }
+
+.progress-bar-container {
+    position: relative;
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    overflow: visible;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.progress-bar.warning { background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%); }
+
+.progress-marker {
+    position: absolute;
+    top: -3px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border: 3px solid #059669;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.progress-bar.warning + .progress-marker { border-color: #f59e0b; }
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.sparziel-details {
+    display: flex;
+    gap: 24px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.detail-item { display: flex; flex-direction: column; gap: 2px; }
+
+.detail-label {
+    font-size: 11px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value { font-size: 15px; font-weight: 600; color: #1e293b; }
+.detail-value.success { color: #059669; }
+.detail-value.warning { color: #d97706; }
+
+.sparziel-recommendation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #fef9c3;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #92400e;
+}
+
+.btn-detail-analysis {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-detail-analysis:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-1px);
+}
+
+.btn-add-goal {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-add-goal:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}

@@ -1,7 +1,13 @@
-// js/config.js - Configuration and Constants
+/**
+ * Configuration Module - ES2024
+ * KPI definitions, factors, and constants
+ */
 
-// KPI Definitions - Modern SVG Icons
-const kpiDefinitions = [
+// ========================================
+// KPI DEFINITIONS
+// ========================================
+
+export const kpiDefinitions = [
     { id: 'neugeschaeft', title: 'Neugeschäftsvolumen', description: 'Gesamtvolumen aller neu abgeschlossenen Verträge', unit: 'currency', hasYTD: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>' },
     { id: 'bestand', title: 'Bestandsvolumen', description: 'Gesamtwert aller verwalteten Versicherungsverträge', unit: 'currency', hasYTD: false, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path></svg>' },
     { id: 'storno', title: 'Stornoquote', description: 'Prozentsatz der gekündigten Verträge', unit: 'percent', hasYTD: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>' },
@@ -13,8 +19,11 @@ const kpiDefinitions = [
     { id: 'deckungsbeitrag', title: 'Deckungsbeitrag', description: 'Ertrag nach Abzug direkter Kosten und Provisionen', unit: 'currency', hasYTD: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>' }
 ];
 
-// Bundesland Data (for reference only - used in CSV generator)
-const bundeslandData = {
+// ========================================
+// BUNDESLAND DATA
+// ========================================
+
+export const bundeslandData = {
     'Baden-Württemberg': { baseFactor: 1.35, seasonPattern: [1.1, 1.0, 1.05, 1.1, 0.95, 0.85, 0.8, 0.75, 1.0, 1.15, 1.2, 1.25], volatility: 0.15 },
     'Bayern': { baseFactor: 1.40, seasonPattern: [1.15, 1.05, 1.1, 1.0, 0.9, 0.8, 0.75, 0.7, 0.95, 1.1, 1.25, 1.3], volatility: 0.12 },
     'Berlin': { baseFactor: 0.95, seasonPattern: [0.9, 0.95, 1.0, 1.05, 1.1, 1.05, 1.0, 1.05, 1.1, 1.05, 0.95, 0.85], volatility: 0.25 },
@@ -33,37 +42,45 @@ const bundeslandData = {
     'Thüringen': { baseFactor: 0.72, seasonPattern: [0.85, 0.9, 0.95, 1.05, 1.1, 1.1, 1.05, 1.0, 0.95, 0.9, 0.85, 0.85], volatility: 0.18 }
 };
 
-// Simple factors for backward compatibility (used in map display)
-const bundeslandFactors = Object.fromEntries(
+// Derived simple factors for backward compatibility
+export const bundeslandFactors = Object.fromEntries(
     Object.entries(bundeslandData).map(([name, data]) => [name, data.baseFactor])
 );
 
-// Segment Factors
-const segmentFactors = {
+// ========================================
+// SEGMENT & SILO FACTORS
+// ========================================
+
+export const segmentFactors = {
     'Leben': { neugeschaeft: 0.45, bestand: 0.40, storno: 1.15, nps: 0.95, risiko: 0.90, combined: 0.92, ergebnis: 0.35, underwriting: 1.02, deckungsbeitrag: 0.38 },
     'Kranken': { neugeschaeft: 0.20, bestand: 0.25, storno: 0.70, nps: 1.10, risiko: 0.85, combined: 0.98, ergebnis: 0.25, underwriting: 1.05, deckungsbeitrag: 0.22 },
     'Schaden': { neugeschaeft: 0.20, bestand: 0.20, storno: 0.90, nps: 1.00, risiko: 1.10, combined: 1.05, ergebnis: 0.25, underwriting: 0.95, deckungsbeitrag: 0.23 },
     'Kfz': { neugeschaeft: 0.15, bestand: 0.15, storno: 1.10, nps: 0.90, risiko: 1.15, combined: 1.08, ergebnis: 0.15, underwriting: 0.92, deckungsbeitrag: 0.17 }
 };
 
-// Silo Factors
-const siloFactors = {
+export const siloFactors = {
     'Ausschließlichkeit': { neugeschaeft: 1.20, bestand: 1.15, storno: 0.85, nps: 1.05, risiko: 0.95, combined: 0.96, ergebnis: 1.25, underwriting: 1.08, deckungsbeitrag: 1.22 },
     'Makler': { neugeschaeft: 0.90, bestand: 0.95, storno: 1.05, nps: 0.95, risiko: 1.05, combined: 1.02, ergebnis: 0.85, underwriting: 0.95, deckungsbeitrag: 0.88 },
     'Direktvertrieb': { neugeschaeft: 0.60, bestand: 0.55, storno: 1.20, nps: 1.10, risiko: 0.90, combined: 0.94, ergebnis: 1.10, underwriting: 1.05, deckungsbeitrag: 0.95 },
     'Banken': { neugeschaeft: 0.30, bestand: 0.35, storno: 0.95, nps: 0.90, risiko: 1.00, combined: 1.00, ergebnis: 0.80, underwriting: 0.98, deckungsbeitrag: 0.85 }
 };
 
-// Products by Segment
-const productsBySegment = {
+// ========================================
+// PRODUCTS BY SEGMENT
+// ========================================
+
+export const productsBySegment = {
     'Leben': ['Risikoleben', 'Kapitallebensversicherung', 'Fondsgebundene LV', 'Berufsunfähigkeit', 'Rentenversicherung'],
     'Kranken': ['Vollversicherung', 'Zusatzversicherung', 'Pflegeversicherung', 'Zahnzusatz', 'Auslandsreise'],
     'Schaden': ['Hausrat', 'Wohngebäude', 'Haftpflicht', 'Rechtsschutz', 'Gewerbe'],
     'Kfz': ['Kfz-Haftpflicht', 'Vollkasko', 'Teilkasko', 'Flottenversicherung', 'Schutzbrief']
 };
 
-// Agent Distribution Templates
-const agentDistributions = {
+// ========================================
+// AGENT DISTRIBUTIONS
+// ========================================
+
+export const agentDistributions = {
     'neugeschaeft': [
         { range: '< 10k', count: 120 },
         { range: '10k-50k', count: 340 },
@@ -146,3 +163,17 @@ const agentDistributions = {
         { range: '> 1M', count: 15 }
     ]
 };
+
+// ========================================
+// WINDOW EXPORTS
+// ========================================
+
+Object.assign(window, {
+    kpiDefinitions,
+    bundeslandData,
+    bundeslandFactors,
+    segmentFactors,
+    siloFactors,
+    productsBySegment,
+    agentDistributions
+});

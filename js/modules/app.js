@@ -4,11 +4,16 @@
  */
 
 // ========================================
-// CORE MODULES
+// CORE MODULES (replacing legacy config.js, utils.js, data.js, tables.js)
 // ========================================
 
 import './logger.js';
 import './event-handlers.js';
+import './core/config.js';
+import './core/utils.js';
+import './core/data.js';
+import './core/tables.js';
+import './finanzplanung/index.js';
 
 // ========================================
 // FEATURE MODULES

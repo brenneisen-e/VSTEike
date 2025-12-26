@@ -1,0 +1,217 @@
+/**
+ * Risikoscoring - Responsive Styles
+ */
+
+@media (max-width: 1200px) {
+    .risikoscoring-page .scoring-container,
+    .risikoscoring-page .enterprise-container { grid-template-columns: 1fr; }
+
+    .risikoscoring-page .scoring-result,
+    .risikoscoring-page .kpi-box { position: static; }
+}
+
+@media (max-width: 768px) {
+    .risikoscoring-header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .risikoscoring-header-left { flex-direction: column; }
+    .rs-tabs { flex-direction: column; }
+    .risikoscoring-page .toggle-button-group { flex-direction: column; }
+    .risikoscoring-page .comparison-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .risikoscoring-header { padding: 12px 16px !important; }
+
+    .risikoscoring-header .back-button {
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+        min-height: 44px !important;
+    }
+
+    .risikoscoring-page-title { font-size: 1.1em !important; }
+    .risikoscoring-subtitle { font-size: 0.8em !important; }
+
+    .rs-tab {
+        padding: 12px 16px !important;
+        font-size: 0.85em !important;
+        min-height: 44px !important;
+    }
+
+    .rs-tab-content { padding: 12px !important; }
+
+    .risikoscoring-page .scoring-container {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .risikoscoring-page .scoring-parameters,
+    .risikoscoring-page .scoring-result { padding: 14px !important; }
+
+    .risikoscoring-page .parameter-section {
+        padding: 14px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .risikoscoring-page .section-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+    }
+
+    .risikoscoring-page .section-title { font-size: 1em !important; }
+    .risikoscoring-page .slider { height: 10px !important; }
+
+    .risikoscoring-page .slider::-webkit-slider-thumb {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .risikoscoring-page .score-value { font-size: 3em !important; }
+
+    .risikoscoring-page .score-category {
+        font-size: 1.1em !important;
+        padding: 8px 16px !important;
+    }
+
+    .risikoscoring-page .traffic-light {
+        padding: 12px 20px !important;
+        gap: 6px !important;
+    }
+
+    .risikoscoring-page .light {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .risikoscoring-page .enterprise-container {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .risikoscoring-page .silo-toggle-container { padding: 14px !important; }
+
+    .risikoscoring-page .toggle-button {
+        padding: 10px 14px !important;
+        font-size: 0.85em !important;
+        min-height: 44px !important;
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .risikoscoring-page .distribution-container { padding: 14px !important; }
+    .risikoscoring-page .chart-wrapper { height: 250px !important; }
+    .risikoscoring-page .legend-container { gap: 12px !important; }
+    .risikoscoring-page .legend-item { font-size: 0.8em !important; }
+
+    .risikoscoring-page .statistics-container {
+        padding: 14px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .risikoscoring-page .statistics-table { min-width: 500px !important; }
+
+    .risikoscoring-page .statistics-table th,
+    .risikoscoring-page .statistics-table td {
+        padding: 10px 8px !important;
+        font-size: 0.8em !important;
+    }
+
+    .risikoscoring-page .measures-container { padding: 14px !important; }
+
+    .risikoscoring-page .measures-toggle-button {
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+        font-size: 0.9em !important;
+    }
+
+    .risikoscoring-page .measures-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    .risikoscoring-page .measure-item { padding: 12px !important; }
+
+    .risikoscoring-page .measure-checkbox input[type="checkbox"] {
+        width: 22px !important;
+        height: 22px !important;
+    }
+
+    .risikoscoring-page .comparison-container { padding: 14px !important; }
+    .risikoscoring-page .comparison-column { padding: 14px !important; }
+    .risikoscoring-page .comparison-value { font-size: 2em !important; }
+    .risikoscoring-page .kpi-box { padding: 14px !important; }
+    .risikoscoring-page .kpi-value { font-size: 1.5em !important; }
+
+    .risikoscoring-page .vm-distribution {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .risikoscoring-page .vm-level { flex: 1 1 45% !important; }
+    .risikoscoring-page .vm-count { font-size: 1.1em !important; }
+    .risikoscoring-page .score-details { padding: 12px !important; }
+
+    .risikoscoring-page .detail-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 4px !important;
+        padding: 10px 0 !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .risikoscoring-header { padding: 10px 12px !important; }
+
+    .rs-tab {
+        padding: 10px 12px !important;
+        font-size: 0.8em !important;
+    }
+
+    .risikoscoring-page .score-value { font-size: 2.5em !important; }
+    .risikoscoring-page .score-category { font-size: 1em !important; }
+
+    .risikoscoring-page .light {
+        width: 24px !important;
+        height: 24px !important;
+    }
+
+    .risikoscoring-page .comparison-value { font-size: 1.6em !important; }
+    .risikoscoring-page .vm-level { flex: 1 1 100% !important; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .risikoscoring-header .back-button,
+    .rs-tab,
+    .risikoscoring-page .toggle-button,
+    .risikoscoring-page .measures-toggle-button,
+    .risikoscoring-page .measure-checkbox { min-height: 44px !important; }
+
+    .risikoscoring-page .slider { height: 12px !important; }
+
+    .risikoscoring-page .slider::-webkit-slider-thumb {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .risikoscoring-page .slider::-moz-range-thumb {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .risikoscoring-page .toggle-button:hover,
+    .risikoscoring-page .segment-header:hover { transform: none !important; }
+
+    .risikoscoring-page .toggle-button:active,
+    .risikoscoring-page .measures-toggle-button:active {
+        transform: scale(0.98) !important;
+        opacity: 0.9 !important;
+    }
+
+    .risikoscoring-page .statistics-container { -webkit-overflow-scrolling: touch !important; }
+}
