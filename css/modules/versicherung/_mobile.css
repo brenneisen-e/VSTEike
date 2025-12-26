@@ -1,0 +1,480 @@
+/* ========================================
+   PSD2/FIDA SOURCE TAGS IN DECKUNGSLÜCKE
+   ======================================== */
+
+/* Combined Source Tag */
+.combined-source-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: linear-gradient(90deg, #64748b 0%, #64748b 45%, #10b981 55%, #10b981 100%);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    margin-left: auto;
+}
+
+/* Individual Source Tags */
+.source-tag {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.source-tag.psd2 {
+    background: #64748b;
+    color: white;
+}
+
+.source-tag.fida {
+    background: #10b981;
+    color: white;
+}
+
+/* Deckungslücke Item with Source */
+.deckungsluecke-item.psd2-item {
+    border-left: 3px solid #64748b;
+    padding-left: 12px;
+}
+
+.deckungsluecke-item.fida-item {
+    border-left: 3px solid #10b981;
+    padding-left: 12px;
+}
+
+.deckungsluecke-source {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.deckungsluecke-item.highlight-danger .deckungsluecke-source {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Deckungslücke Insight Section */
+.deckungsluecke-insight {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insight-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #334155;
+}
+
+.insight-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.insight-icon.psd2 {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.insight-icon.fida {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.insight-row strong {
+    font-weight: 600;
+}
+
+/* Make recommendation more prominent */
+.deckungsluecke-recommendation {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.6;
+}
+
+.deckungsluecke-recommendation strong {
+    color: #92400e;
+}
+
+/* Klickbare Tabellenzeilen */
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.clickable-row:hover {
+    background-color: #e0f2fe !important;
+    transform: scale(1.002);
+}
+
+.clickable-row:active {
+    background-color: #bae6fd !important;
+}
+
+/* ========================================
+   ENHANCED MOBILE STYLES
+   ======================================== */
+
+/* Phone-specific improvements (480px and below) */
+@media (max-width: 480px) {
+    /* Landing Page */
+    .loading-title {
+        font-size: 18px !important;
+        padding: 0 16px;
+        text-align: center;
+    }
+
+    .loading-brand {
+        font-size: 18px !important;
+        padding: 0 16px;
+        text-align: center;
+    }
+
+    .progress-container {
+        width: 85% !important;
+    }
+
+    /* Welcome Chat */
+    .welcome-chat {
+        width: 95% !important;
+        max-width: none !important;
+        margin: 10px;
+        border-radius: 12px !important;
+    }
+
+    .welcome-chat-header {
+        padding: 12px 16px !important;
+    }
+
+    .chat-title {
+        font-size: 15px !important;
+    }
+
+    .welcome-chat-body {
+        padding: 12px !important;
+    }
+
+    .chat-bubble {
+        padding: 12px !important;
+        font-size: 13px !important;
+    }
+
+    .chat-bubble p {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Sample Question Buttons */
+    .landing-sample-questions {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .sample-question-btn {
+        width: 100% !important;
+        padding: 12px 16px !important;
+        font-size: 13px !important;
+        text-align: left !important;
+    }
+
+    /* Chat Input */
+    .landing-chat-input {
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+
+    .landing-chat-send {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    /* Module Tabs */
+    .module-tabs {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    .module-tab {
+        flex: 1 1 auto !important;
+        min-width: 80px !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+
+    /* Navigation Boxes */
+    .navigation-boxes {
+        flex-direction: column !important;
+    }
+
+    .nav-box {
+        width: 100% !important;
+        padding: 16px !important;
+    }
+
+    .nav-box-title {
+        font-size: 14px !important;
+    }
+
+    /* Dashboard Chat Widget */
+    .chat-widget {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100vh !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .chat-header {
+        padding: 12px 16px !important;
+    }
+
+    .chat-header-title {
+        font-size: 14px !important;
+    }
+
+    .chat-body {
+        padding: 12px !important;
+    }
+
+    .chat-input-area {
+        padding: 12px !important;
+    }
+
+    /* Tables - Card View on Mobile */
+    .data-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    th, td {
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+
+    .kpi-card {
+        padding: 12px !important;
+    }
+
+    .kpi-value {
+        font-size: 18px !important;
+    }
+
+    .kpi-label {
+        font-size: 11px !important;
+    }
+
+    /* Headers */
+    .header {
+        padding: 12px 16px !important;
+    }
+
+    .header h1 {
+        font-size: 16px !important;
+    }
+
+    /* Filter Controls */
+    .filter-group {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .filter-group select,
+    .filter-group input {
+        width: 100% !important;
+        min-width: unset !important;
+    }
+
+    /* Buttons */
+    .btn, button {
+        min-height: 44px !important;
+        font-size: 13px !important;
+    }
+
+    /* Cards */
+    .card, .kunden-card {
+        border-radius: 8px !important;
+    }
+
+    .card-header, .kunden-card-header {
+        padding: 12px 16px !important;
+    }
+
+    .card-header h2, .card-header h3,
+    .kunden-card-header h2 {
+        font-size: 14px !important;
+    }
+
+    /* Sidebar */
+    .sidebar, .map-sidebar {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        top: auto !important;
+        width: 100% !important;
+        max-height: 50vh !important;
+        border-radius: 16px 16px 0 0 !important;
+        z-index: 1000 !important;
+    }
+
+    /* Map */
+    .map-container {
+        height: 50vh !important;
+    }
+
+    /* Modals */
+    .modal-content {
+        width: 95% !important;
+        max-width: none !important;
+        margin: 10px !important;
+        max-height: 90vh !important;
+    }
+
+    .modal-header {
+        padding: 12px 16px !important;
+    }
+
+    .modal-body {
+        padding: 16px !important;
+    }
+
+    /* Settings Panel */
+    .settings-panel {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    .settings-item {
+        padding: 12px !important;
+    }
+
+    /* Typography adjustments */
+    h1 { font-size: 20px !important; }
+    h2 { font-size: 18px !important; }
+    h3 { font-size: 16px !important; }
+    h4 { font-size: 14px !important; }
+
+    /* Padding/Margin reductions */
+    .section, .content-section {
+        padding: 12px !important;
+    }
+
+    /* Touch-friendly spacing */
+    .action-buttons {
+        gap: 8px !important;
+    }
+
+    .action-btn {
+        padding: 10px 16px !important;
+    }
+}
+
+/* Small phone (360px and below) */
+@media (max-width: 360px) {
+    .loading-title,
+    .loading-brand {
+        font-size: 16px !important;
+    }
+
+    .welcome-chat {
+        margin: 5px !important;
+    }
+
+    .chat-bubble p {
+        font-size: 12px !important;
+    }
+
+    .module-tab {
+        font-size: 11px !important;
+        padding: 6px 10px !important;
+    }
+
+    .kpi-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .kpi-value {
+        font-size: 16px !important;
+    }
+
+    th, td {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Landscape phone */
+@media (max-width: 768px) and (orientation: landscape) {
+    .welcome-chat {
+        max-height: 85vh !important;
+    }
+
+    .chat-widget {
+        max-height: 100vh !important;
+    }
+
+    .modal-content {
+        max-height: 85vh !important;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    button, .btn, a.btn,
+    .nav-box, .module-tab,
+    .sample-question-btn {
+        min-height: 44px;
+    }
+
+    /* Remove hover effects that don't work on touch */
+    .clickable-row:hover {
+        transform: none;
+    }
+
+    /* Better tap feedback */
+    button:active, .btn:active {
+        opacity: 0.8;
+        transform: scale(0.98);
+    }
+
+    /* Scrollable containers */
+    .scroll-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+}
+

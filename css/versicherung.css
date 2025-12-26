@@ -7,4 +7,12 @@
 @import 'modules/versicherung/_dashboard.css';
 @import 'modules/versicherung/_tables-maps.css';
 @import 'modules/versicherung/_chat.css';
-@import 'modules/versicherung/_misc.css';
+/* Komponenten (ehemals _misc.css) */
+@import 'modules/versicherung/_autocomplete.css';
+@import 'modules/versicherung/_potentialanalyse.css';
+@import 'modules/versicherung/_kundendetail.css';
+@import 'modules/versicherung/_fida.css';
+@import 'modules/versicherung/_agentur-photo.css';
+@import 'modules/versicherung/_agentur-overview.css';
+@import 'modules/versicherung/_user-profile.css';
+@import 'modules/versicherung/_mobile.css';
