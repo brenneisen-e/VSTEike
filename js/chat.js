@@ -5,8 +5,8 @@ let isProcessing = false;
 let chatInitialized = false;
 
 // ⚠️ CONFIGURATION - Claude API via Cloudflare Worker
-const CLAUDE_WORKER_URL = 'https://vst-claude-api.eike-3e2.workers.dev';
-const CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
+window.CLAUDE_WORKER_URL = 'https://vst-claude-api.eike-3e2.workers.dev';
+window.CLAUDE_MODEL = 'claude-sonnet-4-5-20250514';
 
 // Fallback: API-Key aus localStorage (falls kein Worker)
 function getClaudeApiKey() {
@@ -14,11 +14,11 @@ function getClaudeApiKey() {
 }
 
 // Prüfe ob Worker oder direkter Zugriff verwendet wird
-const USE_WORKER = CLAUDE_WORKER_URL !== '';
+window.USE_WORKER = window.CLAUDE_WORKER_URL !== '';
 
 // Mock-Modus nur wenn weder Worker noch API-Key vorhanden
 function shouldUseMockMode() {
-    return !USE_WORKER && !getClaudeApiKey();
+    return !window.USE_WORKER && !getClaudeApiKey();
 }
 
 let USE_MOCK_MODE = shouldUseMockMode();
@@ -390,14 +390,14 @@ USER FRAGE: ${message}`
     ];
 
     // API URL (Worker or direct)
-    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+    const apiUrl = window.USE_WORKER ? window.CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
 
     // Headers
     const headers = {
         "Content-Type": "application/json"
     };
 
-    if (!USE_WORKER) {
+    if (!window.USE_WORKER) {
         headers["x-api-key"] = getClaudeApiKey();
         headers["anthropic-version"] = "2023-06-01";
         headers["anthropic-dangerous-direct-browser-access"] = "true";
@@ -408,7 +408,7 @@ USER FRAGE: ${message}`
         method: "POST",
         headers: headers,
         body: JSON.stringify({
-            model: CLAUDE_MODEL,
+            model: window.CLAUDE_MODEL,
             max_tokens: 2000,
             system: systemPrompt,
             messages: messages
@@ -770,9 +770,9 @@ Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den ech
                         }
                     ];
 
-                    const apiUrl = USE_WORKER ? CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
+                    const apiUrl = window.USE_WORKER ? window.CLAUDE_WORKER_URL : "https://api.anthropic.com/v1/messages";
                     const headers = { "Content-Type": "application/json" };
-                    if (!USE_WORKER) {
+                    if (!window.USE_WORKER) {
                         headers["x-api-key"] = getClaudeApiKey();
                         headers["anthropic-version"] = "2023-06-01";
                         headers["anthropic-dangerous-direct-browser-access"] = "true";
@@ -782,7 +782,7 @@ Formatiere große Zahlen lesbar (z.B. "€45.2 Mio") und sei konkret mit den ech
                         method: "POST",
                         headers: headers,
                         body: JSON.stringify({
-                            model: CLAUDE_MODEL,
+                            model: window.CLAUDE_MODEL,
                             max_tokens: 2000,
                             system: systemPrompt,
                             messages: messages
