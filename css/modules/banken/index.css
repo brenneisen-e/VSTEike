@@ -1,0 +1,22 @@
+/**
+ * Banken Module CSS - Entry Point
+ * Imports all banken-specific styles
+ */
+
+/* Layout: Header, Page structure, Navigation */
+@import '_layout.css';
+
+/* KPIs: Cards, Charts, Matrix, Segments */
+@import '_kpis.css';
+
+/* Tables: Customer tables, Data tables */
+@import '_tables.css';
+
+/* CRM: Customer detail views, Profile */
+@import '_crm.css';
+
+/* Chat: Banken chat interface */
+@import '_chat.css';
+
+/* Feedback: Feedback panel, Screenshots */
+@import '_feedback.css';

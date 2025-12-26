@@ -1,0 +1,1001 @@
+
+/* Typewriter-Effekt */
+.typewriter-text,
+.typewriter-text-2 {
+    opacity: 0;
+    overflow: hidden;
+    border-right: 2px solid transparent;
+    white-space: nowrap;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.typewriter-text {
+    animation-delay: 0.3s;
+}
+
+.typewriter-text-2 {
+    animation-delay: 0.6s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Typewriter Cursor Blink */
+@keyframes blink {
+    50% {
+        border-color: #667eea;
+    }
+}
+
+.typewriter-text.typing {
+    animation: typewriter 2s steps(60) 0.3s, blink 0.7s step-end infinite;
+    border-right-color: #667eea;
+}
+
+.typewriter-text-2.typing {
+    animation: typewriter 1.5s steps(60) 2.5s, blink 0.7s step-end infinite 2.5s;
+    border-right-color: #667eea;
+}
+
+/* Probefragen: grau mit lila Hover */
+.landing-sample-questions .sample-question-btn {
+    background: #f1f5f9; /* Grau */
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.landing-sample-questions .sample-question-btn:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Lila */
+    color: white;
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.landing-sample-questions .sample-question-btn:active {
+    transform: translateY(0);
+}
+
+/* Landing Chat Section spacing anpassen */
+.landing-chat-section {
+    margin-top: 20px;
+}
+
+.landing-sample-questions {
+    margin-top: 16px; /* Nach Input */
+}
+
+/* ========================================
+   AGENTUR OVERVIEW PAGE STYLES
+   ======================================== */
+
+.agentur-page {
+    min-height: 100vh;
+    background: #f1f5f9;
+    padding: 24px;
+}
+
+.agentur-header {
+    max-width: 1400px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.agentur-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.agentur-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 24px;
+}
+
+/* Stammdaten Card */
+.agentur-stammdaten {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.agentur-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.agentur-photo svg {
+    width: 80px;
+    height: 80px;
+    color: white;
+}
+
+.stammdaten-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stammdaten-item {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
+}
+
+.stammdaten-item:last-child {
+    border-bottom: none;
+}
+
+.stammdaten-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.stammdaten-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Details Column */
+.agentur-details {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.agentur-kpis,
+.agentur-contracts {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.agentur-kpis h2,
+.agentur-contracts h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+/* KPI Bars */
+.kpi-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.kpi-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.kpi-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kpi-bar-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.kpi-bar-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.kpi-bar-track {
+    height: 32px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.kpi-bar-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    transition: width 1s ease;
+}
+
+.kpi-bar-fill.positive {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.kpi-bar-fill.negative {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Contracts Table */
+.contracts-table-wrapper {
+    overflow-x: auto;
+}
+
+.contracts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contracts-table thead {
+    background: #f8fafc;
+}
+
+.contracts-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contracts-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.contracts-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.contract-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.contract-status.aktiv {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.contract-status.storniert {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .agentur-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   BILLING CHECK PAGE STYLES
+   ======================================== */
+
+.billing-page {
+    min-height: 100vh;
+    background: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.billing-header {
+    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.billing-page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+}
+
+.billing-iframe {
+    flex: 1;
+    border: none;
+    width: 100%;
+    height: calc(100vh - 80px);
+}
+
+/* ========================================
+   DELOITTE BRANDING STYLES
+   ======================================== */
+
+/* Deloitte Logo Container */
+.deloitte-logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10001;
+}
+
+.deloitte-logo {
+    height: 40px;
+    width: auto;
+}
+
+/* Deloitte D Icon für Chat */
+.chat-icon-deloitte,
+.chat-avatar-deloitte {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid #86BC25;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chat-avatar-deloitte {
+    width: 44px;
+    height: 44px;
+}
+
+.deloitte-d {
+    font-size: 22px;
+    font-weight: 700;
+    color: #000000;
+    font-family: 'Arial', sans-serif;
+}
+
+/* ========================================
+   LANDING PAGE - WEISSER HINTERGRUND
+   ======================================== */
+
+.landing-page {
+    background: white !important;
+}
+
+/* Loading screen text colors for white background */
+.loading-brand {
+    color: #667eea !important;
+}
+
+.loading-status {
+    color: #667eea !important;
+}
+
+.loading-percent {
+    color: #667eea !important;
+    background: rgba(102, 126, 234, 0.1) !important;
+}
+
+.loading-progress-track {
+    background: rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Welcome Chat - Breiter */
+.welcome-chat {
+    width: 90%;
+    max-width: 800px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
+}
+
+/* Header mit Deloitte-Grün */
+.welcome-chat-header {
+    background: white;
+    color: #000000;
+    padding: 20px 24px;
+    border-bottom: 3px solid #86BC25;
+}
+
+/* ========================================
+   NAVIGATION BOXEN
+   ======================================== */
+
+.navigation-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.nav-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 16px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-box:hover {
+    border-color: #86BC25;
+    background: #f8fdf5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(134, 188, 37, 0.2);
+}
+
+.nav-box-icon {
+    width: 32px;
+    height: 32px;
+    color: #86BC25;
+}
+
+.nav-box span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Sales Operations Sub-Section */
+.sales-ops-section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.sales-ops-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sales-ops-heading svg {
+    color: #86BC25;
+}
+
+.sales-ops-boxes {
+    margin: 0;
+}
+
+.nav-box.nav-box-small {
+    padding: 16px 12px;
+    gap: 8px;
+}
+
+.nav-box.nav-box-small .nav-box-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-box.nav-box-small span {
+    font-size: 12px;
+}
+
+/* External Link Tiles */
+.nav-box.nav-box-external {
+    position: relative;
+}
+
+.nav-box.nav-box-external .external-link-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #94a3b8;
+    opacity: 0.6;
+}
+
+.nav-box.nav-box-external:hover .external-link-icon {
+    opacity: 1;
+    color: #86BC25;
+}
+
+/* ========================================
+   SETTINGS COLLAPSIBLE BOX
+   ======================================== */
+
+.settings-collapsible {
+    margin-top: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.settings-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+.settings-toggle:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.settings-icon {
+    width: 20px;
+    height: 20px;
+    color: #64748b;
+}
+
+.chevron-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    color: #64748b;
+    transition: transform 0.3s ease;
+}
+
+.settings-collapsible.open .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.settings-content {
+    display: none;
+    padding: 16px 20px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.settings-collapsible.open .settings-content {
+    display: block;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-item:hover {
+    background: #f1f5f9;
+    border-color: #86BC25;
+}
+
+.settings-item-icon {
+    width: 20px;
+    height: 20px;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.settings-item span {
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.settings-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.settings-api-section {
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.settings-item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.settings-item-header span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Mock Toggle */
+.mock-toggle {
+    justify-content: space-between;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+    background-color: #86BC25;
+}
+
+.toggle-switch input:checked + label:before {
+    transform: translateX(24px);
+}
+
+/* API Token Styles angepasst */
+.api-token-save {
+    padding: 10px 20px;
+    background: #86BC25;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.api-token-save:hover {
+    background: #6fa31e;
+    transform: translateY(-1px);
+}
+
+.api-token-toggle {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.api-token-toggle:hover {
+    background: #f8fafc;
+    border-color: #86BC25;
+}
+
+/* Chat Widget - Breiter */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 500px;
+    height: 600px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Chat Header mit Deloitte-Grün */
+.chat-header {
+    background: white;
+    color: #000000;
+    padding: 16px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #86BC25;
+}
+
+.chat-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+}
+
+.chat-subtitle {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.chat-minimize,
+.chat-close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.chat-minimize:hover,
+.chat-close:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+/* Chat Toggle Button mit Deloitte-Grün */
+.chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #86BC25;
+    background: white;
+    color: #000000;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 4px 20px rgba(134, 188, 37, 0.3);
+    z-index: 999;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(134, 188, 37, 0.4);
+}
+
+/* Sample Questions mit Deloitte-Grün */
+.sample-question-btn {
+    background: white;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sample-question-btn:hover {
+    border-color: #86BC25;
+    background: #f8fdf5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(134, 188, 37, 0.15);
+}
+
+.sample-question-btn svg {
+    flex-shrink: 0;
+    color: #86BC25;
+}
+
+.sample-question-btn:hover svg {
+    color: currentColor;
+}
+
+/* Button SVG Icons allgemein */
+button svg,
+.back-button svg,
+.view-mode-toggle button svg {
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.upload-label svg {
+    vertical-align: middle;
+    margin-right: 6px;
+    color: #86BC25;
+}
+
+/* Landing Chat Input - Deloitte Focus */
+.landing-chat-input:focus {
+    outline: none;
+    border-color: #86BC25;
+    box-shadow: 0 0 0 3px rgba(134, 188, 37, 0.1);
+}
+
+/* Landing Chat Send Button */
+.landing-chat-send {
+    background: #86BC25;
+}
+
+.landing-chat-send:hover {
+    background: #6fa31e;
+}
+
+/* Chat Input Focus */
+.chat-input:focus {
+    outline: none;
+    border-color: #86BC25;
+    box-shadow: 0 0 0 3px rgba(134, 188, 37, 0.1);
+}
+
+/* Chat Send Button */
+.chat-send {
+    background: #86BC25;
+}
+
+.chat-send:hover {
+    background: #6fa31e;
+}
+
+/* Landing Chat Message Assistant Avatar */
+.landing-chat-message.assistant .chat-avatar {
+    background: white;
+    border: 2px solid #86BC25;
+    color: #000000;
+}
+
+/* User Message - Deloitte Grün */
+.landing-chat-message.user .chat-bubble {
+    background: #86BC25;
+    color: white;
+}
+
+.chat-message.user .chat-bubble {
+    background: #86BC25;
+    color: white;
+}
+
+/* Responsive für breiteres Chat Widget */
+@media (max-width: 768px) {
+    .chat-widget {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    .welcome-chat {
+        width: 95%;
+        max-width: none;
+    }
+
+    .navigation-boxes {
+        flex-direction: column;
+    }
+}
+
+/* ========================================
+   LOGO PLATZHALTER
+   ======================================== */
+
+.logo-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.logo-placeholder:hover {
+    border-color: #86BC25;
+    background: #f8fdf5;
+    color: #86BC25;
+}
+
+.logo-placeholder svg {
+    color: inherit;
+}
+
+.upload-mode-active .logo-placeholder {
+    border-color: #86BC25;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0%, 100% { border-color: #86BC25; }
+    50% { border-color: #cbd5e1; }
+}
+
+.upload-mode-hint {
+    font-size: 12px;
+    color: #86BC25;
+    padding: 8px 16px;
+    background: #f8fdf5;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+/* ========================================
+   CHATBOT GRÖSSERE SCHRIFT
