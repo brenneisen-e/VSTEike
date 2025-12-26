@@ -6,7 +6,7 @@
 
 // Claude API via Cloudflare Worker (nutze window, um Konflikte mit chat.js zu vermeiden)
 window.CLAUDE_WORKER_URL = window.CLAUDE_WORKER_URL || 'https://vst-claude-api.eike-3e2.workers.dev';
-window.CLAUDE_MODEL = window.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
+window.CLAUDE_MODEL = window.CLAUDE_MODEL || 'claude-sonnet-4-5-20250929';
 
 // Fallback: API-Key aus localStorage
 function getApiToken() {
