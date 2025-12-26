@@ -748,20 +748,37 @@ window.backToLanding = backToLanding;
 // Hier ist der einzige DOMContentLoaded Listener:
 window.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Landing Page wird geladen...');
-    
-    // Show loading animation for 1.5 seconds, then show welcome chat
-    setTimeout(function() {
-        const loadingAnim = document.getElementById('loadingAnimation');
-        const welcomeChat = document.getElementById('welcomeChat');
-        
-        if (loadingAnim) loadingAnim.style.display = 'none';
-        if (welcomeChat) welcomeChat.style.display = 'block';
-        
-        console.log('✅ Welcome Chat angezeigt');
-        
-        // WICHTIG: Initialize landing chat
-        initLandingChat();
-    }, 1500);
+
+    // Animate progress bar
+    const progressBar = document.getElementById('progressBar');
+    const loadingPercent = document.getElementById('loadingPercent');
+    let progress = 0;
+
+    const progressInterval = setInterval(function() {
+        progress += Math.random() * 15 + 5;
+        if (progress > 100) progress = 100;
+
+        if (progressBar) progressBar.style.width = progress + '%';
+        if (loadingPercent) loadingPercent.textContent = Math.round(progress) + '%';
+
+        if (progress >= 100) {
+            clearInterval(progressInterval);
+
+            // Show welcome chat after progress completes
+            setTimeout(function() {
+                const loadingAnim = document.getElementById('loadingAnimation');
+                const welcomeChat = document.getElementById('welcomeChat');
+
+                if (loadingAnim) loadingAnim.style.display = 'none';
+                if (welcomeChat) welcomeChat.style.display = 'block';
+
+                console.log('✅ Welcome Chat angezeigt');
+
+                // WICHTIG: Initialize landing chat
+                initLandingChat();
+            }, 300);
+        }
+    }, 200);
     
     // Setup quick upload
     setupQuickUpload();
