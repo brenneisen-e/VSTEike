@@ -61,6 +61,8 @@ Object.assign(window, {
     toggleSettings: navigation.toggleSettings,
     saveUserName: navigation.saveUserName,
     loadUserName: navigation.loadUserName,
+    openAbrechnungspruefung: navigation.openAbrechnungspruefung,
+    openValidierungProvision: navigation.openValidierungProvision,
 });
 
 // ========================================

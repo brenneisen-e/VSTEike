@@ -99,8 +99,8 @@ export function switchModule(moduleName) {
         tab.classList.toggle('active', tab.dataset.module === moduleName);
     });
 
-    document.querySelectorAll('.module-page').forEach(page => {
-        page.classList.toggle('active', page.id === `${moduleName}-page`);
+    document.querySelectorAll('.module-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${moduleName}Module`);
     });
 
     localStorage.setItem('currentModule', moduleName);

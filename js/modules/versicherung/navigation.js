@@ -26,15 +26,13 @@ export function openDashboard() {
 }
 
 export function backToLanding() {
-    const dashboardPage = document.getElementById('dashboard-page');
-    const landingPage = document.getElementById('landing-page');
-    const sidebar = document.querySelector('.sidebar');
+    const mainApp = document.getElementById('mainApp');
+    const landingPage = document.getElementById('landingPage');
     const risikoModule = document.getElementById('risikoscoring-module');
     const bestandModule = document.getElementById('bestandsuebertragung-module');
 
-    if (dashboardPage) dashboardPage.classList.add('hidden');
-    if (landingPage) landingPage.classList.remove('hidden');
-    if (sidebar) sidebar.classList.remove('visible');
+    if (mainApp) mainApp.style.display = 'none';
+    if (landingPage) landingPage.style.display = 'flex';
     if (risikoModule) risikoModule.style.display = 'none';
     if (bestandModule) bestandModule.style.display = 'none';
 
@@ -204,4 +202,16 @@ function updateUserNameDisplay(name) {
     displayEls.forEach(el => {
         if (el) el.textContent = name;
     });
+}
+
+// ========================================
+// EXTERNAL TOOLS
+// ========================================
+
+export function openAbrechnungspruefung() {
+    window.open('https://billingcheck.pages.dev/', '_blank');
+}
+
+export function openValidierungProvision() {
+    window.open('https://vstboard.pages.dev/provision-validation.html', '_blank');
 }
