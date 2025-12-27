@@ -293,7 +293,7 @@
                                 <line x1="2" y1="10" x2="22" y2="10"></line>
                             </svg>
                             <span class="kpi-label">Kredite</span>
-                            <span class="kpi-value">5</span>
+                            <span class="kpi-value" id="kontenKrediteAnzahl">0</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -301,7 +301,7 @@
                                 <path d="M15 15a7 7 0 0 0-6-6"></path>
                             </svg>
                             <span class="kpi-label">Gesamtforderung</span>
-                            <span class="kpi-value">€350.500</span>
+                            <span class="kpi-value" id="kontenGesamtforderung">€0</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -309,7 +309,7 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <span class="kpi-label">Monatl. Rate</span>
-                            <span class="kpi-value">€2.380</span>
+                            <span class="kpi-value" id="kontenMonatsrate">€0</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -318,7 +318,7 @@
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
                             <span class="kpi-label">Überfällig</span>
-                            <span class="kpi-value">€15.000</span>
+                            <span class="kpi-value" id="kontenUeberfaellig">€0</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -326,7 +326,7 @@
                                 <polyline points="17 6 23 6 23 12"></polyline>
                             </svg>
                             <span class="kpi-label">Rückgabequote</span>
-                            <span class="kpi-value">34%</span>
+                            <span class="kpi-value" id="kontenRueckgabequote">0%</span>
                         </div>
                     </div>
 
@@ -334,19 +334,19 @@
                     <div class="forderungen-compact">
                         <div class="forderung-breakdown-row">
                             <span class="label">Hauptforderung</span>
-                            <span class="value">€110.000</span>
+                            <span class="value" id="kontenHauptforderung">€0</span>
                         </div>
                         <div class="forderung-breakdown-row">
                             <span class="label">Zinsen</span>
-                            <span class="value">€8.450</span>
+                            <span class="value" id="kontenZinsen">€0</span>
                         </div>
                         <div class="forderung-breakdown-row">
                             <span class="label">Mahngebühren</span>
-                            <span class="value">€350</span>
+                            <span class="value" id="kontenMahngebuehren">€0</span>
                         </div>
                         <div class="forderung-breakdown-row">
                             <span class="label">Inkassokosten</span>
-                            <span class="value">€6.200</span>
+                            <span class="value" id="kontenInkassokosten">€0</span>
                         </div>
                     </div>
 
@@ -362,18 +362,18 @@
                         </div>
                         <div class="ea-row">
                             <span class="label">Monatl. Einkommen</span>
-                            <span class="value einkommen">€45.000</span>
+                            <span class="value einkommen" id="kontenEinkommen">€0</span>
                         </div>
                         <div class="ea-row">
                             <span class="label">Monatl. Ausgaben</span>
-                            <span class="value ausgaben">€52.000</span>
+                            <span class="value ausgaben" id="kontenAusgaben">€0</span>
                         </div>
                         <div class="ea-row differenz">
                             <span class="label">Differenz</span>
-                            <span class="value negativ">-€7.000</span>
+                            <span class="value" id="kontenDifferenz">€0</span>
                         </div>
                         <div class="ea-details">
-                            <span class="details-text">Personal: €28.000, Miete: €8.500, Wareneinkauf: €12.000</span>
+                            <span class="details-text" id="kontenAusgabenDetails">-</span>
                         </div>
                     </div>
                 </div>

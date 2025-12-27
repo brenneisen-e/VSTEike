@@ -953,47 +953,50 @@ function updateStammdatenFields(modal, customer) {
 }
 
 function updateKontenFields(modal, customer) {
-    const kontenTab = modal.querySelector('#tab-konten');
-    if (!kontenTab) return;
+    const kontenTab = document.getElementById('tab-konten');
+    if (!kontenTab) {
+        console.warn('[KONTEN] tab-konten element not found');
+        return;
+    }
+
+    console.log('[KONTEN] Updating fields for customer:', customer.name);
 
     const isBezahlt = customer.status === 'Bezahlt';
+    const formatEuro = (val) => '€' + (val || 0).toLocaleString('de-DE');
 
-    // Update KPI values
-    const kpis = kontenTab.querySelectorAll('.finanzen-kpi');
-    if (kpis.length >= 5) {
-        const kpiValues = kpis[0]?.querySelector('.kpi-value');
-        if (kpiValues) kpiValues.textContent = customer.krediteAnzahl || (isBezahlt ? 0 : 1);
-
-        const kpi1 = kpis[1]?.querySelector('.kpi-value');
-        if (kpi1) kpi1.textContent = '€' + (customer.gesamtforderung || 0).toLocaleString('de-DE');
-
-        const kpi2 = kpis[2]?.querySelector('.kpi-value');
-        if (kpi2) kpi2.textContent = '€' + (customer.monatsrate || 0).toLocaleString('de-DE');
-
-        const kpi3 = kpis[3]?.querySelector('.kpi-value');
-        if (kpi3) kpi3.textContent = '€' + (customer.ueberfaellig || 0).toLocaleString('de-DE');
-
-        const kpi4 = kpis[4]?.querySelector('.kpi-value');
-        if (kpi4) kpi4.textContent = (customer.rueckgabequote || 0) + '%';
-
-        if (isBezahlt) {
-            kpis[1]?.querySelector('.kpi-value')?.setAttribute('style', 'color: #22c55e');
-            kpis[3]?.querySelector('.kpi-value')?.setAttribute('style', 'color: #22c55e');
+    // Helper to safely update element
+    const updateEl = (id, value, style = null) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+            if (style) el.style.color = style;
         }
-    }
+        return el;
+    };
+
+    // Update KPI values using IDs
+    updateEl('kontenKrediteAnzahl', customer.krediteAnzahl || (isBezahlt ? 0 : 1));
+    updateEl('kontenGesamtforderung', formatEuro(customer.gesamtforderung), isBezahlt ? '#22c55e' : null);
+    updateEl('kontenMonatsrate', formatEuro(customer.monatsrate));
+    updateEl('kontenUeberfaellig', formatEuro(customer.ueberfaellig), isBezahlt ? '#22c55e' : null);
+    updateEl('kontenRueckgabequote', (customer.rueckgabequote || 0) + '%');
 
     // Update Forderungen breakdown
-    const forderungRows = kontenTab.querySelectorAll('.forderung-breakdown-row');
-    if (forderungRows.length >= 4) {
-        const v0 = forderungRows[0]?.querySelector('.value');
-        if (v0) v0.textContent = '€' + (customer.hauptforderung || 0).toLocaleString('de-DE');
-        const v1 = forderungRows[1]?.querySelector('.value');
-        if (v1) v1.textContent = '€' + (customer.zinsen || 0).toLocaleString('de-DE');
-        const v2 = forderungRows[2]?.querySelector('.value');
-        if (v2) v2.textContent = '€' + (customer.mahngebuehren || 0).toLocaleString('de-DE');
-        const v3 = forderungRows[3]?.querySelector('.value');
-        if (v3) v3.textContent = '€' + (customer.inkassokosten || 0).toLocaleString('de-DE');
-    }
+    updateEl('kontenHauptforderung', formatEuro(customer.hauptforderung));
+    updateEl('kontenZinsen', formatEuro(customer.zinsen));
+    updateEl('kontenMahngebuehren', formatEuro(customer.mahngebuehren));
+    updateEl('kontenInkassokosten', formatEuro(customer.inkassokosten));
+
+    // Update Einkommen & Ausgaben
+    const einkommen = customer.einkommenMonatlich || 0;
+    const ausgaben = customer.ausgabenMonatlich || 0;
+    const differenz = einkommen - ausgaben;
+
+    updateEl('kontenEinkommen', formatEuro(einkommen));
+    updateEl('kontenAusgaben', formatEuro(ausgaben));
+    updateEl('kontenDifferenz', (differenz >= 0 ? '' : '-') + formatEuro(Math.abs(differenz)),
+        differenz >= 0 ? '#22c55e' : '#ef4444');
+    updateEl('kontenAusgabenDetails', customer.ausgabenDetails || '-');
 
     // Update credit product info
     const produkte = customer.produkte || [];
@@ -1244,16 +1247,23 @@ function updateKiAnalyseFields(modal, customer) {
 }
 
 function updateOpenFinanceFields(modal, customer) {
-    const openfinanceTab = modal.querySelector('#tab-openfinance');
-    if (!openfinanceTab || !customer.openFinance) {
-        console.log('Open Finance tab not found or no openFinance data');
+    const openfinanceTab = document.getElementById('tab-openfinance');
+    if (!openfinanceTab) {
+        console.warn('[OPENFINANCE] tab-openfinance element not found');
         return;
     }
 
+    if (!customer.openFinance) {
+        console.warn('[OPENFINANCE] No openFinance data for customer:', customer.name);
+        return;
+    }
+
+    console.log('[OPENFINANCE] Updating fields for customer:', customer.name, customer.openFinance);
+
     const of = customer.openFinance;
 
-    // Update Consent Grid
-    const consentGrid = openfinanceTab.querySelector('#consentGrid');
+    // Update Consent Grid - use document.getElementById for reliability
+    const consentGrid = document.getElementById('consentGrid');
     if (consentGrid && of.consent) {
         const psd2Status = of.consent.psd2 ? 'active' : 'inactive';
         const versicherungenStatus = of.consent.versicherungen ? 'active' : 'pending';
@@ -1290,8 +1300,8 @@ function updateOpenFinanceFields(modal, customer) {
         `;
     }
 
-    // Update Externe Konten table
-    const externeKontenBody = openfinanceTab.querySelector('#externeKontenBody');
+    // Update Externe Konten table - use document.getElementById for reliability
+    const externeKontenBody = document.getElementById('externeKontenBody');
     if (externeKontenBody && of.externeKonten) {
         if (of.externeKonten.length === 0) {
             externeKontenBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Keine externen Konten gefunden</td></tr>';
@@ -1312,8 +1322,8 @@ function updateOpenFinanceFields(modal, customer) {
         }
     }
 
-    // Update Externe Versicherungen table
-    const externeVersicherungenBody = openfinanceTab.querySelector('#externeVersicherungenBody');
+    // Update Externe Versicherungen table - use document.getElementById for reliability
+    const externeVersicherungenBody = document.getElementById('externeVersicherungenBody');
     if (externeVersicherungenBody && of.externeVersicherungen) {
         if (of.externeVersicherungen.length === 0) {
             externeVersicherungenBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Keine externen Versicherungen erkannt (kein Consent oder keine Daten)</td></tr>';
@@ -1432,91 +1442,84 @@ function updateHaushaltGuvTab(customer) {
 
 // Update Haushaltsrechnung tab fields (for Privat customers)
 function updateHaushaltFields(modal, customer) {
-    const haushaltTab = modal.querySelector('#tab-haushalt');
-    if (!haushaltTab || !customer.haushalt) {
-        console.log('Haushalt tab not found or no haushalt data');
+    // Use document.getElementById for more reliable element lookup
+    const haushaltTab = document.getElementById('tab-haushalt');
+
+    if (!haushaltTab) {
+        console.warn('[HAUSHALT] tab-haushalt element not found');
         return;
     }
+
+    if (!customer.haushalt) {
+        console.warn('[HAUSHALT] No haushalt data for customer:', customer.name);
+        return;
+    }
+
+    console.log('[HAUSHALT] Updating fields for customer:', customer.name, customer.haushalt);
 
     const h = customer.haushalt;
     const isGewerbe = customer.type === 'Gewerbe';
 
     // Calculate totals
-    const einnahmenGesamt = (h.einnahmen.gehalt || 0) + (h.einnahmen.neben || 0) + (h.einnahmen.sozial || 0) + (h.einnahmen.sonstige || 0);
-    const fixkostenGesamt = (h.fixkosten.miete || 0) + (h.fixkosten.nebenkosten || 0) + (h.fixkosten.versicherung || 0) + (h.fixkosten.kredite || 0) + (h.fixkosten.abos || 0);
-    const lebenshaltungGesamt = (h.lebenshaltung.essen || 0) + (h.lebenshaltung.mobilitaet || 0) + (h.lebenshaltung.gesundheit || 0) + (h.lebenshaltung.freizeit || 0) + (h.lebenshaltung.sonstige || 0);
+    const einnahmenGesamt = (h.einnahmen?.gehalt || 0) + (h.einnahmen?.neben || 0) + (h.einnahmen?.sozial || 0) + (h.einnahmen?.sonstige || 0);
+    const fixkostenGesamt = (h.fixkosten?.miete || 0) + (h.fixkosten?.nebenkosten || 0) + (h.fixkosten?.versicherung || 0) + (h.fixkosten?.kredite || 0) + (h.fixkosten?.abos || 0);
+    const lebenshaltungGesamt = (h.lebenshaltung?.essen || 0) + (h.lebenshaltung?.mobilitaet || 0) + (h.lebenshaltung?.gesundheit || 0) + (h.lebenshaltung?.freizeit || 0) + (h.lebenshaltung?.sonstige || 0);
     const ausgabenGesamt = fixkostenGesamt + lebenshaltungGesamt;
     const freiVerfuegbar = einnahmenGesamt - ausgabenGesamt;
     const sparquote = einnahmenGesamt > 0 ? Math.round((freiVerfuegbar / einnahmenGesamt) * 100) : 0;
 
+    console.log('[HAUSHALT] Calculated totals:', { einnahmenGesamt, ausgabenGesamt, freiVerfuegbar, sparquote });
+
     // Helper to format currency
     const formatEuro = (val) => '€' + val.toLocaleString('de-DE');
 
-    // Update summary cards
-    const summaryEinnahmen = haushaltTab.querySelector('#haushaltEinnahmen');
-    const summaryAusgaben = haushaltTab.querySelector('#haushaltAusgaben');
-    const summaryVerfuegbar = haushaltTab.querySelector('#haushaltVerfuegbar');
-    const summarySparquote = haushaltTab.querySelector('#haushaltSparquote');
+    // Helper to safely update element text
+    const updateEl = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+        } else {
+            console.warn(`[HAUSHALT] Element #${id} not found`);
+        }
+        return el;
+    };
 
-    if (summaryEinnahmen) summaryEinnahmen.textContent = formatEuro(einnahmenGesamt);
-    if (summaryAusgaben) summaryAusgaben.textContent = formatEuro(ausgabenGesamt);
-    if (summaryVerfuegbar) {
-        summaryVerfuegbar.textContent = formatEuro(freiVerfuegbar);
-        summaryVerfuegbar.style.color = freiVerfuegbar >= 0 ? '#22c55e' : '#ef4444';
-    }
-    if (summarySparquote) {
-        summarySparquote.textContent = sparquote + '%';
-        summarySparquote.style.color = sparquote >= 10 ? '#22c55e' : (sparquote >= 0 ? '#f59e0b' : '#ef4444');
-    }
+    // Update summary cards
+    updateEl('haushaltEinnahmen', formatEuro(einnahmenGesamt));
+    updateEl('haushaltAusgaben', formatEuro(ausgabenGesamt));
+
+    const verfuegbarEl = updateEl('haushaltVerfuegbar', formatEuro(freiVerfuegbar));
+    if (verfuegbarEl) verfuegbarEl.style.color = freiVerfuegbar >= 0 ? '#22c55e' : '#ef4444';
+
+    const sparquoteEl = updateEl('haushaltSparquote', sparquote + '%');
+    if (sparquoteEl) sparquoteEl.style.color = sparquote >= 10 ? '#22c55e' : (sparquote >= 0 ? '#f59e0b' : '#ef4444');
 
     // Update summary detail text
-    const einnahmenDetail = haushaltTab.querySelector('#haushaltEinnahmenDetail');
-    const ausgabenDetail = haushaltTab.querySelector('#haushaltAusgabenDetail');
-    if (einnahmenDetail) einnahmenDetail.textContent = isGewerbe ? 'Betriebseinnahmen' : 'Nettoeinkommen';
-    if (ausgabenDetail) ausgabenDetail.textContent = 'Fixkosten + Lebenshaltung';
+    updateEl('haushaltEinnahmenDetail', isGewerbe ? 'Betriebseinnahmen' : 'Nettoeinkommen');
+    updateEl('haushaltAusgabenDetail', 'Fixkosten + Lebenshaltung');
 
-    // Update Einnahmen breakdown (with null checks)
-    const einnahmenGehaltEl = haushaltTab.querySelector('#einnahmenGehalt');
-    const einnahmenNebenEl = haushaltTab.querySelector('#einnahmenNeben');
-    const einnahmenSozialEl = haushaltTab.querySelector('#einnahmenSozial');
-    const einnahmenSonstigeEl = haushaltTab.querySelector('#einnahmenSonstige');
-    const einnahmenGesamtEl = haushaltTab.querySelector('#einnahmenGesamt');
+    // Update Einnahmen breakdown
+    updateEl('einnahmenGehalt', formatEuro(h.einnahmen?.gehalt || 0));
+    updateEl('einnahmenNeben', formatEuro(h.einnahmen?.neben || 0));
+    updateEl('einnahmenSozial', formatEuro(h.einnahmen?.sozial || 0));
+    updateEl('einnahmenSonstige', formatEuro(h.einnahmen?.sonstige || 0));
+    updateEl('einnahmenGesamt', formatEuro(einnahmenGesamt));
 
-    if (einnahmenGehaltEl) einnahmenGehaltEl.textContent = formatEuro(h.einnahmen.gehalt || 0);
-    if (einnahmenNebenEl) einnahmenNebenEl.textContent = formatEuro(h.einnahmen.neben || 0);
-    if (einnahmenSozialEl) einnahmenSozialEl.textContent = formatEuro(h.einnahmen.sozial || 0);
-    if (einnahmenSonstigeEl) einnahmenSonstigeEl.textContent = formatEuro(h.einnahmen.sonstige || 0);
-    if (einnahmenGesamtEl) einnahmenGesamtEl.textContent = formatEuro(einnahmenGesamt);
+    // Update Fixkosten breakdown
+    updateEl('fixkostenMiete', formatEuro(h.fixkosten?.miete || 0));
+    updateEl('fixkostenNebenkosten', formatEuro(h.fixkosten?.nebenkosten || 0));
+    updateEl('fixkostenVersicherung', formatEuro(h.fixkosten?.versicherung || 0));
+    updateEl('fixkostenKredite', formatEuro(h.fixkosten?.kredite || 0));
+    updateEl('fixkostenAbos', formatEuro(h.fixkosten?.abos || 0));
+    updateEl('fixkostenGesamt', formatEuro(fixkostenGesamt));
 
-    // Update Fixkosten breakdown (with null checks)
-    const fixkostenMieteEl = haushaltTab.querySelector('#fixkostenMiete');
-    const fixkostenNebenkostenEl = haushaltTab.querySelector('#fixkostenNebenkosten');
-    const fixkostenVersicherungEl = haushaltTab.querySelector('#fixkostenVersicherung');
-    const fixkostenKrediteEl = haushaltTab.querySelector('#fixkostenKredite');
-    const fixkostenAbosEl = haushaltTab.querySelector('#fixkostenAbos');
-    const fixkostenGesamtEl = haushaltTab.querySelector('#fixkostenGesamt');
-
-    if (fixkostenMieteEl) fixkostenMieteEl.textContent = formatEuro(h.fixkosten.miete || 0);
-    if (fixkostenNebenkostenEl) fixkostenNebenkostenEl.textContent = formatEuro(h.fixkosten.nebenkosten || 0);
-    if (fixkostenVersicherungEl) fixkostenVersicherungEl.textContent = formatEuro(h.fixkosten.versicherung || 0);
-    if (fixkostenKrediteEl) fixkostenKrediteEl.textContent = formatEuro(h.fixkosten.kredite || 0);
-    if (fixkostenAbosEl) fixkostenAbosEl.textContent = formatEuro(h.fixkosten.abos || 0);
-    if (fixkostenGesamtEl) fixkostenGesamtEl.textContent = formatEuro(fixkostenGesamt);
-
-    // Update Lebenshaltung breakdown (with null checks)
-    const lebenshaltungEssenEl = haushaltTab.querySelector('#lebenshaltungEssen');
-    const lebenshaltungMobilitaetEl = haushaltTab.querySelector('#lebenshaltungMobilitaet');
-    const lebenshaltungGesundheitEl = haushaltTab.querySelector('#lebenshaltungGesundheit');
-    const lebenshaltungFreizeitEl = haushaltTab.querySelector('#lebenshaltungFreizeit');
-    const lebenshaltungSonstigeEl = haushaltTab.querySelector('#lebenshaltungSonstige');
-    const lebenshaltungGesamtEl = haushaltTab.querySelector('#lebenshaltungGesamt');
-
-    if (lebenshaltungEssenEl) lebenshaltungEssenEl.textContent = formatEuro(h.lebenshaltung.essen || 0);
-    if (lebenshaltungMobilitaetEl) lebenshaltungMobilitaetEl.textContent = formatEuro(h.lebenshaltung.mobilitaet || 0);
-    if (lebenshaltungGesundheitEl) lebenshaltungGesundheitEl.textContent = formatEuro(h.lebenshaltung.gesundheit || 0);
-    if (lebenshaltungFreizeitEl) lebenshaltungFreizeitEl.textContent = formatEuro(h.lebenshaltung.freizeit || 0);
-    if (lebenshaltungSonstigeEl) lebenshaltungSonstigeEl.textContent = formatEuro(h.lebenshaltung.sonstige || 0);
-    if (lebenshaltungGesamtEl) lebenshaltungGesamtEl.textContent = formatEuro(lebenshaltungGesamt);
+    // Update Lebenshaltung breakdown
+    updateEl('lebenshaltungEssen', formatEuro(h.lebenshaltung?.essen || 0));
+    updateEl('lebenshaltungMobilitaet', formatEuro(h.lebenshaltung?.mobilitaet || 0));
+    updateEl('lebenshaltungGesundheit', formatEuro(h.lebenshaltung?.gesundheit || 0));
+    updateEl('lebenshaltungFreizeit', formatEuro(h.lebenshaltung?.freizeit || 0));
+    updateEl('lebenshaltungSonstige', formatEuro(h.lebenshaltung?.sonstige || 0));
+    updateEl('lebenshaltungGesamt', formatEuro(lebenshaltungGesamt));
 
     // Update Zahlungsfähigkeitsbewertung
     const assessmentFill = haushaltTab.querySelector('#assessmentFill');
