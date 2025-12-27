@@ -7,38 +7,24 @@
 // DASHBOARD NAVIGATION
 // ========================================
 
-export function openDashboard() {
-    const dashboardPage = document.getElementById('dashboard-page');
-    const landingPage = document.getElementById('landing-page');
-    const sidebar = document.querySelector('.sidebar');
-
-    if (landingPage) landingPage.classList.add('hidden');
-    if (dashboardPage) dashboardPage.classList.remove('hidden');
-    if (sidebar) sidebar.classList.add('visible');
-
-    setNavigationEnabled(true);
-    document.body.classList.add('dashboard-active');
-
-    window.initCharts?.();
-    window.initChatBot?.();
-    window.setupChatManually?.();
-
-}
+// Note: openDashboard is exported from data.js (uses landingPage, mainApp correctly)
+// This function is kept for compatibility but data.js version is preferred
 
 export function backToLanding() {
     const mainApp = document.getElementById('mainApp');
     const landingPage = document.getElementById('landingPage');
-    const risikoModule = document.getElementById('risikoscoring-module');
-    const bestandModule = document.getElementById('bestandsuebertragung-module');
+    const risikoModule = document.getElementById('risikoscoringModule');
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    const agenturOverview = document.getElementById('agenturOverview');
 
     if (mainApp) mainApp.style.display = 'none';
     if (landingPage) landingPage.style.display = 'flex';
     if (risikoModule) risikoModule.style.display = 'none';
     if (bestandModule) bestandModule.style.display = 'none';
+    if (agenturOverview) agenturOverview.style.display = 'none';
 
     setNavigationEnabled(false);
     document.body.classList.remove('dashboard-active');
-
 }
 
 export function setNavigationEnabled(enabled) {
@@ -59,20 +45,24 @@ export function setNavigationEnabled(enabled) {
 // ========================================
 
 export function openAgenturView() {
-    document.getElementById('main-dashboard')?.classList.add('hidden');
-    document.getElementById('agentur-overview-page')?.classList.remove('hidden');
+    const mainApp = document.getElementById('mainApp');
+    const agenturOverview = document.getElementById('agenturOverview');
+
+    if (mainApp) mainApp.style.display = 'none';
+    if (agenturOverview) agenturOverview.style.display = 'block';
 
     const activeAgentId = window.getActiveAgentId?.();
     if (activeAgentId && typeof window.showAgenturOverview === 'function') {
         window.showAgenturOverview(activeAgentId);
     }
-
 }
 
 export function backToGesamtsicht() {
-    document.getElementById('agentur-overview-page')?.classList.add('hidden');
-    document.getElementById('main-dashboard')?.classList.remove('hidden');
+    const mainApp = document.getElementById('mainApp');
+    const agenturOverview = document.getElementById('agenturOverview');
 
+    if (agenturOverview) agenturOverview.style.display = 'none';
+    if (mainApp) mainApp.style.display = 'block';
 }
 
 // ========================================
@@ -80,12 +70,12 @@ export function backToGesamtsicht() {
 // ========================================
 
 export async function openRisikoscoring() {
-    const risikoModule = document.getElementById('risikoscoring-module');
-    const mainDashboard = document.getElementById('main-dashboard');
-    const agenturPage = document.getElementById('agentur-overview-page');
+    const risikoModule = document.getElementById('risikoscoringModule');
+    const mainApp = document.getElementById('mainApp');
+    const agenturOverview = document.getElementById('agenturOverview');
 
-    if (mainDashboard) mainDashboard.classList.add('hidden');
-    if (agenturPage) agenturPage.classList.add('hidden');
+    if (mainApp) mainApp.style.display = 'none';
+    if (agenturOverview) agenturOverview.style.display = 'none';
 
     if (risikoModule) {
         if (!risikoModule.innerHTML.trim() || risikoModule.innerHTML.includes('Lädt')) {
@@ -107,16 +97,14 @@ export async function openRisikoscoring() {
 
         risikoModule.style.display = 'block';
     }
-
 }
 
 export function closeRisikoscoring() {
-    const risikoModule = document.getElementById('risikoscoring-module');
-    const mainDashboard = document.getElementById('main-dashboard');
+    const risikoModule = document.getElementById('risikoscoringModule');
+    const mainApp = document.getElementById('mainApp');
 
     if (risikoModule) risikoModule.style.display = 'none';
-    if (mainDashboard) mainDashboard.classList.remove('hidden');
-
+    if (mainApp) mainApp.style.display = 'block';
 }
 
 // ========================================
@@ -124,13 +112,13 @@ export function closeRisikoscoring() {
 // ========================================
 
 export async function openBestandsuebertragung() {
-    const bestandModule = document.getElementById('bestandsuebertragung-module');
-    const mainDashboard = document.getElementById('main-dashboard');
-    const agenturPage = document.getElementById('agentur-overview-page');
-    const risikoModule = document.getElementById('risikoscoring-module');
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    const mainApp = document.getElementById('mainApp');
+    const agenturOverview = document.getElementById('agenturOverview');
+    const risikoModule = document.getElementById('risikoscoringModule');
 
-    if (mainDashboard) mainDashboard.classList.add('hidden');
-    if (agenturPage) agenturPage.classList.add('hidden');
+    if (mainApp) mainApp.style.display = 'none';
+    if (agenturOverview) agenturOverview.style.display = 'none';
     if (risikoModule) risikoModule.style.display = 'none';
 
     if (bestandModule) {
@@ -153,16 +141,14 @@ export async function openBestandsuebertragung() {
 
         bestandModule.style.display = 'block';
     }
-
 }
 
 export function closeBestandsuebertragung() {
-    const bestandModule = document.getElementById('bestandsuebertragung-module');
-    const mainDashboard = document.getElementById('main-dashboard');
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    const mainApp = document.getElementById('mainApp');
 
     if (bestandModule) bestandModule.style.display = 'none';
-    if (mainDashboard) mainDashboard.classList.remove('hidden');
-
+    if (mainApp) mainApp.style.display = 'block';
 }
 
 // ========================================
@@ -184,7 +170,6 @@ export function saveUserName() {
 
         const settingsPanel = document.getElementById('settingsPanel');
         settingsPanel?.classList.remove('open');
-
     }
 }
 
