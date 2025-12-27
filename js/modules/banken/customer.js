@@ -2133,6 +2133,271 @@ function formatRelativeTime(timestamp) {
     return date.toLocaleDateString('de-DE');
 }
 
+// ========================================
+// AI SUMMARY
+// ========================================
+
+export function showAiSummary(customerId) {
+    window.showNotification?.('KI-Zusammenfassung wird erstellt...', 'info');
+
+    // Simulate AI loading
+    setTimeout(() => {
+        const summary = `
+            <div class="ai-summary-modal">
+                <div class="ai-summary-header">
+                    <div class="ai-summary-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span>KI-Zusammenfassung für ${customerId}</span>
+                    </div>
+                    <button onclick="this.closest('.ai-summary-modal').remove()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ai-summary-content">
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Kundenprofil
+                    </h4>
+                    <p>Der Kunde zeigt eine <strong>moderate Zahlungsbereitschaft</strong> (Willingness: 45%) bei <strong>eingeschränkter Zahlungsfähigkeit</strong> (Ability: 35%). Die Kommunikation war bisher konstruktiv.</p>
+
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Aktivitäten (letzte 30 Tage)
+                    </h4>
+                    <ul>
+                        <li>3 Telefonkontakte (2 erfolgreich, 1 nicht erreicht)</li>
+                        <li>1 Zahlungsvereinbarung getroffen</li>
+                        <li>Teilzahlung i.H.v. €1.200 eingegangen</li>
+                    </ul>
+
+                    <h4>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Empfohlene nächste Schritte
+                    </h4>
+                    <ol>
+                        <li><strong>Telefonat führen</strong> - Zahlungsvereinbarung nachfassen</li>
+                        <li><strong>Ratenzahlung prüfen</strong> - Kunde hat Interesse signalisiert</li>
+                        <li><strong>Dokumentation aktualisieren</strong> - Finanzielle Situation erfassen</li>
+                    </ol>
+                </div>
+            </div>
+        `;
+
+        // Add modal to page
+        const modalContainer = document.createElement('div');
+        modalContainer.className = 'ai-summary-overlay';
+        modalContainer.innerHTML = summary;
+        modalContainer.onclick = (e) => {
+            if (e.target === modalContainer) modalContainer.remove();
+        };
+        document.body.appendChild(modalContainer);
+    }, 1500);
+}
+
+// ========================================
+// OPEN CUSTOMER CRM DIRECTLY
+// ========================================
+
+export function openCustomerDetailCRM(customerId) {
+    // Use the full CRM profile instead of the modal
+    openCrmProfile(customerId);
+}
+
+// ========================================
+// WRITE OFF CASE
+// ========================================
+
+export function writeOffCase() {
+    window.showNotification?.('Fall zur Abschreibung vorgemerkt', 'warning');
+    closeCustomerDetail();
+}
+
+// ========================================
+// ACTIVITY ELEMENT CREATION
+// ========================================
+
+export function createActivityElement(activity) {
+    const div = document.createElement('div');
+    div.className = `komm-item ${activity.type} custom-activity`;
+    div.dataset.activityId = activity.id;
+
+    const iconMap = {
+        'notiz': '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>',
+        'anruf': '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>',
+        'email': '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>',
+        'brief': '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>',
+        'termin': '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>',
+        'aufgabe': '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'
+    };
+
+    const date = new Date(activity.timestamp);
+    const dateStr = date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+
+    div.innerHTML = `
+        <div class="komm-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                ${iconMap[activity.type] || iconMap['notiz']}
+            </svg>
+        </div>
+        <div class="komm-content">
+            <div class="komm-header">
+                <span class="komm-type">${activity.typeLabel || activity.type}</span>
+                <span class="komm-date">${dateStr}, ${timeStr}</span>
+            </div>
+            <div class="komm-body">
+                <p>${activity.text}</p>
+            </div>
+            <div class="komm-meta">
+                <span class="meta-item">Bearbeiter: ${activity.author}</span>
+                <button class="btn-delete-activity" onclick="deleteActivity('${activity.id}')" title="Löschen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `;
+
+    return div;
+}
+
+// ========================================
+// ACTIVITY MODAL STYLES
+// ========================================
+
+export function addActivityModalStyles() {
+    if (document.getElementById('activity-modal-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'activity-modal-styles';
+    styles.textContent = `
+        .activity-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        .activity-modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .activity-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .activity-modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .activity-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: #64748b;
+        }
+        .activity-modal-close:hover { color: #1e293b; }
+        .activity-modal-body {
+            padding: 20px;
+        }
+        .activity-form-group {
+            margin-bottom: 16px;
+        }
+        .activity-form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .activity-form-group select,
+        .activity-form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .activity-form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .activity-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .activity-cancel-btn {
+            padding: 10px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .activity-submit-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .activity-submit-btn:hover { background: #2563eb; }
+        .btn-delete-activity {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .btn-delete-activity:hover { color: #ef4444; }
+    `;
+    document.head.appendChild(styles);
+}
+
 // Export current customer ID getter/setter
 export const getCurrentCustomerId = () => currentCustomerId;
 export const setCurrentCustomerId = (id) => { currentCustomerId = id; };

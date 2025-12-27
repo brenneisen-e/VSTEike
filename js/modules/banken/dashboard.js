@@ -679,3 +679,85 @@ export function openCrmFromModal(customerId) {
     window.closeCrmProfile?.();
     window.openCrmProfile?.(customerId);
 }
+
+// ========================================
+// LETTER MODAL
+// ========================================
+
+export function closeLetterModal() {
+    const overlay = document.querySelector('.letter-modal-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+export function printLetter(letterId) {
+    window.showNotification?.('Dokument wird gedruckt...', 'info');
+    // In a real app, this would trigger print
+    console.log('Printing letter:', letterId);
+}
+
+// ========================================
+// DASHBOARD SUMMARY EXPORT
+// ========================================
+
+export function downloadDashboardSummary() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    const timeStr = now.toLocaleTimeString('de-DE', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    let summary = `
+################################################################################
+##              COLLECTIONS MANAGEMENT - DASHBOARD ZUSAMMENFASSUNG            ##
+################################################################################
+
+Erstellt am: ${dateStr} um ${timeStr} Uhr
+
+================================================================================
+                           ÜBERSICHT
+================================================================================
+
+Das Dashboard zeigt den aktuellen Stand des Forderungsmanagements.
+
+Hauptbereiche:
+- Kundensegmentierung nach Willingness/Ability Matrix
+- Portfolio-Entwicklung über Zeit
+- Neue Fälle und Zahlungseingänge
+- Kundenliste mit Bewertungen und Aktionen
+
+================================================================================
+                        NAVIGATIONSSTRUKTUR
+================================================================================
+
+1. MODUL-TABS: Versicherung | Banken | Asset Manager
+2. NAVIGATIONS-KACHELN: Kundensegmentierung | Bestandskunden | Leads | Prozesse
+3. KPI-BOXEN: Gesamtkredite | Forderung | Schulden/Kunde | Aufgaben
+4. AKTIONS-LEISTE: Dokument scannen | Bulk-Import | Zusammenfassung
+5. CHART-BEREICH: Willingness/Ability Matrix | Portfolio-Entwicklung
+6. INFO-KARTEN: Neue Fälle | Zahlungseingänge
+7. KUNDENLISTE: Scrollbare Tabelle mit Details
+
+================================================================================
+`;
+
+    // Create and download file
+    const blob = new Blob([summary], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard_zusammenfassung_${now.toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    window.showNotification?.('Dashboard-Zusammenfassung heruntergeladen', 'success');
+}
