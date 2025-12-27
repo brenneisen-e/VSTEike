@@ -450,8 +450,19 @@ const customerDatabase = {
     'K-2024-8847': {
         name: 'Müller, Hans', type: 'Privat', rechtsform: 'Privatperson',
         adresse: 'Waldstraße 22, 38100 Braunschweig', telefon: '+49 531 998877',
-        email: 'h.mueller@email.de', ansprechpartner: 'Hans Müller',
-        branche: 'Angestellter', restschuld: 4230, status: 'Offen',
+        telefonMobil: '+49 170 5556677', email: 'h.mueller@email.de', ansprechpartner: 'Hans Müller',
+        branche: 'Angestellter (Maschinenbau)', restschuld: 4230, status: 'Offen',
+        // Extended Stammdaten
+        kundeSeit: '15.08.2022', kundenbetreuer: 'Eike Brenneisen',
+        iban: 'DE45 2505 0000 0152 3344 55', bic: 'NOLADE2HXXX', kreditinstitut: 'Nord/LB',
+        sepaMandat: 'Aktiv (seit 15.08.2022)', internesRating: 'B+', schufaScore: '92 / 100',
+        letztePruefung: '01.12.2025', zahlungsmoral: 'Gut', stage: 'Stage 1',
+        // Kreditdetails
+        vertragsart: 'Ratenkredit', vertragsnummer: 'RK-2024-7782',
+        ursprungsbetrag: 8000, zinssatz: '5,49% p.a.', vertragsbeginn: '01.03.2024',
+        vertragslaufzeit: '48 Monate', restlaufzeit: '27 Monate',
+        sicherheiten: 'Keine', sicherheitenwert: 0,
+        // KPIs
         krediteAnzahl: 1, gesamtforderung: 4230, monatsrate: 180, ueberfaellig: 180,
         rueckgabequote: 0, hauptforderung: 4000, zinsen: 180, mahngebuehren: 50, inkassokosten: 0,
         dpd: 18, willingness: 85, ability: 70, segment: 'prioritaet',
@@ -462,15 +473,26 @@ const customerDatabase = {
         einkommenMonatlich: 2850, ausgabenMonatlich: 2680, ausgabenDetails: 'Miete: €780, Lebensmittel: €320, Auto: €380, Versicherungen: €190, Kinder: €450, Sonstiges: €560',
         kernproblem: 'Neuer Fall - Dezember-Rate (€180) 18 Tage überfällig. Angestellter mit stabilem Einkommen €2.850. Nach Telefonat: Zahlung vergessen wegen Umzug. Zahlungszusage für 23.12.',
         workflowStatus: 'Zahlungszusage', mahnstufe: 1,
-        // Transaktionshistorie für diesen Kunden
+        // Erweiterte Transaktionshistorie
         transaktionen: [
             { datum: '01.12.2025', beschreibung: 'Monatliche Rate - Fällig', betrag: -180, status: 'ueberfaellig' },
             { datum: '01.11.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' },
             { datum: '01.10.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' },
-            { datum: '01.09.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' }
+            { datum: '01.09.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' },
+            { datum: '01.08.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' },
+            { datum: '01.07.2025', beschreibung: 'Monatliche Rate', betrag: 180, status: 'gebucht' }
         ],
         produkte: [
-            { typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, status: '18 DPD', badge: 'warning' }
+            {
+                typ: 'Ratenkredit', nummer: 'RK-2024-7782', saldo: 4230, limit: 8000,
+                status: '18 DPD', badge: 'warning', rate: 180,
+                transaktionen: [
+                    { datum: '01.12.2025', beschreibung: 'Monatliche Rate - Fällig', betrag: -180, saldo: 4230 },
+                    { datum: '01.11.2025', beschreibung: 'Monatliche Rate', betrag: -180, saldo: 4410 },
+                    { datum: '01.10.2025', beschreibung: 'Monatliche Rate', betrag: -180, saldo: 4590 },
+                    { datum: '01.09.2025', beschreibung: 'Monatliche Rate', betrag: -180, saldo: 4770 }
+                ]
+            }
         ],
         // Haushaltsrechnung (Privat - Angestellter)
         haushalt: {
@@ -490,8 +512,26 @@ const customerDatabase = {
     'K-2024-8846': {
         name: 'Schmidt GmbH', type: 'Gewerbe', rechtsform: 'GmbH',
         adresse: 'Berliner Allee 100, 30175 Hannover', telefon: '+49 511 665544',
-        email: 'info@schmidt-gmbh.de', ansprechpartner: 'Michael Schmidt',
-        branche: 'IT-Dienstleistungen', restschuld: 12890, status: 'Offen',
+        telefonMobil: '+49 171 4455667', email: 'info@schmidt-gmbh.de', ansprechpartner: 'Michael Schmidt',
+        branche: 'IT-Dienstleistungen (NACE 62.01)', restschuld: 12890, status: 'Offen',
+        // Extended Stammdaten
+        handelsregister: 'HRB 45678 Hannover', ustId: 'DE987654321',
+        gruendungsjahr: '2015', mitarbeiter: '28 (Stand: 2024)', jahresumsatz: 1850000,
+        kundeSeit: '01.03.2019', kundenbetreuer: 'Eike Brenneisen',
+        iban: 'DE78 2505 0000 0102 8833 44', bic: 'NOLADE2HXXX', kreditinstitut: 'Nord/LB',
+        sepaMandat: 'Aktiv (seit 01.03.2019)', internesRating: 'B', creditreformIndex: '285 (mittleres Risiko)',
+        schufaScore: '85 / 100', letztePruefung: '15.12.2025', zahlungsmoral: 'Befriedigend',
+        // GuV-Daten für Gewerbekunden
+        guv: {
+            umsatz: 1850000, aufwendungen: 1720000, gewinn: 130000, ebitda: 12,
+            vorjahresgewinn: 95000,
+            ertraege: { umsatzerloese: 1850000, sonstigeErtraege: 45000 },
+            aufwendungenDetails: {
+                personal: 820000, miete: 96000, wareneinkauf: 0,
+                abschreibungen: 65000, sonstige: 739000
+            },
+            liquiditaet: { kontostand: 45000, monatlicheEinnahmen: 154000, monatlicheAusgaben: 143000 }
+        },
         krediteAnzahl: 2, gesamtforderung: 12890, monatsrate: 650, ueberfaellig: 650,
         rueckgabequote: 0, hauptforderung: 12000, zinsen: 640, mahngebuehren: 150, inkassokosten: 100,
         dpd: 18, willingness: 75, ability: 80, segment: 'prioritaet',
@@ -919,37 +959,108 @@ export function showCustomerTab(tabName) {
 }
 
 function updateStammdatenFields(modal, customer) {
-    // Map label text to customer data fields
+    console.log('[STAMMDATEN] Updating fields for customer:', customer.name);
+
+    const formatEuro = (val) => val != null ? '€' + val.toLocaleString('de-DE') : '-';
+    const formatDate = (val) => val || '-';
+
+    // Comprehensive label to customer data mapping
     const labelMapping = {
+        // Unternehmensdaten / Personendaten
         'Firmenname:': customer.name,
+        'Name:': customer.ansprechpartner || customer.name,
         'Rechtsform:': customer.rechtsform,
+        'Handelsregister:': customer.handelsregister || '-',
+        'USt-ID:': customer.ustId || '-',
         'Branche:': customer.branche,
-        'Kundentyp:': customer.type,
+        'Gründungsjahr:': customer.gruendungsjahr || '-',
+        'Mitarbeiter:': customer.mitarbeiter || '-',
+        'Jahresumsatz:': customer.jahresumsatz ? formatEuro(customer.jahresumsatz) : '-',
+        'Kundentyp:': customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde',
+        'Kunde seit:': customer.kundeSeit || '-',
+        'Kundenbetreuer:': customer.kundenbetreuer || 'Eike Brenneisen',
+
+        // Kontaktdaten
         'Adresse:': customer.adresse,
         'Telefon Zentrale:': customer.telefon,
+        'Telefon Mobil:': customer.telefonMobil || '-',
         'E-Mail:': customer.email,
-        'Name:': customer.ansprechpartner, // Geschäftsführung
+        'Website:': customer.website || '-',
+        'Direktwahl:': customer.direktwahl || '-',
+
+        // Bankverbindung & Bonität
+        'IBAN:': customer.iban || '-',
+        'BIC:': customer.bic || '-',
+        'Kreditinstitut:': customer.kreditinstitut || '-',
+        'SEPA-Mandat:': customer.sepaMandat || '-',
+        'Internes Rating:': customer.internesRating || '-',
+        'Creditreform-Index:': customer.creditreformIndex || '-',
+        'Schufa-Score:': customer.schufaScore || '-',
+        'Letzte Prüfung:': customer.letztePruefung || '-',
+        'Zahlungsmoral:': customer.zahlungsmoral || '-',
+        'Ø Zahlungsverzug:': customer.dpd ? customer.dpd + ' Tage' : '-',
+
+        // Kreditdetails
+        'Vertragsart:': customer.vertragsart || (customer.produkte?.[0]?.typ || '-'),
+        'Vertragsnummer:': customer.vertragsnummer || (customer.produkte?.[0]?.nummer || '-'),
+        'Ursprungsbetrag:': customer.ursprungsbetrag ? formatEuro(customer.ursprungsbetrag) : '-',
+        'Restschuld:': formatEuro(customer.restschuld),
+        'Zinssatz:': customer.zinssatz || '-',
+        'Monatsrate:': formatEuro(customer.monatsrate),
+        'Vertragsbeginn:': customer.vertragsbeginn || '-',
+        'Vertragslaufzeit:': customer.vertragslaufzeit || '-',
+        'Restlaufzeit:': customer.restlaufzeit || '-',
+        'Sicherheiten:': customer.sicherheiten || '-',
+        'Sicherheitenwert:': customer.sicherheitenwert ? formatEuro(customer.sicherheitenwert) : '-',
+        'Stage:': customer.stage || (customer.dpd > 90 ? 'Stage 3 (NPL)' : customer.dpd > 30 ? 'Stage 2' : 'Stage 1'),
+        'DPD:': customer.dpd ? customer.dpd + ' Tage' : '0 Tage',
     };
 
     // Find all stammdaten rows and update values by label
-    modal.querySelectorAll('.stammdaten-row').forEach(row => {
+    const stammdatenTab = document.getElementById('tab-stammdaten');
+    if (!stammdatenTab) {
+        console.warn('[STAMMDATEN] tab-stammdaten element not found');
+        return;
+    }
+
+    stammdatenTab.querySelectorAll('.stammdaten-row').forEach(row => {
         const labelEl = row.querySelector('.label');
         const valueEl = row.querySelector('.value');
         if (!labelEl || !valueEl) return;
 
         const labelText = labelEl.textContent.trim();
-        if (labelMapping[labelText] !== undefined) {
-            valueEl.textContent = labelMapping[labelText] ?? '-';
+        if (labelMapping[labelText] !== undefined && labelMapping[labelText] !== null) {
+            // Preserve certain classes
+            const hasHighlight = valueEl.classList.contains('highlight-red');
+            const hasBadge = valueEl.classList.contains('badge');
+            const hasMono = valueEl.classList.contains('mono');
+            const hasClickable = valueEl.classList.contains('clickable');
+
+            valueEl.textContent = labelMapping[labelText];
+
+            // Re-apply highlight for important values
+            if (labelText === 'Restschuld:' || labelText === 'DPD:') {
+                valueEl.classList.add('highlight-red');
+            }
         }
     });
 
     // Update Kundentyp badge if present
-    const typeBadge = modal.querySelector('.value.badge');
-    if (typeBadge && customer.type) {
-        typeBadge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
-        typeBadge.classList.remove('gewerbe', 'privat');
-        typeBadge.classList.add(customer.type === 'Gewerbe' ? 'gewerbe' : 'privat');
-    }
+    const typeBadges = stammdatenTab.querySelectorAll('.value.badge');
+    typeBadges.forEach(badge => {
+        const parentRow = badge.closest('.stammdaten-row');
+        if (parentRow?.querySelector('.label')?.textContent?.includes('Kundentyp')) {
+            badge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
+            badge.classList.remove('gewerbe', 'privat');
+            badge.classList.add(customer.type === 'Gewerbe' ? 'gewerbe' : 'privat');
+        }
+        if (parentRow?.querySelector('.label')?.textContent?.includes('Stage')) {
+            const stage = customer.dpd > 90 ? 'Stage 3 (NPL)' : customer.dpd > 30 ? 'Stage 2' : 'Stage 1';
+            badge.textContent = stage;
+            badge.classList.remove('danger', 'warning', 'success');
+            badge.classList.add(customer.dpd > 90 ? 'danger' : customer.dpd > 30 ? 'warning' : 'success');
+        }
+    });
 }
 
 function updateKontenFields(modal, customer) {
@@ -998,26 +1109,8 @@ function updateKontenFields(modal, customer) {
         differenz >= 0 ? '#22c55e' : '#ef4444');
     updateEl('kontenAusgabenDetails', customer.ausgabenDetails || '-');
 
-    // Update credit product info
-    const produkte = customer.produkte || [];
-    const hauptProdukt = produkte.length > 0 ? produkte[0] : null;
-
-    const productName = kontenTab.querySelector('.credit-product-name');
-    if (productName) {
-        productName.textContent = hauptProdukt?.typ || (customer.type === 'Privat' ? 'Ratenkredit' : 'Betriebsmittelkredit');
-    }
-
-    const productNumber = kontenTab.querySelector('.credit-product-number');
-    if (productNumber) {
-        productNumber.textContent = hauptProdukt?.nummer || 'Keine Daten';
-    }
-
-    const saldoValue = kontenTab.querySelector('.amount-value.danger, .amount-value.success');
-    if (saldoValue) {
-        const saldo = hauptProdukt?.saldo ?? customer.restschuld ?? 0;
-        saldoValue.textContent = '€' + saldo.toLocaleString('de-DE');
-        saldoValue.className = 'amount-value ' + (saldo === 0 ? 'success' : 'danger');
-    }
+    // Generate credit products dynamically
+    renderCreditProducts(customer);
 
     const statusBadge = kontenTab.querySelector('.credit-status-badge');
     if (statusBadge) {
@@ -1379,35 +1472,100 @@ function formatCurrency(amount) {
 // Update GuV fields with customer data (for Gewerbe customers)
 function updateGuvFields(customer) {
     const guv = customer.guv || {};
+    const formatEuro = (val) => val != null ? '€' + val.toLocaleString('de-DE') : '-';
+
+    console.log('[GUV] Updating GuV fields for:', customer.name, guv);
+
+    // Helper to safely update element
+    const updateEl = (id, value, addClass = null) => {
+        const el = document.getElementById(id);
+        if (el && value != null) {
+            el.textContent = value;
+            if (addClass) {
+                el.classList.remove('negative', 'positive');
+                el.classList.add(addClass);
+            }
+        }
+        return el;
+    };
 
     // Update summary cards
-    const umsatzEl = document.getElementById('guvUmsatz');
-    const aufwendungenEl = document.getElementById('guvAufwendungen');
-    const gewinnEl = document.getElementById('guvGewinn');
-    const ebitdaEl = document.getElementById('guvEbitda');
+    updateEl('guvUmsatz', formatEuro(guv.umsatz));
+    updateEl('guvAufwendungen', formatEuro(guv.aufwendungen));
 
-    if (umsatzEl && guv.umsatz) {
-        umsatzEl.textContent = formatCurrency(guv.umsatz);
-    }
-    if (aufwendungenEl && guv.aufwendungen) {
-        aufwendungenEl.textContent = formatCurrency(guv.aufwendungen);
-    }
-    if (gewinnEl && guv.gewinn !== undefined) {
-        gewinnEl.textContent = formatCurrency(guv.gewinn);
-        gewinnEl.classList.toggle('negative', guv.gewinn < 0);
-    }
-    if (ebitdaEl && guv.ebitda) {
-        ebitdaEl.textContent = guv.ebitda + '%';
+    const gewinnEl = updateEl('guvGewinn', formatEuro(guv.gewinn), guv.gewinn < 0 ? 'negative' : 'positive');
+
+    if (guv.ebitda) {
+        updateEl('guvEbitda', guv.ebitda + '%');
     }
 
-    // Update detail fields
-    const guvUmsatzDetail = document.getElementById('guvUmsatzDetail');
-    const guvGewinnDetail = document.getElementById('guvGewinnDetail');
-    if (guvUmsatzDetail && guv.umsatzChange) {
-        guvUmsatzDetail.textContent = guv.umsatzChange;
+    // Update detail text
+    const guvGewinnDetailEl = document.getElementById('guvGewinnDetail');
+    if (guvGewinnDetailEl && guv.vorjahresgewinn !== undefined) {
+        const diff = guv.gewinn - guv.vorjahresgewinn;
+        const diffText = diff >= 0 ? '+' : '';
+        guvGewinnDetailEl.textContent = guv.gewinn >= 0
+            ? `Gewinn (Vorjahr: ${formatEuro(guv.vorjahresgewinn)})`
+            : `Verlust (Vorjahr: ${formatEuro(guv.vorjahresgewinn)})`;
     }
-    if (guvGewinnDetail && guv.gewinnText) {
-        guvGewinnDetail.textContent = guv.gewinnText;
+
+    // Update Erträge breakdown
+    if (guv.ertraege) {
+        const ertraegeContainer = document.getElementById('guvErtraegeBreakdown');
+        if (ertraegeContainer) {
+            const gesamt = (guv.ertraege.umsatzerloese || 0) + (guv.ertraege.sonstigeErtraege || 0);
+            ertraegeContainer.innerHTML = `
+                <div class="breakdown-row"><span class="breakdown-label">Umsatzerlöse</span><span class="breakdown-value">${formatEuro(guv.ertraege.umsatzerloese)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Sonstige Erträge</span><span class="breakdown-value">${formatEuro(guv.ertraege.sonstigeErtraege)}</span></div>
+                <div class="breakdown-row total"><span class="breakdown-label">Gesamt Erträge</span><span class="breakdown-value">${formatEuro(gesamt)}</span></div>
+            `;
+        }
+    }
+
+    // Update Aufwendungen breakdown
+    if (guv.aufwendungenDetails) {
+        const aufwContainer = document.getElementById('guvAufwendungenBreakdown');
+        if (aufwContainer) {
+            const a = guv.aufwendungenDetails;
+            const gesamt = (a.personal || 0) + (a.miete || 0) + (a.wareneinkauf || 0) + (a.abschreibungen || 0) + (a.sonstige || 0);
+            aufwContainer.innerHTML = `
+                <div class="breakdown-row"><span class="breakdown-label">Personal</span><span class="breakdown-value negative">${formatEuro(a.personal)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Miete/Raumkosten</span><span class="breakdown-value negative">${formatEuro(a.miete)}</span></div>
+                ${a.wareneinkauf ? `<div class="breakdown-row"><span class="breakdown-label">Wareneinkauf</span><span class="breakdown-value negative">${formatEuro(a.wareneinkauf)}</span></div>` : ''}
+                <div class="breakdown-row"><span class="breakdown-label">Abschreibungen</span><span class="breakdown-value negative">${formatEuro(a.abschreibungen)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Sonstige</span><span class="breakdown-value negative">${formatEuro(a.sonstige)}</span></div>
+                <div class="breakdown-row total"><span class="breakdown-label">Gesamt Aufwendungen</span><span class="breakdown-value negative">${formatEuro(gesamt)}</span></div>
+            `;
+        }
+    }
+
+    // Update Liquidität
+    if (guv.liquiditaet) {
+        const l = guv.liquiditaet;
+        updateEl('guvKontostand', formatEuro(l.kontostand), l.kontostand < 0 ? 'negative' : null);
+        updateEl('guvMonatlicheEinnahmen', formatEuro(l.monatlicheEinnahmen));
+        updateEl('guvMonatlicheAusgaben', formatEuro(l.monatlicheAusgaben), 'negative');
+
+        const cashflow = (l.monatlicheEinnahmen || 0) - (l.monatlicheAusgaben || 0);
+        updateEl('guvCashflow', formatEuro(cashflow), cashflow < 0 ? 'negative' : 'positive');
+
+        // Update cashflow warning
+        const warningEl = document.getElementById('guvLiquidityWarning');
+        const warningTextEl = document.getElementById('guvLiquidityWarningText');
+        if (warningEl && warningTextEl) {
+            if (cashflow < 0) {
+                warningEl.style.display = 'flex';
+                warningTextEl.textContent = `Negativer Cashflow: Monatliche Ausgaben übersteigen Einnahmen um ${formatEuro(Math.abs(cashflow))}`;
+            } else {
+                warningEl.style.display = 'none';
+            }
+        }
+
+        // Update item class for warning styling
+        const cfItemEl = document.getElementById('guvCashflowItem');
+        if (cfItemEl) {
+            cfItemEl.classList.toggle('warning', cashflow < 0);
+        }
     }
 }
 
@@ -1598,6 +1756,148 @@ function updateCrmFields(crmView, customer) {
             badge.className = badge.className.replace(/danger|warning|inkasso/g, 'success');
         }
     });
+}
+
+// ========================================
+// DYNAMIC CREDIT PRODUCTS RENDERING
+// ========================================
+
+function renderCreditProducts(customer) {
+    const container = document.getElementById('creditProductsContainer');
+    if (!container) {
+        console.warn('[KREDITE] creditProductsContainer not found');
+        return;
+    }
+
+    const produkte = customer.produkte || [];
+    if (produkte.length === 0) {
+        container.innerHTML = `
+            <div class="no-products-message">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p>Keine Kreditprodukte vorhanden</p>
+            </div>
+        `;
+        return;
+    }
+
+    console.log('[KREDITE] Rendering', produkte.length, 'products for', customer.name);
+
+    const formatEuro = (val) => '€' + (val || 0).toLocaleString('de-DE');
+
+    // Product type icons
+    const getProductIcon = (typ) => {
+        const icons = {
+            'Kreditkarte': '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line>',
+            'Ratenkredit': '<path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>',
+            'Dispositionskredit': '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>',
+            'Immobilienkredit': '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>',
+            'Autokredit': '<rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle>',
+            'Betriebsmittelkredit': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>',
+            'Kontokorrentkredit': '<line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>',
+            'Studienkredit': '<path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path>'
+        };
+        return icons[typ] || icons['Ratenkredit'];
+    };
+
+    // Determine badge class based on status
+    const getBadgeClass = (produkt) => {
+        if (produkt.badge) return produkt.badge;
+        if (produkt.status?.includes('DPD') || produkt.saldo > (produkt.limit || Infinity)) return 'danger';
+        if (produkt.status === 'Aktiv') return 'info';
+        return 'warning';
+    };
+
+    let html = '';
+
+    produkte.forEach((produkt, index) => {
+        const badgeClass = getBadgeClass(produkt);
+        const hasLimit = produkt.limit != null;
+        const isOverLimit = hasLimit && produkt.saldo > produkt.limit;
+        const transaktionen = produkt.transaktionen || [];
+
+        html += `
+            <div class="credit-product-large ${badgeClass}" data-product="${produkt.typ?.toLowerCase().replace(/\s+/g, '-') || 'kredit'}">
+                <div class="credit-product-header-large">
+                    <div class="credit-product-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            ${getProductIcon(produkt.typ)}
+                        </svg>
+                    </div>
+                    <div class="credit-product-info-large">
+                        <span class="credit-product-name">${produkt.typ || 'Kredit'}</span>
+                        <span class="credit-product-number">${produkt.nummer || '-'}</span>
+                    </div>
+                    <div class="credit-product-amounts-large">
+                        <div class="amount-row">
+                            <span class="amount-label">Aktueller Saldo</span>
+                            <span class="amount-value ${badgeClass}">${formatEuro(produkt.saldo)}</span>
+                        </div>
+                        ${hasLimit ? `
+                        <div class="amount-row">
+                            <span class="amount-label">Kreditlimit</span>
+                            <span class="amount-value">${formatEuro(produkt.limit)}</span>
+                        </div>
+                        ` : produkt.rate ? `
+                        <div class="amount-row">
+                            <span class="amount-label">Monatl. Rate</span>
+                            <span class="amount-value">${formatEuro(produkt.rate)}/M</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <span class="credit-status-badge ${badgeClass}">${produkt.status || 'Aktiv'}</span>
+                </div>
+
+                <!-- Simplified chart placeholder -->
+                <div class="credit-product-chart-large">
+                    <div class="chart-info-text">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        Saldoverlauf: ${formatEuro(produkt.saldo)}
+                        ${hasLimit ? `(Limit: ${formatEuro(produkt.limit)})` : ''}
+                    </div>
+                </div>
+
+                <!-- Transaction history -->
+                <div class="credit-product-transactions">
+                    <div class="transactions-header">
+                        <span>Letzte Kontobewegungen</span>
+                        <button class="btn-text" onclick="showAllTransactions('${produkt.nummer}')">Alle anzeigen</button>
+                    </div>
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Beschreibung</th>
+                                <th>Betrag</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${transaktionen.length > 0 ? transaktionen.slice(0, 4).map(t => `
+                            <tr>
+                                <td>${t.datum}</td>
+                                <td>${t.beschreibung}</td>
+                                <td class="${t.betrag < 0 ? 'negative' : 'positive'}">${t.betrag < 0 ? '-' : '+'}${formatEuro(Math.abs(t.betrag))}</td>
+                                <td>${formatEuro(t.saldo)}</td>
+                            </tr>
+                            `).join('') : `
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 20px;">Keine Transaktionen verfügbar</td>
+                            </tr>
+                            `}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
 }
 
 function updateKommunikationFields(modal, customer) {
