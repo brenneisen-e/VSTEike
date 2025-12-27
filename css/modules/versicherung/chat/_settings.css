@@ -1,0 +1,204 @@
+/* ========================================
+   SETTINGS COLLAPSIBLE BOX
+   ======================================== */
+
+.settings-collapsible {
+    margin-top: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.settings-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.2s ease;
+}
+
+.settings-toggle:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.settings-icon {
+    width: 20px;
+    height: 20px;
+    color: #64748b;
+}
+
+.chevron-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    color: #64748b;
+    transition: transform 0.3s ease;
+}
+
+.settings-collapsible.open .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.settings-content {
+    display: none;
+    padding: 16px 20px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.settings-collapsible.open .settings-content {
+    display: block;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-item:hover {
+    background: #f1f5f9;
+    border-color: #86BC25;
+}
+
+.settings-item-icon {
+    width: 20px;
+    height: 20px;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.settings-item span {
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.settings-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.settings-api-section {
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.settings-item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.settings-item-header span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Mock Toggle */
+.mock-toggle {
+    justify-content: space-between;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+    background-color: #86BC25;
+}
+
+.toggle-switch input:checked + label:before {
+    transform: translateX(24px);
+}
+
+/* API Token Styles angepasst */
+.api-token-save {
+    padding: 10px 20px;
+    background: #86BC25;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.api-token-save:hover {
+    background: #6fa31e;
+    transform: translateY(-1px);
+}
+
+.api-token-toggle {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.api-token-toggle:hover {
+    background: #f8fafc;
+    border-color: #86BC25;
+}

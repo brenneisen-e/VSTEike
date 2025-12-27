@@ -1,0 +1,121 @@
+/**
+ * Navigation Tiles Styles
+ * Dashboard navigation cards
+ */
+
+.banken-nav-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.nav-tile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nav-tile:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tile.active {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.nav-tile-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.nav-tile-icon.warning {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.nav-tile-icon.info {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.nav-tile-content {
+    flex: 1;
+}
+
+.nav-tile-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.nav-tile-desc {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.nav-tile-badge {
+    padding: 6px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.nav-tile-badge.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.nav-tile-badge.warning {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.nav-tile-badge.highlight {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+/* Soon Badge for Coming Soon tiles */
+.nav-tile.coming-soon {
+    position: relative;
+    opacity: 0.85;
+}
+
+.nav-tile.coming-soon::after {
+    content: 'SOON';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 3px 8px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+}
+
+.nav-tile.coming-soon:hover {
+    opacity: 1;
+}

@@ -1,13 +1,13 @@
 /**
  * Banken Module CSS - Entry Point
- * Imports all banken-specific styles
+ * Imports all banken-specific styles (fully modularized)
  */
 
-/* Layout: Header, Page structure, Navigation */
-@import '_layout.css';
+/* Layout: Header, Page structure, Navigation (modularized) */
+@import 'layout/index.css';
 
-/* KPIs: Cards, Charts, Matrix, Segments */
-@import '_kpis.css';
+/* KPIs: Cards, Charts, Matrix, Segments (modularized) */
+@import 'kpis/index.css';
 
 /* Tables: Customer tables, Badges, Modals (modularized) */
 @import 'tables/index.css';
@@ -18,5 +18,5 @@
 /* Chat: Banken chat interface (modularized) */
 @import 'chat/index.css';
 
-/* Feedback: Feedback panel, Screenshots */
-@import '_feedback.css';
+/* Feedback: Feedback panel, Screenshots (modularized) */
+@import 'feedback/index.css';

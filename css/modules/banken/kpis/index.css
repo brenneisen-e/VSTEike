@@ -1,0 +1,13 @@
+/**
+ * KPIs Module - Entry Point
+ * Dashboard statistics, charts, and segments
+ */
+
+@import '_inline-stats.css';
+@import '_segmentierung.css';
+@import '_matrix.css';
+@import '_sidebar.css';
+@import '_updates.css';
+@import '_collapsible.css';
+@import '_ehemalige.css';
+@import '_customer-list.css';

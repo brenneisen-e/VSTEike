@@ -1,0 +1,11 @@
+/**
+ * Feedback Module - Entry Point
+ * Financial analysis tabs and screenshot annotation
+ */
+
+@import '_reply.css';
+@import '_haushalt.css';
+@import '_guv.css';
+@import '_openfinance.css';
+@import '_screenshot.css';
+@import '_mobile.css';

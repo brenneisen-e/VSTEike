@@ -1,0 +1,251 @@
+/* Chat Widget - Breiter */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 500px;
+    height: 600px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Chat Header mit Deloitte-Grün */
+.chat-header {
+    background: white;
+    color: #000000;
+    padding: 16px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #86BC25;
+}
+
+.chat-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+}
+
+.chat-subtitle {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.chat-minimize,
+.chat-close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.chat-minimize:hover,
+.chat-close:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+/* Chat Toggle Button mit Deloitte-Grün */
+.chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #86BC25;
+    background: white;
+    color: #000000;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 4px 20px rgba(134, 188, 37, 0.3);
+    z-index: 999;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(134, 188, 37, 0.4);
+}
+
+/* Sample Questions mit Deloitte-Grün */
+.sample-question-btn {
+    background: white;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sample-question-btn:hover {
+    border-color: #86BC25;
+    background: #f8fdf5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(134, 188, 37, 0.15);
+}
+
+.sample-question-btn svg {
+    flex-shrink: 0;
+    color: #86BC25;
+}
+
+.sample-question-btn:hover svg {
+    color: currentColor;
+}
+
+/* Button SVG Icons allgemein */
+button svg,
+.back-button svg,
+.view-mode-toggle button svg {
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.upload-label svg {
+    vertical-align: middle;
+    margin-right: 6px;
+    color: #86BC25;
+}
+
+/* Landing Chat Input - Deloitte Focus */
+.landing-chat-input:focus {
+    outline: none;
+    border-color: #86BC25;
+    box-shadow: 0 0 0 3px rgba(134, 188, 37, 0.1);
+}
+
+/* Landing Chat Send Button */
+.landing-chat-send {
+    background: #86BC25;
+}
+
+.landing-chat-send:hover {
+    background: #6fa31e;
+}
+
+/* Chat Input Focus */
+.chat-input:focus {
+    outline: none;
+    border-color: #86BC25;
+    box-shadow: 0 0 0 3px rgba(134, 188, 37, 0.1);
+}
+
+/* Chat Send Button */
+.chat-send {
+    background: #86BC25;
+}
+
+.chat-send:hover {
+    background: #6fa31e;
+}
+
+/* Landing Chat Message Assistant Avatar */
+.landing-chat-message.assistant .chat-avatar {
+    background: white;
+    border: 2px solid #86BC25;
+    color: #000000;
+}
+
+/* User Message - Deloitte Grün */
+.landing-chat-message.user .chat-bubble {
+    background: #86BC25;
+    color: white;
+}
+
+.chat-message.user .chat-bubble {
+    background: #86BC25;
+    color: white;
+}
+
+/* Responsive für breiteres Chat Widget */
+@media (max-width: 768px) {
+    .chat-widget {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    .welcome-chat {
+        width: 95%;
+        max-width: none;
+    }
+
+    .navigation-boxes {
+        flex-direction: column;
+    }
+}
+
+/* ========================================
+   LOGO PLATZHALTER
+   ======================================== */
+
+.logo-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.logo-placeholder:hover {
+    border-color: #86BC25;
+    background: #f8fdf5;
+    color: #86BC25;
+}
+
+.logo-placeholder svg {
+    color: inherit;
+}
+
+.upload-mode-active .logo-placeholder {
+    border-color: #86BC25;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0%, 100% { border-color: #86BC25; }
+    50% { border-color: #cbd5e1; }
+}
+
+.upload-mode-hint {
+    font-size: 12px;
+    color: #86BC25;
+    padding: 8px 16px;
+    background: #f8fdf5;
+    border-radius: 6px;
+    margin-top: 8px;
+}

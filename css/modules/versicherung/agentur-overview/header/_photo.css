@@ -1,0 +1,47 @@
+/* ========================================
+   AGENTUR HEADER - PHOTO
+   ======================================== */
+
+.agentur-photo-small {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #86BC25 0%, #6fa31e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.agentur-photo-small:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(134, 188, 37, 0.3);
+}
+
+.agentur-photo-small:hover::after {
+    content: '📷';
+    position: absolute;
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.agentur-photo-placeholder-small {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.agentur-photo-img-small {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

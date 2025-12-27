@@ -4,16 +4,25 @@
  */
 
 /* Welcome: Loading, Landing page, Chat intro */
-@import '_welcome.css';
+@import './welcome/index.css';
+
+/* Agentur Photo: Customer detail, filters, sales impulse */
+@import './agentur-photo/index.css';
+
+/* Agentur Overview: Header, KPIs, tabs, profile switcher */
+@import './agentur-overview/index.css';
+
+/* FIDA: Data sources, product recommendations, coverage analysis */
+@import './fida/index.css';
 
 /* Dashboard: KPIs, Charts, Layout */
-@import '_dashboard.css';
+@import 'dashboard/index.css';
 
 /* Tables & Maps: Data tables, County maps */
-@import '_tables-maps.css';
+@import 'tables-maps/index.css';
 
 /* Chat: Main chat interface */
-@import '_chat.css';
+@import 'chat/index.css';
 
 /* Misc: Customer cards, Deloitte branding, etc. */
 @import '_misc.css';

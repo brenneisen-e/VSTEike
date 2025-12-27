@@ -1,0 +1,19 @@
+/**
+ * Dashboard Module - Entry Point
+ * Imports all dashboard related styles
+ */
+
+/* Header: Main header, filters, view toggle */
+@import '_header.css';
+
+/* Layout: Main grid layout and containers */
+@import '_layout.css';
+
+/* KPI Cards: Card components, metrics, charts */
+@import '_kpi-cards.css';
+
+/* Fullscreen: Fullscreen modal and interactions */
+@import '_fullscreen.css';
+
+/* Map Sidebar: County map sidebar and controls */
+@import '_map-sidebar.css';

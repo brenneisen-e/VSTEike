@@ -9,6 +9,6 @@
 @import '_toolbar.css';
 @import '_tables.css';
 @import '_modals.css';
-@import '_features.css';
+@import 'features/index.css';
 @import '_case-detail.css';
-@import '_responsive.css';
+@import 'responsive/index.css';
