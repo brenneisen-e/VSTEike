@@ -881,6 +881,7 @@ export function openCustomerDetail(customerId, options = {}) {
     updateKommunikationFields(modal, customer);
     updateKiAnalyseFields(modal, customer);
     updateOpenFinanceFields(modal, customer);
+    updateHaushaltGuvTab(customer);
     updateHaushaltFields(modal, customer);
 
     setTimeout(() => renderCustomerActivities(customerId), 100);
@@ -1396,6 +1397,35 @@ function updateGuvFields(customer) {
     }
     if (guvGewinnDetail && guv.gewinnText) {
         guvGewinnDetail.textContent = guv.gewinnText;
+    }
+}
+
+// Update Haushalt/GuV tab based on customer type (Privat vs Gewerbe)
+function updateHaushaltGuvTab(customer) {
+    const tabButton = document.getElementById('tabHaushaltGuv');
+    const haushaltSection = document.getElementById('haushaltSection');
+    const guvSection = document.getElementById('guvSection');
+
+    if (!haushaltSection || !guvSection) return;
+
+    // Only show GuV for explicitly marked business customers (type === 'Gewerbe')
+    const isGewerbe = customer.type === 'Gewerbe';
+
+    if (isGewerbe) {
+        // Show GuV for business customers
+        if (tabButton) tabButton.textContent = 'GuV';
+        haushaltSection.style.display = 'none';
+        guvSection.style.display = 'block';
+
+        // Update GuV values based on customer data
+        if (customer.guv) {
+            updateGuvFields(customer);
+        }
+    } else {
+        // Show Haushaltsrechnung for private customers
+        if (tabButton) tabButton.textContent = 'Haushaltsrechnung';
+        haushaltSection.style.display = 'block';
+        guvSection.style.display = 'none';
     }
 }
 
