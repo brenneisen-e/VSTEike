@@ -8,6 +8,7 @@
 // ========================================
 
 let currentCustomerId = null;
+let stammdatenEditMode = false;
 
 // ========================================
 // HELPER FUNCTIONS
@@ -1922,6 +1923,179 @@ export function saveCustomerStammdaten(customerId, field, value) {
     stammdaten[customerId] ??= {};
     stammdaten[customerId][field] = value;
     localStorage.setItem('customerStammdaten', JSON.stringify(stammdaten));
+}
+
+// ========================================
+// STAMMDATEN EDIT MODE
+// ========================================
+
+export function editStammdaten() {
+    stammdatenEditMode = !stammdatenEditMode;
+
+    const stammdatenTab = document.getElementById('tab-stammdaten');
+    if (!stammdatenTab) return;
+
+    if (stammdatenEditMode) {
+        enableStammdatenEditMode(stammdatenTab);
+        window.showNotification?.('Bearbeitungsmodus aktiviert - Klicken Sie auf Felder zum Bearbeiten', 'info');
+    } else {
+        saveStammdatenChanges(stammdatenTab);
+        disableStammdatenEditMode(stammdatenTab);
+        window.showNotification?.('Änderungen gespeichert', 'success');
+    }
+}
+
+function enableStammdatenEditMode(container) {
+    container.classList.add('edit-mode');
+
+    container.querySelectorAll('.stammdaten-row .value').forEach(valueEl => {
+        if (valueEl.querySelector('.badge') || valueEl.classList.contains('badge')) return;
+
+        valueEl.contentEditable = 'true';
+        valueEl.classList.add('editable');
+
+        const labelEl = valueEl.previousElementSibling;
+        const fieldName = labelEl ? labelEl.textContent.replace(':', '').trim() : '';
+        valueEl.dataset.fieldName = fieldName;
+
+        valueEl.addEventListener('focus', function() {
+            this.classList.add('editing');
+        });
+        valueEl.addEventListener('blur', function() {
+            this.classList.remove('editing');
+        });
+    });
+
+    let editControls = container.querySelector('.stammdaten-edit-controls');
+    if (!editControls) {
+        editControls = document.createElement('div');
+        editControls.className = 'stammdaten-edit-controls';
+        editControls.innerHTML = `
+            <button class="btn-save-stammdaten" onclick="editStammdaten()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Speichern
+            </button>
+            <button class="btn-cancel-stammdaten" onclick="cancelStammdatenEdit()">
+                Abbrechen
+            </button>
+        `;
+        container.insertBefore(editControls, container.firstChild);
+    }
+    editControls.style.display = 'flex';
+
+    addStammdatenEditStyles();
+}
+
+function disableStammdatenEditMode(container) {
+    container.classList.remove('edit-mode');
+
+    container.querySelectorAll('.stammdaten-row .value.editable').forEach(valueEl => {
+        valueEl.contentEditable = 'false';
+        valueEl.classList.remove('editable', 'editing');
+    });
+
+    const editControls = container.querySelector('.stammdaten-edit-controls');
+    if (editControls) {
+        editControls.style.display = 'none';
+    }
+
+    stammdatenEditMode = false;
+}
+
+export function cancelStammdatenEdit() {
+    const stammdatenTab = document.getElementById('tab-stammdaten');
+    if (stammdatenTab) {
+        if (currentCustomerId) {
+            const customer = getFullCustomerData(currentCustomerId);
+            const modal = document.getElementById('customerDetailModal');
+            if (modal) updateStammdatenFields(modal, customer);
+        }
+        disableStammdatenEditMode(stammdatenTab);
+        window.showNotification?.('Bearbeitung abgebrochen', 'info');
+    }
+}
+
+function saveStammdatenChanges(container) {
+    if (!currentCustomerId) return;
+
+    container.querySelectorAll('.stammdaten-row .value.editable').forEach(valueEl => {
+        const fieldName = valueEl.dataset.fieldName;
+        const value = valueEl.textContent.trim();
+
+        if (fieldName && value) {
+            saveCustomerStammdaten(currentCustomerId, fieldName, value);
+        }
+    });
+}
+
+function addStammdatenEditStyles() {
+    if (document.getElementById('stammdaten-edit-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'stammdaten-edit-styles';
+    styles.textContent = `
+        .stammdaten-edit-controls {
+            display: none;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #fef3c7;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .stammdaten-edit-controls::before {
+            content: 'Bearbeitungsmodus aktiv';
+            font-size: 13px;
+            font-weight: 500;
+            color: #92400e;
+            flex: 1;
+        }
+        .btn-save-stammdaten {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-save-stammdaten:hover { background: #059669; }
+        .btn-cancel-stammdaten {
+            padding: 8px 16px;
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-cancel-stammdaten:hover { background: #f3f4f6; }
+        #tab-stammdaten.edit-mode .value.editable {
+            background: #fffbeb;
+            border: 1px dashed #fbbf24;
+            border-radius: 4px;
+            padding: 2px 6px;
+            margin: -2px -6px;
+            cursor: text;
+            transition: all 0.2s;
+        }
+        #tab-stammdaten.edit-mode .value.editable:hover {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+        #tab-stammdaten.edit-mode .value.editable.editing {
+            background: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    `;
+    document.head.appendChild(styles);
 }
 
 // ========================================
