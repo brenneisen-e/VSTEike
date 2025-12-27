@@ -378,8 +378,8 @@
                     </div>
                 </div>
 
-                <!-- Kredit-Produkte mit großen Charts -->
-                <div class="credit-products-large">
+                <!-- Kredit-Produkte mit großen Charts (dynamisch befüllt) -->
+                <div class="credit-products-large" id="creditProductsContainer">
                     <!-- Kreditkarte Gold - großes Chart mit realistischem Saldoverlauf -->
                     <div class="credit-product-large danger" data-product="kreditkarte">
                         <div class="credit-product-header-large">
@@ -1214,18 +1214,18 @@
                                 </svg>
                                 Erträge
                             </h4>
-                            <div class="guv-breakdown">
+                            <div class="guv-breakdown" id="guvErtraegeBreakdown">
                                 <div class="breakdown-row">
                                     <span class="breakdown-label">Umsatzerlöse</span>
-                                    <span class="breakdown-value">€540.000</span>
+                                    <span class="breakdown-value">€0</span>
                                 </div>
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">Sonstige betr. Erträge</span>
-                                    <span class="breakdown-value">€12.500</span>
+                                    <span class="breakdown-label">Sonstige Erträge</span>
+                                    <span class="breakdown-value">€0</span>
                                 </div>
                                 <div class="breakdown-row total">
-                                    <span class="breakdown-label">Gesamterträge</span>
-                                    <span class="breakdown-value">€552.500</span>
+                                    <span class="breakdown-label">Gesamt Erträge</span>
+                                    <span class="breakdown-value">€0</span>
                                 </div>
                             </div>
                         </div>
@@ -1238,30 +1238,26 @@
                                 </svg>
                                 Aufwendungen
                             </h4>
-                            <div class="guv-breakdown">
+                            <div class="guv-breakdown" id="guvAufwendungenBreakdown">
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">Materialaufwand</span>
-                                    <span class="breakdown-value negative">€144.000</span>
+                                    <span class="breakdown-label">Personal</span>
+                                    <span class="breakdown-value negative">€0</span>
                                 </div>
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">Personalaufwand</span>
-                                    <span class="breakdown-value negative">€252.000</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">Miete/Pacht</span>
-                                    <span class="breakdown-value negative">€102.000</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">Sonstige betr. Aufwendungen</span>
-                                    <span class="breakdown-value negative">€78.500</span>
+                                    <span class="breakdown-label">Miete/Raumkosten</span>
+                                    <span class="breakdown-value negative">€0</span>
                                 </div>
                                 <div class="breakdown-row">
                                     <span class="breakdown-label">Abschreibungen</span>
-                                    <span class="breakdown-value negative">€18.000</span>
+                                    <span class="breakdown-value negative">€0</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Sonstige</span>
+                                    <span class="breakdown-value negative">€0</span>
                                 </div>
                                 <div class="breakdown-row total">
-                                    <span class="breakdown-label">Gesamtaufwendungen</span>
-                                    <span class="breakdown-value negative">€594.500</span>
+                                    <span class="breakdown-label">Gesamt Aufwendungen</span>
+                                    <span class="breakdown-value negative">€0</span>
                                 </div>
                             </div>
                         </div>
@@ -1279,28 +1275,28 @@
                         <div class="liquidity-grid">
                             <div class="liquidity-item">
                                 <span class="liquidity-label">Ø Kontostand</span>
-                                <span class="liquidity-value negative">-€8.450</span>
+                                <span class="liquidity-value" id="guvKontostand">€0</span>
                             </div>
                             <div class="liquidity-item">
                                 <span class="liquidity-label">Ø Zahlungseingänge/M</span>
-                                <span class="liquidity-value">€45.000</span>
+                                <span class="liquidity-value" id="guvMonatlicheEinnahmen">€0</span>
                             </div>
                             <div class="liquidity-item">
                                 <span class="liquidity-label">Ø Zahlungsausgänge/M</span>
-                                <span class="liquidity-value negative">€52.000</span>
+                                <span class="liquidity-value" id="guvMonatlicheAusgaben">€0</span>
                             </div>
-                            <div class="liquidity-item warning">
-                                <span class="liquidity-label">Liquiditätslücke/M</span>
-                                <span class="liquidity-value negative">-€7.000</span>
+                            <div class="liquidity-item" id="guvCashflowItem">
+                                <span class="liquidity-label">Cashflow/M</span>
+                                <span class="liquidity-value" id="guvCashflow">€0</span>
                             </div>
                         </div>
-                        <div class="liquidity-warning">
+                        <div class="liquidity-warning" id="guvLiquidityWarning" style="display: none;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                                 <line x1="12" y1="9" x2="12" y2="13"></line>
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
-                            <span>Negativer Cashflow: Monatliche Ausgaben übersteigen Einnahmen um ca. €7.000</span>
+                            <span id="guvLiquidityWarningText"></span>
                         </div>
                     </div>
                 </div>
