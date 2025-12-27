@@ -172,19 +172,37 @@ export async function loadBankenComponents(container) {
 
 function showLoadingProgress(container) {
     container.innerHTML = `
-        <div class="banken-loading">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Banken-Modul wird geladen...</div>
-            <div class="loading-progress"><div class="loading-progress-bar" style="width: 0%"></div></div>
+        <div class="banken-loading-screen">
+            <div class="banken-loading-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+            </div>
+            <h2 class="banken-loading-title">Collections Management</h2>
+            <p class="banken-loading-subtitle">Forderungsmanagement wird vorbereitet</p>
+            <div class="banken-loading-progress-wrapper">
+                <div class="banken-loading-progress-track">
+                    <div class="banken-loading-progress-bar" id="bankenProgressBar"></div>
+                </div>
+                <div class="banken-loading-progress-details">
+                    <span class="banken-loading-status" id="bankenLoadingStatus">Initialisiere...</span>
+                    <span class="banken-loading-percent" id="bankenLoadingPercent">0%</span>
+                </div>
+            </div>
         </div>
     `;
 }
 
 function updateBankenLoadingProgress(percent, text) {
-    const bar = document.querySelector('.loading-progress-bar');
-    const textEl = document.querySelector('.loading-text');
+    const bar = document.getElementById('bankenProgressBar');
+    const statusEl = document.getElementById('bankenLoadingStatus');
+    const percentEl = document.getElementById('bankenLoadingPercent');
+
     if (bar) bar.style.width = `${percent}%`;
-    if (textEl) textEl.textContent = text;
+    if (statusEl) statusEl.textContent = text;
+    if (percentEl) percentEl.textContent = `${Math.round(percent)}%`;
 }
 
 export async function loadBankenModule() {
