@@ -450,6 +450,106 @@ export const getAgenturenData = () => {
 };
 
 // ========================================
+// CENTRALIZED FILTER MANAGEMENT
+// ========================================
+
+/**
+ * Update filters with validation and trigger UI refresh
+ * @param {Object} updates - Partial filter updates
+ * @param {boolean} skipRefresh - Skip UI refresh (for batch updates)
+ */
+export const updateFilters = (updates, skipRefresh = false) => {
+    // Validate agentur if provided
+    if (updates.agentur && updates.agentur !== 'alle') {
+        const agenturen = getAgenturen();
+        const valid = agenturen.some(a => a.id === updates.agentur);
+        if (!valid) {
+            console.warn(`[FILTER] Invalid agentur: ${updates.agentur}`);
+            updates.agentur = 'alle';
+        }
+    }
+
+    // Validate silo if provided
+    const validSilos = ['alle', 'Makler', 'Direktvertrieb', 'Ausschließlichkeit', 'Banken'];
+    if (updates.silo && !validSilos.includes(updates.silo)) {
+        console.warn(`[FILTER] Invalid silo: ${updates.silo}`);
+        updates.silo = 'alle';
+    }
+
+    // Apply updates
+    Object.assign(state.filters, updates);
+
+    // Trigger UI refresh
+    if (!skipRefresh) {
+        refreshAfterFilterChange();
+    }
+};
+
+/**
+ * Set geographic filter (Bundesländer)
+ * @param {string[]} bundeslaender - Array of Bundesland codes
+ */
+export const setSelectedStates = (bundeslaender) => {
+    state.selectedStates.clear();
+    bundeslaender.forEach(bl => state.selectedStates.add(bl));
+    refreshAfterFilterChange();
+};
+
+/**
+ * Set county filter
+ * @param {string[]} counties - Array of county names
+ */
+export const setSelectedCounties = (counties) => {
+    state.selectedCounties.clear();
+    counties.forEach(c => state.selectedCounties.add(c));
+
+    // Sync with map handler if available
+    if (window.countyMapHandler?.selectedCounties) {
+        window.countyMapHandler.selectedCounties.clear();
+        counties.forEach(c => window.countyMapHandler.selectedCounties.add(c));
+    }
+
+    refreshAfterFilterChange();
+};
+
+/**
+ * Clear all filters to default state
+ */
+export const clearAllFilters = () => {
+    state.filters = {
+        year: state.filters.year, // Keep year
+        silo: 'alle',
+        segments: ['alle'],
+        products: ['alle'],
+        agentur: 'alle'
+    };
+    state.selectedStates.clear();
+    state.selectedCounties.clear();
+
+    // Sync with map handler
+    if (window.countyMapHandler?.selectedCounties) {
+        window.countyMapHandler.selectedCounties.clear();
+    }
+
+    refreshAfterFilterChange();
+};
+
+/**
+ * Refresh all UI components after filter change
+ */
+const refreshAfterFilterChange = () => {
+    window.updateAllKPIs?.();
+    window.updateAgenturFilterDisplay?.();
+    window.renderTable?.();
+
+    // Update map if available
+    if (window.countyMapHandler && typeof window.getFilteredData === 'function') {
+        const data = window.getFilteredData();
+        window.countyMapHandler.updateMapData?.(data);
+    }
+};
+
+// ========================================
 // WINDOW EXPORTS
 // ========================================
 
@@ -464,5 +564,10 @@ Object.assign(window, {
     getLandkreiseData,
     updateAgenturFilterDisplay,
     getAgenturenData,
-    setDailyRawData
+    setDailyRawData,
+    // New centralized filter functions
+    updateFilters,
+    setSelectedStates,
+    setSelectedCounties,
+    clearAllFilters
 });

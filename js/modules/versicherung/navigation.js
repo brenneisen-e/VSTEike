@@ -156,8 +156,8 @@ export function closeBestandsuebertragung() {
 // ========================================
 
 export function toggleSettings() {
-    const settingsPanel = document.getElementById('settingsPanel');
-    settingsPanel?.classList.toggle('open');
+    const settingsContent = document.getElementById('settingsContent');
+    settingsContent?.classList.toggle('open');
 }
 
 export function saveUserName() {
@@ -168,8 +168,8 @@ export function saveUserName() {
         localStorage.setItem('dashboardUserName', name);
         updateUserNameDisplay(name);
 
-        const settingsPanel = document.getElementById('settingsPanel');
-        settingsPanel?.classList.remove('open');
+        const settingsContent = document.getElementById('settingsContent');
+        settingsContent?.classList.remove('open');
     }
 }
 

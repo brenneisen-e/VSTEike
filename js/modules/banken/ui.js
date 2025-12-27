@@ -95,17 +95,24 @@ export function showNotification(message, type = 'info') {
 let bankenModuleLoaded = false;
 
 export function switchModule(moduleName) {
+    console.log(`[MODULE] Switching to: ${moduleName}`);
+
     document.querySelectorAll('.module-tab').forEach(tab => {
         tab.classList.toggle('active', tab.dataset.module === moduleName);
     });
 
     document.querySelectorAll('.module-content').forEach(content => {
-        content.classList.toggle('active', content.id === `${moduleName}Module`);
+        const isTarget = content.id === `${moduleName}Module`;
+        content.classList.toggle('active', isTarget);
+        if (isTarget) {
+            console.log(`[MODULE] Activated: ${content.id}`);
+        }
     });
 
     localStorage.setItem('currentModule', moduleName);
 
     if (moduleName === 'banken' && !bankenModuleLoaded) {
+        console.log('[MODULE] Loading Banken module for first time...');
         window.loadBankenModule?.();
         bankenModuleLoaded = true;
     }
@@ -127,25 +134,38 @@ const BANKEN_COMPONENTS = [
 
 export async function loadComponent(componentName) {
     try {
+        console.log(`[BANKEN] Loading component: ${componentName}`);
         const response = await fetch(`partials/banken/${componentName}.html`);
-        return response.ok ? await response.text() : `<!-- Component ${componentName} failed -->`;
+        if (!response.ok) {
+            console.warn(`[BANKEN] Failed to load ${componentName}: ${response.status}`);
+            return `<!-- Component ${componentName} failed: ${response.status} -->`;
+        }
+        const html = await response.text();
+        console.log(`[BANKEN] Loaded ${componentName} (${html.length} bytes)`);
+        return html;
     } catch (error) {
-        return `<!-- Component ${componentName} error -->`;
+        console.error(`[BANKEN] Error loading ${componentName}:`, error);
+        return `<!-- Component ${componentName} error: ${error.message} -->`;
     }
 }
 
 export async function loadBankenComponents(container) {
+    console.log('[BANKEN] Starting component loading...');
     showLoadingProgress(container);
 
-    const componentPromises = BANKEN_COMPONENTS.map(async (name, index) => {
+    const htmlParts = [];
+    for (let i = 0; i < BANKEN_COMPONENTS.length; i++) {
+        const name = BANKEN_COMPONENTS[i];
+        updateBankenLoadingProgress((i / BANKEN_COMPONENTS.length) * 100, `Lädt ${name}...`);
         const html = await loadComponent(name);
-        updateBankenLoadingProgress((index + 1) / BANKEN_COMPONENTS.length * 100, `Lädt ${name}...`);
-        return html;
-    });
+        htmlParts.push(html);
+    }
 
-    const htmlParts = await Promise.all(componentPromises);
+    console.log('[BANKEN] All components loaded, rendering...');
+    updateBankenLoadingProgress(100, 'Rendering...');
     container.innerHTML = htmlParts.join('');
 
+    console.log('[BANKEN] Components rendered successfully');
     window.restoreCollapsedSections?.();
 }
 
@@ -167,8 +187,11 @@ function updateBankenLoadingProgress(percent, text) {
 }
 
 export async function loadBankenModule() {
-    const container = document.querySelector('.banken-content');
-    if (!container) return;
+    const container = document.getElementById('bankenModule');
+    if (!container) {
+        console.error('[BANKEN] Container #bankenModule nicht gefunden');
+        return;
+    }
 
     await loadBankenComponents(container);
     window.showNotification?.('Banken-Modul geladen', 'success');

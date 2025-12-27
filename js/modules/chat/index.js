@@ -289,7 +289,22 @@ export const sendMessage = async () => {
     } catch (error) {
         console.error('[ERROR] Chat Fehler:', error);
         hideTyping();
-        addMessage('assistant', '[ERROR] Fehler bei der Verarbeitung. Bitte versuche es erneut.');
+
+        // Provide specific error feedback based on error type
+        let errorMessage = '[ERROR] ';
+        if (error.message?.includes('API request failed: 429')) {
+            errorMessage += 'Zu viele Anfragen. Bitte warte einen Moment und versuche es erneut.';
+        } else if (error.message?.includes('API request failed: 401') || error.message?.includes('API request failed: 403')) {
+            errorMessage += 'API-Authentifizierung fehlgeschlagen. Bitte überprüfe den API-Schlüssel.';
+        } else if (error.message?.includes('API request failed: 5')) {
+            errorMessage += 'Der API-Server ist momentan nicht erreichbar. Bitte versuche es später erneut.';
+        } else if (error.name === 'TypeError' && error.message?.includes('fetch')) {
+            errorMessage += 'Netzwerkfehler. Bitte überprüfe deine Internetverbindung.';
+        } else {
+            errorMessage += 'Fehler bei der Verarbeitung. Bitte versuche es erneut.';
+        }
+
+        addMessage('assistant', errorMessage);
     }
 
     isProcessing = false;

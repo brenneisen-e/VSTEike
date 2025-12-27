@@ -28,19 +28,71 @@ export const execute = (name, ...args) => {
 };
 
 /**
+ * Navigate to a view based on data-view attribute
+ */
+const navigateToView = (viewName) => {
+    console.log(`[NAV] Navigating to view: ${viewName}`);
+
+    // Update active nav-link styling
+    document.querySelectorAll('.nav-link[data-view]').forEach(link => {
+        link.classList.toggle('active', link.dataset.view === viewName);
+    });
+
+    // Handle different views
+    switch (viewName) {
+        case 'dashboard':
+        case 'gesamtuebersicht':
+            window.openDashboard?.();
+            break;
+        case 'agenturuebersicht':
+            window.openAgenturView?.();
+            break;
+        case 'risikoscoring':
+            window.openRisikoscoring?.();
+            break;
+        case 'bestandsuebertragung':
+            window.openBestandsuebertragung?.();
+            break;
+        case 'finanzplanung':
+            window.openFinanzplanung?.();
+            break;
+        case 'provisionssimulation':
+            window.openProvisionssimulation?.();
+            break;
+        case 'einstellungen':
+            window.toggleSettings?.();
+            break;
+        case 'hilfe':
+            window.startDemoTour?.();
+            break;
+        default:
+            console.warn(`[NAV] Unknown view: ${viewName}`);
+    }
+};
+
+/**
  * Initialize event delegation
- * Handles [data-action] clicks automatically
+ * Handles [data-action] and [data-view] clicks automatically
  */
 export const init = () => {
     document.addEventListener('click', (e) => {
-        const target = e.target.closest('[data-action]');
-        if (!target) return;
+        // Handle data-action clicks
+        const actionTarget = e.target.closest('[data-action]');
+        if (actionTarget) {
+            const action = actionTarget.dataset.action;
+            const args = actionTarget.dataset.args ? JSON.parse(actionTarget.dataset.args) : [];
+            e.preventDefault();
+            execute(action, ...args);
+            return;
+        }
 
-        const action = target.dataset.action;
-        const args = target.dataset.args ? JSON.parse(target.dataset.args) : [];
-
-        e.preventDefault();
-        execute(action, ...args);
+        // Handle data-view clicks (sidebar navigation)
+        const viewTarget = e.target.closest('[data-view]');
+        if (viewTarget && viewTarget.closest('.sidebar-nav')) {
+            e.preventDefault();
+            navigateToView(viewTarget.dataset.view);
+            return;
+        }
     });
 
     document.addEventListener('change', (e) => {
