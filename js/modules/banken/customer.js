@@ -425,25 +425,74 @@ export function showCustomerTab(tabName) {
 }
 
 function updateStammdatenFields(modal, customer) {
-    const fields = {
-        'kundenTyp': customer.type,
-        'rechtsform': customer.rechtsform,
-        'adresse': customer.adresse,
-        'telefon': customer.telefon,
-        'email': customer.email,
-        'ansprechpartner': customer.ansprechpartner,
-        'branche': customer.branche
+    // Map label text to customer data fields
+    const labelMapping = {
+        'Firmenname:': customer.name,
+        'Rechtsform:': customer.rechtsform,
+        'Branche:': customer.branche,
+        'Kundentyp:': customer.type,
+        'Adresse:': customer.adresse,
+        'Telefon Zentrale:': customer.telefon,
+        'E-Mail:': customer.email,
+        'Name:': customer.ansprechpartner, // Geschäftsführung
     };
 
-    Object.entries(fields).forEach(([id, value]) => {
-        const el = modal.querySelector(`#${id}, [data-field="${id}"]`);
-        if (el) el.textContent = value ?? '-';
+    // Find all stammdaten rows and update values by label
+    modal.querySelectorAll('.stammdaten-row').forEach(row => {
+        const labelEl = row.querySelector('.label');
+        const valueEl = row.querySelector('.value');
+        if (!labelEl || !valueEl) return;
+
+        const labelText = labelEl.textContent.trim();
+        if (labelMapping[labelText] !== undefined) {
+            valueEl.textContent = labelMapping[labelText] ?? '-';
+        }
     });
+
+    // Update Kundentyp badge if present
+    const typeBadge = modal.querySelector('.value.badge');
+    if (typeBadge && customer.type) {
+        typeBadge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
+        typeBadge.classList.remove('gewerbe', 'privat');
+        typeBadge.classList.add(customer.type === 'Gewerbe' ? 'gewerbe' : 'privat');
+    }
 }
 
 function updateKommunikationFields(modal, customer) {
-    const kernproblemEl = modal.querySelector('.ki-kernproblem, #kernproblem');
-    if (kernproblemEl) kernproblemEl.textContent = customer.kernproblem ?? '-';
+    // Update KI-Analyse Kernproblem
+    const kiSummaryContent = modal.querySelector('#tab-ki-analyse .ki-summary-section p');
+    if (kiSummaryContent && customer.kernproblem) {
+        kiSummaryContent.innerHTML = customer.kernproblem;
+    }
+
+    // Update Willingness/Ability scores
+    const willingnessBar = modal.querySelector('.score-item:first-child .bar-fill');
+    const willingnessPercent = modal.querySelector('.score-item:first-child .score-percent');
+    if (willingnessBar && customer.willingness !== undefined) {
+        willingnessBar.style.width = `${customer.willingness}%`;
+        if (willingnessPercent) willingnessPercent.textContent = `${customer.willingness}%`;
+    }
+
+    const abilityBar = modal.querySelector('.score-item:nth-child(2) .bar-fill');
+    const abilityPercent = modal.querySelector('.score-item:nth-child(2) .score-percent');
+    if (abilityBar && customer.ability !== undefined) {
+        abilityBar.style.width = `${customer.ability}%`;
+        if (abilityPercent) abilityPercent.textContent = `${customer.ability}%`;
+    }
+
+    // Update score point position (Willingness = X, Ability = Y)
+    const scorePoint = modal.querySelector('.score-point');
+    if (scorePoint && customer.willingness !== undefined && customer.ability !== undefined) {
+        scorePoint.style.left = `${customer.willingness}%`;
+        scorePoint.style.bottom = `${customer.ability}%`;
+    }
+
+    // Update DPD and Restschuld in summary if elements exist
+    const dpdEl = modal.querySelector('.dpd-value, [data-field="dpd"]');
+    if (dpdEl) dpdEl.textContent = customer.dpd ?? '0';
+
+    const restschuldEl = modal.querySelector('.restschuld-value, [data-field="restschuld"]');
+    if (restschuldEl) restschuldEl.textContent = customer.restschuld ? `€${customer.restschuld.toLocaleString('de-DE')}` : '€0';
 }
 
 // ========================================
