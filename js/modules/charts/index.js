@@ -157,14 +157,47 @@ export const createChart = (kpiId, data, view, kpi, timeRange = 'year', offset =
         type: chartType,
         data: chartData,
         options: {
-            responsive: true, maintainAspectRatio: false,
-            layout: { padding: { top: 5, right: 8, bottom: 5, left: 8 } },
-            plugins: { legend: { display: false }, tooltip: {
-                callbacks: { label: (context) => view === 'distribution' ? `Anzahl Vermittler: ${context.parsed.y}` : `${kpi.title}: ${window.formatValue?.(context.parsed.y, kpi.unit) ?? context.parsed.y}` }
-            }},
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 5, right: 8, bottom: 0, left: 8 } },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => view === 'distribution'
+                            ? `Anzahl Vermittler: ${context.parsed.y}`
+                            : `${kpi.title}: ${window.formatValue?.(context.parsed.y, kpi.unit) ?? context.parsed.y}`
+                    }
+                }
+            },
             scales: {
-                x: { grid: { display: true, color: 'rgba(0, 0, 0, 0.05)', drawBorder: false }, ticks: { font: { size: 11 }, color: '#64748b', maxRotation: 0, autoSkip: true, maxTicksLimit: 8, padding: 8 }, offset: true },
-                y: { beginAtZero: view === 'distribution' || kpi.id === 'ergebnis', grid: { display: true, color: 'rgba(0, 0, 0, 0.05)', drawBorder: false }, ticks: { font: { size: 11 }, color: '#64748b', maxTicksLimit: 6, padding: 8, align: 'end', callback: (value) => view === 'distribution' ? Math.round(value) : window.formatValue?.(value, kpi.unit) ?? value }, afterFit: (scaleInstance) => { scaleInstance.width = 65; } }
+                x: {
+                    grid: { display: true, color: 'rgba(0, 0, 0, 0.05)', drawBorder: false },
+                    ticks: {
+                        font: { size: 10 },
+                        color: '#64748b',
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: view === 'daily' ? 6 : 8,
+                        padding: 2
+                    },
+                    offset: true,
+                    afterFit: (scaleInstance) => { scaleInstance.height = 22; }
+                },
+                y: {
+                    beginAtZero: view === 'distribution' || kpi.id === 'ergebnis',
+                    grid: { display: true, color: 'rgba(0, 0, 0, 0.05)', drawBorder: false },
+                    ticks: {
+                        font: { size: 10 },
+                        color: '#64748b',
+                        maxTicksLimit: 5,
+                        padding: 4,
+                        callback: (value) => view === 'distribution'
+                            ? Math.round(value)
+                            : window.formatValue?.(value, kpi.unit) ?? value
+                    },
+                    afterFit: (scaleInstance) => { scaleInstance.width = 55; }
+                }
             }
         }
     });
