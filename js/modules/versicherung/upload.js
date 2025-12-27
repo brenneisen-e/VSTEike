@@ -69,7 +69,12 @@ export function handleQuickUpload(file) {
             const hasLandkreis = 'landkreis' in firstRow || 'kreis' in firstRow;
 
             if (hasDay && hasVermittler) {
-                window.dailyRawData = parsedData;
+                // Use setDailyRawData to sync with core/data.js module
+                if (typeof window.setDailyRawData === 'function') {
+                    window.setDailyRawData(parsedData);
+                } else {
+                    window.dailyRawData = parsedData;
+                }
                 const monthlyData = window.aggregateDailyToMonthly?.(parsedData) ?? parsedData;
                 window.state.uploadedData = monthlyData;
 
@@ -80,7 +85,11 @@ export function handleQuickUpload(file) {
                 }
             } else if (hasMonth && !hasDay) {
                 window.state.uploadedData = parsedData;
-                window.dailyRawData = null;
+                if (typeof window.setDailyRawData === 'function') {
+                    window.setDailyRawData(null);
+                } else {
+                    window.dailyRawData = null;
+                }
 
                 if (statusDiv) {
                     statusDiv.className = 'upload-status success';
@@ -88,7 +97,11 @@ export function handleQuickUpload(file) {
                 }
             } else {
                 window.state.uploadedData = parsedData;
-                window.dailyRawData = null;
+                if (typeof window.setDailyRawData === 'function') {
+                    window.setDailyRawData(null);
+                } else {
+                    window.dailyRawData = null;
+                }
 
                 if (statusDiv) {
                     statusDiv.className = 'upload-status success';
