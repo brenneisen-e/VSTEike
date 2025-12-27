@@ -228,6 +228,146 @@ const mockKunden = {
             { anbieter: 'N26', typ: 'Girokonto', info: 'Hauptkonto' },
             { anbieter: 'Trade Republic', typ: 'Depot', info: 'ETF-Sparplan' }
         ]
+    },
+    'Anna Hoffmann': {
+        geburtsdatum: '12.07.1988',
+        adresse: 'Rosenweg 45, 50678 Köln',
+        telefon: '+49 221 9876543',
+        email: 'anna.hoffmann@email.de',
+        beruf: 'Marketing-Managerin',
+        familienstand: 'Verheiratet',
+        kinder: [{ name: 'Sophie', alter: 4 }],
+        vertraege: [
+            { typ: 'Risikolebensversicherung', versicherer: 'ERGO', details: 'Vers.-Summe: €300.000', praemie: '€25/Mon.', beginn: '01.06.2020', status: 'Aktiv' },
+            { typ: 'Privathaftpflichtversicherung', versicherer: 'HUK24', details: 'Familie, €50 Mio. Deckung', praemie: '€85/Jahr', beginn: '01.01.2019', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'Commerzbank', typ: 'Girokonto', info: 'Gehaltskonto' },
+            { anbieter: 'Comdirect', typ: 'Depot', info: 'Aktien-Portfolio' }
+        ]
+    },
+    'Christian Bauer': {
+        geburtsdatum: '03.09.1975',
+        adresse: 'Hauptstraße 112, 70173 Stuttgart',
+        telefon: '+49 711 5551234',
+        email: 'christian.bauer@email.de',
+        beruf: 'Ingenieur',
+        familienstand: 'Verheiratet',
+        kinder: [{ name: 'Tim', alter: 14 }, { name: 'Jana', alter: 11 }],
+        vertraege: [
+            { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'Allianz', details: 'BU-Rente: €2.500/Mon.', praemie: '€145/Mon.', beginn: '01.04.2012', status: 'Aktiv' },
+            { typ: 'Kapitallebensversicherung', versicherer: 'ERGO', details: 'Ablauf 2030, €120.000', praemie: '€200/Mon.', beginn: '01.01.2005', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'BW-Bank', typ: 'Girokonto', info: 'Hauptkonto' },
+            { anbieter: 'Union Investment', typ: 'Depot', info: 'Fondssparplan' },
+            { anbieter: 'Bausparkasse Schwäbisch Hall', typ: 'Bausparvertrag', info: '€50.000' }
+        ]
+    },
+    'Eva Hartmann': {
+        geburtsdatum: '21.02.1992',
+        adresse: 'Gartenstraße 8, 20095 Hamburg',
+        telefon: '+49 40 3334567',
+        email: 'eva.hartmann@email.de',
+        beruf: 'Ärztin',
+        familienstand: 'Ledig',
+        kinder: [],
+        vertraege: [
+            { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €3.000/Mon.', praemie: '€180/Mon.', beginn: '01.08.2020', status: 'Aktiv' },
+            { typ: 'Private Krankenversicherung', versicherer: 'Debeka', details: 'Vollversicherung Ärzte-Tarif', praemie: '€650/Mon.', beginn: '01.01.2021', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'Deutsche Bank', typ: 'Girokonto', info: 'Gehaltskonto' },
+            { anbieter: 'Scalable Capital', typ: 'Depot', info: 'Vermögensaufbau' }
+        ]
+    },
+    'Klaus Meier': {
+        geburtsdatum: '17.11.1968',
+        adresse: 'Waldweg 23, 30159 Hannover',
+        telefon: '+49 511 7778899',
+        email: 'klaus.meier@email.de',
+        beruf: 'Geschäftsführer',
+        familienstand: 'Verheiratet',
+        kinder: [{ name: 'Markus', alter: 22 }, { name: 'Lisa', alter: 19 }],
+        vertraege: [
+            { typ: 'Kapitallebensversicherung', versicherer: 'ERGO', details: 'Ablauf 2028, €200.000', praemie: '€350/Mon.', beginn: '01.03.2003', status: 'Aktiv' },
+            { typ: 'Private Rentenversicherung', versicherer: 'Allianz', details: 'Rentenbeginn 2033', praemie: '€400/Mon.', beginn: '01.06.2010', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'Sparkasse Hannover', typ: 'Girokonto', info: 'Geschäftskonto' },
+            { anbieter: 'Deutsche Bank', typ: 'Depot', info: 'Aktien & Fonds' },
+            { anbieter: 'ING', typ: 'Tagesgeld', info: 'Rücklage' }
+        ]
+    },
+    'Lisa Müller': {
+        geburtsdatum: '29.05.1995',
+        adresse: 'Sonnenscheinweg 15, 40213 Düsseldorf',
+        telefon: '+49 211 8889900',
+        email: 'lisa.mueller@email.de',
+        beruf: 'Grafikdesignerin',
+        familienstand: 'Ledig',
+        kinder: [],
+        vertraege: [
+            { typ: 'Privathaftpflichtversicherung', versicherer: 'ERGO', details: 'Single, €50 Mio. Deckung', praemie: '€55/Jahr', beginn: '01.09.2018', status: 'Aktiv' },
+            { typ: 'Hausratversicherung', versicherer: 'HUK-Coburg', details: 'Vers.-Summe: €40.000', praemie: '€95/Jahr', beginn: '01.11.2019', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'N26', typ: 'Girokonto', info: 'Hauptkonto' },
+            { anbieter: 'Trade Republic', typ: 'Depot', info: 'ETF-Sparplan' }
+        ]
+    },
+    'Martin Wolf': {
+        geburtsdatum: '08.03.1982',
+        adresse: 'Industriestraße 77, 90403 Nürnberg',
+        telefon: '+49 911 2223344',
+        email: 'martin.wolf@email.de',
+        beruf: 'Selbstständiger Handwerker',
+        familienstand: 'Verheiratet',
+        kinder: [{ name: 'Leon', alter: 7 }, { name: 'Mia', alter: 3 }],
+        vertraege: [
+            { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €2.000/Mon.', praemie: '€125/Mon.', beginn: '01.02.2015', status: 'Aktiv' },
+            { typ: 'Betriebshaftpflichtversicherung', versicherer: 'HDI', details: 'Handwerkerbetrieb', praemie: '€480/Jahr', beginn: '01.05.2014', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'Volksbank', typ: 'Girokonto', info: 'Geschäftskonto' },
+            { anbieter: 'Sparkasse', typ: 'Girokonto', info: 'Privatkonto' }
+        ]
+    },
+    'Matthias Engel': {
+        geburtsdatum: '14.10.1978',
+        adresse: 'Parkallee 33, 04109 Leipzig',
+        telefon: '+49 341 5556677',
+        email: 'matthias.engel@email.de',
+        beruf: 'IT-Consultant',
+        familienstand: 'Geschieden',
+        kinder: [{ name: 'Felix', alter: 10 }],
+        vertraege: [
+            { typ: 'Berufsunfähigkeitsversicherung', versicherer: 'ERGO', details: 'BU-Rente: €2.200/Mon.', praemie: '€135/Mon.', beginn: '01.07.2016', status: 'Aktiv' },
+            { typ: 'Risikolebensversicherung', versicherer: 'CosmosDirekt', details: 'Vers.-Summe: €250.000', praemie: '€18/Mon.', beginn: '01.03.2018', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'Commerzbank', typ: 'Girokonto', info: 'Hauptkonto' },
+            { anbieter: 'DekaBank', typ: 'Depot', info: 'Fondssparplan' }
+        ]
+    },
+    'Michael Braun': {
+        geburtsdatum: '22.06.1972',
+        adresse: 'Am Stadtpark 5, 60322 Frankfurt',
+        telefon: '+49 69 1112233',
+        email: 'michael.braun@email.de',
+        beruf: 'Bankdirektor',
+        familienstand: 'Verheiratet',
+        kinder: [{ name: 'Alexander', alter: 18 }, { name: 'Victoria', alter: 16 }],
+        vertraege: [
+            { typ: 'Private Krankenversicherung', versicherer: 'DKV', details: 'Premium-Tarif', praemie: '€850/Mon.', beginn: '01.01.2010', status: 'Aktiv' },
+            { typ: 'Private Rentenversicherung', versicherer: 'ERGO', details: 'Rentenbeginn 2037', praemie: '€500/Mon.', beginn: '01.04.2015', status: 'Aktiv' },
+            { typ: 'Wohngebäudeversicherung', versicherer: 'AXA', details: 'Vers.-Summe: €850.000', praemie: '€680/Jahr', beginn: '01.08.2012', status: 'Aktiv' }
+        ],
+        fidaVertraege: [
+            { anbieter: 'Deutsche Bank', typ: 'Girokonto', info: 'Premium-Konto' },
+            { anbieter: 'DWS', typ: 'Depot', info: 'Vermögensverwaltung' },
+            { anbieter: 'Deka', typ: 'Depot', info: 'Fondssparplan' }
+        ]
     }
 };
 
