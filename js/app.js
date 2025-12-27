@@ -220,23 +220,8 @@ export function showLoading(text = 'Wird geladen...') {
     });
 }
 
-/**
- * Format currency helper
- */
-export function formatCurrency(value) {
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR'
-    }).format(value);
-}
-
-/**
- * Format date helper
- */
-export function formatDate(date, options = {}) {
-    const dateObj = date instanceof Date ? date : new Date(date);
-    return dateObj.toLocaleDateString('de-DE', options);
-}
+// Re-export from helpers for backwards compatibility
+export { formatCurrency, formatDate } from './modules/helpers.js';
 
 // ========================================
 // AUTO-INIT ON DOM READY
