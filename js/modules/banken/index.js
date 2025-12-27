@@ -59,24 +59,87 @@ Object.assign(window, {
 // ========================================
 
 Object.assign(window, {
+    // Section & Navigation
     showBankenTab: dashboard.showBankenTab,
     showBankenSection: dashboard.showBankenSection,
-    filterBySegment: dashboard.filterBySegment,
-    openSegmentFullscreen: dashboard.openSegmentFullscreen,
-    clearSegmentFilter: dashboard.clearSegmentFilter,
-    filterByDPDBucket: dashboard.filterByDPDBucket,
     toggleSection: dashboard.toggleSection,
     restoreCollapsedSections: dashboard.restoreCollapsedSections,
+    showCrmSection: dashboard.showCrmSection,
+
+    // Filtering
+    filterBySegment: dashboard.filterBySegment,
+    filterByDPDBucket: dashboard.filterByDPDBucket,
+    filterByDPD: dashboard.filterByDPD,
+    filterByAll: dashboard.filterByAll,
+    filterByAmount: dashboard.filterByAmount,
+    filterAufgaben: dashboard.filterAufgaben,
+    openSegmentFullscreen: dashboard.openSegmentFullscreen,
+    clearSegmentFilter: dashboard.clearSegmentFilter,
+
+    // Case Views
+    showRecoveryDetails: dashboard.showRecoveryDetails,
+    showNewCases: dashboard.showNewCases,
+    showAllNewCases: dashboard.showAllNewCases,
+    showAllResolvedCases: dashboard.showAllResolvedCases,
+    showPayments: dashboard.showPayments,
+    showPromises: dashboard.showPromises,
+    showAlternativeStrategies: dashboard.showAlternativeStrategies,
+    showAllEhemalige: dashboard.showAllEhemalige,
+    showFullLetter: dashboard.showFullLetter,
+
+    // Charts & Popups
     showChartPopup: dashboard.showChartPopup,
     closeChartPopup: dashboard.closeChartPopup,
+    toggleCreditView: dashboard.toggleCreditView,
+    toggleDocument: dashboard.toggleDocument,
+
+    // Bulk Actions
     toggleAllNpl: dashboard.toggleAllNpl,
     updateBulkActionState: dashboard.updateBulkActionState,
     bulkAction: dashboard.bulkAction,
+
+    // Quick Actions
     openCase: dashboard.openCase,
     callCustomer: dashboard.callCustomer,
+    initiateCall: dashboard.initiateCall,
+    scheduleCall: dashboard.scheduleCall,
     sendReminder: dashboard.sendReminder,
+    sendEmail: dashboard.sendEmail,
+    composeEmail: dashboard.composeEmail,
     scheduleCallback: dashboard.scheduleCallback,
-    showAllEhemalige: dashboard.showAllEhemalige,
+
+    // AI & Recommendations
+    applyAIRecommendation: dashboard.applyAIRecommendation,
+
+    // Workflows
+    startMahnprozess: dashboard.startMahnprozess,
+    startMahnlauf: dashboard.startMahnlauf,
+    createAgreement: dashboard.createAgreement,
+    viewAgreement: dashboard.viewAgreement,
+    sellCase: dashboard.sellCase,
+    writeOff: dashboard.writeOff,
+    reviewForSale: dashboard.reviewForSale,
+    reviewForWriteOff: dashboard.reviewForWriteOff,
+
+    // Tasks
+    rescheduleTask: dashboard.rescheduleTask,
+    openTaskCustomer: dashboard.openTaskCustomer,
+
+    // Documents
+    uploadDocument: dashboard.uploadDocument,
+    downloadDocument: dashboard.downloadDocument,
+    printDocument: dashboard.printDocument,
+    generateDemoCustomerFile: dashboard.generateDemoCustomerFile,
+
+    // CRM
+    editStammdaten: dashboard.editStammdaten,
+    crmCall: dashboard.crmCall,
+    crmEmail: dashboard.crmEmail,
+    crmNote: dashboard.crmNote,
+    crmSchedule: dashboard.crmSchedule,
+    openCrmFromModal: dashboard.openCrmFromModal,
+
+    // Export
     exportReport: dashboard.exportReport,
 });
 

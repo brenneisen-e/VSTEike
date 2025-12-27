@@ -236,6 +236,33 @@ export function filterByDPDBucket(bucket) {
     }
 }
 
+export function filterByDPD() {
+    window.showNotification?.('DPD-Filter aktiviert', 'info');
+    // Reset all filters and show DPD overview
+    const table = document.querySelector('.banken-page .customer-table tbody');
+    if (table) {
+        table.querySelectorAll('tr').forEach(row => row.style.display = '');
+    }
+}
+
+export function filterByAll() {
+    window.showNotification?.('Alle Kunden anzeigen', 'info');
+    // Reset all filters
+    const table = document.querySelector('.banken-page .customer-table tbody');
+    if (table) {
+        table.querySelectorAll('tr').forEach(row => row.style.display = '');
+    }
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = 'Zeige alle Fälle';
+    }
+}
+
+export function showRecoveryDetails() {
+    window.showNotification?.('Recovery-Details werden geladen...', 'info');
+    // Show recovery rate details
+}
+
 // ========================================
 // COLLAPSIBLE SECTIONS
 // ========================================
@@ -498,4 +525,157 @@ function parseAmount(amountStr) {
     if (!amountStr) return 0;
     const cleaned = amountStr.replace(/[€\s]/g, '').replace(/\./g, '').replace(',', '.');
     return parseFloat(cleaned) || 0;
+}
+
+// ========================================
+// ADDITIONAL UI FUNCTIONS (Stubs)
+// ========================================
+
+export function filterByAmount() {
+    window.showNotification?.('Filterung nach Betrag', 'info');
+}
+
+export function filterAufgaben(filter) {
+    window.showNotification?.(`Aufgaben-Filter: ${filter}`, 'info');
+}
+
+export function showNewCases() {
+    window.showNotification?.('Neue Fälle werden angezeigt', 'info');
+}
+
+export function showAllNewCases() {
+    window.showNotification?.('Alle neuen Fälle anzeigen', 'info');
+}
+
+export function showAllResolvedCases() {
+    window.showNotification?.('Alle abgeschlossenen Fälle anzeigen', 'info');
+}
+
+export function showPayments() {
+    window.showNotification?.('Zahlungseingänge werden geladen', 'info');
+}
+
+export function showPromises() {
+    window.showNotification?.('Zahlungsversprechen werden angezeigt', 'info');
+}
+
+export function showAlternativeStrategies() {
+    window.showNotification?.('Alternative Strategien anzeigen', 'info');
+}
+
+export function showCrmSection(section) {
+    window.showNotification?.(`CRM-Bereich: ${section}`, 'info');
+}
+
+export function showFullLetter() {
+    window.showNotification?.('Vollständiges Schreiben anzeigen', 'info');
+}
+
+export function toggleCreditView() {
+    window.showNotification?.('Kreditansicht umschalten', 'info');
+}
+
+export function toggleDocument(docId) {
+    window.showNotification?.(`Dokument ${docId} umschalten`, 'info');
+}
+
+export function applyAIRecommendation(action) {
+    window.showNotification?.(`KI-Empfehlung anwenden: ${action}`, 'success');
+}
+
+export function initiateCall(customerId) {
+    window.showNotification?.(`Anruf initiieren: ${customerId}`, 'info');
+}
+
+export function scheduleCall(customerId) {
+    window.showNotification?.(`Anruf planen: ${customerId}`, 'info');
+}
+
+export function sendEmail(customerId) {
+    window.showNotification?.(`E-Mail senden an: ${customerId}`, 'info');
+}
+
+export function composeEmail() {
+    window.showNotification?.('E-Mail verfassen', 'info');
+}
+
+export function startMahnprozess() {
+    window.showNotification?.('Mahnprozess wird gestartet', 'info');
+}
+
+export function startMahnlauf() {
+    window.showNotification?.('Mahnlauf wird gestartet', 'info');
+}
+
+export function createAgreement() {
+    window.showNotification?.('Vereinbarung erstellen', 'info');
+}
+
+export function viewAgreement(agreementId) {
+    window.showNotification?.(`Vereinbarung ${agreementId} anzeigen`, 'info');
+}
+
+export function sellCase() {
+    window.showNotification?.('Fall zum Verkauf markieren', 'info');
+}
+
+export function writeOff() {
+    window.showNotification?.('Fall zur Abschreibung markieren', 'warning');
+}
+
+export function reviewForSale() {
+    window.showNotification?.('Prüfung für Verkauf eingeleitet', 'info');
+}
+
+export function reviewForWriteOff() {
+    window.showNotification?.('Prüfung für Abschreibung eingeleitet', 'info');
+}
+
+export function rescheduleTask(taskId) {
+    window.showNotification?.(`Aufgabe ${taskId} wird neu terminiert`, 'info');
+}
+
+export function openTaskCustomer(customerId) {
+    window.openCustomerDetail?.(customerId);
+}
+
+export function uploadDocument() {
+    window.showNotification?.('Dokument hochladen', 'info');
+}
+
+export function downloadDocument(docId) {
+    window.showNotification?.(`Dokument ${docId} wird heruntergeladen`, 'info');
+}
+
+export function printDocument(docId) {
+    window.showNotification?.(`Dokument ${docId} wird gedruckt`, 'info');
+}
+
+export function generateDemoCustomerFile() {
+    window.showNotification?.('Demo-Kundenakte wird generiert', 'info');
+}
+
+export function editStammdaten() {
+    window.showNotification?.('Stammdaten bearbeiten', 'info');
+}
+
+export function crmCall() {
+    window.showNotification?.('CRM: Anruf starten', 'info');
+}
+
+export function crmEmail() {
+    window.showNotification?.('CRM: E-Mail schreiben', 'info');
+}
+
+export function crmNote() {
+    window.showNotification?.('CRM: Notiz hinzufügen', 'info');
+}
+
+export function crmSchedule() {
+    window.showNotification?.('CRM: Termin planen', 'info');
+}
+
+export function openCrmFromModal(customerId) {
+    window.closeCrmProfile?.();
+    window.openCrmProfile?.(customerId);
 }
