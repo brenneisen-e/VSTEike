@@ -550,6 +550,30 @@ const refreshAfterFilterChange = () => {
 };
 
 // ========================================
+// ACTIVE AGENT ID
+// ========================================
+
+/**
+ * Get the currently active agent ID for opening Agentursicht
+ * Returns the selected agent filter, or the first agent, or a default
+ */
+export const getActiveAgentId = () => {
+    // If a specific agent is selected in filters, use that
+    if (state.filters.agentur && state.filters.agentur !== 'alle') {
+        return state.filters.agentur;
+    }
+
+    // Otherwise return the first available agent
+    const agenturen = getAgenturen();
+    if (agenturen.length > 0) {
+        return agenturen[0].id;
+    }
+
+    // Fallback to default demo agent
+    return 'VM-2024-0001';
+};
+
+// ========================================
 // WINDOW EXPORTS
 // ========================================
 
@@ -565,6 +589,7 @@ Object.assign(window, {
     updateAgenturFilterDisplay,
     getAgenturenData,
     setDailyRawData,
+    getActiveAgentId,
     // New centralized filter functions
     updateFilters,
     setSelectedStates,

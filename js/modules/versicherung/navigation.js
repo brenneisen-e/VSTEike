@@ -53,8 +53,9 @@ export function openAgenturView() {
     if (mainApp) mainApp.style.display = 'none';
     if (agenturOverview) agenturOverview.style.display = 'block';
 
-    const activeAgentId = window.getActiveAgentId?.();
-    if (activeAgentId && typeof window.showAgenturOverview === 'function') {
+    // Get active agent ID - getActiveAgentId returns first agent or default if none selected
+    const activeAgentId = window.getActiveAgentId?.() ?? 'VM-2024-0001';
+    if (typeof window.showAgenturOverview === 'function') {
         window.showAgenturOverview(activeAgentId);
     }
 }
