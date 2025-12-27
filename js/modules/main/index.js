@@ -352,4 +352,3 @@ Object.assign(window, {
     updateAgenturFilterDropdown
 });
 
-console.log('✅ Main Application ES6 modules loaded (ES2024)');

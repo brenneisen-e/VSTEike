@@ -1,0 +1,92 @@
+/**
+ * Tables - Konten & Verträge Tab
+ */
+
+.konten-header { margin-bottom: 24px; }
+
+.konten-summary {
+    display: flex;
+    gap: 24px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.konten-kpi { display: flex; flex-direction: column; gap: 2px; }
+.konten-kpi .kpi-value { font-size: 20px; font-weight: 700; color: #1e293b; }
+.konten-kpi .kpi-value.highlight-red { color: #dc2626; }
+.konten-kpi .kpi-label { font-size: 12px; color: #64748b; }
+
+.credit-products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.credit-product-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+.credit-product-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.credit-product-card.danger { border-left: 4px solid #ef4444; }
+.credit-product-card.warning { border-left: 4px solid #f59e0b; }
+.credit-product-card.primary { border-left: 4px solid #3b82f6; }
+
+.credit-product-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+
+.credit-product-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.credit-product-card.danger .credit-product-icon { background: #fee2e2; color: #dc2626; }
+.credit-product-card.warning .credit-product-icon { background: #fef3c7; color: #d97706; }
+.credit-product-card.primary .credit-product-icon { background: #dbeafe; color: #2563eb; }
+
+.credit-product-info { flex: 1; min-width: 0; }
+.credit-product-name { display: block; font-size: 14px; font-weight: 600; color: #1e293b; }
+.credit-product-number { display: block; font-size: 11px; color: #64748b; font-family: 'Monaco', 'Menlo', monospace; }
+
+.credit-status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.credit-status-badge.danger { background: #fee2e2; color: #dc2626; }
+.credit-status-badge.warning { background: #fef3c7; color: #d97706; }
+
+.credit-product-amounts { margin-bottom: 12px; }
+.amount-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.amount-row .amount-label { color: #64748b; }
+.amount-row .amount-value { font-weight: 600; color: #1e293b; }
+.amount-row .amount-value.highlight-red { color: #dc2626; }
+
+.utilization-bar {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    margin-top: 8px;
+    position: relative;
+    overflow: visible;
+}
+
+.utilization-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
+.utilization-fill.danger { background: #ef4444; }
+.utilization-fill.warning { background: #f59e0b; }
+
+.over-limit-indicator {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    background: repeating-linear-gradient(45deg, #dc2626, #dc2626 2px, #b91c1c 2px, #b91c1c 4px);
+    border-radius: 3px;
+}
+
+.credit-mini-chart { padding-top: 8px; border-top: 1px solid #f1f5f9; }
+.credit-mini-chart svg { width: 100%; height: 50px; }
+.credit-mini-chart .chart-label { display: block; font-size: 10px; color: #94a3b8; text-align: center; margin-top: 4px; }

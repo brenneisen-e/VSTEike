@@ -61,7 +61,7 @@ export function init() {
     initCopyButtons();
 
     // Log initialization
-    console.log('[VSTEike] Application initialized');
+    // Application initialized
 }
 
 /**

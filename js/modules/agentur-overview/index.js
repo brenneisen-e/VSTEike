@@ -272,7 +272,6 @@ export const showAgenturTab = (tabName) => {
 };
 
 const loadAgenturData = (vermittlerId) => {
-    console.log('📂 Lade Daten für Agentur:', vermittlerId);
 
     const agenturen = window.getAgenturen?.() ?? [];
     const agentur = agenturen.find(a => a.id === vermittlerId);
@@ -299,7 +298,6 @@ const loadAgenturData = (vermittlerId) => {
 };
 
 export const showAgenturOverview = (vermittlerId) => {
-    console.log('📊 Zeige Agentur-Übersicht für:', vermittlerId);
 
     const pages = ['landingPage', 'mainApp', 'billingCheckPage', 'potentialAnalysePage', 'kundenDetailPage'];
     pages.forEach(id => {
@@ -314,7 +312,6 @@ export const showAgenturOverview = (vermittlerId) => {
 };
 
 export const backFromAgentur = () => {
-    console.log('🔙 Zurück vom Agentur-Overview');
     const landingPage = document.getElementById('landingPage');
     const agenturOverview = document.getElementById('agenturOverview');
 
@@ -327,7 +324,6 @@ export const backFromAgentur = () => {
 // ========================================
 
 export const openBillingCheck = () => {
-    console.log('💳 Öffne Billing Check');
     ['landingPage', 'mainApp', 'agenturOverview'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -349,7 +345,6 @@ export const closeBillingCheck = () => {
 // ========================================
 
 export const filterFidaCases = (status) => {
-    console.log('🔍 Filtere FIDA-Fälle nach:', status);
 
     document.querySelectorAll('.fida-filter-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.fida-filter-btn[onclick="filterFidaCases('${status}')"]`)?.classList.add('active');
@@ -364,7 +359,6 @@ export const filterFidaCases = (status) => {
 };
 
 export const openKundenDetailFromFida = (kundenId) => {
-    console.log('👤 Öffne Kundendetail von FIDA für:', kundenId);
     window.openKundenDetail?.(kundenId);
 };
 
@@ -382,4 +376,3 @@ Object.assign(window, {
     openKundenDetailFromFida
 });
 
-console.log('✅ Agentur Overview ES6 modules loaded (ES2024)');

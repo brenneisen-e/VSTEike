@@ -1,0 +1,384 @@
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+.bestand-page .empty-state {
+    padding: var(--spacing-xl) * 2;
+    text-align: center;
+    color: var(--gray-500);
+}
+
+/* ========================================
+   MODALS
+   ======================================== */
+.bestand-page .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--spacing-xl);
+}
+
+.bestand-page .modal {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.bestand-page .modal-large {
+    max-width: 900px;
+}
+
+.bestand-page .modal-medium {
+    max-width: 600px;
+}
+
+.bestand-page .modal-small {
+    max-width: 400px;
+}
+
+/* Validation Modal */
+.bestand-page .validation-progress {
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    font-weight: 500;
+}
+
+.bestand-page .validation-case-data {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.bestand-page .validation-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.bestand-page .validation-hint {
+    grid-column: 1 / -1;
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    font-style: italic;
+    margin-bottom: var(--spacing-sm);
+}
+
+.bestand-page .validation-field .field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bestand-page .validation-field .field-input {
+    padding: var(--spacing-sm);
+    font-size: 1rem;
+    color: var(--gray-800);
+    font-weight: 500;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    background: white;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.bestand-page .validation-field .field-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.bestand-page .validation-field .field-input:not(:placeholder-shown) {
+    background: #fef2f2;
+}
+
+.bestand-page .highlight-hint {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--gray-400);
+}
+
+.bestand-page .validation-email-preview {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+}
+
+.bestand-page .validation-email-preview h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    margin-bottom: var(--spacing-sm);
+}
+
+.bestand-page .email-preview-content {
+    font-size: 0.85rem;
+    color: var(--gray-700);
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.bestand-page .email-preview-content mark {
+    background: #fef08a;
+    color: var(--gray-800);
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+.bestand-page .validation-footer {
+    gap: var(--spacing-sm);
+}
+
+.bestand-page .validation-footer .btn {
+    flex: 1;
+}
+
+/* Validation Reject Section */
+.bestand-page .validation-reject-section {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+}
+
+.bestand-page .validation-reject-section .field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--status-abgelehnt);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-xs);
+    display: block;
+}
+
+.bestand-page .validation-reject-section textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    font-size: 0.9rem;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-sm);
+    resize: vertical;
+    min-height: 60px;
+}
+
+.bestand-page .validation-reject-section textarea:focus {
+    outline: none;
+    border-color: var(--status-abgelehnt);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Email Template Cards */
+/* E-Mail Vorlagen View */
+.bestand-page .vorlagen-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.bestand-page .vorlagen-container h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: var(--spacing-sm);
+}
+
+.bestand-page .vorlagen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.bestand-page .email-template-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.bestand-page .email-template-card .template-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.bestand-page .email-template-card .template-header h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 0;
+}
+
+.bestand-page .email-template-card .template-content {
+    padding: var(--spacing-md);
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    white-space: pre-wrap;
+    font-family: inherit;
+    line-height: 1.5;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.bestand-page .email-template-card .btn-copy {
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.bestand-page .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.bestand-page .modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.bestand-page .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--gray-400);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    line-height: 1;
+}
+
+.bestand-page .modal-close:hover {
+    color: var(--gray-600);
+}
+
+.bestand-page .modal-body {
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.bestand-page .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+.bestand-page .modal-footer-right {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+/* Export Info Banner */
+.bestand-page .export-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #ede9fe;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.bestand-page .export-info .export-icon {
+    font-size: 1.5rem;
+    color: var(--status-exportiert);
+}
+
+.bestand-page .export-info .export-text {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+}
+
+/* ========================================
+   FORMS
+   ======================================== */
+.bestand-page .form-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.bestand-page .form-section h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.bestand-page .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
+.bestand-page .form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.bestand-page .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--gray-600);
+    margin-bottom: var(--spacing-xs);
+}
+
+.bestand-page .form-group input,
+.bestand-page .form-group select,
+.bestand-page .form-group textarea {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    background: white;
+}
+
+.bestand-page .form-group input:focus,
+.bestand-page .form-group select:focus,
+.bestand-page .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.bestand-page .form-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.bestand-page .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--gray-200);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-600);
+}
+

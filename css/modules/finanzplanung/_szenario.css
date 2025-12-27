@@ -1,0 +1,38 @@
+/**
+ * Finanzplanung - Szenario-Vergleich
+ */
+
+.szenario-vergleich { padding: 20px; }
+
+.szenario-vergleich canvas {
+    margin-bottom: 20px;
+    max-height: 280px !important;
+    height: 280px !important;
+}
+
+.szenario-legende {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.legende-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legende-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.legende-item.konservativ .legende-color { background: #94a3b8; }
+.legende-item.moderat .legende-color { background: #3b82f6; }
+.legende-item.optimistisch .legende-color { background: #10b981; }
+
+.legende-label { font-size: 13px; color: #64748b; }
+.legende-value { font-size: 14px; font-weight: 600; color: #1e293b; }

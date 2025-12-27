@@ -33,19 +33,16 @@ const debounce = (func, wait) => {
 // ========================================
 
 export const init = () => {
-    console.log('Bestandsübertragung Tool wird initialisiert...');
 
     ui.init();
 
     if (demoData.loadDemoData()) {
-        console.log('Demo-Daten wurden geladen');
         ui.showToast('26 Demo-Vorgänge wurden geladen', 'success');
     }
 
     setupEventListeners();
     refreshData();
 
-    console.log('Initialisierung abgeschlossen');
 };
 
 // ========================================

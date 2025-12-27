@@ -18,11 +18,9 @@ export function toggleUploadMode() {
     if (uploadModeActive) {
         document.body.classList.add('upload-mode-active');
         if (hint) hint.style.display = 'block';
-        console.log('Upload-Modus aktiviert');
     } else {
         document.body.classList.remove('upload-mode-active');
         if (hint) hint.style.display = 'none';
-        console.log('Upload-Modus deaktiviert');
     }
 }
 
@@ -35,7 +33,6 @@ export function initUploadMode() {
     if (hint) hint.style.display = 'block';
 
     uploadModeActive = true;
-    console.log('Upload-Modus standardmäßig aktiviert');
 }
 
 // ========================================
@@ -44,7 +41,6 @@ export function initUploadMode() {
 
 export function triggerLogoUpload() {
     if (!uploadModeActive) {
-        console.log('Upload-Modus nicht aktiv');
         return;
     }
     document.getElementById('logoUploadInput')?.click();
@@ -66,7 +62,6 @@ export function handleLogoUpload(event) {
         if (placeholder) placeholder.style.display = 'none';
 
         localStorage.setItem('customLogo', e.target.result);
-        console.log('Logo hochgeladen und gespeichert');
     };
     reader.readAsDataURL(file);
 }
@@ -96,13 +91,11 @@ export function handleProfileUpload(event, vermittlerId) {
             if (kundenFoto) {
                 kundenFoto.innerHTML = `<img src="${e.target.result}" alt="Kundenfoto" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
             }
-            console.log('Kundenfoto gespeichert');
         } else {
             const photoContainer = document.getElementById('agenturPhoto');
             if (photoContainer) {
                 photoContainer.innerHTML = `<img src="${e.target.result}" alt="Profilbild">`;
             }
-            console.log('Profilbild gespeichert für:', vermittlerId);
         }
     };
     reader.readAsDataURL(file);
@@ -132,7 +125,6 @@ export function handleAgenturPhotoUpload(event) {
         if (placeholder) placeholder.style.display = 'none';
 
         localStorage.setItem('agenturPhoto', e.target.result);
-        console.log('Agentur-Foto hochgeladen und gespeichert');
     };
     reader.readAsDataURL(file);
 }
@@ -149,7 +141,6 @@ export async function loadSavedImages() {
             configImages = await response.json();
         }
     } catch {
-        console.log('Keine images-config.json gefunden, nutze Fallbacks');
     }
 
     const savedLogo = localStorage.getItem('customLogo');
@@ -236,5 +227,4 @@ export function exportImagesForGitHub() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    console.log('Bilder exportiert für GitHub');
 }

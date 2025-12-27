@@ -163,7 +163,6 @@ export function executeSuggestion(element) {
 }
 
 export function selectAgentSuggestion(agentId, agentName) {
-    console.log('Agentur ausgewählt:', agentId, agentName);
 
     const container = document.getElementById('autocompleteSuggestions');
     if (container) container.style.display = 'none';
@@ -180,7 +179,6 @@ export function selectAgentSuggestion(agentId, agentName) {
 }
 
 export function selectPotentialSuggestion(productId, productName) {
-    console.log('Potential ausgewählt:', productId, productName);
 
     const container = document.getElementById('autocompleteSuggestions');
     if (container) container.style.display = 'none';

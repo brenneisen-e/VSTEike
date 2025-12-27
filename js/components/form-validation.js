@@ -237,7 +237,7 @@ export function create(form, schema = {}, options = {}) {
             // Get rule function
             const ruleFn = rules[ruleName];
             if (!ruleFn) {
-                console.warn(`Unknown validation rule: ${ruleName}`);
+                // Unknown rule: skip
                 continue;
             }
 

@@ -15,7 +15,6 @@ let currentVermittlerMode = 'makler';
 // ========================================
 
 export function openKundenDetail(kundenName, vermittlerId) {
-    console.log('Kundendetail öffnen:', kundenName, vermittlerId);
 
     const fidaContainer = document.getElementById('fidaContainer');
     fidaActiveInPotentialAnalyse = fidaContainer?.style.display === 'block';
@@ -73,7 +72,6 @@ export function toggleKundenFida() {
 
 export function switchVermittlerMode(mode) {
     currentVermittlerMode = mode;
-    console.log('Vermittlermodus gewechselt zu:', mode);
 
     document.querySelectorAll('.toggle-option').forEach(btn => {
         btn.classList.remove('active');
@@ -105,7 +103,6 @@ export function switchVermittlerMode(mode) {
 }
 
 export function updateOpenFinanceTable(mode) {
-    console.log('Open Finance Tabelle für Modus:', mode);
 
     document.querySelectorAll('tr[data-anbieter="ergo"]').forEach(row => {
         row.style.display = mode === 'ao' ? 'none' : '';
@@ -132,7 +129,6 @@ export function switchKundenTab(tabName) {
     const tabContent = document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
     tabContent?.classList.add('active');
 
-    console.log('Tab gewechselt zu:', tabName);
 }
 
 export function toggleImpulsDetail(impulsId) {
@@ -150,7 +146,6 @@ export function toggleImpulsDetail(impulsId) {
 }
 
 export function viewKommunikation(kommId) {
-    console.log('Kommunikation ansehen:', kommId);
 
     const kommunikationen = {
         'email-1': {

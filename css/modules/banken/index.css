@@ -9,14 +9,14 @@
 /* KPIs: Cards, Charts, Matrix, Segments */
 @import '_kpis.css';
 
-/* Tables: Customer tables, Data tables */
-@import '_tables.css';
+/* Tables: Customer tables, Badges, Modals (modularized) */
+@import 'tables/index.css';
 
-/* CRM: Customer detail views, Profile */
-@import '_crm.css';
+/* CRM: Customer detail views, Profile (modularized) */
+@import 'crm/index.css';
 
-/* Chat: Banken chat interface */
-@import '_chat.css';
+/* Chat: Banken chat interface (modularized) */
+@import 'chat/index.css';
 
 /* Feedback: Feedback panel, Screenshots */
 @import '_feedback.css';

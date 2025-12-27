@@ -420,7 +420,6 @@ export const sendBankenMessage = () => {
 };
 
 export const showFilteredCustomers = (customerIdsString) => {
-    console.log('🔍 Showing filtered customers:', customerIdsString);
     const customerIds = customerIdsString.split(',').map(id => id.trim());
 
     const customerListSection = document.querySelector('.customer-list-section');
@@ -551,17 +550,14 @@ export const exportChatToPdf = (data, filename) => {
 
 export const initBankenChat = () => {
     if (bankenChatInitialized) {
-        console.log('⚠️ Banken Chat bereits initialisiert');
         return;
     }
 
-    console.log('🤖 Initialisiere Banken Chat...');
 
     const chatToggle = document.getElementById('bankenChatToggle');
     const chatWidget = document.getElementById('bankenChatWidget');
 
     if (!chatToggle || !chatWidget) {
-        console.log('ℹ️ Banken Chat Elemente nicht gefunden');
         return;
     }
 
@@ -604,7 +600,6 @@ export const initBankenChat = () => {
         }
     });
 
-    console.log('✅ Banken Chat initialisiert');
 };
 
 // ========================================
@@ -620,6 +615,5 @@ Object.assign(window, {
     get lastChatQueryResult() { return lastChatQueryResult; }
 });
 
-console.log('✅ Banken Chat ES6 modules loaded (ES2024)');
 
 export { DEMO_CUSTOMER_DATA, DEMO_PAYMENTS };

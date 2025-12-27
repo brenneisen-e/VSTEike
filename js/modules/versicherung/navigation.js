@@ -23,7 +23,6 @@ export function openDashboard() {
     window.initChatBot?.();
     window.setupChatManually?.();
 
-    console.log('📊 Dashboard geöffnet');
 }
 
 export function backToLanding() {
@@ -42,7 +41,6 @@ export function backToLanding() {
     setNavigationEnabled(false);
     document.body.classList.remove('dashboard-active');
 
-    console.log('🏠 Zurück zur Landing Page');
 }
 
 export function setNavigationEnabled(enabled) {
@@ -71,14 +69,12 @@ export function openAgenturView() {
         window.showAgenturOverview(activeAgentId);
     }
 
-    console.log('👤 Agentursicht geöffnet');
 }
 
 export function backToGesamtsicht() {
     document.getElementById('agentur-overview-page')?.classList.add('hidden');
     document.getElementById('main-dashboard')?.classList.remove('hidden');
 
-    console.log('📊 Zurück zur Gesamtsicht');
 }
 
 // ========================================
@@ -114,7 +110,6 @@ export async function openRisikoscoring() {
         risikoModule.style.display = 'block';
     }
 
-    console.log('📊 Risikoscoring geöffnet');
 }
 
 export function closeRisikoscoring() {
@@ -124,7 +119,6 @@ export function closeRisikoscoring() {
     if (risikoModule) risikoModule.style.display = 'none';
     if (mainDashboard) mainDashboard.classList.remove('hidden');
 
-    console.log('❌ Risikoscoring geschlossen');
 }
 
 // ========================================
@@ -162,7 +156,6 @@ export async function openBestandsuebertragung() {
         bestandModule.style.display = 'block';
     }
 
-    console.log('📦 Bestandsübertragung geöffnet');
 }
 
 export function closeBestandsuebertragung() {
@@ -172,7 +165,6 @@ export function closeBestandsuebertragung() {
     if (bestandModule) bestandModule.style.display = 'none';
     if (mainDashboard) mainDashboard.classList.remove('hidden');
 
-    console.log('❌ Bestandsübertragung geschlossen');
 }
 
 // ========================================
@@ -195,7 +187,6 @@ export function saveUserName() {
         const settingsPanel = document.getElementById('settingsPanel');
         settingsPanel?.classList.remove('open');
 
-        console.log('✅ Benutzername gespeichert:', name);
     }
 }
 

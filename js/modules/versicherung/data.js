@@ -18,7 +18,6 @@ export function updateMainLoadingProgress(percent, text) {
     const statusText = document.getElementById('loadingStatus');
     const percentText = document.getElementById('loadingPercent');
 
-    console.log(`Loading: ${percent}% - ${text}`);
     if (progressBar) progressBar.style.width = `${percent}%`;
     if (statusText) statusText.textContent = text;
     if (percentText) percentText.textContent = `${percent}%`;
@@ -46,7 +45,6 @@ export function processCSVData(csvText) {
                 window.state.useUploadedData = true;
             }
 
-            console.log('CSV-Daten geladen:', parsedData.length, 'Datensätze');
 
             window.updateAgenturFilterDropdown?.();
             window.updateAllKPIs?.();
@@ -71,7 +69,6 @@ export function processCSVData(csvText) {
 // ========================================
 
 export async function loadDefaultCSVData() {
-    console.log('Lade Standard-CSV-Daten...');
 
     updateMainLoadingProgress(10, 'Initialisiere Anwendung...');
     await sleep(200);
@@ -104,15 +101,12 @@ export async function loadDefaultCSVData() {
         updateMainLoadingProgress(100, 'Fertig!');
         await sleep(400);
 
-        console.log('Alle Daten geladen');
 
     } catch (error) {
-        console.warn('Fehler beim Laden der CSV-Daten:', error);
         updateMainLoadingProgress(90, 'Lade Feedback-Kommentare...');
         await loadFeedbackData();
         updateMainLoadingProgress(100, 'Bereit');
         await sleep(500);
-        console.log('Daten können manuell über Settings > CSV Upload geladen werden');
     }
 }
 
@@ -124,11 +118,9 @@ export async function loadFeedbackData() {
             const result = await response.json();
             if (result.success && result.data) {
                 window.preloadedFeedback = result.data;
-                console.log(`${result.data.length} Feedback-Kommentare geladen`);
             }
         }
     } catch (error) {
-        console.warn('Feedback konnte nicht vorgeladen werden:', error);
     }
 }
 
@@ -149,7 +141,6 @@ export function setupChatManually() {
         return;
     }
 
-    console.log('Chat Elemente gefunden, setze Event Listeners...');
 
     chatClose?.addEventListener('click', () => {
         chatWidget.style.display = 'none';
@@ -182,11 +173,9 @@ export function setupChatManually() {
         chatInput.focus();
     });
 
-    console.log('Chat manuell initialisiert!');
 }
 
 export function openDashboard() {
-    console.log('Dashboard öffnen...');
 
     const landingPage = document.getElementById('landingPage');
     const mainApp = document.getElementById('mainApp');

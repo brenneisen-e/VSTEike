@@ -1,0 +1,18 @@
+/**
+ * Provisionssimulation - CSS Variables
+ */
+
+:root {
+    --ps-primary: #3b82f6;
+    --ps-primary-dark: #2563eb;
+    --ps-secondary: #10b981;
+    --ps-warning: #f59e0b;
+    --ps-text: #1e293b;
+    --ps-text-muted: #64748b;
+    --ps-border: #e2e8f0;
+    --ps-bg: #f8fafc;
+    --ps-white: #fff;
+    --ps-radius: 12px;
+    --ps-radius-sm: 8px;
+    --ps-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

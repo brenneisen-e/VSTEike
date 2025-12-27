@@ -1,0 +1,180 @@
+/**
+ * Provisionssimulation - KPI Comparison Cards
+ */
+
+.provision-kpi-comparison {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.provision-kpi-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.provision-kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.provision-kpi-card.alpha::before { background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%); }
+.provision-kpi-card.beta::before { background: linear-gradient(90deg, #10b981 0%, #34d399 100%); }
+.provision-kpi-card.delta::before { background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); }
+.provision-kpi-card.neutral::before { background: linear-gradient(90deg, #94a3b8 0%, #cbd5e1 100%); }
+
+.provision-kpi-label {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.provision-kpi-label .model-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.provision-kpi-label .model-badge.alpha { background: #dbeafe; color: #3b82f6; }
+.provision-kpi-label .model-badge.beta { background: #dcfce7; color: #10b981; }
+
+.provision-kpi-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.provision-kpi-card.alpha .provision-kpi-value { color: #3b82f6; }
+.provision-kpi-card.beta .provision-kpi-value { color: #10b981; }
+.provision-kpi-card.delta .provision-kpi-value { color: #f59e0b; }
+
+.provision-kpi-delta {
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.provision-kpi-delta.positive { color: #10b981; }
+.provision-kpi-delta.negative { color: #ef4444; }
+
+/* Revers Tier Section */
+.revers-tier-section {
+    margin-top: 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 10px;
+    border: 1px solid #bae6fd;
+}
+
+.revers-tier-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.revers-tier-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0369a1;
+}
+
+.revers-tier-info {
+    font-size: 11px;
+    color: #0284c7;
+    background: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.revers-tier-progress {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.revers-step {
+    flex: 1;
+    height: 8px;
+    background: #e0f2fe;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.revers-step.active { background: linear-gradient(90deg, #3b82f6 0%, #0ea5e9 100%); }
+
+.revers-step.current::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.revers-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Action Buttons */
+.provision-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.provision-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.provision-action-btn.primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+}
+
+.provision-action-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.provision-action-btn.secondary {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.provision-action-btn.secondary:hover { background: #e2e8f0; }

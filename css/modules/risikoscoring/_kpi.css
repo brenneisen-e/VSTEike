@@ -1,0 +1,77 @@
+/**
+ * Risikoscoring - KPI Box
+ */
+
+.risikoscoring-page .kpi-box {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 25px;
+}
+
+.risikoscoring-page .kpi-box-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.risikoscoring-page .kpi-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.risikoscoring-page .kpi-item:last-child { border-bottom: none; }
+.risikoscoring-page .kpi-label { font-size: 0.85em; color: #6b7280; margin-bottom: 10px; }
+
+.risikoscoring-page .kpi-value-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.risikoscoring-page .kpi-value {
+    font-size: 1.8em;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.risikoscoring-page .kpi-value.combined-ratio-red { color: #dc2626; }
+.risikoscoring-page .kpi-trend { font-size: 0.9em; font-weight: 600; }
+.risikoscoring-page .kpi-trend.positive { color: #059669; }
+
+.risikoscoring-page .vm-distribution {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.risikoscoring-page .vm-level {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    border-radius: 8px;
+}
+
+.risikoscoring-page .vm-level.a { background: #d1fae5; }
+.risikoscoring-page .vm-level.b { background: #fef3c7; }
+.risikoscoring-page .vm-level.c { background: #fed7aa; }
+.risikoscoring-page .vm-level.d { background: #fecaca; }
+
+.risikoscoring-page .vm-count {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.risikoscoring-page .vm-label {
+    font-size: 0.75em;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.risikoscoring-page .kpi-benchmark { font-size: 0.85em; color: #6b7280; }

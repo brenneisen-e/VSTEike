@@ -1,0 +1,65 @@
+/**
+ * Tables - Base Styles
+ * Core table and customer table styles
+ */
+
+.customer-table tr {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.customer-table tr:hover { background: #f8fafc; }
+
+.customer-cell strong { display: block; color: #1e293b; }
+.customer-cell small { color: #94a3b8; font-size: 12px; }
+
+.amount { font-weight: 600; color: #1e293b; }
+
+/* Pagination */
+.table-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.pagination-controls { display: flex; align-items: center; gap: 4px; }
+
+.pagination-btn {
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) { background: #f1f5f9; }
+.pagination-btn.active { background: #3b82f6; border-color: #3b82f6; color: white; }
+.pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Action Buttons in Table */
+.actions-cell { display: flex; gap: 6px; }
+
+.action-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover { background: #e2e8f0; color: #334155; }
+.action-btn.primary { background: #dbeafe; color: #3b82f6; }
+.action-btn.primary:hover { background: #bfdbfe; }
+.action-btn.danger { background: #fee2e2; color: #ef4444; }
+.action-btn.danger:hover { background: #fecaca; }

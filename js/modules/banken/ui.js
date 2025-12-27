@@ -130,7 +130,6 @@ export async function loadComponent(componentName) {
         const response = await fetch(`partials/banken/${componentName}.html`);
         return response.ok ? await response.text() : `<!-- Component ${componentName} failed -->`;
     } catch (error) {
-        console.warn(`Error loading component ${componentName}:`, error);
         return `<!-- Component ${componentName} error -->`;
     }
 }
@@ -148,7 +147,6 @@ export async function loadBankenComponents(container) {
     container.innerHTML = htmlParts.join('');
 
     window.restoreCollapsedSections?.();
-    console.log('✅ All Banken components loaded');
 }
 
 function showLoadingProgress(container) {

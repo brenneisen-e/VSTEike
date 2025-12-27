@@ -36,7 +36,6 @@ export function initLandingChat() {
         chatInput.style.height = `${chatInput.scrollHeight}px`;
     });
 
-    console.log('✅ Landing Chat initialisiert');
 }
 
 // ========================================
