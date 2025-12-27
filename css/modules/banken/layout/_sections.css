@@ -3,6 +3,23 @@
  * Page sections and intro areas
  */
 
+/* Main Banken Module Container - Padding */
+#bankenModule {
+    padding: 0 24px 24px 24px;
+}
+
+@media (min-width: 1200px) {
+    #bankenModule {
+        padding: 0 48px 48px 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    #bankenModule {
+        padding: 0 16px 16px 16px;
+    }
+}
+
 .banken-section {
     display: none;
 }

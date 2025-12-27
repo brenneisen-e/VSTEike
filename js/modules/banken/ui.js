@@ -215,7 +215,12 @@ export async function loadBankenModule() {
     await loadBankenComponents(container);
 
     // Initialize Banken Chat after components are loaded
-    window.initBankenChat?.();
+    console.log('[BANKEN] Calling initBankenChat...');
+    if (typeof window.initBankenChat === 'function') {
+        window.initBankenChat();
+    } else {
+        console.error('[BANKEN] initBankenChat not found on window');
+    }
 
     window.showNotification?.('Banken-Modul geladen', 'success');
 }

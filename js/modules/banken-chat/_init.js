@@ -39,7 +39,10 @@ export const askBankenQuestion = (question) => {
  * Sets up event listeners and prepares the chat interface
  */
 export const initBankenChat = () => {
+    console.log('[BANKEN-CHAT] initBankenChat called, initialized:', bankenChatInitialized);
+
     if (bankenChatInitialized) {
+        console.log('[BANKEN-CHAT] Already initialized, skipping');
         return;
     }
 
@@ -47,6 +50,7 @@ export const initBankenChat = () => {
     const chatWidget = document.getElementById('bankenChatWidget');
 
     if (!chatToggle || !chatWidget) {
+        console.log('[BANKEN-CHAT] Elements not found yet - toggle:', !!chatToggle, 'widget:', !!chatWidget);
         return;
     }
 
@@ -56,11 +60,12 @@ export const initBankenChat = () => {
     const chatBody = document.getElementById('bankenChatBody');
 
     if (!chatSend || !chatInput || !chatBody) {
-        console.error('[ERROR] Banken Chat Input-Elemente nicht gefunden');
+        console.error('[BANKEN-CHAT] Input elements not found - send:', !!chatSend, 'input:', !!chatInput, 'body:', !!chatBody);
         return;
     }
 
     setBankenChatInitialized(true);
+    console.log('[BANKEN-CHAT] Initialized successfully');
 
     chatToggle.addEventListener('click', () => {
         chatWidget.style.display = 'flex';
