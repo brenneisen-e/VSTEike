@@ -24,14 +24,14 @@ function initFirebase() {
         if (typeof firebase !== 'undefined' && !firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
             feedbackDb = firebase.database();
-            console.log('✅ Firebase initialisiert');
+            // Firebase ready
             loadFeedbackFromFirebase();
         } else if (firebase.apps.length) {
             feedbackDb = firebase.database();
             loadFeedbackFromFirebase();
         }
     } catch (error) {
-        console.warn('Firebase nicht verfügbar, nutze LocalStorage:', error);
+        // Firebase unavailable, using LocalStorage
         loadFeedbackFromLocalStorage();
     }
 }
@@ -91,7 +91,7 @@ function submitFeedback() {
         // In Firebase speichern
         feedbackDb.ref('feedback').push(feedback)
             .then(() => {
-                console.log('✅ Feedback in Firebase gespeichert');
+                // Saved to Firebase
                 document.getElementById('feedbackText').value = '';
                 showFeedbackNotification('Feedback gespeichert!');
             })
@@ -236,4 +236,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initFirebase, 500);
 });
 
-console.log('📝 Banken Feedback Module geladen');
+// Banken Feedback Module loaded

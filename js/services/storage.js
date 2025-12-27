@@ -21,7 +21,7 @@ export function getLocal(key, defaultValue = null) {
         if (item === null) return defaultValue;
         return JSON.parse(item);
     } catch (error) {
-        console.warn(`Error reading from localStorage: ${key}`, error);
+        // Silent fail for localStorage read
         return defaultValue;
     }
 }
@@ -50,7 +50,7 @@ export function removeLocal(key) {
     try {
         localStorage.removeItem(STORAGE_PREFIX + key);
     } catch (error) {
-        console.warn(`Error removing from localStorage: ${key}`, error);
+        // Silent fail for localStorage remove
     }
 }
 
@@ -83,7 +83,7 @@ export function getSession(key, defaultValue = null) {
         if (item === null) return defaultValue;
         return JSON.parse(item);
     } catch (error) {
-        console.warn(`Error reading from sessionStorage: ${key}`, error);
+        // Silent fail for sessionStorage read
         return defaultValue;
     }
 }
@@ -112,7 +112,7 @@ export function removeSession(key) {
     try {
         sessionStorage.removeItem(STORAGE_PREFIX + key);
     } catch (error) {
-        console.warn(`Error removing from sessionStorage: ${key}`, error);
+        // Silent fail for sessionStorage remove
     }
 }
 
