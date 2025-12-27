@@ -37,7 +37,12 @@ export function processCSVData(csvText) {
         const parsedData = window.parseCSV?.(csvText) ?? [];
 
         if (parsedData.length > 0) {
-            window.dailyRawData = parsedData;
+            // Use setDailyRawData to properly sync with core/data.js module
+            if (typeof window.setDailyRawData === 'function') {
+                window.setDailyRawData(parsedData);
+            } else {
+                window.dailyRawData = parsedData;
+            }
 
             if (typeof window.aggregateDailyToMonthly === 'function') {
                 const monthlyData = window.aggregateDailyToMonthly(parsedData);
