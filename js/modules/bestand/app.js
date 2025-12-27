@@ -548,5 +548,4 @@ const processImportFile = async file => {
     }
 };
 
-// Export for VST integration
-export { refreshData };
+// refreshData is already exported at line 174
