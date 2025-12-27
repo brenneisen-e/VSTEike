@@ -135,7 +135,8 @@ Object.assign(window, {
     generateDemoCustomerFile: dashboard.generateDemoCustomerFile,
 
     // CRM
-    editStammdaten: dashboard.editStammdaten,
+    editStammdaten: customer.editStammdaten,
+    cancelStammdatenEdit: customer.cancelStammdatenEdit,
     crmCall: dashboard.crmCall,
     crmEmail: dashboard.crmEmail,
     crmNote: dashboard.crmNote,
