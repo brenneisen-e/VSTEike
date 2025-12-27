@@ -1,0 +1,52 @@
+/* ========================================
+   POTENTIAL FILTER
+   ======================================== */
+
+.potential-filters {
+    max-width: 1400px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.potential-filters .filter-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 8px;
+}
+
+.potential-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.potential-filter-btn:hover {
+    border-color: #86BC25;
+    color: #86BC25;
+}
+
+.potential-filter-btn.active {
+    background: #86BC25;
+    border-color: #86BC25;
+    color: white;
+}
+
+/* Klickbare Zeilen */
+.clickable-row {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.clickable-row:hover {
+    background: #f8fdf5 !important;
+}

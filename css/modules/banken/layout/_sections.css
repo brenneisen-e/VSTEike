@@ -1,0 +1,61 @@
+/**
+ * Sections Styles
+ * Page sections and intro areas
+ */
+
+.banken-section {
+    display: none;
+}
+
+.banken-section.active {
+    display: block;
+}
+
+.section-intro {
+    margin-bottom: 24px;
+}
+
+.section-intro h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+}
+
+.section-intro p {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* Back to Dashboard Button */
+.section-intro.with-back-button {
+    position: relative;
+}
+
+.btn-back-to-dashboard {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+
+.btn-back-to-dashboard:hover {
+    background: #e2e8f0;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+
+.btn-back-to-dashboard svg {
+    color: inherit;
+    margin: 0;
+}

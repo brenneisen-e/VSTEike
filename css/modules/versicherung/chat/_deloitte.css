@@ -1,0 +1,42 @@
+/* ========================================
+   DELOITTE BRANDING STYLES
+   ======================================== */
+
+/* Deloitte Logo Container */
+.deloitte-logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10001;
+}
+
+.deloitte-logo {
+    height: 40px;
+    width: auto;
+}
+
+/* Deloitte D Icon für Chat */
+.chat-icon-deloitte,
+.chat-avatar-deloitte {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid #86BC25;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chat-avatar-deloitte {
+    width: 44px;
+    height: 44px;
+}
+
+.deloitte-d {
+    font-size: 22px;
+    font-weight: 700;
+    color: #000000;
+    font-family: 'Arial', sans-serif;
+}

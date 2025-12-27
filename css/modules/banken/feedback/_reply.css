@@ -1,0 +1,17 @@
+/**
+ * Reply and Feedback Form Styles
+ * Feedback submission and reply functionality
+ */
+
+.reply-submit-btn {
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.reply-submit-btn:hover {
+    background: #4f46e5;
+}

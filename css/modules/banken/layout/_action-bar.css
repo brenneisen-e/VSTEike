@@ -1,0 +1,12 @@
+/**
+ * Action Bar Styles
+ * Toolbar and action buttons
+ */
+
+.action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+}

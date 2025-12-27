@@ -1,0 +1,74 @@
+/* ========================================
+   PRODUKT RANKING
+   ======================================== */
+
+.produkt-rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+
+.rank-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.rank-badge.gold {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.rank-badge.silver {
+    background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    color: white;
+}
+
+.rank-badge.bronze {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    color: white;
+}
+
+.rank-badge.ergo {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    width: 40px;
+    height: 40px;
+}
+
+.rank-label {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.produkt-rank.ao .rank-label {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.produkt-score {
+    text-align: center;
+    min-width: 60px;
+}
+
+.score-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e40af;
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+}

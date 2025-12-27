@@ -1,0 +1,59 @@
+/* ========================================
+   TAB NAVIGATION
+   ======================================== */
+
+.agentur-main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+.agentur-tabs {
+    display: flex;
+    gap: 8px;
+    background: white;
+    padding: 8px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+.agentur-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.agentur-tab:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.agentur-tab.active {
+    background: #86BC25;
+    color: white;
+}
+
+.agentur-tab svg {
+    flex-shrink: 0;
+}
+
+/* Tab Content */
+.agentur-tab-content {
+    display: none;
+}
+
+.agentur-tab-content.active {
+    display: block;
+}

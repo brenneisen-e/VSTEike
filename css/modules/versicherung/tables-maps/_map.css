@@ -1,0 +1,83 @@
+/**
+ * County Map Styles
+ * Interactive map controls and tooltips
+ */
+
+/* County Map Styles */
+.county-path {
+    transition: all 0.2s ease;
+}
+
+.county-path:hover {
+    filter: brightness(0.95);
+}
+
+.zoom-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.zoom-controls button {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.zoom-controls button:hover {
+    background: #f1f5f9;
+    transform: scale(1.05);
+}
+
+#info-tooltip {
+    animation: tooltipFadeIn 0.2s ease;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* County Map Styles */
+.county-path {
+    transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+.county-path:hover {
+    cursor: pointer;
+}
+
+/* Version Display */
+.version-display {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(37, 99, 235, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    font-family: 'Aptos', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.version-display:hover {
+    background: rgba(37, 99, 235, 1);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}

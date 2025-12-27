@@ -1,0 +1,105 @@
+/* ========================================
+   SPARTEN CHART & STORNO REASONS
+   ======================================== */
+
+.sparten-chart {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.sparten-chart h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 20px 0;
+}
+
+.sparten-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sparten-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sparten-bar-label {
+    width: 100px;
+    font-size: 13px;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.sparten-bar-track {
+    flex: 1;
+    height: 24px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sparten-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    transition: width 0.5s ease;
+}
+
+.sparten-bar-fill.leben { background: #2563eb; }
+.sparten-bar-fill.kranken { background: #16a34a; }
+.sparten-bar-fill.schaden { background: #9333ea; }
+.sparten-bar-fill.kfz { background: #f59e0b; }
+
+/* Storno Reasons */
+.storno-reasons {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.storno-reasons h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+}
+
+.storno-reason-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.storno-reason-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.storno-reason-name {
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.storno-reason-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: #dc2626;
+}

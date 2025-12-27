@@ -1,0 +1,82 @@
+/* ========================================
+   PRODUKT CARDS
+   ======================================== */
+
+.produkt-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+.produkt-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.produkt-card.rank-1 {
+    border: 2px solid #f59e0b;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.produkt-card.rank-2 {
+    border: 1px solid #9ca3af;
+}
+
+.produkt-card.rank-3 {
+    border: 1px solid #d97706;
+}
+
+.produkt-card.ao-single {
+    border: 2px solid #dc2626;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.produkt-info {
+    flex: 1;
+}
+
+.produkt-anbieter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.produkt-anbieter img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.produkt-anbieter strong {
+    font-size: 15px;
+    color: #1e293b;
+}
+
+.produkt-details {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.produkt-deckung {
+    font-size: 14px;
+    font-weight: 600;
+    color: #059669;
+}
+
+.produkt-praemie {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.produkt-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}

@@ -1,0 +1,40 @@
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .fida-finance-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .fida-status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fida-finance-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kunden-tabs {
+        flex-wrap: wrap;
+    }
+
+    .komm-item {
+        flex-direction: column;
+    }
+
+    .komm-action {
+        align-self: flex-start;
+    }
+
+    .deckungsluecke-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .deckungsluecke-divider {
+        transform: rotate(90deg);
+    }
+}

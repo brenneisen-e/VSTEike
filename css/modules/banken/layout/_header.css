@@ -1,0 +1,264 @@
+/**
+ * Banken Page Header Styles
+ * Main header, logo, and actions
+ */
+
+.banken-page {
+    padding: 24px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+/* Header */
+.banken-header-new {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding: 16px 20px 20px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.banken-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.banken-header-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.banken-logo-small {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.banken-page-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.banken-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* Header Center - Quick Access Tiles */
+.banken-header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.header-quick-tiles {
+    display: flex;
+    gap: 12px;
+}
+
+.header-tile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.header-tile:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.header-tile.coming-soon {
+    opacity: 0.7;
+}
+
+.header-tile.coming-soon:hover {
+    opacity: 1;
+}
+
+.header-tile svg {
+    color: #64748b;
+}
+
+.header-tile-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.header-tile-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.header-tile-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #e2e8f0;
+    color: #64748b;
+}
+
+.header-tile-badge.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.header-tile-badge.warning {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.header-tile-badge.primary {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.header-tile.active {
+    background: rgba(37, 99, 235, 0.1);
+    border-color: #3b82f6;
+}
+
+/* Header Feedback Button */
+.header-feedback-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.header-feedback-btn:hover {
+    background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    transform: translateY(-1px);
+}
+
+.header-feedback-btn svg {
+    color: white;
+    flex-shrink: 0;
+}
+
+.header-feedback-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: white;
+    color: #8b5cf6;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
+.banken-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.last-update {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* Header Action Buttons */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.header-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+.header-btn.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.header-btn.primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.header-btn svg {
+    flex-shrink: 0;
+}
+
+/* Back Button */
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background: #f1f5f9;
+    color: #334155;
+    border-color: #cbd5e1;
+}

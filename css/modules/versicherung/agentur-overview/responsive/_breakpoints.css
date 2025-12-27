@@ -1,0 +1,49 @@
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .cockpit-kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stammdaten-sections {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .cockpit-kpis {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+    }
+
+    .agentur-header-new {
+        padding: 12px 16px;
+    }
+
+    .agentur-main-content {
+        padding: 0 16px;
+    }
+
+    .agentur-tabs {
+        padding: 4px;
+    }
+
+    .agentur-tab {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .agentur-tab span {
+        display: none;
+    }
+
+    .kpi-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stammdaten-grid-new {
+        grid-template-columns: 1fr;
+    }
+}
