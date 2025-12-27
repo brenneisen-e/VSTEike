@@ -3,9 +3,5 @@
  * Imports all banken-specific styles from modular files
  */
 
-@import 'modules/banken/_layout.css';
-@import 'modules/banken/_kpis.css';
-@import 'modules/banken/_tables.css';
-@import 'modules/banken/_crm.css';
-@import 'modules/banken/_chat.css';
-@import 'modules/banken/_feedback.css';
+/* Main modular entry point */
+@import 'modules/banken/index.css';
