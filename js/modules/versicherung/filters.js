@@ -158,6 +158,55 @@ Hier kannst du:
 
 Klicke auf "Zur Gesamtübersicht" um loszulegen!`,
 
+    'Was kann ich mit diesem Tool alles machen?': `**Willkommen im Vertriebssteuerungs-Cockpit!**
+
+Dieses Tool bietet dir:
+- **Gesamtübersicht** - KPI-Dashboard mit Charts und Deutschlandkarte
+- **Agenturübersicht** - Detaillierte Vermittler-Analysen
+- **Potentialanalyse** - Cross-Selling und Up-Selling Potentiale
+- **Bestandsübertragung** - Workflow für E-Mail-Vorgänge
+- **Banken-Modul** - NPL-Management und Inkasso-Steuerung
+- **KI-Assistent** - Natürlichsprachliche Datenabfragen
+
+Wähle einfach einen Bereich aus den Navigationskacheln!`,
+
+    'Welche Use Cases gibt es für dieses Dashboard?': `**Verfügbare Use Cases:**
+
+**Versicherung:**
+- Vertriebssteuerung & KPI-Monitoring
+- Vermittler-Performance-Analyse
+- Regionale Marktanalysen
+- Cross-Selling Potentiale
+
+**Banken:**
+- NPL-Portfolio-Management
+- Inkasso-Workflow-Steuerung
+- Mahnstufenanalyse
+- Recovery-Prognosen
+
+**Bestand:**
+- E-Mail-basierte Vorgangsbearbeitung
+- Bestandsübertragungen
+- Dokumenten-Matching
+
+Klicke auf die Navigationskacheln um zu starten!`,
+
+    'Zeige mir eine Übersicht meiner Daten': `**Datenübersicht:**
+
+Um deine Daten zu sehen, hast du folgende Optionen:
+
+1. **Gesamtübersicht öffnen** - Klicke auf die Navigationskachel
+2. **Beispieldaten nutzen** - Werden automatisch geladen
+3. **Eigene CSV hochladen** - Über den Upload-Bereich
+
+Nach dem Laden siehst du:
+- 9 KPI-Kacheln mit Trends
+- Interaktive Deutschlandkarte
+- Zeitreihen-Charts
+- Filter nach Vermittler, Bundesland, Segment
+
+Klicke auf "Gesamtübersicht" um zu starten!`,
+
     'Zeige mir ein Beispiel Dashboard': `**So funktioniert das Dashboard:**
 
 1. **Klicke auf "Zur Gesamtübersicht"** oben
