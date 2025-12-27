@@ -41,6 +41,9 @@ import './versicherung/index.js';
 import './banken/index.js';
 import './bestand/index.js';
 
+// Mobile App Experience
+import './mobile-app/index.js';
+
 // ========================================
 // INITIALIZATION
 // ========================================
@@ -51,6 +54,7 @@ const initApp = () => {
     window.initBankenChat?.();
     window.initMap?.();
     window.initKPIGrid?.();
+    window.initMobileApp?.();
 };
 
 if (document.readyState === 'loading') {
