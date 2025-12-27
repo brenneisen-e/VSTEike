@@ -234,12 +234,23 @@ export async function loadBankenModule() {
         document.body.appendChild(chatWidget);
     }
 
+    // Initialize Banken Charts
+    console.log('[BANKEN] Calling initBankenCharts...');
+    if (typeof window.initBankenCharts === 'function') {
+        window.initBankenCharts();
+    }
+
     // Initialize Banken Chat after components are loaded
     console.log('[BANKEN] Calling initBankenChat...');
     if (typeof window.initBankenChat === 'function') {
         window.initBankenChat();
     } else {
         console.error('[BANKEN] initBankenChat not found on window');
+    }
+
+    // Initialize Feedback System
+    if (typeof window.initFeedbackSystem === 'function') {
+        window.initFeedbackSystem();
     }
 
     window.showNotification?.('Banken-Modul geladen', 'success');

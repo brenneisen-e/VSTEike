@@ -14,6 +14,7 @@ import * as ui from './ui.js';
 import * as customer from './customer.js';
 import * as documents from './documents.js';
 import * as tasks from './tasks.js';
+import * as charts from './charts.js';
 
 // ========================================
 // FEEDBACK FUNCTIONS
@@ -26,6 +27,7 @@ Object.assign(window, {
     handleAuthorSelect: feedback.handleAuthorSelect,
     handleReplyAuthorSelect: feedback.handleReplyAuthorSelect,
     submitFeedback: feedback.submitFeedback,
+    submitReply: feedback.submitReply,
     openFeedbackDetail: feedback.openFeedbackDetail,
     closeFeedbackDetail: feedback.closeFeedbackDetail,
     editFeedbackByIndex: feedback.editFeedbackByIndex,
@@ -217,6 +219,21 @@ Object.assign(window, {
     openTaskCompletionDialog: tasks.openTaskCompletionDialog,
     closeTaskCompletionDialog: tasks.closeTaskCompletionDialog,
     submitTaskCompletion: tasks.submitTaskCompletion,
+});
+
+// ========================================
+// CHART FUNCTIONS
+// ========================================
+
+Object.assign(window, {
+    initBankenCharts: charts.initBankenCharts,
+    initScatterPlot: charts.initScatterPlot,
+    initPortfolioChart: charts.initPortfolioChart,
+    refreshScatterPlot: charts.refreshScatterPlot,
+    exportMatrix: charts.exportMatrix,
+    updatePortfolioChart: charts.updatePortfolioChart,
+    filterCustomers: charts.filterCustomers,
+    searchCustomers: charts.searchCustomers,
 });
 
 // ========================================

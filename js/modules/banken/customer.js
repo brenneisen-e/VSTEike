@@ -10,6 +10,124 @@
 let currentCustomerId = null;
 
 // ========================================
+// HELPER FUNCTIONS
+// ========================================
+
+function generateCustomerFactors(customer) {
+    const factors = [];
+
+    // Negative factors
+    if (customer.dpd > 60) {
+        factors.push({ type: 'negative', name: `Hoher Verzug (${customer.dpd} DPD)`, impact: '-30 Punkte' });
+    } else if (customer.dpd > 30) {
+        factors.push({ type: 'negative', name: `Moderater Verzug (${customer.dpd} DPD)`, impact: '-15 Punkte' });
+    }
+
+    if (customer.mahnstufe >= 3) {
+        factors.push({ type: 'negative', name: `${customer.mahnstufe} Mahnungen ohne Reaktion`, impact: '-20 Punkte' });
+    }
+
+    if (customer.branche && (customer.branche.includes('Gastronomie') || customer.branche.includes('Restaurant'))) {
+        factors.push({ type: 'negative', name: 'Branchenrisiko: Gastronomie', impact: '-15 Punkte' });
+    }
+
+    if (customer.willingness < 40) {
+        factors.push({ type: 'negative', name: 'Geringe Zahlungsbereitschaft erkennbar', impact: '-25 Punkte' });
+    }
+
+    // Positive factors
+    if (customer.willingness >= 70) {
+        factors.push({ type: 'positive', name: 'Hohe Kooperationsbereitschaft', impact: '+20 Punkte' });
+    }
+
+    if (customer.ability >= 70) {
+        factors.push({ type: 'positive', name: 'Gute Zahlungsfähigkeit', impact: '+15 Punkte' });
+    }
+
+    if (customer.type === 'Privat' && customer.branche && customer.branche.includes('Angestellt')) {
+        factors.push({ type: 'positive', name: 'Stabiles Einkommen (Angestellter)', impact: '+10 Punkte' });
+    }
+
+    if (customer.type === 'Privat' && customer.branche && customer.branche.includes('Beamt')) {
+        factors.push({ type: 'positive', name: 'Sichere Einkommensquelle (Beamter)', impact: '+15 Punkte' });
+    }
+
+    if (customer.dpd <= 14) {
+        factors.push({ type: 'positive', name: 'Neuer Fall mit kurzer Verzugsdauer', impact: '+10 Punkte' });
+    }
+
+    return factors.slice(0, 5); // Max 5 factors
+}
+
+function generateProductTransactions(product, customer) {
+    const produktTyp = product.typ.toLowerCase();
+    const saldo = product.saldo || 0;
+    const rate = product.rate || customer.monatsrate || 0;
+    const limit = product.limit || 0;
+    const dpd = customer.dpd || 0;
+
+    // For Dispo/Kontokorrent: Show account movements
+    if (produktTyp.includes('dispo') || produktTyp.includes('kontokorrent')) {
+        const istUeberLimit = saldo > limit;
+        const ueberLimitBetrag = istUeberLimit ? saldo - limit : 0;
+        const rows = [];
+
+        if (istUeberLimit) {
+            rows.push(`<tr class="highlight-row">
+                <td>16.12.2025</td>
+                <td>Überschreitung Dispolimit</td>
+                <td class="negative">-€${ueberLimitBetrag.toLocaleString('de-DE')}</td>
+                <td class="negative">€${saldo.toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge danger">Über Limit</span></td>
+            </tr>`);
+        }
+
+        rows.push(`<tr>
+            <td>15.12.2025</td>
+            <td>Gehaltseingang</td>
+            <td class="positive">+€${(customer.einkommenMonatlich || 3200).toLocaleString('de-DE')}</td>
+            <td>€${(saldo - (customer.einkommenMonatlich || 3200) + 500).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge success">Eingang</span></td>
+        </tr>`);
+
+        rows.push(`<tr>
+            <td>10.12.2025</td>
+            <td>Lastschrift Stadtwerke</td>
+            <td class="negative">-€285,00</td>
+            <td>€${(saldo + 285).toLocaleString('de-DE')}</td>
+            <td><span class="tx-badge">Gebucht</span></td>
+        </tr>`);
+
+        return rows.join('');
+    }
+
+    // For Ratenkredit: Show monthly payments
+    if (produktTyp.includes('ratenkredit') || produktTyp.includes('baufinanzierung')) {
+        const ueberfaelligClass = dpd > 0 ? 'highlight-row' : '';
+        const ueberfaelligBadge = dpd > 0 ? '<span class="tx-badge danger">Überfällig</span>' : '<span class="tx-badge">Gebucht</span>';
+        return `
+            <tr class="${ueberfaelligClass}">
+                <td>01.12.2025</td>
+                <td>Monatliche Rate - Fällig</td>
+                <td class="negative">-€${rate.toLocaleString('de-DE')}</td>
+                <td>€${saldo.toLocaleString('de-DE')}</td>
+                <td>${ueberfaelligBadge}</td>
+            </tr>
+            <tr>
+                <td>01.11.2025</td>
+                <td>Monatliche Rate</td>
+                <td class="positive">+€${rate.toLocaleString('de-DE')}</td>
+                <td>€${(saldo + rate).toLocaleString('de-DE')}</td>
+                <td><span class="tx-badge">Gebucht</span></td>
+            </tr>
+        `;
+    }
+
+    // Default: Keep existing
+    return '';
+}
+
+// ========================================
 // CUSTOMER DATA (Demo)
 // ========================================
 
@@ -389,7 +507,9 @@ export function openCustomerDetail(customerId, options = {}) {
 
     // Update all tabs
     updateStammdatenFields(modal, customer);
+    updateKontenFields(modal, customer);
     updateKommunikationFields(modal, customer);
+    updateKiAnalyseFields(modal, customer);
 
     setTimeout(() => renderCustomerActivities(customerId), 100);
 
@@ -455,6 +575,250 @@ function updateStammdatenFields(modal, customer) {
         typeBadge.textContent = customer.type === 'Gewerbe' ? 'Gewerbekunde' : 'Privatkunde';
         typeBadge.classList.remove('gewerbe', 'privat');
         typeBadge.classList.add(customer.type === 'Gewerbe' ? 'gewerbe' : 'privat');
+    }
+}
+
+function updateKontenFields(modal, customer) {
+    const kontenTab = modal.querySelector('#tab-konten');
+    if (!kontenTab) return;
+
+    const isBezahlt = customer.status === 'Bezahlt';
+
+    // Update KPI values
+    const kpis = kontenTab.querySelectorAll('.finanzen-kpi');
+    if (kpis.length >= 5) {
+        const kpiValues = kpis[0]?.querySelector('.kpi-value');
+        if (kpiValues) kpiValues.textContent = customer.krediteAnzahl || (isBezahlt ? 0 : 1);
+
+        const kpi1 = kpis[1]?.querySelector('.kpi-value');
+        if (kpi1) kpi1.textContent = '€' + (customer.gesamtforderung || 0).toLocaleString('de-DE');
+
+        const kpi2 = kpis[2]?.querySelector('.kpi-value');
+        if (kpi2) kpi2.textContent = '€' + (customer.monatsrate || 0).toLocaleString('de-DE');
+
+        const kpi3 = kpis[3]?.querySelector('.kpi-value');
+        if (kpi3) kpi3.textContent = '€' + (customer.ueberfaellig || 0).toLocaleString('de-DE');
+
+        const kpi4 = kpis[4]?.querySelector('.kpi-value');
+        if (kpi4) kpi4.textContent = (customer.rueckgabequote || 0) + '%';
+
+        if (isBezahlt) {
+            kpis[1]?.querySelector('.kpi-value')?.setAttribute('style', 'color: #22c55e');
+            kpis[3]?.querySelector('.kpi-value')?.setAttribute('style', 'color: #22c55e');
+        }
+    }
+
+    // Update Forderungen breakdown
+    const forderungRows = kontenTab.querySelectorAll('.forderung-breakdown-row');
+    if (forderungRows.length >= 4) {
+        const v0 = forderungRows[0]?.querySelector('.value');
+        if (v0) v0.textContent = '€' + (customer.hauptforderung || 0).toLocaleString('de-DE');
+        const v1 = forderungRows[1]?.querySelector('.value');
+        if (v1) v1.textContent = '€' + (customer.zinsen || 0).toLocaleString('de-DE');
+        const v2 = forderungRows[2]?.querySelector('.value');
+        if (v2) v2.textContent = '€' + (customer.mahngebuehren || 0).toLocaleString('de-DE');
+        const v3 = forderungRows[3]?.querySelector('.value');
+        if (v3) v3.textContent = '€' + (customer.inkassokosten || 0).toLocaleString('de-DE');
+    }
+
+    // Update credit product info
+    const produkte = customer.produkte || [];
+    const hauptProdukt = produkte.length > 0 ? produkte[0] : null;
+
+    const productName = kontenTab.querySelector('.credit-product-name');
+    if (productName) {
+        productName.textContent = hauptProdukt?.typ || (customer.type === 'Privat' ? 'Ratenkredit' : 'Betriebsmittelkredit');
+    }
+
+    const productNumber = kontenTab.querySelector('.credit-product-number');
+    if (productNumber) {
+        productNumber.textContent = hauptProdukt?.nummer || 'Keine Daten';
+    }
+
+    const saldoValue = kontenTab.querySelector('.amount-value.danger, .amount-value.success');
+    if (saldoValue) {
+        const saldo = hauptProdukt?.saldo ?? customer.restschuld ?? 0;
+        saldoValue.textContent = '€' + saldo.toLocaleString('de-DE');
+        saldoValue.className = 'amount-value ' + (saldo === 0 ? 'success' : 'danger');
+    }
+
+    const statusBadge = kontenTab.querySelector('.credit-status-badge');
+    if (statusBadge) {
+        if (hauptProdukt) {
+            statusBadge.textContent = hauptProdukt.status;
+            statusBadge.className = 'credit-status-badge ' + (hauptProdukt.badge || 'info');
+        } else if (isBezahlt) {
+            statusBadge.textContent = 'Beglichen';
+            statusBadge.className = 'credit-status-badge success';
+        } else {
+            statusBadge.textContent = (customer.dpd || 0) + ' DPD';
+            statusBadge.className = 'credit-status-badge ' + (customer.dpd > 30 ? 'danger' : 'warning');
+        }
+    }
+
+    // Update Einkommen & Ausgaben section
+    const eaSection = kontenTab.querySelector('.einkommen-ausgaben-compact');
+    if (eaSection && customer.einkommenMonatlich) {
+        eaSection.style.display = 'flex';
+        const einkommen = customer.einkommenMonatlich || 0;
+        const ausgaben = customer.ausgabenMonatlich || 0;
+        const differenz = einkommen - ausgaben;
+
+        const eaRows = eaSection.querySelectorAll('.ea-row');
+        if (eaRows.length >= 3) {
+            const v0 = eaRows[0]?.querySelector('.value');
+            if (v0) v0.textContent = '€' + einkommen.toLocaleString('de-DE');
+            const v1 = eaRows[1]?.querySelector('.value');
+            if (v1) v1.textContent = '€' + ausgaben.toLocaleString('de-DE');
+            const v2 = eaRows[2]?.querySelector('.value');
+            if (v2) {
+                v2.textContent = (differenz >= 0 ? '+' : '') + '€' + differenz.toLocaleString('de-DE');
+                v2.className = 'value ' + (differenz >= 0 ? 'positiv' : 'negativ');
+            }
+        }
+    }
+}
+
+function updateKiAnalyseFields(modal, customer) {
+    const kiTab = modal.querySelector('#tab-ki-analyse');
+    if (!kiTab) return;
+
+    const isBezahlt = customer.status === 'Bezahlt';
+    const isInkasso = customer.status === 'Inkasso';
+
+    // Update all KI summary sections
+    const summaryContent = kiTab.querySelector('.ki-summary-content');
+    if (summaryContent) {
+        const sections = summaryContent.querySelectorAll('.ki-summary-section');
+
+        // Kernproblem section
+        if (sections[0]) {
+            const p = sections[0].querySelector('p');
+            if (p) {
+                if (isBezahlt) {
+                    p.innerHTML = '<strong>Fall abgeschlossen.</strong> ' + customer.name + ' hat die Forderung vollständig beglichen. Gute Kooperationsbereitschaft nach Kontaktaufnahme.';
+                } else {
+                    p.innerHTML = customer.kernproblem || 'Keine Analyse verfügbar.';
+                }
+            }
+        }
+
+        // Letzte Aktivitäten section
+        if (sections[1]) {
+            const ul = sections[1].querySelector('ul');
+            if (ul) {
+                if (isBezahlt) {
+                    ul.innerHTML = '<li>Zahlungseingang bestätigt (' + (customer.statusText?.match(/\d{2}\.\d{2}\.\d{4}/)?.[0] || '16.12.2025') + ')</li><li>Erfolgreiche Zahlungsvereinbarung</li><li>Fall als abgeschlossen markiert</li>';
+                } else if (isInkasso) {
+                    ul.innerHTML = '<li>' + customer.mahnstufe + '. Mahnung versendet</li><li>Telefonversuche nicht erreicht</li><li>Inkasso-Verfahren eingeleitet</li>';
+                } else {
+                    ul.innerHTML = '<li>Zahlungserinnerung versendet (' + new Date().toLocaleDateString('de-DE') + ')</li><li>Fall automatisch erstellt</li><li>Wartet auf Zahlungseingang oder Kundenkontakt</li>';
+                }
+            }
+        }
+
+        // Aktuelle Schritte section
+        if (sections[2]) {
+            const ul = sections[2].querySelector('ul');
+            if (ul) {
+                if (isBezahlt) {
+                    ul.innerHTML = '<li><strong>Erledigt:</strong> Keine weiteren Maßnahmen erforderlich</li><li><strong>Optional:</strong> Kundenfeedback einholen</li>';
+                } else if (isInkasso) {
+                    ul.innerHTML = '<li><strong>Sofort:</strong> Gerichtliches Mahnverfahren prüfen</li><li><strong>Diese Woche:</strong> Letzte telefonische Kontaktaufnahme</li><li><strong>Bei Ablehnung:</strong> Forderungsverkauf oder Abschreibung</li>';
+                } else {
+                    ul.innerHTML = '<li><strong>Sofort:</strong> Telefonischen Kontakt herstellen</li><li><strong>Diese Woche:</strong> Zahlungsvereinbarung anbieten</li><li><strong>Bei Erfolg:</strong> Ratenzahlung dokumentieren</li>';
+                }
+            }
+        }
+    }
+
+    // Update Willingness/Ability scores
+    const scoreBars = kiTab.querySelectorAll('.score-bar-visual .bar-fill');
+    const scorePercents = kiTab.querySelectorAll('.score-percent');
+    if (scoreBars.length >= 2 && scorePercents.length >= 2) {
+        const willingness = isBezahlt ? 95 : (customer.willingness || 50);
+        const ability = isBezahlt ? 90 : (customer.ability || 50);
+        scoreBars[0].style.width = willingness + '%';
+        scoreBars[1].style.width = ability + '%';
+        scorePercents[0].textContent = willingness + '%';
+        scorePercents[1].textContent = ability + '%';
+
+        scoreBars[0].style.background = willingness >= 70 ? '#22c55e' : (willingness >= 40 ? '#f59e0b' : '#ef4444');
+        scoreBars[1].style.background = ability >= 70 ? '#22c55e' : (ability >= 40 ? '#f59e0b' : '#ef4444');
+    }
+
+    // Update score point position in chart
+    const scorePoint = kiTab.querySelector('.score-point');
+    if (scorePoint) {
+        const willingness = isBezahlt ? 95 : (customer.willingness || 50);
+        const ability = isBezahlt ? 90 : (customer.ability || 50);
+        scorePoint.style.left = willingness + '%';
+        scorePoint.style.bottom = ability + '%';
+    }
+
+    // Update segment badge
+    const segmentBadge = kiTab.querySelector('.segment-badge.large');
+    if (segmentBadge) {
+        const segmentNames = {
+            'eskalation': 'Eskalation', 'prioritaet': 'Priorität',
+            'restrukturierung': 'Restrukturierung', 'abwicklung': 'Abwicklung',
+            'abgeschlossen': 'Abgeschlossen'
+        };
+        const segmentClasses = {
+            'eskalation': 'escalate', 'prioritaet': 'priority',
+            'restrukturierung': 'restructure', 'abwicklung': 'writeoff',
+            'abgeschlossen': 'success'
+        };
+        const segment = isBezahlt ? 'abgeschlossen' : (customer.segment || 'prioritaet');
+        segmentBadge.textContent = segmentNames[segment] || segment;
+        segmentBadge.className = 'segment-badge large ' + (segmentClasses[segment] || '');
+    }
+
+    // Update segment description
+    const segmentDesc = kiTab.querySelector('.ki-segment-result p');
+    if (segmentDesc) {
+        if (isBezahlt) {
+            segmentDesc.innerHTML = 'Der Fall <strong>' + customer.name + '</strong> wurde erfolgreich abgeschlossen. Die Forderung wurde vollständig beglichen. Keine weiteren Maßnahmen erforderlich.';
+        } else {
+            const segmentDescriptions = {
+                'eskalation': 'Basierend auf der Analyse wird <strong>' + customer.name + '</strong> dem Segment <strong>Eskalation</strong> zugeordnet. Empfehlung: Intensivierung der Inkasso-Maßnahmen.',
+                'prioritaet': '<strong>' + customer.name + '</strong> zeigt Kooperationsbereitschaft und ausreichende Zahlungsfähigkeit. Empfehlung: Schnelle Vereinbarung anstreben.',
+                'restrukturierung': '<strong>' + customer.name + '</strong> benötigt eine Restrukturierung der Schulden. Empfehlung: Ratenzahlung oder Stundung vereinbaren.',
+                'abwicklung': 'Bei <strong>' + customer.name + '</strong> ist die Rückzahlung unwahrscheinlich. Empfehlung: Forderungsverkauf oder Abschreibung prüfen.'
+            };
+            segmentDesc.innerHTML = segmentDescriptions[customer.segment] ||
+                'Basierend auf der Analyse wird <strong>' + customer.name + '</strong> dem entsprechenden Segment zugeordnet.';
+        }
+    }
+
+    // Update factors based on customer data
+    const factorList = kiTab.querySelector('.factor-list');
+    if (factorList && customer.status !== 'Bezahlt') {
+        const factors = generateCustomerFactors(customer);
+        factorList.innerHTML = factors.map(f => `
+            <div class="factor-item ${f.type}">
+                <span class="factor-icon">
+                    ${f.type === 'positive'
+                        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+                        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'}
+                </span>
+                <span class="factor-name">${f.name}</span>
+                <span class="factor-impact">${f.impact}</span>
+            </div>
+        `).join('');
+    } else if (factorList && customer.status === 'Bezahlt') {
+        factorList.innerHTML = `
+            <div class="factor-item positive">
+                <span class="factor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="factor-name">Forderung vollständig beglichen</span>
+                <span class="factor-impact">+100 Punkte</span>
+            </div>
+            <div class="factor-item positive">
+                <span class="factor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="factor-name">Fall erfolgreich abgeschlossen</span>
+                <span class="factor-impact">Kein Risiko</span>
+            </div>
+        `;
     }
 }
 
