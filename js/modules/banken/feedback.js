@@ -675,3 +675,17 @@ export function getCurrentScreenshotData() {
 export function setCurrentScreenshotData(data) {
     currentScreenshotData = data;
 }
+
+// ========================================
+// FEEDBACK JSON EXPORT
+// ========================================
+
+export function downloadFeedbackJson(data) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `feedback_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}

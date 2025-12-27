@@ -38,6 +38,7 @@ Object.assign(window, {
     refreshFeedbackList: feedback.refreshFeedbackList,
     exportFeedback: feedback.exportFeedback,
     openScreenshotLightbox: feedback.openScreenshotLightbox,
+    downloadFeedbackJson: feedback.downloadFeedbackJson,
 });
 
 // ========================================
@@ -145,6 +146,11 @@ Object.assign(window, {
 
     // Export
     exportReport: dashboard.exportReport,
+
+    // Letter Modal
+    closeLetterModal: dashboard.closeLetterModal,
+    printLetter: dashboard.printLetter,
+    downloadDashboardSummary: dashboard.downloadDashboardSummary,
 });
 
 // ========================================
@@ -190,6 +196,13 @@ Object.assign(window, {
     escalateCase: customer.escalateCase,
     createRatePlan: customer.createRatePlan,
     reviewForRestructure: customer.reviewForRestructure,
+
+    // AI & Additional Customer Functions
+    showAiSummary: customer.showAiSummary,
+    openCustomerDetailCRM: customer.openCustomerDetailCRM,
+    writeOffCase: customer.writeOffCase,
+    createActivityElement: customer.createActivityElement,
+    addActivityModalStyles: customer.addActivityModalStyles,
 });
 
 // ========================================
