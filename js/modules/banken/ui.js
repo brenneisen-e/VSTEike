@@ -111,6 +111,16 @@ export function switchModule(moduleName) {
 
     localStorage.setItem('currentModule', moduleName);
 
+    // Show/hide Banken chat based on active module
+    const chatToggle = document.getElementById('bankenChatToggle');
+    const chatWidget = document.getElementById('bankenChatWidget');
+    if (moduleName === 'banken') {
+        if (chatToggle) chatToggle.style.display = 'flex';
+    } else {
+        if (chatToggle) chatToggle.style.display = 'none';
+        if (chatWidget) chatWidget.style.display = 'none';
+    }
+
     if (moduleName === 'banken' && !bankenModuleLoaded) {
         console.log('[MODULE] Loading Banken module for first time...');
         window.loadBankenModule?.();
@@ -213,6 +223,16 @@ export async function loadBankenModule() {
     }
 
     await loadBankenComponents(container);
+
+    // Move chat widget elements to body so they're always visible (not hidden by parent display:none)
+    const chatToggle = document.getElementById('bankenChatToggle');
+    const chatWidget = document.getElementById('bankenChatWidget');
+    if (chatToggle && chatToggle.parentElement !== document.body) {
+        document.body.appendChild(chatToggle);
+    }
+    if (chatWidget && chatWidget.parentElement !== document.body) {
+        document.body.appendChild(chatWidget);
+    }
 
     // Initialize Banken Chat after components are loaded
     console.log('[BANKEN] Calling initBankenChat...');

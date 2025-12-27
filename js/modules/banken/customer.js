@@ -408,12 +408,19 @@ export function closeCustomerDetail() {
 }
 
 export function showCustomerTab(tabName) {
-    document.querySelectorAll('.customer-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.tab === tabName);
+    const modal = document.getElementById('customerDetailModal');
+    if (!modal) return;
+
+    // Tab buttons use .modal-tab class - match by onclick attribute content
+    modal.querySelectorAll('.modal-tab').forEach(tab => {
+        const onclick = tab.getAttribute('onclick') ?? '';
+        const isMatch = onclick.includes(`'${tabName}'`);
+        tab.classList.toggle('active', isMatch);
     });
 
-    document.querySelectorAll('.customer-tab-content').forEach(content => {
-        content.classList.toggle('active', content.id === `customer-tab-${tabName}`);
+    // Tab content uses .customer-tab class with id="tab-{name}"
+    modal.querySelectorAll('.customer-tab').forEach(content => {
+        content.classList.toggle('active', content.id === `tab-${tabName}`);
     });
 }
 
