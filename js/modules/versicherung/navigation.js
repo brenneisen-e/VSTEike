@@ -45,9 +45,11 @@ export function setNavigationEnabled(enabled) {
 // ========================================
 
 export function openAgenturView() {
+    const landingPage = document.getElementById('landingPage');
     const mainApp = document.getElementById('mainApp');
     const agenturOverview = document.getElementById('agenturOverview');
 
+    if (landingPage) landingPage.style.display = 'none';
     if (mainApp) mainApp.style.display = 'none';
     if (agenturOverview) agenturOverview.style.display = 'block';
 
@@ -70,10 +72,12 @@ export function backToGesamtsicht() {
 // ========================================
 
 export async function openRisikoscoring() {
+    const landingPage = document.getElementById('landingPage');
     const risikoModule = document.getElementById('risikoscoringModule');
     const mainApp = document.getElementById('mainApp');
     const agenturOverview = document.getElementById('agenturOverview');
 
+    if (landingPage) landingPage.style.display = 'none';
     if (mainApp) mainApp.style.display = 'none';
     if (agenturOverview) agenturOverview.style.display = 'none';
 
@@ -112,11 +116,13 @@ export function closeRisikoscoring() {
 // ========================================
 
 export async function openBestandsuebertragung() {
+    const landingPage = document.getElementById('landingPage');
     const bestandModule = document.getElementById('bestandsuebertragungModule');
     const mainApp = document.getElementById('mainApp');
     const agenturOverview = document.getElementById('agenturOverview');
     const risikoModule = document.getElementById('risikoscoringModule');
 
+    if (landingPage) landingPage.style.display = 'none';
     if (mainApp) mainApp.style.display = 'none';
     if (agenturOverview) agenturOverview.style.display = 'none';
     if (risikoModule) risikoModule.style.display = 'none';
