@@ -533,6 +533,27 @@ export function editFeedback(fb) {
     showFeedbackNotification('Formular wurde ausgefüllt - jetzt bearbeiten und speichern');
 }
 
+export function cancelEditFeedback() {
+    editingFeedbackId = null;
+
+    // Formular zurücksetzen
+    const textArea = document.getElementById('feedbackText');
+    if (textArea) textArea.value = '';
+    removeScreenshot();
+
+    // Button-Text zurücksetzen
+    const submitBtn = document.querySelector('.feedback-submit-btn');
+    if (submitBtn) {
+        submitBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Feedback speichern
+        `;
+    }
+}
+
 export async function deleteFeedback(id) {
     if (!confirm('Möchtest du diesen Kommentar wirklich löschen?')) return;
 

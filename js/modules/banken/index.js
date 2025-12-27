@@ -32,6 +32,7 @@ Object.assign(window, {
     closeFeedbackDetail: feedback.closeFeedbackDetail,
     editFeedbackByIndex: feedback.editFeedbackByIndex,
     editFeedback: feedback.editFeedback,
+    cancelEditFeedback: feedback.cancelEditFeedback,
     deleteFeedback: feedback.deleteFeedback,
     showFeedbackNotification: feedback.showFeedbackNotification,
     refreshFeedbackList: feedback.refreshFeedbackList,
