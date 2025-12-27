@@ -1,0 +1,77 @@
+/**
+ * Tables - Workflow & Actions
+ */
+
+.workflow-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.status-label { font-size: 14px; color: #64748b; }
+.status-value { padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+.status-value.inkasso { background: #fee2e2; color: #dc2626; }
+
+.workflow-timeline { margin-bottom: 24px; }
+
+.wf-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-left: 2px solid #e2e8f0;
+    margin-left: 16px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.wf-item:last-child { border-left-color: transparent; }
+
+.wf-icon {
+    position: absolute;
+    left: -13px;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+}
+
+.wf-item.completed .wf-icon { background: #dcfce7; border-color: #22c55e; color: #22c55e; }
+.wf-item.active .wf-icon { background: #dbeafe; border-color: #3b82f6; color: #3b82f6; }
+
+.wf-content { flex: 1; }
+.wf-title { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 2px; }
+.wf-date { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+.wf-note { font-size: 12px; color: #94a3b8; }
+
+.workflow-actions h4 { margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: #1e293b; }
+
+.action-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+.action-btn-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn-large:hover { background: #f1f5f9; }
+.action-btn-large.warning { background: #fef3c7; border-color: #fcd34d; color: #b45309; }
+.action-btn-large.danger { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }

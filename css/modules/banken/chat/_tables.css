@@ -1,0 +1,101 @@
+/**
+ * Chat - View Toggle & Credit Tables
+ */
+
+/* View Toggle Button Group */
+.view-toggle {
+    display: flex;
+    gap: 2px;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 8px;
+    margin-left: auto;
+}
+
+.toggle-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover { background: rgba(255, 255, 255, 0.5); color: #475569; }
+
+.toggle-btn.active {
+    background: white;
+    color: #3b82f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-btn svg { width: 16px; height: 16px; }
+
+/* Credit Views */
+.credit-view { display: none; }
+.credit-view.active { display: block; }
+
+/* Credit Transaction Table */
+.credit-tx-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.credit-tx-table thead { background: #f8fafc; }
+
+.credit-tx-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.credit-tx-table td {
+    padding: 12px 16px;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.credit-tx-table tbody tr:hover { background: #f8fafc; }
+
+.credit-tx-table .highlight-row { background: #fef2f2; }
+.credit-tx-table .highlight-row:hover { background: #fee2e2; }
+
+.credit-tx-table .negative {
+    color: #dc2626;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.credit-tx-table .positive {
+    color: #16a34a;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+/* Transaction Badge */
+.tx-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.tx-badge.danger { background: #fee2e2; color: #dc2626; }
+.tx-badge.success { background: #dcfce7; color: #16a34a; }
+.tx-badge.warning { background: #fef3c7; color: #d97706; }

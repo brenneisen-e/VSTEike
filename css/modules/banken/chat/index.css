@@ -1,0 +1,14 @@
+/**
+ * Chat Module - Banken Chat Widget & Finanzen
+ * Modular CSS architecture for chat components
+ */
+
+@import '_widget.css';
+@import '_messages.css';
+@import '_actions.css';
+@import '_icons.css';
+@import '_finanzen.css';
+@import '_charts.css';
+@import '_tables.css';
+@import '_modals.css';
+@import '_responsive.css';

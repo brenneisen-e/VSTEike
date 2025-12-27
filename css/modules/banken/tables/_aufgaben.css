@@ -1,0 +1,97 @@
+/**
+ * Tables - Aufgaben (Tasks)
+ */
+
+.aufgaben-filters { display: flex; gap: 8px; margin-bottom: 20px; }
+
+.aufgaben-filter {
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.aufgaben-filter:hover { background: #f1f5f9; }
+.aufgaben-filter.active { background: #3b82f6; border-color: #3b82f6; color: white; }
+
+.aufgaben-list { display: flex; flex-direction: column; gap: 12px; }
+
+.aufgabe-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.aufgabe-item.priority-high { border-left-color: #ef4444; }
+.aufgabe-item.priority-medium { border-left-color: #f59e0b; }
+.aufgabe-item.priority-normal { border-left-color: #3b82f6; }
+
+.aufgabe-item.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.aufgabe-item.clickable:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.aufgabe-priority {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.priority-high .aufgabe-priority { background: #fee2e2; color: #ef4444; }
+.priority-medium .aufgabe-priority { background: #fef3c7; color: #f59e0b; }
+
+.aufgabe-content { flex: 1; }
+.aufgabe-title { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+.aufgabe-meta { display: flex; gap: 12px; font-size: 12px; }
+.aufgabe-customer { color: #3b82f6; cursor: pointer; }
+.aufgabe-customer:hover { text-decoration: underline; }
+.aufgabe-due { color: #64748b; }
+.aufgabe-due.overdue { color: #ef4444; font-weight: 500; }
+.aufgabe-due.today { color: #f59e0b; font-weight: 500; }
+
+.aufgabe-actions { display: flex; gap: 8px; }
+
+.btn-complete, .btn-reschedule {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-complete { background: #22c55e; border: none; color: white; }
+.btn-complete:hover { background: #16a34a; }
+.btn-reschedule { background: white; border: 1px solid #e2e8f0; color: #64748b; }
+.btn-reschedule:hover { background: #f1f5f9; }
+
+.aufgaben-pagination {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination-info { font-size: 13px; color: #64748b; }

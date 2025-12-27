@@ -1,0 +1,184 @@
+/**
+ * Tables - Customer Detail Modal
+ */
+
+.customer-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    width: 95%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-title h2 { margin: 0; font-size: 20px; font-weight: 700; color: #1e293b; }
+.modal-title .customer-id { font-size: 13px; color: #64748b; }
+
+.modal-close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover { background: #e2e8f0; color: #334155; }
+
+.modal-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 24px;
+    background: #f8fafc;
+}
+
+.modal-tab {
+    padding: 14px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-tab:hover { color: #334155; }
+.modal-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; background: white; }
+
+.modal-body { flex: 1; overflow-y: auto; padding: 24px; }
+
+.customer-tab { display: none; }
+.customer-tab.active { display: block; }
+
+/* Stammdaten Header Actions */
+.stammdaten-header-actions { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+.btn-edit-stammdaten {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: white;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-edit-stammdaten:hover { background: #3b82f6; color: white; }
+.btn-edit-stammdaten svg { width: 14px; height: 14px; }
+
+/* Stammdaten */
+.stammdaten-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.stammdaten-section h4 {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.stammdaten-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
+.stammdaten-row .label { color: #64748b; }
+.stammdaten-row .value { color: #1e293b; font-weight: 500; }
+.stammdaten-row .value.rating-bad { color: #ef4444; font-weight: 700; }
+
+/* Enhanced Stammdaten Grid */
+.stammdaten-grid.enhanced { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+.stammdaten-grid.enhanced .stammdaten-section {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.stammdaten-grid.enhanced .stammdaten-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    border-bottom: 2px solid #3b82f6;
+}
+
+.stammdaten-grid.enhanced .stammdaten-section h4 svg { color: #3b82f6; }
+
+.stammdaten-subsection {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed #cbd5e1;
+}
+
+.stammdaten-subsection strong {
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stammdaten-row .value.clickable { color: #3b82f6; cursor: pointer; transition: color 0.2s ease; }
+.stammdaten-row .value.clickable:hover { color: #2563eb; text-decoration: underline; }
+.stammdaten-row .value.mono { font-family: 'Monaco', 'Menlo', 'Consolas', monospace; font-size: 12px; letter-spacing: 0.5px; }
+.stammdaten-row .value.highlight-red { color: #dc2626; font-weight: 700; }
+
+.stammdaten-row .value.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.stammdaten-row .value.badge.gewerbe { background: #dbeafe; color: #1e40af; }
+.stammdaten-row .value.badge.privat { background: #dcfce7; color: #166534; }
+.stammdaten-row .value.badge.warning { background: #fef3c7; color: #b45309; }
+.stammdaten-row .value.badge.danger { background: #fee2e2; color: #dc2626; }
