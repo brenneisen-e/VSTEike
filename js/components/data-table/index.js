@@ -54,6 +54,22 @@ export function create(container, options = {}) {
         selectedRows: new Set()
     };
 
+    // Create instance object first (to avoid temporal dead zone)
+    const instance = {
+        wrapper: null,
+        table: null,
+        render: null,
+        setData: null,
+        getData: null,
+        getFilteredData: null,
+        filter: null,
+        sort: null,
+        getSelectedRows: null,
+        clearSelection: null,
+        goToPage: null,
+        refresh: null
+    };
+
     // Create table structure
     const wrapper = createWrapper();
     const toolbar = createToolbar({ filterable, pageSizes }, state, instance);
@@ -73,123 +89,85 @@ export function create(container, options = {}) {
     containerEl.innerHTML = '';
     containerEl.appendChild(wrapper);
 
-    // Instance methods
-    const instance = {
-        wrapper,
-        table,
+    // Populate instance methods
+    instance.wrapper = wrapper;
+    instance.table = table;
 
-        /**
-         * Render table with current state
-         */
-        render() {
-            // Calculate display data
-            state.displayData = getPaginatedData(
-                state.filteredData,
-                state.currentPage,
-                state.currentPageSize
-            );
+    instance.render = function() {
+        // Calculate display data
+        state.displayData = getPaginatedData(
+            state.filteredData,
+            state.currentPage,
+            state.currentPageSize
+        );
 
-            const renderOptions = {
-                striped,
-                hoverable,
-                selectable,
-                emptyMessage,
-                onRowClick,
-                onSelectionChange,
-                formatters
-            };
+        const renderOptions = {
+            striped,
+            hoverable,
+            selectable,
+            emptyMessage,
+            onRowClick,
+            onSelectionChange,
+            formatters
+        };
 
-            renderTableBody(tbody, state, columns, renderOptions, instance);
-            renderPagination(pagination, state, instance);
-        },
+        renderTableBody(tbody, state, columns, renderOptions, instance);
+        renderPagination(pagination, state, instance);
+    };
 
-        /**
-         * Set new data
-         * @param {Array} newData - New data array
-         */
-        setData(newData) {
-            state.currentData = [...newData];
-            state.filteredData = [...newData];
-            state.currentPage = 1;
-            state.selectedRows.clear();
-            this.filter();
-        },
+    instance.setData = function(newData) {
+        state.currentData = [...newData];
+        state.filteredData = [...newData];
+        state.currentPage = 1;
+        state.selectedRows.clear();
+        this.filter();
+    };
 
-        /**
-         * Get current data
-         * @returns {Array} Current data
-         */
-        getData() {
-            return [...state.currentData];
-        },
+    instance.getData = function() {
+        return [...state.currentData];
+    };
 
-        /**
-         * Get filtered data
-         * @returns {Array} Filtered data
-         */
-        getFilteredData() {
-            return [...state.filteredData];
-        },
+    instance.getFilteredData = function() {
+        return [...state.filteredData];
+    };
 
-        /**
-         * Filter data based on current filter value
-         */
-        filter() {
-            state.filteredData = filterData(
-                state.currentData,
-                state.filterValue,
-                columns
-            );
-            state.currentPage = 1;
-            this.sort(false);
-        },
+    instance.filter = function() {
+        state.filteredData = filterData(
+            state.currentData,
+            state.filterValue,
+            columns
+        );
+        state.currentPage = 1;
+        this.sort(false);
+    };
 
-        /**
-         * Sort filtered data
-         * @param {boolean} render - Whether to render after sorting
-         */
-        sort(render = true) {
-            state.filteredData = sortData(
-                state.filteredData,
-                state.sortColumn,
-                state.sortDirection
-            );
+    instance.sort = function(render = true) {
+        state.filteredData = sortData(
+            state.filteredData,
+            state.sortColumn,
+            state.sortDirection
+        );
 
-            if (render) this.render();
-        },
+        if (render) this.render();
+    };
 
-        /**
-         * Get selected rows
-         * @returns {Array} Selected row data
-         */
-        getSelectedRows() {
-            return Array.from(state.selectedRows).map(i => state.displayData[i]);
-        },
+    instance.getSelectedRows = function() {
+        return Array.from(state.selectedRows).map(i => state.displayData[i]);
+    };
 
-        /**
-         * Clear row selection
-         */
-        clearSelection() {
-            state.selectedRows.clear();
-            this.render();
-        },
+    instance.clearSelection = function() {
+        state.selectedRows.clear();
+        this.render();
+    };
 
-        /**
-         * Navigate to specific page
-         * @param {number} page - Page number
-         */
-        goToPage(page) {
-            const totalPages = Math.ceil(state.filteredData.length / state.currentPageSize);
-            state.currentPage = Math.max(1, Math.min(page, totalPages));
-            this.render();
-        },
+    instance.goToPage = function(page) {
+        const totalPages = Math.ceil(state.filteredData.length / state.currentPageSize);
+        state.currentPage = Math.max(1, Math.min(page, totalPages));
+        this.render();
+    };
 
-        /**
-         * Refresh table display
-         */
-        refresh() {
-            this.render();
-        }
+    instance.refresh = function() {
+        this.render();
     };
 
     // Initial render
