@@ -19,30 +19,38 @@ export const updateKPIs = () => {
     const originalStats = calculateStats(distributionData[currentSilo], currentSilo);
 
     const crElement = getElement('kpiCombinedRatio');
-    crElement.textContent = stats.avgCombinedRatio.toFixed(1) + '%';
-    crElement.classList.remove('combined-ratio-green', 'combined-ratio-yellow', 'combined-ratio-orange', 'combined-ratio-red');
-    crElement.classList.add(stats.avgCombinedRatio <= 90 ? 'combined-ratio-green' : stats.avgCombinedRatio <= 100 ? 'combined-ratio-yellow' : stats.avgCombinedRatio <= 105 ? 'combined-ratio-orange' : 'combined-ratio-red');
+    if (crElement) {
+        crElement.textContent = stats.avgCombinedRatio.toFixed(1) + '%';
+        crElement.classList.remove('combined-ratio-green', 'combined-ratio-yellow', 'combined-ratio-orange', 'combined-ratio-red');
+        crElement.classList.add(stats.avgCombinedRatio <= 90 ? 'combined-ratio-green' : stats.avgCombinedRatio <= 100 ? 'combined-ratio-yellow' : stats.avgCombinedRatio <= 105 ? 'combined-ratio-orange' : 'combined-ratio-red');
+    }
 
     const crTrend = getElement('kpiCombinedTrend');
-    if (measuresActive && selectedMeasures.length > 0) {
-        const diff = stats.avgCombinedRatio - originalStats.avgCombinedRatio;
-        crTrend.textContent = diff < 0 ? `↓ ${Math.abs(diff).toFixed(1)}%` : `↑ +${diff.toFixed(1)}%`;
-        crTrend.style.display = 'block';
-        crTrend.className = diff < 0 ? 'kpi-trend positive' : 'kpi-trend negative';
-    } else { crTrend.style.display = 'none'; }
+    if (crTrend) {
+        if (measuresActive && selectedMeasures.length > 0) {
+            const diff = stats.avgCombinedRatio - originalStats.avgCombinedRatio;
+            crTrend.textContent = diff < 0 ? `↓ ${Math.abs(diff).toFixed(1)}%` : `↑ +${diff.toFixed(1)}%`;
+            crTrend.style.display = 'block';
+            crTrend.className = diff < 0 ? 'kpi-trend positive' : 'kpi-trend negative';
+        } else { crTrend.style.display = 'none'; }
+    }
 
     const gesamtergebnis = stats.total * stats.avgErtrag;
     const ergebnisElement = getElement('kpiGesamtergebnis');
-    ergebnisElement.textContent = formatCurrency(gesamtergebnis);
-    ergebnisElement.style.color = gesamtergebnis >= 0 ? '#059669' : '#dc2626';
+    if (ergebnisElement) {
+        ergebnisElement.textContent = formatCurrency(gesamtergebnis);
+        ergebnisElement.style.color = gesamtergebnis >= 0 ? '#059669' : '#dc2626';
+    }
 
     const ergebnisTrend = getElement('kpiErgebnisTrend');
-    if (measuresActive && selectedMeasures.length > 0) {
-        const diff = gesamtergebnis - (originalStats.total * originalStats.avgErtrag);
-        ergebnisTrend.textContent = diff > 0 ? `↑ +${formatCurrency(diff)}` : `↓ ${formatCurrency(Math.abs(diff))}`;
-        ergebnisTrend.style.display = 'block';
-        ergebnisTrend.className = diff > 0 ? 'kpi-trend positive' : 'kpi-trend negative';
-    } else { ergebnisTrend.style.display = 'none'; }
+    if (ergebnisTrend) {
+        if (measuresActive && selectedMeasures.length > 0) {
+            const diff = gesamtergebnis - (originalStats.total * originalStats.avgErtrag);
+            ergebnisTrend.textContent = diff > 0 ? `↑ +${formatCurrency(diff)}` : `↓ ${formatCurrency(Math.abs(diff))}`;
+            ergebnisTrend.style.display = 'block';
+            ergebnisTrend.className = diff > 0 ? 'kpi-trend positive' : 'kpi-trend negative';
+        } else { ergebnisTrend.style.display = 'none'; }
+    }
 
     setText('kpiVmA', stats.levels.a);
     setText('kpiVmB', stats.levels.b);
