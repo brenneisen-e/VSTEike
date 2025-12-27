@@ -42,6 +42,9 @@ Object.assign(window, {
     showLandingChatTyping: chat.showLandingChatTyping,
     hideLandingChatTyping: chat.hideLandingChatTyping,
     askLandingSampleQuestion: filters.askLandingSampleQuestion,
+    getLandingDataContext: chat.getLandingDataContext,
+    generateLandingMockResponse: chat.generateLandingMockResponse,
+    updateSuggestionSelection: chat.updateSuggestionSelection,
 });
 
 // ========================================
@@ -65,6 +68,28 @@ Object.assign(window, {
     openValidierungProvision: navigation.openValidierungProvision,
     openFinanzplanung: navigation.openFinanzplanung,
     openProvisionssimulation: navigation.openProvisionssimulation,
+    openOffeneVorgaenge: navigation.openOffeneVorgaenge,
+
+    // Profile & User Mode
+    toggleProfileDropdown: navigation.toggleProfileDropdown,
+    switchUserMode: navigation.switchUserMode,
+    updateNavigationBoxes: navigation.updateNavigationBoxes,
+    updateWelcomeMessage: navigation.updateWelcomeMessage,
+    updateProfileAvatar: navigation.updateProfileAvatar,
+    getCurrentUserMode: navigation.getCurrentUserMode,
+
+    // User Profile Image Upload
+    triggerUserProfileUpload: navigation.triggerUserProfileUpload,
+    triggerUserProfileUploadFor: navigation.triggerUserProfileUploadFor,
+    handleUserProfileUpload: navigation.handleUserProfileUpload,
+    handleUserProfileUploadDropdown: navigation.handleUserProfileUploadDropdown,
+    processUserProfileImage: navigation.processUserProfileImage,
+    compressImage: navigation.compressImage,
+    updateAllUserProfileImages: navigation.updateAllUserProfileImages,
+    loadUserProfileImages: navigation.loadUserProfileImages,
+
+    // Utilities
+    sleep: navigation.sleep,
 });
 
 // ========================================
@@ -180,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         api.setupApiTokenInput?.();
         chat.initLandingChat?.();
         navigation.loadUserName?.();
+        navigation.loadUserProfileImages?.();
         upload.setupQuickUpload?.();
         autocomplete.setupAutocomplete?.();
         images.initUploadMode?.();
@@ -196,5 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         });
     }, 500);
+});
+
+// Close profile dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const switcher = document.getElementById('userProfileSwitcher');
+    const dropdown = document.getElementById('profileDropdown');
+    const arrow = document.getElementById('profileArrow');
+
+    if (switcher && dropdown && !switcher.contains(event.target)) {
+        dropdown.classList.remove('show');
+        if (arrow) arrow.classList.remove('open');
+    }
 });
 
