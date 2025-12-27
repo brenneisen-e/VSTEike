@@ -7,6 +7,34 @@ import { bankenChatInitialized, setBankenChatInitialized } from './_state.js';
 import { sendBankenMessage } from './_actions.js';
 
 /**
+ * Toggle Banken Chat visibility
+ */
+export const toggleBankenChat = () => {
+    const chatWidget = document.getElementById('bankenChatWidget');
+    const chatToggle = document.getElementById('bankenChatToggle');
+    const chatInput = document.getElementById('bankenChatInput');
+
+    if (!chatWidget || !chatToggle) return;
+
+    const isVisible = chatWidget.style.display === 'flex';
+    chatWidget.style.display = isVisible ? 'none' : 'flex';
+    chatToggle.style.display = isVisible ? 'flex' : 'none';
+
+    if (!isVisible && chatInput) chatInput.focus();
+};
+
+/**
+ * Ask a predefined question in Banken Chat
+ */
+export const askBankenQuestion = (question) => {
+    const chatInput = document.getElementById('bankenChatInput');
+    if (chatInput) {
+        chatInput.value = question;
+        sendBankenMessage();
+    }
+};
+
+/**
  * Initialize the Banken Chat widget
  * Sets up event listeners and prepares the chat interface
  */

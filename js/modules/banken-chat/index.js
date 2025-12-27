@@ -15,7 +15,7 @@
 // Import from submodules
 import { DEMO_CUSTOMER_DATA, DEMO_PAYMENTS } from './_constants.js';
 import { lastChatQueryResult } from './_state.js';
-import { initBankenChat } from './_init.js';
+import { initBankenChat, toggleBankenChat, askBankenQuestion } from './_init.js';
 import { sendBankenMessage, showFilteredCustomers, exportChatToExcel, exportChatToPdf } from './_actions.js';
 
 // Re-export all public functions and data for backwards compatibility
@@ -26,6 +26,8 @@ export {
 
     // Main functions
     initBankenChat,
+    toggleBankenChat,
+    askBankenQuestion,
     sendBankenMessage,
     showFilteredCustomers,
     exportChatToExcel,
@@ -38,6 +40,8 @@ export {
 
 Object.assign(window, {
     initBankenChat,
+    toggleBankenChat,
+    askBankenQuestion,
     sendBankenMessage,
     showFilteredCustomers,
     exportChatToExcel,

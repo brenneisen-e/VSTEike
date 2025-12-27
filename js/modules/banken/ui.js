@@ -129,7 +129,8 @@ export function initModuleSelector() {
 
 const BANKEN_COMPONENTS = [
     'header', 'section-segmentierung', 'section-npl', 'section-stage2',
-    'section-aufgaben', 'modal-customer-detail', 'modal-document-scanner', 'crm-profile-view'
+    'section-aufgaben', 'modal-customer-detail', 'modal-document-scanner', 'crm-profile-view',
+    'chat-widget'
 ];
 
 export async function loadComponent(componentName) {
@@ -194,5 +195,9 @@ export async function loadBankenModule() {
     }
 
     await loadBankenComponents(container);
+
+    // Initialize Banken Chat after components are loaded
+    window.initBankenChat?.();
+
     window.showNotification?.('Banken-Modul geladen', 'success');
 }

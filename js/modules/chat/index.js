@@ -33,27 +33,27 @@ const generateMockResponse = (message) => {
     const lower = message.toLowerCase();
 
     if ((lower.includes('performance') && (lower.includes('freiburg') || lower.includes('landkreis')))) {
-        return `📊 **Performance-Analyse für Freiburg:**\n\n**Neugeschäft:** €4.2 Mio (Rang 3 in BW)\n**Bestand:** €180 Mio\n**Stornoquote:** 6.8%\n**NPS Score:** 78\n\n💡 *Mit einem API-Key würde ich detaillierte Echtzeitdaten analysieren.*`;
+        return `**Performance-Analyse für Freiburg:**\n\n**Neugeschäft:** €4.2 Mio (Rang 3 in BW)\n**Bestand:** €180 Mio\n**Stornoquote:** 6.8%\n**NPS Score:** 78\n\n*Mit einem API-Key würde ich detaillierte Echtzeitdaten analysieren.*`;
     }
 
     if (lower.includes('10%') || (lower.includes('beste') && lower.includes('kv'))) {
-        return `💯 **Top-Performer bei KV (>10% über Durchschnitt):**\n\n1. **VM00042 - Julia Schneider** (+18.3%)\n2. **VM00087 - Thomas Weber** (+15.7%)\n3. **VM00153 - Sandra Hoffmann** (+14.2%)\n\n💡 *Mock-Antwort - echte Daten mit API-Key.*`;
+        return `**Top-Performer bei KV (>10% über Durchschnitt):**\n\n1. **VM00042 - Julia Schneider** (+18.3%)\n2. **VM00087 - Thomas Weber** (+15.7%)\n3. **VM00153 - Sandra Hoffmann** (+14.2%)\n\n*Mock-Antwort - echte Daten mit API-Key.*`;
     }
 
     if (lower.includes('vergleich') || lower.includes('vs')) {
-        return `⚖️ **Vergleich Baden-Württemberg vs Bayern:**\n\n**BW:** Storno 7.2%, NPS 79\n**Bayern:** Storno 7.8%, NPS 76\n\n🏆 BW bei Storno & NPS, Bayern bei Volumen`;
+        return `**Vergleich Baden-Württemberg vs Bayern:**\n\n**BW:** Storno 7.2%, NPS 79\n**Bayern:** Storno 7.8%, NPS 76\n\nBW führt bei Storno & NPS, Bayern bei Volumen`;
     }
 
     if (lower.includes('top') || lower.includes('beste')) {
-        return `📊 **Top 5 Vermittler**\n\n1. VM00001 - Max Mustermann\n2. VM00042 - Julia Schneider\n3. VM00087 - Thomas Weber\n\n💡 *Mock-Antwort*`;
+        return `**Top 5 Vermittler**\n\n1. VM00001 - Max Mustermann\n2. VM00042 - Julia Schneider\n3. VM00087 - Thomas Weber\n\n*Mock-Antwort*`;
     }
 
     if (lower.includes('wie viele') || lower.includes('anzahl')) {
         const count = window.dailyRawData?.length ?? 0;
-        return `📊 **Datensatz-Übersicht:**\n\n• ${count.toLocaleString()} Zeilen Tagesdaten\n• Jahr: ${window.state?.filters?.year ?? '2024'}\n\n💡 *Mit API-Key: detaillierte Analysen*`;
+        return `**Datensatz-Übersicht:**\n\n• ${count.toLocaleString()} Zeilen Tagesdaten\n• Jahr: ${window.state?.filters?.year ?? '2024'}\n\n*Mit API-Key: detaillierte Analysen*`;
     }
 
-    return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv**\n\n**Verfügbare Befehle:**\n• "Top 5 Vermittler"\n• "Performance von Freiburg"\n• "Vergleiche BW vs Bayern"`;
+    return `Ich habe deine Frage verstanden: "${message}"\n\n**Mock-Modus aktiv**\n\n**Verfügbare Befehle:**\n• "Top 5 Vermittler"\n• "Performance von Freiburg"\n• "Vergleiche BW vs Bayern"`;
 };
 
 // ========================================
