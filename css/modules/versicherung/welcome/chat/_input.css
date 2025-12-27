@@ -92,3 +92,36 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* ========================================
+   SUGGESTED QUESTIONS
+   ======================================== */
+
+.suggested-questions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.suggested-question-btn {
+    padding: 6px 12px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 12px;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.suggested-question-btn:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+.suggested-question-btn:active {
+    transform: scale(0.97);
+}
