@@ -337,6 +337,92 @@ export const updateAgenturFilterDropdown = () => {
 };
 
 // ========================================
+// KPI VIEW TOGGLE EVENT LISTENER
+// ========================================
+
+const initKPIViewToggle = () => {
+    const kpiGrid = document.getElementById('kpiGrid');
+    if (!kpiGrid) return;
+
+    kpiGrid.addEventListener('click', (e) => {
+        const button = e.target.closest('.view-toggle button');
+        if (!button) return;
+
+        const kpiId = button.dataset.kpi;
+        const view = button.dataset.view;
+        const kpi = window.kpiDefinitions?.find(k => k.id === kpiId);
+        if (!kpi) return;
+
+        const card = document.getElementById(`kpi-${kpiId}`);
+        card?.querySelectorAll('.view-toggle button').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const timeRangeSelector = document.getElementById(`timeRange-${kpiId}`);
+        if (timeRangeSelector) {
+            timeRangeSelector.style.display = view === 'daily' ? 'flex' : 'none';
+        }
+
+        const data = window.getFilteredData?.() ?? [];
+        if (view === 'daily') {
+            window.createChart?.(kpiId, data, 'daily', kpi, 'year', 0);
+        } else {
+            window.createChart?.(kpiId, data, view, kpi);
+        }
+
+        const container = card?.querySelector('.chart-container');
+        if (view === 'month') {
+            container?.classList.add('clickable');
+            container?.setAttribute('onclick', `switchToDaily('${kpiId}')`);
+        } else {
+            container?.classList.remove('clickable');
+            container?.removeAttribute('onclick');
+        }
+    });
+
+    // Time range toggle (Jahr/Monat/Woche)
+    kpiGrid.addEventListener('click', (e) => {
+        const button = e.target.closest('.time-navigation button[data-range]');
+        if (!button) return;
+
+        const kpiId = button.dataset.kpi;
+        const range = button.dataset.range;
+        const kpi = window.kpiDefinitions?.find(k => k.id === kpiId);
+        if (!kpi) return;
+
+        const timeRangeSelector = document.getElementById(`timeRange-${kpiId}`);
+        timeRangeSelector?.querySelectorAll('button[data-range]').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const data = window.getFilteredData?.() ?? [];
+        window.createChart?.(kpiId, data, 'daily', kpi, range, 0);
+    });
+};
+
+// ========================================
+// VIEW MODE TOGGLE (Dashboard/Tabelle)
+// ========================================
+
+const initViewModeToggle = () => {
+    const toggle = document.querySelector('.view-mode-toggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', (e) => {
+        const button = e.target.closest('button[data-mode]');
+        if (!button) return;
+
+        const mode = button.dataset.mode;
+        switchView(mode);
+    });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        initKPIViewToggle();
+        initViewModeToggle();
+    }, 100);
+});
+
+// ========================================
 // WINDOW EXPORTS
 // ========================================
 
@@ -349,6 +435,7 @@ Object.assign(window, {
     updateSegmentDisplay,
     updateProductFilter,
     updateProductDisplay,
-    updateAgenturFilterDropdown
+    updateAgenturFilterDropdown,
+    initKPIViewToggle
 });
 

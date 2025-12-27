@@ -210,6 +210,151 @@ const customerDatabase = {
         branche: 'Logistik', restschuld: 0, status: 'Abgeschlossen',
         dpd: 0, willingness: 95, ability: 90, segment: 'stabil',
         kernproblem: 'Kontokorrent erfolgreich restrukturiert und beglichen.'
+    },
+    // Aufgaben-Kunden (aus section-aufgaben.html)
+    'K-2024-0022': {
+        name: 'Huber Metallbau', type: 'Gewerbe', rechtsform: 'GmbH',
+        adresse: 'Werkstraße 15, 38100 Braunschweig', telefon: '+49 531 112244',
+        email: 'info@huber-metallbau.de', ansprechpartner: 'Karl Huber',
+        branche: 'Metallverarbeitung', restschuld: 34500, status: 'Offen',
+        dpd: 28, willingness: 65, ability: 55, segment: 'restrukturierung',
+        kernproblem: 'Betriebsmittelkredit. Telefonat zur Ratenzahlung geplant.'
+    },
+    'K-2024-0031': {
+        name: 'Becker, Ursula', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Ahornweg 8, 30159 Hannover', telefon: '+49 511 334466',
+        email: 'u.becker@email.de', ansprechpartner: 'Ursula Becker',
+        branche: 'Rentnerin', restschuld: 5670, status: 'Offen',
+        dpd: 45, willingness: 40, ability: 30, segment: 'restrukturierung',
+        kernproblem: 'Ratenkredit. 2. Mahnung versenden erforderlich.'
+    },
+    'K-2024-0044': {
+        name: 'Krause Transport', type: 'Gewerbe', rechtsform: 'GmbH',
+        adresse: 'Speditionsweg 22, 38100 Braunschweig', telefon: '+49 531 556699',
+        email: 'info@krause-transport.de', ansprechpartner: 'Heinz Krause',
+        branche: 'Spedition', restschuld: 89000, status: 'Inkasso',
+        dpd: 62, willingness: 20, ability: 35, segment: 'eskalation',
+        kernproblem: 'Leasingvertrag. Dokumente zur Zwangsvollstreckung prüfen.'
+    },
+    'K-2024-0052': {
+        name: 'Scholz, Marion', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Birkenstraße 44, 30159 Hannover', telefon: '+49 511 778822',
+        email: 'm.scholz@email.de', ansprechpartner: 'Marion Scholz',
+        branche: 'Selbstständig', restschuld: 12300, status: 'Vereinbarung',
+        dpd: 15, willingness: 80, ability: 45, segment: 'restrukturierung',
+        kernproblem: 'Dispositionskredit. Stundungsvereinbarung verlängern.'
+    },
+    'K-2024-0067': {
+        name: 'Autoservice Lange', type: 'Gewerbe', rechtsform: 'e.K.',
+        adresse: 'Werkstattstr. 5, 38100 Braunschweig', telefon: '+49 531 998811',
+        email: 'info@autoservice-lange.de', ansprechpartner: 'Werner Lange',
+        branche: 'Kfz-Werkstatt', restschuld: 45600, status: 'Offen',
+        dpd: 33, willingness: 55, ability: 50, segment: 'restrukturierung',
+        kernproblem: 'Investitionskredit. Rückruf des Kunden ausstehend.'
+    },
+    'K-2024-0078': {
+        name: 'Friedrich, Klaus', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Ulmenweg 12, 30159 Hannover', telefon: '+49 511 443355',
+        email: 'k.friedrich@email.de', ansprechpartner: 'Klaus Friedrich',
+        branche: 'Angestellter', restschuld: 7890, status: 'Zusage',
+        dpd: 22, willingness: 85, ability: 70, segment: 'prioritaet',
+        kernproblem: 'Ratenkredit. Zahlungszusage für nächste Woche dokumentieren.'
+    },
+    'K-2024-0085': {
+        name: 'Gaststätte Zum Anker', type: 'Gewerbe', rechtsform: 'GmbH',
+        adresse: 'Hafenstraße 1, 38100 Braunschweig', telefon: '+49 531 667799',
+        email: 'info@zum-anker.de', ansprechpartner: 'Rolf Ankermann',
+        branche: 'Gastronomie', restschuld: 78500, status: 'Vereinbarung',
+        dpd: 41, willingness: 60, ability: 35, segment: 'restrukturierung',
+        kernproblem: 'Betriebsmittelkredit. Tilgungsplan aktualisieren.'
+    },
+    'K-2024-0091': {
+        name: 'Vogel, Ingrid', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Finkenweg 7, 30159 Hannover', telefon: '+49 511 889944',
+        email: 'i.vogel@email.de', ansprechpartner: 'Ingrid Vogel',
+        branche: 'Beamtin', restschuld: 3450, status: 'Offen',
+        dpd: 18, willingness: 90, ability: 85, segment: 'prioritaet',
+        kernproblem: 'Kreditkarte. Erinnerungsanruf durchführen.'
+    },
+    'K-2024-0103': {
+        name: 'Hartmann Elektro', type: 'Gewerbe', rechtsform: 'OHG',
+        adresse: 'Stromweg 33, 38100 Braunschweig', telefon: '+49 531 223366',
+        email: 'info@hartmann-elektro.de', ansprechpartner: 'Georg Hartmann',
+        branche: 'Elektrohandwerk', restschuld: 56700, status: 'Inkasso',
+        dpd: 55, willingness: 25, ability: 40, segment: 'eskalation',
+        kernproblem: 'Kontokorrent. Inkasso-Übergabe vorbereiten.'
+    },
+    'K-2024-0112': {
+        name: 'Schröder, Helmut', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Kastanienallee 19, 30159 Hannover', telefon: '+49 511 556688',
+        email: 'h.schroeder@email.de', ansprechpartner: 'Helmut Schröder',
+        branche: 'Rentner', restschuld: 8900, status: 'Offen',
+        dpd: 35, willingness: 50, ability: 40, segment: 'restrukturierung',
+        kernproblem: 'Ratenkredit. Restrukturierungsangebot erstellen.'
+    },
+    'K-2024-0119': {
+        name: 'Druckerei Sommer', type: 'Gewerbe', rechtsform: 'GmbH',
+        adresse: 'Druckweg 8, 38100 Braunschweig', telefon: '+49 531 778899',
+        email: 'info@druckerei-sommer.de', ansprechpartner: 'Rita Sommer',
+        branche: 'Druckerei', restschuld: 123000, status: 'Inkasso',
+        dpd: 78, willingness: 15, ability: 25, segment: 'abwicklung',
+        kernproblem: 'Investitionskredit. Forderungsverkauf prüfen.'
+    },
+    'K-2024-0127': {
+        name: 'Wendt, Sabrina', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Rosenweg 23, 30159 Hannover', telefon: '+49 511 112277',
+        email: 's.wendt@email.de', ansprechpartner: 'Sabrina Wendt',
+        branche: 'Angestellte', restschuld: 4560, status: 'Zusage',
+        dpd: 12, willingness: 95, ability: 80, segment: 'prioritaet',
+        kernproblem: 'Autokredit. Zahlungseingang überwachen.'
+    },
+    'K-2024-0134': {
+        name: 'Sanitär König', type: 'Gewerbe', rechtsform: 'e.K.',
+        adresse: 'Rohrweg 11, 38100 Braunschweig', telefon: '+49 531 334488',
+        email: 'info@sanitaer-koenig.de', ansprechpartner: 'Franz König',
+        branche: 'Sanitär', restschuld: 34500, status: 'Vereinbarung',
+        dpd: 25, willingness: 70, ability: 50, segment: 'restrukturierung',
+        kernproblem: 'Betriebsmittelkredit. Ratenzahlung überwachen.'
+    },
+    'K-2024-0142': {
+        name: 'Jansen, Petra', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Lilienstraße 5, 30159 Hannover', telefon: '+49 511 998866',
+        email: 'p.jansen@email.de', ansprechpartner: 'Petra Jansen',
+        branche: 'Selbstständig', restschuld: 15600, status: 'Offen',
+        dpd: 42, willingness: 45, ability: 35, segment: 'restrukturierung',
+        kernproblem: 'Dispositionskredit. Restrukturierung anbieten.'
+    },
+    'K-2024-0155': {
+        name: 'Maler Stein', type: 'Gewerbe', rechtsform: 'GmbH',
+        adresse: 'Farbweg 7, 38100 Braunschweig', telefon: '+49 531 665544',
+        email: 'info@maler-stein.de', ansprechpartner: 'Otto Stein',
+        branche: 'Malereibetrieb', restschuld: 28900, status: 'Offen',
+        dpd: 38, willingness: 55, ability: 45, segment: 'restrukturierung',
+        kernproblem: 'Kontokorrent. Termin für Gespräch vereinbaren.'
+    },
+    'K-2024-0168': {
+        name: 'Berger, Wolfgang', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Eichenplatz 3, 30159 Hannover', telefon: '+49 511 776655',
+        email: 'w.berger@email.de', ansprechpartner: 'Wolfgang Berger',
+        branche: 'Angestellter', restschuld: 6780, status: 'Zusage',
+        dpd: 15, willingness: 90, ability: 75, segment: 'prioritaet',
+        kernproblem: 'Ratenkredit. Teilzahlung bestätigen.'
+    },
+    'K-2024-0176': {
+        name: 'Gärtnerei Blume', type: 'Gewerbe', rechtsform: 'e.K.',
+        adresse: 'Blumenweg 22, 38100 Braunschweig', telefon: '+49 531 443322',
+        email: 'info@gaertnerei-blume.de', ansprechpartner: 'Rosa Blume',
+        branche: 'Gärtnerei', restschuld: 45000, status: 'Vereinbarung',
+        dpd: 30, willingness: 65, ability: 40, segment: 'restrukturierung',
+        kernproblem: 'Investitionskredit. Stundung dokumentieren.'
+    },
+    'K-2024-0188': {
+        name: 'Koch, Andrea', type: 'Privat', rechtsform: 'Privatperson',
+        adresse: 'Lindenstraße 18, 30159 Hannover', telefon: '+49 511 889933',
+        email: 'a.koch@email.de', ansprechpartner: 'Andrea Koch',
+        branche: 'Ärztin', restschuld: 23400, status: 'Offen',
+        dpd: 28, willingness: 75, ability: 65, segment: 'prioritaet',
+        kernproblem: 'Praxiskredit. Kontaktaufnahme wegen Ratenzahlung.'
     }
 };
 

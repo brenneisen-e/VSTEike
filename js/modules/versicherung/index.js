@@ -63,6 +63,8 @@ Object.assign(window, {
     loadUserName: navigation.loadUserName,
     openAbrechnungspruefung: navigation.openAbrechnungspruefung,
     openValidierungProvision: navigation.openValidierungProvision,
+    openFinanzplanung: navigation.openFinanzplanung,
+    openProvisionssimulation: navigation.openProvisionssimulation,
 });
 
 // ========================================
