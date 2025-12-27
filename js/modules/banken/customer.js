@@ -880,6 +880,8 @@ export function openCustomerDetail(customerId, options = {}) {
     updateKontenFields(modal, customer);
     updateKommunikationFields(modal, customer);
     updateKiAnalyseFields(modal, customer);
+    updateOpenFinanceFields(modal, customer);
+    updateHaushaltFields(modal, customer);
 
     setTimeout(() => renderCustomerActivities(customerId), 100);
 
@@ -1047,6 +1049,53 @@ function updateKontenFields(modal, customer) {
             }
         }
     }
+
+    // Populate "Letzte Transaktionen" from customer.transaktionen
+    const txCompactList = kontenTab.querySelector('#tx-compact-list');
+    if (txCompactList) {
+        if (customer.transaktionen && customer.transaktionen.length > 0) {
+            txCompactList.innerHTML = customer.transaktionen.map(tx => {
+                const statusClass = tx.status === 'ueberfaellig' ? 'failed' :
+                                   tx.status === 'rueckgabe' ? 'failed' :
+                                   tx.status === 'gebucht' ? 'success' : '';
+                const statusBadge = tx.status === 'ueberfaellig' ? 'Überfällig' :
+                                   tx.status === 'rueckgabe' ? 'Rückgabe' :
+                                   tx.status === 'gebucht' ? 'Gebucht' : tx.status;
+                const amountClass = tx.betrag < 0 ? 'negative' : 'positive';
+                const amountSign = tx.betrag < 0 ? '-' : '+';
+                const amountValue = Math.abs(tx.betrag).toLocaleString('de-DE');
+
+                return `
+                    <div class="tx-compact-item ${statusClass}">
+                        <span class="tx-date">${tx.datum}</span>
+                        <span class="tx-desc">${tx.beschreibung}</span>
+                        <span class="tx-amount ${amountClass}">${amountSign}€${amountValue}</span>
+                        <span class="tx-status-badge ${statusClass}">${statusBadge}</span>
+                    </div>
+                `;
+            }).join('');
+        } else if (isBezahlt) {
+            // Bezahlte Kunden: Erfolgreiche Schlusszahlung
+            txCompactList.innerHTML = `
+                <div class="tx-compact-item success">
+                    <span class="tx-date">${customer.letzteZahlung?.datum || '15.12.2025'}</span>
+                    <span class="tx-desc">${customer.letzteZahlung?.typ || 'Schlusszahlung'}</span>
+                    <span class="tx-amount positive">+€${(customer.letzteZahlung?.betrag || customer.monatsrate || 0).toLocaleString('de-DE')}</span>
+                    <span class="tx-status-badge success">Gebucht</span>
+                </div>
+            `;
+        } else {
+            // Fallback: Generic transaction based on customer data
+            txCompactList.innerHTML = `
+                <div class="tx-compact-item ${customer.dpd > 0 ? 'failed' : 'success'}">
+                    <span class="tx-date">01.12.2025</span>
+                    <span class="tx-desc">Monatliche Zahlung</span>
+                    <span class="tx-amount ${customer.dpd > 0 ? 'negative' : 'positive'}">${customer.dpd > 0 ? '-' : '+'}€${(customer.monatsrate || 0).toLocaleString('de-DE')}</span>
+                    <span class="tx-status-badge ${customer.dpd > 0 ? 'failed' : 'success'}">${customer.dpd > 0 ? 'Überfällig' : 'Gebucht'}</span>
+                </div>
+            `;
+        }
+    }
 }
 
 function updateKiAnalyseFields(modal, customer) {
@@ -1192,8 +1241,389 @@ function updateKiAnalyseFields(modal, customer) {
     }
 }
 
+function updateOpenFinanceFields(modal, customer) {
+    const openfinanceTab = modal.querySelector('#tab-openfinance');
+    if (!openfinanceTab || !customer.openFinance) {
+        console.log('Open Finance tab not found or no openFinance data');
+        return;
+    }
+
+    const of = customer.openFinance;
+
+    // Update Consent Grid
+    const consentGrid = openfinanceTab.querySelector('#consentGrid');
+    if (consentGrid && of.consent) {
+        const psd2Status = of.consent.psd2 ? 'active' : 'inactive';
+        const versicherungenStatus = of.consent.versicherungen ? 'active' : 'pending';
+        const investmentsStatus = of.consent.investments ? 'active' : 'inactive';
+
+        const psd2Icon = of.consent.psd2
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+
+        const versicherungenIcon = of.consent.versicherungen
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
+
+        const investmentsIcon = of.consent.investments
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+
+        consentGrid.innerHTML = `
+            <div class="consent-item ${psd2Status}">
+                <span class="consent-status">${psd2Icon} ${of.consent.psd2 ? 'Aktiv' : 'Nicht erteilt'}</span>
+                <span class="consent-label">Konten (PSD2)</span>
+                <span class="consent-detail">${of.consent.psd2 ? 'Gültig bis ' + of.consent.psd2Bis : 'Keine Freigabe'}</span>
+            </div>
+            <div class="consent-item ${versicherungenStatus}">
+                <span class="consent-status">${versicherungenIcon} ${of.consent.versicherungen ? 'Aktiv' : 'Ausstehend'}</span>
+                <span class="consent-label">Versicherungen</span>
+                <span class="consent-detail">${of.consent.versicherungen ? 'Freigabe erteilt' : 'Einwilligung angefragt'}</span>
+            </div>
+            <div class="consent-item ${investmentsStatus}">
+                <span class="consent-status">${investmentsIcon} ${of.consent.investments ? 'Aktiv' : 'Nicht erteilt'}</span>
+                <span class="consent-label">Investments</span>
+                <span class="consent-detail">${of.consent.investments ? 'Freigabe erteilt' : 'Keine Freigabe'}</span>
+            </div>
+        `;
+    }
+
+    // Update Externe Konten table
+    const externeKontenBody = openfinanceTab.querySelector('#externeKontenBody');
+    if (externeKontenBody && of.externeKonten) {
+        if (of.externeKonten.length === 0) {
+            externeKontenBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Keine externen Konten gefunden</td></tr>';
+        } else {
+            externeKontenBody.innerHTML = of.externeKonten.map(konto => {
+                const saldoClass = konto.saldo < 0 ? 'negative' : (konto.saldo > 0 ? 'positive' : '');
+                const statusBadge = konto.status === 'Aktiv' ? 'success' : (konto.status === 'Überzogen' ? 'danger' : 'warning');
+                return `
+                    <tr>
+                        <td>${konto.institut}</td>
+                        <td>${konto.produkt}</td>
+                        <td class="${saldoClass}">€${Math.abs(konto.saldo).toLocaleString('de-DE')}</td>
+                        <td>${konto.rate > 0 ? '€' + konto.rate.toLocaleString('de-DE') : '-'}</td>
+                        <td><span class="status-badge ${statusBadge}">${konto.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+
+    // Update Externe Versicherungen table
+    const externeVersicherungenBody = openfinanceTab.querySelector('#externeVersicherungenBody');
+    if (externeVersicherungenBody && of.externeVersicherungen) {
+        if (of.externeVersicherungen.length === 0) {
+            externeVersicherungenBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Keine externen Versicherungen erkannt (kein Consent oder keine Daten)</td></tr>';
+        } else {
+            externeVersicherungenBody.innerHTML = of.externeVersicherungen.map(vers => `
+                <tr>
+                    <td>${vers.anbieter}</td>
+                    <td>${vers.produkt}</td>
+                    <td>€${vers.beitrag.toLocaleString('de-DE')}/M</td>
+                    <td>${vers.beginn}</td>
+                    <td>${vers.hinweis || '-'}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    // Calculate and update Gesamtverschuldung
+    const produkteSaldo = customer.produkte ? customer.produkte.reduce((sum, p) => sum + (p.saldo || 0), 0) : 0;
+    const externeSaldo = of.externeKonten ? of.externeKonten.filter(k => k.saldo < 0 || k.produkt.toLowerCase().includes('kredit') || k.produkt.toLowerCase().includes('leasing'))
+        .reduce((sum, k) => sum + Math.abs(k.saldo), 0) : 0;
+    const gesamtVerschuldung = produkteSaldo + externeSaldo;
+
+    // Calculate DTI (Debt-to-Income Ratio) based on monthly income
+    const monatlichesEinkommen = customer.haushalt ?
+        (customer.haushalt.einnahmen.gehalt || 0) + (customer.haushalt.einnahmen.neben || 0) +
+        (customer.haushalt.einnahmen.sozial || 0) + (customer.haushalt.einnahmen.sonstige || 0) :
+        (customer.einkommenMonatlich || 1);
+    const dtiRatio = monatlichesEinkommen > 0 ? Math.round((gesamtVerschuldung / (monatlichesEinkommen * 12)) * 100) : 0;
+
+    const debtEigeneBank = openfinanceTab.querySelector('#debtEigeneBank');
+    const debtExtern = openfinanceTab.querySelector('#debtExtern');
+    const debtGesamt = openfinanceTab.querySelector('#debtGesamt');
+    const debtRatio = openfinanceTab.querySelector('#debtRatio');
+
+    if (debtEigeneBank) debtEigeneBank.textContent = '€' + produkteSaldo.toLocaleString('de-DE');
+    if (debtExtern) debtExtern.textContent = '€' + externeSaldo.toLocaleString('de-DE');
+    if (debtGesamt) debtGesamt.textContent = '€' + gesamtVerschuldung.toLocaleString('de-DE');
+    if (debtRatio) {
+        debtRatio.textContent = dtiRatio + '%';
+        debtRatio.style.color = dtiRatio <= 35 ? '#22c55e' : (dtiRatio <= 50 ? '#f59e0b' : '#ef4444');
+    }
+
+    console.log('Open Finance fields updated for:', customer.name);
+}
+
+// Helper to format currency
+function formatCurrency(amount) {
+    if (amount === undefined || amount === null) return '€0';
+    const formatted = Math.abs(amount).toLocaleString('de-DE');
+    return (amount < 0 ? '-' : '') + '€' + formatted;
+}
+
+// Update GuV fields with customer data (for Gewerbe customers)
+function updateGuvFields(customer) {
+    const guv = customer.guv || {};
+
+    // Update summary cards
+    const umsatzEl = document.getElementById('guvUmsatz');
+    const aufwendungenEl = document.getElementById('guvAufwendungen');
+    const gewinnEl = document.getElementById('guvGewinn');
+    const ebitdaEl = document.getElementById('guvEbitda');
+
+    if (umsatzEl && guv.umsatz) {
+        umsatzEl.textContent = formatCurrency(guv.umsatz);
+    }
+    if (aufwendungenEl && guv.aufwendungen) {
+        aufwendungenEl.textContent = formatCurrency(guv.aufwendungen);
+    }
+    if (gewinnEl && guv.gewinn !== undefined) {
+        gewinnEl.textContent = formatCurrency(guv.gewinn);
+        gewinnEl.classList.toggle('negative', guv.gewinn < 0);
+    }
+    if (ebitdaEl && guv.ebitda) {
+        ebitdaEl.textContent = guv.ebitda + '%';
+    }
+
+    // Update detail fields
+    const guvUmsatzDetail = document.getElementById('guvUmsatzDetail');
+    const guvGewinnDetail = document.getElementById('guvGewinnDetail');
+    if (guvUmsatzDetail && guv.umsatzChange) {
+        guvUmsatzDetail.textContent = guv.umsatzChange;
+    }
+    if (guvGewinnDetail && guv.gewinnText) {
+        guvGewinnDetail.textContent = guv.gewinnText;
+    }
+}
+
+// Update Haushaltsrechnung tab fields (for Privat customers)
+function updateHaushaltFields(modal, customer) {
+    const haushaltTab = modal.querySelector('#tab-haushalt');
+    if (!haushaltTab || !customer.haushalt) {
+        console.log('Haushalt tab not found or no haushalt data');
+        return;
+    }
+
+    const h = customer.haushalt;
+    const isGewerbe = customer.type === 'Gewerbe';
+
+    // Calculate totals
+    const einnahmenGesamt = (h.einnahmen.gehalt || 0) + (h.einnahmen.neben || 0) + (h.einnahmen.sozial || 0) + (h.einnahmen.sonstige || 0);
+    const fixkostenGesamt = (h.fixkosten.miete || 0) + (h.fixkosten.nebenkosten || 0) + (h.fixkosten.versicherung || 0) + (h.fixkosten.kredite || 0) + (h.fixkosten.abos || 0);
+    const lebenshaltungGesamt = (h.lebenshaltung.essen || 0) + (h.lebenshaltung.mobilitaet || 0) + (h.lebenshaltung.gesundheit || 0) + (h.lebenshaltung.freizeit || 0) + (h.lebenshaltung.sonstige || 0);
+    const ausgabenGesamt = fixkostenGesamt + lebenshaltungGesamt;
+    const freiVerfuegbar = einnahmenGesamt - ausgabenGesamt;
+    const sparquote = einnahmenGesamt > 0 ? Math.round((freiVerfuegbar / einnahmenGesamt) * 100) : 0;
+
+    // Helper to format currency
+    const formatEuro = (val) => '€' + val.toLocaleString('de-DE');
+
+    // Update summary cards
+    const summaryEinnahmen = haushaltTab.querySelector('#haushaltEinnahmen');
+    const summaryAusgaben = haushaltTab.querySelector('#haushaltAusgaben');
+    const summaryVerfuegbar = haushaltTab.querySelector('#haushaltVerfuegbar');
+    const summarySparquote = haushaltTab.querySelector('#haushaltSparquote');
+
+    if (summaryEinnahmen) summaryEinnahmen.textContent = formatEuro(einnahmenGesamt);
+    if (summaryAusgaben) summaryAusgaben.textContent = formatEuro(ausgabenGesamt);
+    if (summaryVerfuegbar) {
+        summaryVerfuegbar.textContent = formatEuro(freiVerfuegbar);
+        summaryVerfuegbar.style.color = freiVerfuegbar >= 0 ? '#22c55e' : '#ef4444';
+    }
+    if (summarySparquote) {
+        summarySparquote.textContent = sparquote + '%';
+        summarySparquote.style.color = sparquote >= 10 ? '#22c55e' : (sparquote >= 0 ? '#f59e0b' : '#ef4444');
+    }
+
+    // Update summary detail text
+    const einnahmenDetail = haushaltTab.querySelector('#haushaltEinnahmenDetail');
+    const ausgabenDetail = haushaltTab.querySelector('#haushaltAusgabenDetail');
+    if (einnahmenDetail) einnahmenDetail.textContent = isGewerbe ? 'Betriebseinnahmen' : 'Nettoeinkommen';
+    if (ausgabenDetail) ausgabenDetail.textContent = 'Fixkosten + Lebenshaltung';
+
+    // Update Einnahmen breakdown (with null checks)
+    const einnahmenGehaltEl = haushaltTab.querySelector('#einnahmenGehalt');
+    const einnahmenNebenEl = haushaltTab.querySelector('#einnahmenNeben');
+    const einnahmenSozialEl = haushaltTab.querySelector('#einnahmenSozial');
+    const einnahmenSonstigeEl = haushaltTab.querySelector('#einnahmenSonstige');
+    const einnahmenGesamtEl = haushaltTab.querySelector('#einnahmenGesamt');
+
+    if (einnahmenGehaltEl) einnahmenGehaltEl.textContent = formatEuro(h.einnahmen.gehalt || 0);
+    if (einnahmenNebenEl) einnahmenNebenEl.textContent = formatEuro(h.einnahmen.neben || 0);
+    if (einnahmenSozialEl) einnahmenSozialEl.textContent = formatEuro(h.einnahmen.sozial || 0);
+    if (einnahmenSonstigeEl) einnahmenSonstigeEl.textContent = formatEuro(h.einnahmen.sonstige || 0);
+    if (einnahmenGesamtEl) einnahmenGesamtEl.textContent = formatEuro(einnahmenGesamt);
+
+    // Update Fixkosten breakdown (with null checks)
+    const fixkostenMieteEl = haushaltTab.querySelector('#fixkostenMiete');
+    const fixkostenNebenkostenEl = haushaltTab.querySelector('#fixkostenNebenkosten');
+    const fixkostenVersicherungEl = haushaltTab.querySelector('#fixkostenVersicherung');
+    const fixkostenKrediteEl = haushaltTab.querySelector('#fixkostenKredite');
+    const fixkostenAbosEl = haushaltTab.querySelector('#fixkostenAbos');
+    const fixkostenGesamtEl = haushaltTab.querySelector('#fixkostenGesamt');
+
+    if (fixkostenMieteEl) fixkostenMieteEl.textContent = formatEuro(h.fixkosten.miete || 0);
+    if (fixkostenNebenkostenEl) fixkostenNebenkostenEl.textContent = formatEuro(h.fixkosten.nebenkosten || 0);
+    if (fixkostenVersicherungEl) fixkostenVersicherungEl.textContent = formatEuro(h.fixkosten.versicherung || 0);
+    if (fixkostenKrediteEl) fixkostenKrediteEl.textContent = formatEuro(h.fixkosten.kredite || 0);
+    if (fixkostenAbosEl) fixkostenAbosEl.textContent = formatEuro(h.fixkosten.abos || 0);
+    if (fixkostenGesamtEl) fixkostenGesamtEl.textContent = formatEuro(fixkostenGesamt);
+
+    // Update Lebenshaltung breakdown (with null checks)
+    const lebenshaltungEssenEl = haushaltTab.querySelector('#lebenshaltungEssen');
+    const lebenshaltungMobilitaetEl = haushaltTab.querySelector('#lebenshaltungMobilitaet');
+    const lebenshaltungGesundheitEl = haushaltTab.querySelector('#lebenshaltungGesundheit');
+    const lebenshaltungFreizeitEl = haushaltTab.querySelector('#lebenshaltungFreizeit');
+    const lebenshaltungSonstigeEl = haushaltTab.querySelector('#lebenshaltungSonstige');
+    const lebenshaltungGesamtEl = haushaltTab.querySelector('#lebenshaltungGesamt');
+
+    if (lebenshaltungEssenEl) lebenshaltungEssenEl.textContent = formatEuro(h.lebenshaltung.essen || 0);
+    if (lebenshaltungMobilitaetEl) lebenshaltungMobilitaetEl.textContent = formatEuro(h.lebenshaltung.mobilitaet || 0);
+    if (lebenshaltungGesundheitEl) lebenshaltungGesundheitEl.textContent = formatEuro(h.lebenshaltung.gesundheit || 0);
+    if (lebenshaltungFreizeitEl) lebenshaltungFreizeitEl.textContent = formatEuro(h.lebenshaltung.freizeit || 0);
+    if (lebenshaltungSonstigeEl) lebenshaltungSonstigeEl.textContent = formatEuro(h.lebenshaltung.sonstige || 0);
+    if (lebenshaltungGesamtEl) lebenshaltungGesamtEl.textContent = formatEuro(lebenshaltungGesamt);
+
+    // Update Zahlungsfähigkeitsbewertung
+    const assessmentFill = haushaltTab.querySelector('#assessmentFill');
+    const assessmentText = haushaltTab.querySelector('#assessmentText');
+
+    let assessmentLevel = 0;
+    let assessmentMessage = '';
+    let assessmentColor = '';
+
+    if (sparquote >= 20) {
+        assessmentLevel = 90;
+        assessmentMessage = `<strong>Gut:</strong> ${customer.name} verfügt über einen soliden finanziellen Spielraum (${sparquote}% Sparquote). Ratenzahlungen können problemlos bedient werden.`;
+        assessmentColor = '#22c55e';
+    } else if (sparquote >= 10) {
+        assessmentLevel = 70;
+        assessmentMessage = `<strong>Stabil:</strong> ${customer.name} hat ausreichend frei verfügbares Einkommen (${formatEuro(freiVerfuegbar)}/Monat). Moderate Raten sind tragbar.`;
+        assessmentColor = '#3b82f6';
+    } else if (sparquote >= 0) {
+        assessmentLevel = 45;
+        assessmentMessage = `<strong>Eingeschränkt:</strong> ${customer.name} hat nur ${formatEuro(freiVerfuegbar)} frei verfügbar. Niedrige Raten oder Stundung empfohlen.`;
+        assessmentColor = '#f59e0b';
+    } else {
+        assessmentLevel = 20;
+        assessmentMessage = `<strong>Kritisch:</strong> ${customer.name} hat ein monatliches Defizit von ${formatEuro(Math.abs(freiVerfuegbar))}. Restrukturierung oder Härtefallprüfung erforderlich.`;
+        assessmentColor = '#ef4444';
+    }
+
+    if (assessmentFill) {
+        assessmentFill.style.width = assessmentLevel + '%';
+        assessmentFill.style.background = `linear-gradient(90deg, ${assessmentColor}, ${assessmentColor}80)`;
+    }
+    if (assessmentText) {
+        assessmentText.innerHTML = assessmentMessage;
+    }
+
+    console.log('Haushalt fields updated for:', customer.name);
+}
+
+// Update CRM fields with customer data
+function updateCrmFields(crmView, customer) {
+    // Helper to find and update by label
+    function updateByLabel(labelText, newValue) {
+        const rows = crmView.querySelectorAll('.crm-row, .info-row, .detail-row');
+        for (const row of rows) {
+            const label = row.querySelector('.label, .info-label, .detail-label');
+            if (label && label.textContent.trim().toLowerCase().includes(labelText.toLowerCase())) {
+                const value = row.querySelector('.value, .info-value, .detail-value');
+                if (value) {
+                    value.textContent = newValue;
+                    return value;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Update main fields
+    updateByLabel('Firmenname', customer.name);
+    updateByLabel('Name', customer.name);
+    updateByLabel('Rechtsform', customer.rechtsform);
+    updateByLabel('Branche', customer.branche);
+    updateByLabel('Adresse', customer.adresse);
+    updateByLabel('Telefon', customer.telefon);
+    updateByLabel('E-Mail', customer.email);
+    updateByLabel('Ansprechpartner', customer.ansprechpartner);
+
+    // Update financial data
+    updateByLabel('Restschuld', '€' + (customer.restschuld || 0).toLocaleString('de-DE'));
+    updateByLabel('Gesamtforderung', '€' + (customer.gesamtforderung || 0).toLocaleString('de-DE'));
+
+    // Update status badges
+    const statusBadges = crmView.querySelectorAll('.status-badge, .segment-badge');
+    statusBadges.forEach(badge => {
+        if (customer.status === 'Bezahlt') {
+            badge.textContent = 'Abgeschlossen';
+            badge.className = badge.className.replace(/danger|warning|inkasso/g, 'success');
+        }
+    });
+}
+
 function updateKommunikationFields(modal, customer) {
-    // Update KI-Analyse Kernproblem
+    const kommTab = modal.querySelector('#tab-kommunikation');
+    if (!kommTab) return;
+
+    const isBezahlt = customer.status === 'Bezahlt';
+    const isInkasso = customer.status === 'Inkasso';
+
+    // Update workflow status
+    const statusValue = kommTab.querySelector('.status-value');
+    if (statusValue) {
+        statusValue.textContent = customer.workflowStatus || 'Offen';
+        statusValue.className = 'status-value ' + (isBezahlt ? 'success' : isInkasso ? 'inkasso' : 'offen');
+    }
+
+    // Add or update KI summary at the top of Kommunikation
+    let kiSummary = kommTab.querySelector('.kommunikation-ki-summary');
+    if (!kiSummary) {
+        kiSummary = document.createElement('div');
+        kiSummary.className = 'kommunikation-ki-summary';
+        const header = kommTab.querySelector('.kommunikation-header');
+        if (header) {
+            header.after(kiSummary);
+        }
+    }
+
+    const mahnstufeText = customer.mahnstufe > 0 ? 'Mahnstufe ' + customer.mahnstufe : 'Keine Mahnungen';
+    const statusClass = isBezahlt ? 'success' : isInkasso ? 'danger' : 'warning';
+
+    kiSummary.innerHTML = `
+        <div class="ki-summary-mini">
+            <div class="ki-summary-header-mini">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"></path>
+                </svg>
+                <span>KI-Zusammenfassung der Kommunikation</span>
+            </div>
+            <div class="ki-summary-content-mini">
+                <p><strong>${customer.name}</strong> - ${customer.kernproblem || 'Keine Analyse verfügbar.'}</p>
+                <div class="ki-summary-stats">
+                    <span class="stat-item ${statusClass}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle></svg>
+                        ${customer.workflowStatus || 'Offen'}
+                    </span>
+                    <span class="stat-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        ${mahnstufeText}
+                    </span>
+                    <span class="stat-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        ${customer.dpd || 0} DPD
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Update KI-Analyse Kernproblem (for KI tab)
     const kiSummaryContent = modal.querySelector('#tab-ki-analyse .ki-summary-section p');
     if (kiSummaryContent && customer.kernproblem) {
         kiSummaryContent.innerHTML = customer.kernproblem;
@@ -1248,6 +1678,31 @@ export function openCrmProfile(customerId, taskContext = null) {
     const crmCustomerId = crmView.querySelector('.crm-customer-id');
     if (crmCustomerId) crmCustomerId.textContent = customerId;
 
+    // Update CRM fields using the same helper approach
+    updateCrmFields(crmView, customer);
+
+    // Show/hide task hint box
+    const taskHintBox = document.getElementById('crmTaskHint');
+    if (taskHintBox) {
+        if (taskContext) {
+            taskHintBox.style.display = 'block';
+            taskHintBox.innerHTML = `
+                <div class="task-hint-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <strong>Offene Aufgabe:</strong> ${taskContext.title}
+                </div>
+                <div class="task-hint-meta">
+                    <span class="task-hint-due ${taskContext.overdue ? 'overdue' : ''}">${taskContext.due}</span>
+                </div>
+            `;
+        } else {
+            taskHintBox.style.display = 'none';
+        }
+    }
 }
 
 export function closeCrmProfile() {
