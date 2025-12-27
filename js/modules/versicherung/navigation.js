@@ -206,3 +206,24 @@ export function openAbrechnungspruefung() {
 export function openValidierungProvision() {
     window.open('https://vstboard.pages.dev/provision-validation.html', '_blank');
 }
+
+// ========================================
+// FINANZPLANUNG & PROVISIONSSIMULATION
+// ========================================
+
+export function openFinanzplanung() {
+    // Finanzplanung is a tab within customer detail view
+    // Show an info message that a customer needs to be selected first
+    const kundenDetailPage = document.getElementById('kundenDetailPage');
+    if (kundenDetailPage && kundenDetailPage.style.display !== 'none') {
+        // If already in customer detail, switch to finanzplanung tab
+        window.switchKundenTab?.('finanzplanung');
+    } else {
+        alert('Bitte wählen Sie zuerst einen Kunden aus, um die Finanzplanung zu öffnen.');
+    }
+}
+
+export function openProvisionssimulation() {
+    // Navigate to the standalone Provisionssimulation page
+    window.location.href = 'Provisionssimulation.html';
+}
