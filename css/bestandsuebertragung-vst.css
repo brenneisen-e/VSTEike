@@ -2807,14 +2807,14 @@ body {
 }
 
 .bestand-page .pros li::before {
-    content: "✓";
+    content: "\2713"; /* Unicode checkmark */
     position: absolute;
     left: 0;
     color: #22c55e;
 }
 
 .bestand-page .cons li::before {
-    content: "✕";
+    content: "\2715"; /* Unicode X mark */
     position: absolute;
     left: 0;
     color: #ef4444;

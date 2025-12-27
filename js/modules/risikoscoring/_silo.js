@@ -35,12 +35,12 @@ export const toggleMeasures = () => {
     if (active) {
         button.classList.add('active');
         content.classList.add('active');
-        button.innerHTML = '<span>✅</span><span>Maßnahmen aktiv</span>';
+        button.innerHTML = '<span>[OK]</span><span>Maßnahmen aktiv</span>';
         if (selectedMeasures.length > 0) updateMeasures();
     } else {
         button.classList.remove('active');
         content.classList.remove('active');
-        button.innerHTML = '<span>🎯</span><span>Maßnahmen aktivieren</span>';
+        button.innerHTML = '<span>[PLAN]</span><span>Maßnahmen aktivieren</span>';
         document.querySelectorAll('.measure-checkbox input').forEach(cb => { cb.checked = false; });
         setSelectedMeasures([]);
         setModifiedDistributionData({});

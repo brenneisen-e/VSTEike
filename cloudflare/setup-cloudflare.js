@@ -136,11 +136,11 @@ async function setup() {
 
     try {
         // 1. Account ID holen
-        console.log('🔍 Ermittle Account ID...');
+        console.log('[CHECK] Ermittle Account ID...');
         const accounts = await apiRequest('GET', '/accounts');
 
         if (!accounts.success || !accounts.result?.length) {
-            console.error('❌ Fehler: Konnte Account nicht finden');
+            console.error('[ERROR] Fehler: Konnte Account nicht finden');
             console.error('   Prüfen Sie, ob der API Token korrekt ist.');
             if (accounts.errors) console.error('   Fehler:', accounts.errors);
             process.exit(1);
@@ -148,10 +148,10 @@ async function setup() {
 
         const accountId = accounts.result[0].id;
         const accountName = accounts.result[0].name;
-        console.log(`✅ Account: ${accountName} (${accountId})`);
+        console.log(`[OK] Account: ${accountName} (${accountId})`);
 
         // 2. KV Namespace erstellen
-        console.log('\n📦 Erstelle KV Namespace...');
+        console.log('\n[INFO] Erstelle KV Namespace...');
         let kvId;
 
         // Prüfen ob schon existiert
@@ -160,47 +160,47 @@ async function setup() {
 
         if (existing) {
             kvId = existing.id;
-            console.log(`✅ KV Namespace existiert bereits: ${kvId}`);
+            console.log(`[OK] KV Namespace existiert bereits: ${kvId}`);
         } else {
             const kvResult = await apiRequest('POST', `/accounts/${accountId}/storage/kv/namespaces`, {
                 title: 'FEEDBACK_KV'
             });
 
             if (!kvResult.success) {
-                console.error('❌ Fehler beim Erstellen des KV Namespace');
+                console.error('[ERROR] Fehler beim Erstellen des KV Namespace');
                 if (kvResult.errors) console.error('   Fehler:', kvResult.errors);
                 process.exit(1);
             }
 
             kvId = kvResult.result.id;
-            console.log(`✅ KV Namespace erstellt: ${kvId}`);
+            console.log(`[OK] KV Namespace erstellt: ${kvId}`);
         }
 
         // 3. Worker Script laden
-        console.log('\n📄 Lade Worker Script...');
+        console.log('\n[INFO] Lade Worker Script...');
         const scriptPath = path.join(__dirname, 'feedback-worker.js');
 
         if (!fs.existsSync(scriptPath)) {
-            console.error(`❌ Worker Script nicht gefunden: ${scriptPath}`);
+            console.error(`[ERROR] Worker Script nicht gefunden: ${scriptPath}`);
             process.exit(1);
         }
 
         const workerScript = fs.readFileSync(scriptPath, 'utf8');
-        console.log(`✅ Worker Script geladen (${workerScript.length} Bytes)`);
+        console.log(`[OK] Worker Script geladen (${workerScript.length} Bytes)`);
 
         // 4. Worker deployen
-        console.log('\n🚀 Deploye Worker...');
+        console.log('\n[START] Deploye Worker...');
         const deployResult = await uploadWorker(accountId, kvId, workerScript);
 
         if (!deployResult.success) {
-            console.error('❌ Fehler beim Deployen des Workers');
+            console.error('[ERROR] Fehler beim Deployen des Workers');
             if (deployResult.errors) console.error('   Fehler:', JSON.stringify(deployResult.errors, null, 2));
             process.exit(1);
         }
-        console.log('✅ Worker deployed!');
+        console.log('[OK] Worker deployed!');
 
         // 5. Subdomain aktivieren
-        console.log('\n🌐 Aktiviere workers.dev Subdomain...');
+        console.log('\n[INFO] Aktiviere workers.dev Subdomain...');
         await apiRequest('POST', `/accounts/${accountId}/workers/scripts/${WORKER_NAME}/subdomain`, {
             enabled: true
         });
@@ -214,7 +214,7 @@ async function setup() {
             : `https://${WORKER_NAME}.workers.dev`;
 
         // 7. banken.js automatisch aktualisieren
-        console.log('\n📝 Aktualisiere banken.js...');
+        console.log('\n[INFO] Aktualisiere banken.js...');
         const bankenPath = path.join(__dirname, '..', 'js', 'banken.js');
 
         if (fs.existsSync(bankenPath)) {
@@ -224,13 +224,13 @@ async function setup() {
                 `const FEEDBACK_API_URL = '${workerUrl}';`
             );
             fs.writeFileSync(bankenPath, bankenContent);
-            console.log('✅ banken.js aktualisiert!');
+            console.log('[OK] banken.js aktualisiert!');
         }
 
         // Erfolg!
         console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║                    ✅ SETUP ERFOLGREICH!                   ║
+║                    [OK] SETUP ERFOLGREICH!                 ║
 ╚════════════════════════════════════════════════════════════╝
 
 Worker URL: ${workerUrl}
@@ -243,7 +243,7 @@ Test: ${workerUrl}/feedback
 `);
 
     } catch (error) {
-        console.error('\n❌ Fehler:', error.message);
+        console.error('\n[ERROR] Fehler:', error.message);
         process.exit(1);
     }
 }

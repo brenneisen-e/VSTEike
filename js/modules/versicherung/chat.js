@@ -66,9 +66,9 @@ export async function sendLandingChatMessage() {
             await sendLandingMessageToClaude(message);
         }
     } catch (error) {
-        console.error('❌ Landing Chat Fehler:', error);
+        console.error('[ERROR] Landing Chat Fehler:', error);
         hideLandingChatTyping();
-        addLandingChatMessage('assistant', '❌ Entschuldigung, es gab einen Fehler.');
+        addLandingChatMessage('assistant', '[ERROR] Entschuldigung, es gab einen Fehler.');
     }
 
     isLandingChatProcessing = false;

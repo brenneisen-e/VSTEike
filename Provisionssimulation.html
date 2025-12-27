@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PowerBI Provisionssimulation Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" defer></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -813,33 +817,33 @@
 </head>
 <body>
     <div class="header">
-        <h1>🏢 PowerBI Provisionssimulation</h1>
+        <h1>PowerBI Provisionssimulation</h1>
         <p>Strategische Analyse von Provisionsmodellen • AlphaProtect vs. BetaCare</p>
     </div>
-    
+
     <div class="tabs">
         <div class="tab active" onclick="switchTab(event, 'vermittler')">
-            📊 Vermittlerperspektive
+            Vermittlerperspektive
         </div>
         <div class="tab" onclick="switchTab(event, 'unternehmen')">
-            🏢 Unternehmensperspektive
+            Unternehmensperspektive
         </div>
     </div>
-    
+
     <!-- VERMITTLERPERSPEKTIVE -->
     <div id="vermittler" class="tab-content active">
         <div class="dashboard">
             <div class="sidebar">
-                <h3>🎛️ Steuerung & Filter</h3>
+                <h3>Steuerung & Filter</h3>
                 
                 <div class="form-group">
                     <label>Vermittler auswählen</label>
                     <select id="vermittlerSelect" onchange="updateVermittlerData()">
-                        <option value="1">Max Mustermann 🟢 (Neugeschäft-Champion)</option>
-                        <option value="2">Anna Schmidt 🟢 (Wachstums-Vermittler)</option>
-                        <option value="3">Peter Klein 🟢 (Starter mit Dynamik)</option>
-                        <option value="4">Thomas Weber 🔴 (Bestandsmanager)</option>
-                        <option value="5">Sarah Müller 🔴 (Bestandspflegerin)</option>
+                        <option value="1">Max Mustermann + (Neugeschäft-Champion)</option>
+                        <option value="2">Anna Schmidt + (Wachstums-Vermittler)</option>
+                        <option value="3">Peter Klein + (Starter mit Dynamik)</option>
+                        <option value="4">Thomas Weber - (Bestandsmanager)</option>
+                        <option value="5">Sarah Müller - (Bestandspflegerin)</option>
                     </select>
                 </div>
                 
@@ -920,7 +924,7 @@
                     </div>
                 </div>
                 
-                <button class="btn" onclick="resetToDefaults()">🔄 Zurücksetzen</button>
+                <button class="btn" onclick="resetToDefaults()">Zurücksetzen</button>
             </div>
             
             <div class="main-content">
@@ -968,7 +972,7 @@
                         <div class="kpi-main">
                             <div class="kpi-value" id="deltaValue">+€ 7.350</div>
                             <div class="kpi-trend">
-                                <span class="trend-arrow" id="deltaArrow">📈</span>
+                                <span class="trend-arrow" id="deltaArrow">&uarr;</span>
                                 <span class="trend-percent" id="deltaPercent">+8.2%</span>
                             </div>
                         </div>
@@ -981,7 +985,7 @@
                 <!-- PROVISIONSSÄTZE TABELLE mit BETACARE ANPASSUNG -->
                 <div class="provisions-with-beta">
                     <div class="card provision-rates-card">
-                        <h3>📋 Provisionssätze nach Segmenten und Produkten</h3>
+                        <h3>Provisionssätze nach Segmenten und Produkten</h3>
                         <div class="table-container">
                             <table class="data-table provision-table">
                                 <thead>
@@ -1125,7 +1129,7 @@
                     
                     <!-- BETACARE ANPASSUNG -->
                     <div class="beta-adjustment-panel">
-                        <h3>⚙️ BetaCare Provisionsanpassung</h3>
+                        <h3>BetaCare Provisionsanpassung</h3>
                         <!-- Leben Anpassung -->
                         <div class="segment-config">
                             <h4 class="segment-title">Leben</h4>
@@ -1171,13 +1175,13 @@
                             </div>
                         </div>
                         
-                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="resetBetaCareDefaults()">🔄 BetaCare zurücksetzen</button>
+                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="resetBetaCareDefaults()">BetaCare zurücksetzen</button>
                     </div>
                 </div>
                 
                 <!-- DETAILANALYSE NACH SEGMENTEN -->
                 <div class="card revers-table-card">
-                    <h3>🎯 Detailanalyse nach Geschäftsfeldern</h3>
+                    <h3>Detailanalyse nach Geschäftsfeldern</h3>
                     <div class="revers-config">
                         <!-- Leben Detail -->
                         <div class="segment-revers-section">
@@ -1345,7 +1349,7 @@
                 
                 <!-- Segment Comparison -->
                 <div class="card" style="grid-column: 1 / -1;">
-                    <h3>📊 Segmentvergleich AlphaProtect vs. BetaCare</h3>
+                    <h3>Segmentvergleich AlphaProtect vs. BetaCare</h3>
                     <div class="chart-container">
                         <canvas id="segmentChart"></canvas>
                     </div>
@@ -1358,7 +1362,7 @@
     <div id="unternehmen" class="tab-content">
         <div class="dashboard">
             <div class="sidebar">
-                <h3>🎛️ Unternehmenssteuerung</h3>
+                <h3>Unternehmenssteuerung</h3>
                 
                 <div class="form-group">
                     <label>Vermittlergrößenklasse</label>
@@ -1388,7 +1392,7 @@
                     </div>
                 </div>
                 
-                <button class="btn" onclick="resetUnternehmenDefaults()">🔄 Zurücksetzen</button>
+                <button class="btn" onclick="resetUnternehmenDefaults()">Zurücksetzen</button>
             </div>
             
             <div class="main-content">
@@ -1402,7 +1406,7 @@
                         <div class="kpi-main">
                             <div class="kpi-value" id="aktuellAufwand">€ 12.8M</div>
                             <div class="kpi-trend">
-                                <span class="trend-arrow" style="color: #2563eb;">📊</span>
+                                <span class="trend-arrow" style="color: #2563eb;">&harr;</span>
                                 <span class="trend-percent" style="color: #2563eb;" id="aktuellKostenquote">20.8%</span>
                             </div>
                         </div>
@@ -1419,7 +1423,7 @@
                         <div class="kpi-main">
                             <div class="kpi-value" id="zielAufwand">€ 14.6M</div>
                             <div class="kpi-trend">
-                                <span class="trend-arrow" id="zielTrendArrow" style="color: #dc2626;">📈</span>
+                                <span class="trend-arrow" id="zielTrendArrow" style="color: #dc2626;">&uarr;</span>
                                 <span class="trend-percent" id="zielKostenquote" style="color: #dc2626;">23.2%</span>
                             </div>
                         </div>
@@ -1448,7 +1452,7 @@
                 
                 <!-- SEGMENT-KOSTEN ÜBERSICHT -->
                 <div class="card" style="grid-column: 1 / -1;">
-                    <h3>💰 Kostensimulation nach Geschäftssegmenten</h3>
+                    <h3>Kostensimulation nach Geschäftssegmenten</h3>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
                         <!-- Leben Segment Kosten -->
                         <div class="segment-cost-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 2px solid #3b82f6; border-radius: 12px; padding: 20px;">
@@ -1584,7 +1588,7 @@
                 <!-- PROVISIONSSÄTZE TABELLE mit BETACARE ANPASSUNG -->
                 <div class="provisions-with-beta">
                     <div class="card provision-rates-card">
-                        <h3>📋 Provisionssätze nach Segmenten und Produkten</h3>
+                        <h3>Provisionssätze nach Segmenten und Produkten</h3>
                         <div class="table-container">
                             <table class="data-table provision-table">
                                 <thead>
@@ -1631,7 +1635,7 @@
                                     </tr>
                                     
                                     <tr style="background: #f8fafc;">
-                                        <td colspan="6"><strong>🏥 KRANKEN</strong></td>
+                                        <td colspan="6"><strong>KRANKEN</strong></td>
                                     </tr>
                                     <tr>
                                         <td style="padding-left: 30px;">Vollversicherung</td>
@@ -1659,7 +1663,7 @@
                                     </tr>
                                     
                                     <tr style="background: #f8fafc;">
-                                        <td colspan="6"><strong>🚗 SCHADEN</strong></td>
+                                        <td colspan="6"><strong>SCHADEN</strong></td>
                                     </tr>
                                     <tr>
                                         <td style="padding-left: 30px;">Haftpflichtversicherung</td>
@@ -1728,7 +1732,7 @@
                     
                     <!-- BETACARE ANPASSUNG -->
                     <div class="beta-adjustment-panel">
-                        <h3>⚙️ BetaCare Provisionsanpassung</h3>
+                        <h3>BetaCare Provisionsanpassung</h3>
                         <!-- Leben Anpassung -->
                         <div class="segment-config">
                             <h4 class="segment-title">Leben</h4>
@@ -1746,7 +1750,7 @@
                         
                         <!-- Kranken Anpassung -->
                         <div class="segment-config">
-                            <h4 class="segment-title">🏥 Kranken</h4>
+                            <h4 class="segment-title">Kranken</h4>
                             <div class="slider-group">
                                 <label>AP Basis: <span id="betaAPKrankenValueU">7,5MB</span></label>
                                 <input type="range" id="betaAPKrankenSliderU" min="5.0" max="10.0" step="0.1" value="7.5" 
@@ -1761,7 +1765,7 @@
                         
                         <!-- Schaden Anpassung -->
                         <div class="segment-config">
-                            <h4 class="segment-title">🚗 Schaden</h4>
+                            <h4 class="segment-title">Schaden</h4>
                             <div class="slider-group">
                                 <label>AP Basis: <span id="betaAPSchadenValueU">16,0%</span></label>
                                 <input type="range" id="betaAPSchadenSliderU" min="10.0" max="25.0" step="0.5" value="16.0" 
@@ -1774,13 +1778,13 @@
                             </div>
                         </div>
                         
-                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="resetBetaCareDefaultsU()">🔄 BetaCare zurücksetzen</button>
+                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="resetBetaCareDefaultsU()">BetaCare zurücksetzen</button>
                     </div>
                 </div>
                 
                 <!-- VERMITTLER VERTEILUNGSANALYSE -->
                 <div class="card" style="grid-column: 1 / -1;">
-                    <h3>📊 Verteilung der Vermittler nach Provisionsveränderung</h3>
+                    <h3>Verteilung der Vermittler nach Provisionsveränderung</h3>
                     <div class="chart-container" style="height: 400px;">
                         <canvas id="distributionChart"></canvas>
                     </div>
@@ -2034,7 +2038,7 @@
                         <td>${data.grenze}</td>
                         <td>${data.apAlpha}</td>
                         <td>${data.apBeta}</td>
-                        <td>${isCurrent ? '✓ Aktuell' : ''}</td>
+                        <td>${isCurrent ? 'Aktuell' : ''}</td>
                     </tr>
                 `;
             });
@@ -2705,7 +2709,7 @@
             
             // Update delta display
             if (deltaArrowEl) {
-                deltaArrowEl.textContent = isImprovement ? '📈' : '📉';
+                deltaArrowEl.innerHTML = isImprovement ? '&uarr;' : '&darr;';
             }
             
             if (deltaPercentEl) {
@@ -3189,7 +3193,7 @@
                 mehraufwandArrowEl.className = 'trend-arrow ' + (isReduction ? 'positive' : 'negative');
             }
             if (zielTrendArrowEl) {
-                zielTrendArrowEl.textContent = isReduction ? '📉' : '📈';
+                zielTrendArrowEl.innerHTML = isReduction ? '&darr;' : '&uarr;';
                 zielTrendArrowEl.style.color = isReduction ? '#059669' : '#dc2626';
             }
             if (aktuellKostenquoteEl) aktuellKostenquoteEl.textContent = `${alphaKostenquote.toFixed(1)}%`;

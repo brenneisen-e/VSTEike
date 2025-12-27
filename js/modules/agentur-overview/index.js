@@ -67,12 +67,15 @@ const fillHeader = (agentur, agenturData) => {
     setElementText('agenturIdHeader', agentur.id);
     setElementText('agenturStatusHeader', 'Aktiv');
 
+    // WARNING: defaultPhoto is 4.8MB - Consider optimizing this image for web use
+    // Recommended: Use WebP format and reduce to ~200-300KB
     const defaultPhoto = 'https://raw.githubusercontent.com/brenneisen-e/VSTEike/main/AdobeStock_1091012713.jpeg';
     const savedPhoto = localStorage.getItem('agenturPhoto');
     const photoImgSmall = document.getElementById('agenturPhotoImgSmall');
     const placeholderSmall = document.querySelector('.agentur-photo-placeholder-small');
 
     if (photoImgSmall) {
+        // Lazy loading is handled by HTML attribute
         photoImgSmall.src = savedPhoto ?? defaultPhoto;
         photoImgSmall.style.display = 'block';
         if (placeholderSmall) placeholderSmall.style.display = 'none';
@@ -277,7 +280,7 @@ const loadAgenturData = (vermittlerId) => {
     const agentur = agenturen.find(a => a.id === vermittlerId);
 
     if (!agentur) {
-        console.error('❌ Agentur nicht gefunden:', vermittlerId);
+        console.error('[ERROR] Agentur nicht gefunden:', vermittlerId);
         alert('Agentur nicht gefunden: ' + vermittlerId);
         backFromAgentur();
         return;

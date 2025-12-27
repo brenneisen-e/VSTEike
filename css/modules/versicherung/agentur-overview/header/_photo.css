@@ -22,7 +22,7 @@
 }
 
 .agentur-photo-small:hover::after {
-    content: '📷';
+    content: '\1F4F7'; /* Camera icon */
     position: absolute;
     font-size: 14px;
     background: rgba(0, 0, 0, 0.5);

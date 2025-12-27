@@ -287,9 +287,9 @@ export const sendMessage = async () => {
             await sendToClaude(message);
         }
     } catch (error) {
-        console.error('❌ Chat Fehler:', error);
+        console.error('[ERROR] Chat Fehler:', error);
         hideTyping();
-        addMessage('assistant', '❌ Fehler bei der Verarbeitung. Bitte versuche es erneut.');
+        addMessage('assistant', '[ERROR] Fehler bei der Verarbeitung. Bitte versuche es erneut.');
     }
 
     isProcessing = false;
