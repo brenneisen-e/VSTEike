@@ -336,6 +336,23 @@ export function openFeedbackDetail(index) {
     const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     const savedAuthor = localStorage.getItem('feedbackAuthor') || '';
 
+    // Render existing replies
+    const repliesHtml = fb.replies && fb.replies.length > 0
+        ? fb.replies.map(reply => {
+            const replyDate = new Date(reply.timestamp);
+            const replyDateStr = replyDate.toLocaleDateString('de-DE') + ' ' + replyDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            return `
+                <div class="feedback-reply">
+                    <div class="reply-header">
+                        <span class="reply-author">${reply.author}</span>
+                        <span class="reply-date">${replyDateStr}</span>
+                    </div>
+                    <div class="reply-text">${reply.text}</div>
+                </div>
+            `;
+        }).join('')
+        : '';
+
     modal.innerHTML = `
         <div class="feedback-detail-content">
             <div class="feedback-detail-header">
@@ -351,10 +368,45 @@ export function openFeedbackDetail(index) {
                 </div>
                 <div class="feedback-detail-text">${fb.text}</div>
                 ${fb.screenshot ? `<div class="feedback-detail-screenshot"><img src="${fb.screenshot}" onclick="openScreenshotLightbox(this.src)"></div>` : ''}
+
+                ${repliesHtml ? `<div class="feedback-replies-section"><h4>Antworten</h4>${repliesHtml}</div>` : ''}
+
+                <div class="feedback-reply-form">
+                    <h4>Antwort schreiben</h4>
+                    <div class="reply-author-row">
+                        <select id="replyAuthorSelect" onchange="handleReplyAuthorSelect()">
+                            <option value="">Wer antwortet?</option>
+                            <option value="Eike" ${savedAuthor === 'Eike' ? 'selected' : ''}>Eike</option>
+                            <option value="Bianca" ${savedAuthor === 'Bianca' ? 'selected' : ''}>Bianca</option>
+                            <option value="custom">Andere Person...</option>
+                        </select>
+                        <input type="text" id="replyAuthor" placeholder="Dein Name" value="${savedAuthor}" style="display: ${savedAuthor && savedAuthor !== 'Eike' && savedAuthor !== 'Bianca' ? 'block' : 'none'};">
+                    </div>
+                    <textarea id="replyText" placeholder="Deine Antwort..." rows="3"></textarea>
+                    <button class="reply-submit-btn" onclick="submitReply('${fb.id}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        Antwort senden
+                    </button>
+                </div>
             </div>
             <div class="feedback-detail-actions">
-                <button onclick="closeFeedbackDetail(); editFeedbackByIndex(${index});">Bearbeiten</button>
-                <button onclick="closeFeedbackDetail(); deleteFeedback('${fb.id}');">Löschen</button>
+                <button class="feedback-detail-btn edit" onclick="closeFeedbackDetail(); editFeedbackByIndex(${index});">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Bearbeiten
+                </button>
+                <button class="feedback-detail-btn delete" onclick="closeFeedbackDetail(); deleteFeedback('${fb.id}');">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Löschen
+                </button>
             </div>
         </div>
     `;
@@ -366,6 +418,75 @@ export function openFeedbackDetail(index) {
 export function closeFeedbackDetail() {
     const modal = document.getElementById('feedbackDetailModal');
     if (modal) modal.classList.remove('open');
+}
+
+// ========================================
+// REPLY SYSTEM
+// ========================================
+
+export async function submitReply(feedbackId) {
+    const authorInput = document.getElementById('replyAuthor');
+    const textInput = document.getElementById('replyText');
+
+    const author = authorInput?.value?.trim() || 'Anonym';
+    const text = textInput?.value?.trim();
+
+    if (!text) {
+        showFeedbackNotification('Bitte gib eine Antwort ein');
+        return;
+    }
+
+    // Autor speichern
+    localStorage.setItem('feedbackAuthor', author);
+
+    const reply = {
+        id: Date.now(),
+        author: author,
+        text: text,
+        timestamp: new Date().toISOString()
+    };
+
+    if (USE_CLOUDFLARE) {
+        try {
+            const response = await fetch(`${FEEDBACK_API_URL}/feedback/${feedbackId}/reply`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reply)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showFeedbackNotification('Antwort gespeichert!');
+                closeFeedbackDetail();
+                loadFeedbackFromCloudflare();
+            } else {
+                throw new Error(result.error || 'Unbekannter Fehler');
+            }
+        } catch (error) {
+            console.error('Reply Fehler:', error);
+            showFeedbackNotification('Fehler beim Speichern, versuche lokal...');
+            addReplyToLocalStorage(feedbackId, reply);
+        }
+    } else {
+        addReplyToLocalStorage(feedbackId, reply);
+    }
+}
+
+function addReplyToLocalStorage(feedbackId, reply) {
+    const feedbacks = JSON.parse(localStorage.getItem('bankenFeedback') || '[]');
+    const feedback = feedbacks.find(f => f.id === feedbackId || f.id === parseInt(feedbackId));
+
+    if (feedback) {
+        if (!feedback.replies) feedback.replies = [];
+        feedback.replies.push(reply);
+        localStorage.setItem('bankenFeedback', JSON.stringify(feedbacks));
+        showFeedbackNotification('Antwort lokal gespeichert');
+        closeFeedbackDetail();
+        loadFeedbackFromLocalStorage();
+    } else {
+        showFeedbackNotification('Kommentar nicht gefunden');
+    }
 }
 
 // ========================================

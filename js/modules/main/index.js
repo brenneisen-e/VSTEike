@@ -415,10 +415,406 @@ const initViewModeToggle = () => {
     });
 };
 
+// ========================================
+// TABLE VIEW TOGGLE (Monat/Agentur)
+// ========================================
+
+const initTableViewToggle = () => {
+    document.querySelectorAll('.table-view-toggle button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (!window.state) return;
+
+            window.state.currentTableView = this.dataset.tableView;
+            window.state.tableSort = { column: null, direction: 'asc' };
+
+            document.querySelectorAll('.table-view-toggle button').forEach(b => {
+                b.classList.remove('active');
+            });
+            this.classList.add('active');
+
+            // Zeige Agentur-Mehrfachauswahl bei Agentur-View
+            const agenturMultiSelector = document.getElementById('agenturMultiSelector');
+            const selectedAgenturen = document.getElementById('selectedAgenturen');
+
+            if (window.state.currentTableView === 'agentur') {
+                if (agenturMultiSelector) agenturMultiSelector.style.display = '';
+                if (selectedAgenturen) selectedAgenturen.style.display = '';
+                // Fülle Agentur-Liste beim ersten Mal
+                const checkboxList = document.getElementById('agenturCheckboxList');
+                if (checkboxList && checkboxList.children.length === 0) {
+                    populateAgenturCheckboxes();
+                }
+            } else {
+                if (agenturMultiSelector) agenturMultiSelector.style.display = 'none';
+                if (selectedAgenturen) selectedAgenturen.style.display = 'none';
+            }
+
+            window.renderTable?.();
+        });
+    });
+};
+
+// ========================================
+// TABLE SORTING
+// ========================================
+
+const initTableSorting = () => {
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.data-table th.sortable')) {
+            const th = e.target.closest('th');
+            const column = th.dataset.column;
+
+            if (!window.state) return;
+
+            if (window.state.tableSort.column === column) {
+                window.state.tableSort.direction = window.state.tableSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                window.state.tableSort.column = column;
+                window.state.tableSort.direction = 'asc';
+            }
+
+            window.renderTable?.();
+        }
+    });
+};
+
+// ========================================
+// CSV UPLOAD HANDLER
+// ========================================
+
+const initCSVUpload = () => {
+    const csvUploadElement = document.getElementById('csvUpload');
+    if (!csvUploadElement) return;
+
+    csvUploadElement.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                const csvText = event.target.result;
+                const parsedData = window.parseCSV?.(csvText) ?? [];
+
+                const firstRow = parsedData[0] || {};
+                const hasDay = 'day' in firstRow;
+                const hasMonth = 'month' in firstRow;
+                const hasYear = 'year' in firstRow;
+                const hasVermittler = 'vermittler_id' in firstRow;
+                const hasLandkreis = 'landkreis' in firstRow || 'kreis' in firstRow;
+
+                if (hasDay && hasVermittler) {
+                    window.dailyRawData = parsedData;
+                    console.log('Stored', parsedData.length, 'daily records');
+
+                    const monthlyData = window.aggregateDailyToMonthly?.(parsedData) ?? parsedData;
+                    if (window.state) window.state.uploadedData = monthlyData;
+
+                    const landkreisInfo = hasLandkreis ? ' mit Landkreisen' : '';
+                    const fileStatus = document.getElementById('fileStatus');
+                    if (fileStatus) {
+                        fileStatus.textContent = `${file.name} geladen (${parsedData.length} Tagesdaten → ${monthlyData.length} Monate${landkreisInfo})`;
+                        fileStatus.classList.add('success');
+                    }
+
+                    window.activateChat?.();
+                } else if (hasMonth && !hasDay) {
+                    if (window.state) window.state.uploadedData = parsedData;
+                    window.dailyRawData = null;
+
+                    const fileStatus = document.getElementById('fileStatus');
+                    if (fileStatus) {
+                        fileStatus.textContent = `${file.name} geladen (${parsedData.length} Monatsdaten)`;
+                        fileStatus.classList.add('success');
+                    }
+                } else {
+                    if (window.state) window.state.uploadedData = parsedData;
+                    window.dailyRawData = null;
+
+                    const fileStatus = document.getElementById('fileStatus');
+                    if (fileStatus) {
+                        fileStatus.textContent = `${file.name} geladen (${parsedData.length} Zeilen)`;
+                        fileStatus.classList.add('warning');
+                    }
+                }
+
+                if (window.state) window.state.useUploadedData = true;
+
+                if (hasYear && parsedData.length > 0) {
+                    const years = [...new Set(parsedData.map(row => row.year))].sort();
+                    const yearFilter = document.getElementById('yearFilter');
+                    if (yearFilter) {
+                        const currentYear = yearFilter.value;
+
+                        years.forEach(year => {
+                            if (!Array.from(yearFilter.options).some(opt => opt.value == year)) {
+                                const option = document.createElement('option');
+                                option.value = year;
+                                option.textContent = year;
+                                yearFilter.appendChild(option);
+                            }
+                        });
+
+                        if (!years.includes(parseInt(currentYear))) {
+                            yearFilter.value = years[0];
+                            if (window.state) window.state.filters.year = String(years[0]);
+                        }
+                    }
+                }
+
+                updateAgenturFilterDropdown();
+
+                if (window.state?.currentView === 'table') {
+                    window.updateAgenturSelector?.();
+                    window.renderTable?.();
+                }
+
+                updateAllKPIs();
+
+                if (window.countyMapHandler) {
+                    const data = window.getFilteredData?.() ?? [];
+                    window.countyMapHandler.updateMapData(data);
+                }
+
+                window.initChat?.();
+            } catch (error) {
+                const fileStatus = document.getElementById('fileStatus');
+                if (fileStatus) {
+                    fileStatus.textContent = 'Fehler beim Laden der Datei';
+                    fileStatus.classList.add('error');
+                }
+                console.error('CSV parsing error:', error);
+            }
+        };
+        reader.readAsText(file);
+    });
+};
+
+// ========================================
+// FILTER EVENT LISTENERS
+// ========================================
+
+const initFilterListeners = () => {
+    // Year filter
+    const yearFilter = document.getElementById('yearFilter');
+    if (yearFilter) {
+        yearFilter.addEventListener('change', function() {
+            if (window.state) window.state.filters.year = this.value;
+            updateAllKPIs();
+            if (window.state?.currentView === 'table') window.renderTable?.();
+        });
+    }
+
+    // Silo filter
+    const siloFilter = document.getElementById('siloFilter');
+    if (siloFilter) {
+        siloFilter.addEventListener('change', function() {
+            if (window.state) window.state.filters.silo = this.value;
+            updateAllKPIs();
+            if (window.state?.currentView === 'table') window.renderTable?.();
+        });
+    }
+
+    // Agentur filter button
+    const agenturFilterButton = document.getElementById('agenturFilterButton');
+    if (agenturFilterButton) {
+        agenturFilterButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.toggleDropdown?.('agenturFilterMenu');
+        });
+    }
+
+    // Segment button
+    const segmentButton = document.getElementById('segmentButton');
+    if (segmentButton) {
+        segmentButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.toggleDropdown?.('segmentMenu');
+        });
+    }
+
+    // Segment menu items
+    document.querySelectorAll('#segmentMenu .dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const value = this.dataset.value;
+
+            if (!window.state) return;
+
+            if (value === 'alle') {
+                window.state.filters.segments = ['alle'];
+            } else {
+                const otherSegments = window.state.filters.segments.filter(s => s !== 'alle');
+                if (otherSegments.includes(value)) {
+                    const newSegments = otherSegments.filter(s => s !== value);
+                    window.state.filters.segments = newSegments.length > 0 ? newSegments : ['alle'];
+                } else {
+                    window.state.filters.segments = [...otherSegments, value];
+                }
+            }
+
+            updateSegmentDisplay();
+            updateAllKPIs();
+            if (window.state?.currentView === 'table') window.renderTable?.();
+        });
+    });
+
+    // Product button
+    const productButton = document.getElementById('productButton');
+    if (productButton) {
+        productButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.toggleDropdown?.('productMenu');
+        });
+    }
+
+    // Clear states button
+    const clearStatesButton = document.getElementById('clearStates');
+    if (clearStatesButton) {
+        clearStatesButton.addEventListener('click', function() {
+            if (window.countyMapHandler) {
+                window.countyMapHandler.clearSelection();
+            } else if (window.state) {
+                window.state.selectedStates?.clear();
+                window.state.selectedCounties?.clear();
+                window.updateMapSelection?.();
+            }
+            updateAllKPIs();
+            if (window.state?.currentView === 'table') window.renderTable?.();
+        });
+    }
+
+    // Close dropdowns on document click
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+        });
+    });
+
+    // ESC key to close fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            window.closeFullscreen?.();
+        }
+    });
+};
+
+// ========================================
+// AGENTUR MULTI-SELECT
+// ========================================
+
+const initAgenturMultiSelect = () => {
+    const agenturMultiButton = document.getElementById('agenturMultiButton');
+    const agenturMultiMenu = document.getElementById('agenturMultiMenu');
+
+    if (agenturMultiButton && agenturMultiMenu) {
+        agenturMultiButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            agenturMultiMenu.classList.toggle('show');
+        });
+
+        agenturMultiMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+};
+
+export const populateAgenturCheckboxes = () => {
+    const container = document.getElementById('agenturCheckboxList');
+    if (!container) return;
+
+    const agenturen = window.getAgenturen?.() ?? [];
+    if (agenturen.length === 0) return;
+
+    container.innerHTML = agenturen.map(agentur => {
+        const displayName = agentur.name ? `${agentur.id} - ${agentur.name}` : agentur.id;
+        return `
+            <div class="dropdown-item" data-agentur-id="${agentur.id}">
+                <span class="checkbox"></span>
+                <span>${displayName}</span>
+            </div>
+        `;
+    }).join('');
+
+    container.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const agenturId = this.dataset.agenturId;
+            const checkbox = this.querySelector('.checkbox');
+
+            if (!window.state?.selectedAgenturen) return;
+
+            if (window.state.selectedAgenturen.has(agenturId)) {
+                window.state.selectedAgenturen.delete(agenturId);
+                checkbox?.classList.remove('checked');
+            } else {
+                window.state.selectedAgenturen.add(agenturId);
+                checkbox?.classList.add('checked');
+            }
+
+            updateSelectedAgenturenDisplay();
+            window.renderTable?.();
+        });
+    });
+
+    // "Alle" Checkbox
+    const alleItem = document.querySelector('.dropdown-item[data-value="alle"]');
+    if (alleItem) {
+        alleItem.addEventListener('click', function() {
+            const checkbox = this.querySelector('.checkbox');
+            const isChecked = checkbox?.classList.contains('checked');
+
+            if (!window.state?.selectedAgenturen) return;
+
+            if (isChecked) {
+                window.state.selectedAgenturen.clear();
+                checkbox?.classList.remove('checked');
+                container.querySelectorAll('.checkbox').forEach(cb => cb.classList.remove('checked'));
+            } else {
+                agenturen.forEach(a => window.state.selectedAgenturen.add(a.id));
+                checkbox?.classList.add('checked');
+                container.querySelectorAll('.checkbox').forEach(cb => cb.classList.add('checked'));
+            }
+
+            updateSelectedAgenturenDisplay();
+            window.renderTable?.();
+        });
+    }
+};
+
+export const updateSelectedAgenturenDisplay = () => {
+    const container = document.getElementById('selectedAgenturen');
+    if (!container) return;
+
+    if (!window.state?.selectedAgenturen || window.state.selectedAgenturen.size === 0) {
+        container.innerHTML = '<span class="empty-state">— keine ausgewählt —</span>';
+        return;
+    }
+
+    const agenturen = window.getAgenturen?.() ?? [];
+    const selectedNames = Array.from(window.state.selectedAgenturen).map(id => {
+        const agentur = agenturen.find(a => a.id === id);
+        if (!agentur) return id;
+        const displayName = agentur.name ? `${agentur.id.substring(2)} - ${agentur.name}` : agentur.id;
+        return `<span class="selected-tag">${displayName}</span>`;
+    }).join('');
+
+    container.innerHTML = selectedNames;
+};
+
+// ========================================
+// INITIALIZATION
+// ========================================
+
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         initKPIViewToggle();
         initViewModeToggle();
+        initTableViewToggle();
+        initTableSorting();
+        initCSVUpload();
+        initFilterListeners();
+        initAgenturMultiSelect();
+        console.log('Main module: All event listeners initialized');
     }, 100);
 });
 
@@ -436,6 +832,8 @@ Object.assign(window, {
     updateProductFilter,
     updateProductDisplay,
     updateAgenturFilterDropdown,
-    initKPIViewToggle
+    initKPIViewToggle,
+    populateAgenturCheckboxes,
+    updateSelectedAgenturenDisplay
 });
 
