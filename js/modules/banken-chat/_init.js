@@ -28,7 +28,7 @@ export const initBankenChat = () => {
     const chatBody = document.getElementById('bankenChatBody');
 
     if (!chatSend || !chatInput || !chatBody) {
-        console.error('❌ Banken Chat Input-Elemente nicht gefunden');
+        console.error('[ERROR] Banken Chat Input-Elemente nicht gefunden');
         return;
     }
 

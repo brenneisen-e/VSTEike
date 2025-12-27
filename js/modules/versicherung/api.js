@@ -44,16 +44,16 @@ export function setupApiTokenInput() {
     // Show current status
     if (window.USE_WORKER) {
         statusDiv.className = 'api-token-status success';
-        statusDiv.textContent = '✅ Claude AI aktiv (via Worker)';
+        statusDiv.textContent = '[OK] Claude AI aktiv (via Worker)';
     } else {
         const existingToken = getApiToken();
         if (existingToken) {
             tokenInput.value = existingToken;
             statusDiv.className = 'api-token-status success';
-            statusDiv.textContent = '✅ API-Key gespeichert (KI-Modus aktiv)';
+            statusDiv.textContent = '[OK] API-Key gespeichert (KI-Modus aktiv)';
         } else {
             statusDiv.className = 'api-token-status';
-            statusDiv.textContent = 'ℹ️ Mock-Modus aktiv (vorgefertigte Antworten)';
+            statusDiv.textContent = '[INFO] Mock-Modus aktiv (vorgefertigte Antworten)';
         }
     }
 
@@ -71,23 +71,23 @@ export function setupApiTokenInput() {
         if (!token) {
             clearApiToken();
             statusDiv.className = 'api-token-status';
-            statusDiv.textContent = 'ℹ️ Mock-Modus aktiv (vorgefertigte Antworten)';
+            statusDiv.textContent = '[INFO] Mock-Modus aktiv (vorgefertigte Antworten)';
             return;
         }
 
         if (!token.startsWith('sk-')) {
             statusDiv.className = 'api-token-status error';
-            statusDiv.textContent = '❌ Ungültiger API-Key (muss mit "sk-" beginnen)';
+            statusDiv.textContent = '[ERROR] Ungültiger API-Key (muss mit "sk-" beginnen)';
             return;
         }
 
         if (saveApiToken(token)) {
             statusDiv.className = 'api-token-status success';
-            statusDiv.textContent = '✅ API-Key gespeichert! KI-Modus ist jetzt aktiv.';
+            statusDiv.textContent = '[OK] API-Key gespeichert! KI-Modus ist jetzt aktiv.';
             window.USE_MOCK_MODE = false;
         } else {
             statusDiv.className = 'api-token-status error';
-            statusDiv.textContent = '❌ Fehler beim Speichern';
+            statusDiv.textContent = '[ERROR] Fehler beim Speichern';
         }
     };
 

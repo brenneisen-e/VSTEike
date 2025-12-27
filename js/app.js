@@ -78,77 +78,96 @@ function setupErrorHandler() {
 }
 
 /**
- * Initialize tooltips
+ * Initialize tooltips using event delegation
+ * This prevents memory leaks from duplicate event listeners
  */
+let tooltipInitialized = false;
+let currentTooltip = null;
+
 function initTooltips() {
-    document.querySelectorAll('[data-tooltip]').forEach(el => {
-        const text = el.dataset.tooltip;
-        const position = el.dataset.tooltipPosition || 'top';
+    // Prevent duplicate initialization
+    if (tooltipInitialized) return;
+    tooltipInitialized = true;
 
-        let tooltip = null;
+    // Use event delegation for better performance and memory management
+    document.body.addEventListener('mouseenter', (e) => {
+        const target = e.target.closest('[data-tooltip]');
+        if (!target) return;
 
-        el.addEventListener('mouseenter', () => {
-            tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.textContent = text;
-            tooltip.style.cssText = `
-                position: fixed;
-                background: #0F172A;
-                color: white;
-                padding: 6px 12px;
-                font-size: 12px;
-                border-radius: 6px;
-                z-index: 10000;
-                pointer-events: none;
-                opacity: 0;
-                transition: opacity 0.15s ease;
-            `;
+        const text = target.dataset.tooltip;
+        const position = target.dataset.tooltipPosition || 'top';
 
-            document.body.appendChild(tooltip);
+        // Clean up any existing tooltip
+        if (currentTooltip) {
+            currentTooltip.remove();
+            currentTooltip = null;
+        }
 
-            const rect = el.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
+        currentTooltip = document.createElement('div');
+        currentTooltip.className = 'tooltip';
+        currentTooltip.textContent = text;
+        currentTooltip.style.cssText = `
+            position: fixed;
+            background: #0F172A;
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            z-index: 10000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        `;
 
-            let top, left;
+        document.body.appendChild(currentTooltip);
 
-            switch (position) {
-                case 'bottom':
-                    top = rect.bottom + 8;
-                    left = rect.left + (rect.width - tooltipRect.width) / 2;
-                    break;
-                case 'left':
-                    top = rect.top + (rect.height - tooltipRect.height) / 2;
-                    left = rect.left - tooltipRect.width - 8;
-                    break;
-                case 'right':
-                    top = rect.top + (rect.height - tooltipRect.height) / 2;
-                    left = rect.right + 8;
-                    break;
-                default:
-                    top = rect.top - tooltipRect.height - 8;
-                    left = rect.left + (rect.width - tooltipRect.width) / 2;
+        const rect = target.getBoundingClientRect();
+        const tooltipRect = currentTooltip.getBoundingClientRect();
+
+        let top, left;
+
+        switch (position) {
+            case 'bottom':
+                top = rect.bottom + 8;
+                left = rect.left + (rect.width - tooltipRect.width) / 2;
+                break;
+            case 'left':
+                top = rect.top + (rect.height - tooltipRect.height) / 2;
+                left = rect.left - tooltipRect.width - 8;
+                break;
+            case 'right':
+                top = rect.top + (rect.height - tooltipRect.height) / 2;
+                left = rect.right + 8;
+                break;
+            default:
+                top = rect.top - tooltipRect.height - 8;
+                left = rect.left + (rect.width - tooltipRect.width) / 2;
+        }
+
+        currentTooltip.style.top = `${top}px`;
+        currentTooltip.style.left = `${left}px`;
+
+        requestAnimationFrame(() => {
+            if (currentTooltip) {
+                currentTooltip.style.opacity = '1';
             }
-
-            tooltip.style.top = `${top}px`;
-            tooltip.style.left = `${left}px`;
-
-            requestAnimationFrame(() => {
-                tooltip.style.opacity = '1';
-            });
         });
+    }, true);
 
-        el.addEventListener('mouseleave', () => {
-            if (tooltip) {
-                tooltip.style.opacity = '0';
-                setTimeout(() => {
-                    if (tooltip && tooltip.parentNode) {
-                        tooltip.parentNode.removeChild(tooltip);
-                    }
-                    tooltip = null;
-                }, 150);
+    document.body.addEventListener('mouseleave', (e) => {
+        const target = e.target.closest('[data-tooltip]');
+        if (!target || !currentTooltip) return;
+
+        currentTooltip.style.opacity = '0';
+        const tooltipToRemove = currentTooltip;
+        currentTooltip = null;
+
+        setTimeout(() => {
+            if (tooltipToRemove && tooltipToRemove.parentNode) {
+                tooltipToRemove.remove();
             }
-        });
-    });
+        }, 150);
+    }, true);
 }
 
 /**

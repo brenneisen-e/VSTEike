@@ -40,7 +40,7 @@ export function setupQuickUpload() {
             handleQuickUpload(files[0]);
         } else if (statusDiv) {
             statusDiv.className = 'upload-status error';
-            statusDiv.textContent = '❌ Bitte nur CSV-Dateien hochladen';
+            statusDiv.textContent = '[ERROR] Bitte nur CSV-Dateien hochladen';
         }
     });
 }
@@ -51,7 +51,7 @@ export function handleQuickUpload(file) {
 
     if (statusDiv) {
         statusDiv.className = 'upload-status';
-        statusDiv.textContent = '⏳ Lade Datei...';
+        statusDiv.textContent = '[LOADING] Lade Datei...';
     }
 
     const reader = new FileReader();
@@ -76,7 +76,7 @@ export function handleQuickUpload(file) {
                 const landkreisInfo = hasLandkreis ? ' mit Landkreisen' : '';
                 if (statusDiv) {
                     statusDiv.className = 'upload-status success';
-                    statusDiv.textContent = `✅ ${file.name} geladen (${parsedData.length} Tagesdaten → ${monthlyData.length} Monate${landkreisInfo})`;
+                    statusDiv.textContent = `[OK] ${file.name} geladen (${parsedData.length} Tagesdaten → ${monthlyData.length} Monate${landkreisInfo})`;
                 }
             } else if (hasMonth && !hasDay) {
                 window.state.uploadedData = parsedData;
@@ -84,7 +84,7 @@ export function handleQuickUpload(file) {
 
                 if (statusDiv) {
                     statusDiv.className = 'upload-status success';
-                    statusDiv.textContent = `✅ ${file.name} geladen (${parsedData.length} Monatsdaten)`;
+                    statusDiv.textContent = `[OK] ${file.name} geladen (${parsedData.length} Monatsdaten)`;
                 }
             } else {
                 window.state.uploadedData = parsedData;
@@ -92,7 +92,7 @@ export function handleQuickUpload(file) {
 
                 if (statusDiv) {
                     statusDiv.className = 'upload-status success';
-                    statusDiv.textContent = `⚠️ ${file.name} geladen (${parsedData.length} Zeilen)`;
+                    statusDiv.textContent = `[WARN] ${file.name} geladen (${parsedData.length} Zeilen)`;
                 }
             }
 
@@ -112,7 +112,7 @@ export function handleQuickUpload(file) {
             console.error('Fehler beim Parsen:', error);
             if (statusDiv) {
                 statusDiv.className = 'upload-status error';
-                statusDiv.textContent = `❌ Fehler beim Laden: ${error.message}`;
+                statusDiv.textContent = `[ERROR] Fehler beim Laden: ${error.message}`;
             }
         }
     };
@@ -120,7 +120,7 @@ export function handleQuickUpload(file) {
     reader.onerror = () => {
         if (statusDiv) {
             statusDiv.className = 'upload-status error';
-            statusDiv.textContent = '❌ Fehler beim Lesen der Datei';
+            statusDiv.textContent = '[ERROR] Fehler beim Lesen der Datei';
         }
     };
 
@@ -151,7 +151,7 @@ export function toggleUploadMode() {
 
     const uploadBtn = document.querySelector('.upload-mode-toggle');
     if (uploadBtn) {
-        uploadBtn.textContent = uploadModeActive ? '✓ Upload-Modus' : '📤 Upload-Modus';
+        uploadBtn.textContent = uploadModeActive ? '[OK] Upload-Modus' : '[UPLOAD] Upload-Modus';
     }
 
     if (uploadModeActive) {

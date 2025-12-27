@@ -109,7 +109,7 @@ export function submitTaskCompletion() {
             id: Date.now().toString(),
             type: 'aufgabe',
             typeLabel: 'Aufgabe erledigt',
-            text: `**${taskTitle}**\n\n**Problem:** ${problem}\n\n**Lösung:** ${solution}\n\n✅ Status: Erledigt`,
+            text: `**${taskTitle}**\n\n**Problem:** ${problem}\n\n**Lösung:** ${solution}\n\n[OK] Status: Erledigt`,
             author: localStorage.getItem('feedbackAuthor') ?? 'Eike',
             timestamp: new Date().toISOString(),
             isCompleted: true

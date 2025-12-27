@@ -39,4 +39,4 @@ export const disableDebug = () => {
 // Window exports for console access
 Object.assign(window, { logger, enableDebug, disableDebug, VST_DEBUG: DEBUG });
 
-if (DEBUG) console.log('🔧 VST Debug Mode enabled');
+if (DEBUG) console.log('[DEBUG] VST Debug Mode enabled');

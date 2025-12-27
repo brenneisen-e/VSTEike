@@ -16,7 +16,7 @@ import { getElements } from './_ui-state.js';
 export const showToast = (message, type = 'info', duration = 4000) => {
     const elements = getElements();
     if (!elements.toastContainer) return;
-    const icons = { success: '✔', error: '✕', warning: '△', info: 'ℹ' };
+    const icons = { success: '[OK]', error: '[ERROR]', warning: '[WARN]', info: '[INFO]' };
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.innerHTML = `<span class="toast-icon">${icons[type] ?? icons.info}</span><span class="toast-message">${escapeHtml(message)}</span>`;

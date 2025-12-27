@@ -148,10 +148,10 @@ function renderFeedbackList(feedbacks) {
     }
 
     const typeIcons = {
-        'verbesserung': '💡',
-        'fehler': '🐛',
-        'frage': '❓',
-        'lob': '👍'
+        'verbesserung': '[IDEA]',
+        'fehler': '[BUG]',
+        'frage': '[?]',
+        'lob': '[+1]'
     };
 
     const areaLabels = {

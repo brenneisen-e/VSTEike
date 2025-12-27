@@ -262,7 +262,7 @@ export const initMap = async () => {
         }
 
     } catch (error) {
-        console.error('❌ Fehler bei Karteninitialisierung:', error);
+        console.error('[ERROR] Fehler bei Karteninitialisierung:', error);
         if (container) container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;text-align:center;padding:1rem;"><span>Karte konnte nicht geladen werden.<br>Bitte Seite neu laden.</span></div>';
     }
 };

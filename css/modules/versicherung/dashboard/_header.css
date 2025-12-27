@@ -185,7 +185,7 @@ select:focus, .dropdown-button:focus {
 }
 
 .checkbox.checked::after {
-    content: '✓';
+    content: '\2713'; /* Unicode checkmark */
     color: white;
     font-size: 0.75rem;
 }
