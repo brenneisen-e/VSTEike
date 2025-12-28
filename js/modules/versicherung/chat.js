@@ -128,49 +128,6 @@ WICHTIG: Antworte auf Deutsch und sei präzise.`;
     window.parseAndExecuteCommands?.(assistantMessage);
 }
 
-// ========================================
-// DATA CONTEXT
-// ========================================
-
-function getLandingDataContext() {
-    const rawData = window.dailyRawData ?? [];
-
-    if (rawData.length === 0) {
-        return 'Keine Daten geladen. Der Nutzer sollte zuerst eine CSV hochladen.';
-    }
-
-    const agenturen = typeof window.getAgenturen === 'function' ? window.getAgenturen() : [];
-    const bundeslaender = [...new Set(rawData.map(r => r.bundesland))].filter(Boolean);
-    const silos = [...new Set(rawData.map(r => r.silo))].filter(Boolean);
-
-    return `
-Datensatz: ${rawData.length} Zeilen
-Agenturen: ${agenturen.length} verfügbar
-Bundesländer: ${bundeslaender.join(', ')}
-Silos: ${silos.join(', ')}`;
-}
-
-// ========================================
-// MOCK RESPONSES
-// ========================================
-
-function generateLandingMockResponse(message) {
-    const lower = message.toLowerCase();
-
-    if (!window.dailyRawData?.length) {
-        return '📊 **Keine Daten vorhanden**\n\nBitte lade zuerst eine CSV-Datei hoch oder gehe zum Dashboard.';
-    }
-
-    if (lower.includes('top') || lower.includes('beste')) {
-        return '📊 **Top Vermittler** - Lade die Daten im Dashboard für Details!';
-    }
-
-    if (lower.includes('hallo') || lower.includes('hi')) {
-        return 'Hallo! 👋 Ich kann dir beim Dashboard helfen. Lade eine CSV hoch oder gehe zum Dashboard!';
-    }
-
-    return `⚠️ **Mock-Modus aktiv**\n\nVerfügbare Befehle:\n• "Zeige Top 5 Vermittler"\n• "Wie viele Daten haben wir?"`;
-}
 
 // ========================================
 // UI HELPERS
