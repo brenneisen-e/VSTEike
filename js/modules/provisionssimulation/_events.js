@@ -13,7 +13,7 @@ import {
     updateMigrationDisplay,
     initCompanyView
 } from './_actions.js';
-import { calculateProvisions } from './_calculations.js';
+import { calculateProvisions, calculateCompanyCosts } from './_calculations.js';
 
 /**
  * Setup event listeners
@@ -38,6 +38,7 @@ export const setupWindowExports = () => {
         initProvisionSimulation,
         handleProvisionSlider,
         calculateProvisions,
+        calculateCompanyCosts,
         exportProvisionReport,
         resetProvisionSimulation,
         toggleProvisionFullscreen,
