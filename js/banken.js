@@ -1256,6 +1256,8 @@ async function loadBankenModule() {
                 }
                 // Initialize Feedback System
                 initFeedbackSystem();
+                // Sort customer table by priority (most urgent first)
+                initCustomerTableSort();
             }, 100);
         } else {
             throw new Error('Failed to load module');
@@ -1475,19 +1477,45 @@ function restoreCollapsedSections() {
 
 // Show all ehemalige (former) cases
 function showAllEhemalige() {
-    // Filter customer list by ehemalige status
-    showNotification('Zeige alle ehemaligen Fälle', 'info');
+    // Close drawer and navigate to filtered list
+    closeEhemaligeDrawer();
+    openSegmentFullscreen('ehemalige');
+}
 
-    // For demo, show notification - in production this would filter/show a dedicated view
-    const customerTable = document.querySelector('.customer-table tbody');
-    if (customerTable) {
-        // Scroll to customer list
-        const customerList = document.querySelector('.customer-list-section');
-        if (customerList) {
-            customerList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Toggle Ehemalige Drawer
+function toggleEhemaligeDrawer() {
+    const drawer = document.getElementById('ehemaligeDrawer');
+    const overlay = document.getElementById('ehemaligeDrawerOverlay');
+
+    if (drawer && overlay) {
+        drawer.classList.toggle('open');
+        overlay.classList.toggle('open');
+
+        // Prevent body scroll when drawer is open
+        if (drawer.classList.contains('open')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
         }
     }
 }
+
+// Close Ehemalige Drawer
+function closeEhemaligeDrawer() {
+    const drawer = document.getElementById('ehemaligeDrawer');
+    const overlay = document.getElementById('ehemaligeDrawerOverlay');
+
+    if (drawer) drawer.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// Close drawer on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeEhemaligeDrawer();
+    }
+});
 
 // Navigate to customer list with segment filter applied
 function openSegmentFullscreen(segment) {
@@ -4854,6 +4882,195 @@ function filterCustomers(filterType, value) {
     console.log('Filtering customers by', filterType, ':', value);
 }
 
+// Customer Table Sorting State
+let currentSortColumn = 'priority'; // Default: Priorität (Verzugstage + Forderung)
+let currentSortDirection = 'desc';
+
+// Sort Customer Table
+function sortCustomerTable(column) {
+    const table = document.querySelector('.customer-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Toggle direction if same column clicked
+    if (currentSortColumn === column) {
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSortColumn = column;
+        currentSortDirection = 'desc'; // Default to descending
+    }
+
+    // Update header sort indicators
+    table.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+    });
+
+    const columnIndex = getColumnIndex(column);
+    const activeHeader = table.querySelectorAll('th')[columnIndex];
+    if (activeHeader) {
+        activeHeader.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+    }
+
+    // Sort rows
+    rows.sort((a, b) => {
+        let valueA = getCellValue(a, column);
+        let valueB = getCellValue(b, column);
+
+        // Handle numeric vs string comparison
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+            return currentSortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+        }
+
+        // String comparison
+        return currentSortDirection === 'asc'
+            ? String(valueA).localeCompare(String(valueB), 'de')
+            : String(valueB).localeCompare(String(valueA), 'de');
+    });
+
+    // Re-append sorted rows
+    rows.forEach(row => tbody.appendChild(row));
+
+    showNotification(`Sortiert nach ${getColumnLabel(column)} (${currentSortDirection === 'asc' ? 'aufsteigend' : 'absteigend'})`, 'info');
+}
+
+// Get column index for sorting
+function getColumnIndex(column) {
+    const columnMap = {
+        'name': 0,
+        'amount': 2,
+        'dpd': 3,
+        'segment': 4,
+        'mahnstufe': 6,
+        'action': 7
+    };
+    return columnMap[column] || 0;
+}
+
+// Get cell value for comparison
+function getCellValue(row, column) {
+    const cells = row.querySelectorAll('td');
+    const columnIndex = getColumnIndex(column);
+
+    if (!cells[columnIndex]) return '';
+
+    const cellText = cells[columnIndex].textContent.trim();
+
+    switch (column) {
+        case 'name':
+            return cells[0].querySelector('strong')?.textContent?.trim() || cellText;
+
+        case 'amount':
+            // Parse currency: "€12.500" -> 12500
+            const amountMatch = cellText.replace(/[€.]/g, '').replace(',', '.');
+            return parseFloat(amountMatch) || 0;
+
+        case 'dpd':
+            // Parse days: "45 Tage" -> 45
+            const dpdMatch = cellText.match(/(\d+)/);
+            return dpdMatch ? parseInt(dpdMatch[1]) : 0;
+
+        case 'mahnstufe':
+            // Parse Mahnstufe: "M3" -> 3
+            const mMatch = cellText.match(/M(\d+)/);
+            return mMatch ? parseInt(mMatch[1]) : 0;
+
+        case 'segment':
+            // Priority order: Abwicklung > Eskalation > Restrukturierung > Priorität
+            const segmentPriority = {
+                'Abwicklung': 4,
+                'Eskalation': 3,
+                'Restrukturierung': 2,
+                'Priorität': 1
+            };
+            return segmentPriority[cellText] || 0;
+
+        case 'action':
+            // Sort by date
+            const dateMatch = cellText.match(/(\d{2})\.(\d{2})\.(\d{4})/);
+            if (dateMatch) {
+                return new Date(dateMatch[3], dateMatch[2] - 1, dateMatch[1]).getTime();
+            }
+            return 0;
+
+        default:
+            return cellText;
+    }
+}
+
+// Get column label for notification
+function getColumnLabel(column) {
+    const labels = {
+        'name': 'Name',
+        'amount': 'Forderung',
+        'dpd': 'Verzugstage',
+        'segment': 'Segment',
+        'mahnstufe': 'Mahnstufe',
+        'action': 'Nächste Aktion',
+        'priority': 'Priorität'
+    };
+    return labels[column] || column;
+}
+
+// Sort by priority (combined score: high DPD + high amount + critical segment)
+function sortByPriority() {
+    const table = document.querySelector('.customer-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    rows.sort((a, b) => {
+        const scoreA = calculatePriorityScore(a);
+        const scoreB = calculatePriorityScore(b);
+        return scoreB - scoreA; // Higher score = higher priority
+    });
+
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+// Calculate priority score for a row
+function calculatePriorityScore(row) {
+    const cells = row.querySelectorAll('td');
+
+    // Get DPD (higher = more urgent)
+    const dpdText = cells[3]?.textContent || '0';
+    const dpd = parseInt(dpdText.match(/(\d+)/)?.[1]) || 0;
+
+    // Get Amount (higher = more important)
+    const amountText = cells[2]?.textContent || '0';
+    const amount = parseFloat(amountText.replace(/[€.]/g, '').replace(',', '.')) || 0;
+
+    // Get Mahnstufe (higher = more urgent)
+    const mahnstufeText = cells[6]?.textContent || 'M0';
+    const mahnstufe = parseInt(mahnstufeText.match(/M(\d+)/)?.[1]) || 0;
+
+    // Get Segment priority
+    const segmentText = cells[4]?.textContent?.trim() || '';
+    const segmentWeight = {
+        'Abwicklung': 100,
+        'Eskalation': 80,
+        'Restrukturierung': 40,
+        'Priorität': 20
+    }[segmentText] || 0;
+
+    // Combined priority score
+    return (dpd * 2) + (amount / 1000) + (mahnstufe * 10) + segmentWeight;
+}
+
+// Initialize default sort on page load
+function initCustomerTableSort() {
+    const table = document.querySelector('.customer-table');
+    if (table) {
+        sortByPriority();
+    }
+}
+
 // Search Customers
 function searchCustomers(query) {
     console.log('Searching customers:', query);
@@ -5453,6 +5670,11 @@ window.showAllNewCases = showAllNewCases;
 window.showAllResolvedCases = showAllResolvedCases;
 window.filterCustomers = filterCustomers;
 window.searchCustomers = searchCustomers;
+window.sortCustomerTable = sortCustomerTable;
+window.sortByPriority = sortByPriority;
+window.initCustomerTableSort = initCustomerTableSort;
+window.toggleEhemaligeDrawer = toggleEhemaligeDrawer;
+window.closeEhemaligeDrawer = closeEhemaligeDrawer;
 
 // NPL Actions
 window.reviewForSale = reviewForSale;

@@ -113,17 +113,32 @@
                                 -3 Tage
                             </div>
                         </div>
-                        <div class="dpd-buckets-compact">
-                            <span class="dpd-bucket-tag green" onclick="event.stopPropagation(); filterByDPDBucket('0-30')">0-30: 5.010</span>
-                            <span class="dpd-bucket-tag amber" onclick="event.stopPropagation(); filterByDPDBucket('31-90')">31-90: 2.880</span>
-                            <span class="dpd-bucket-tag red" onclick="event.stopPropagation(); filterByDPDBucket('90+')">&gt;90: 2.344</span>
-                        </div>
                     </div>
-                    <div class="kpi-mini-chart" onclick="event.stopPropagation(); showChartPopup('dpd', 'Ø Verzugstage - Zeitverlauf')">
-                        <svg viewBox="0 0 64 34">
-                            <polyline fill="none" stroke="#8b5cf6" stroke-width="2" points="2,10 12,12 22,15 32,14 42,16 52,20 58,22"/>
-                            <circle cx="58" cy="22" r="3" fill="#8b5cf6"/>
+                    <!-- Mini Donut Chart für Verzugstage-Verteilung -->
+                    <div class="dpd-mini-donut" onclick="event.stopPropagation(); showChartPopup('dpd', 'Verzugstage - Verteilung')">
+                        <svg viewBox="0 0 42 42" class="donut-chart">
+                            <!-- Hintergrundkreis -->
+                            <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#e2e8f0" stroke-width="4"></circle>
+                            <!-- 0-30 Tage (grün) - 49% = 5010/10234 -->
+                            <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#22c55e" stroke-width="4"
+                                stroke-dasharray="49 51" stroke-dashoffset="25" class="donut-segment green"
+                                onclick="event.stopPropagation(); filterByDPDBucket('0-30')"></circle>
+                            <!-- 31-90 Tage (amber) - 28% = 2880/10234 -->
+                            <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#f59e0b" stroke-width="4"
+                                stroke-dasharray="28 72" stroke-dashoffset="-24" class="donut-segment amber"
+                                onclick="event.stopPropagation(); filterByDPDBucket('31-90')"></circle>
+                            <!-- >90 Tage (rot) - 23% = 2344/10234 -->
+                            <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#ef4444" stroke-width="4"
+                                stroke-dasharray="23 77" stroke-dashoffset="-52" class="donut-segment red"
+                                onclick="event.stopPropagation(); filterByDPDBucket('90+')"></circle>
+                            <!-- Zentraler Wert -->
+                            <text x="21" y="23" text-anchor="middle" class="donut-center-text">47</text>
                         </svg>
+                        <div class="donut-legend">
+                            <span class="legend-item green" onclick="event.stopPropagation(); filterByDPDBucket('0-30')">0-30</span>
+                            <span class="legend-item amber" onclick="event.stopPropagation(); filterByDPDBucket('31-90')">31-90</span>
+                            <span class="legend-item red" onclick="event.stopPropagation(); filterByDPDBucket('90+')">&gt;90</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -416,69 +431,134 @@
                     </div>
                 </div>
 
-                    <!-- Axis Labels -->
-                    <div class="matrix-axis-labels">
-                        <span class="axis-left">← Geringe Willingness</span>
-                        <span class="axis-center">↑ Ability ↓</span>
-                        <span class="axis-right">Hohe Willingness →</span>
+                    <!-- Axis Labels - Redesigned -->
+                    <div class="matrix-axis-container">
+                        <div class="axis-y-label">
+                            <span>Hohe Ability</span>
+                            <div class="axis-arrow-up"></div>
+                            <div class="axis-arrow-down"></div>
+                            <span>Geringe Ability</span>
+                        </div>
+                        <div class="axis-x-label">
+                            <span>← Geringe Willingness</span>
+                            <span>Hohe Willingness →</span>
+                        </div>
+                    </div>
+
+                    <!-- Matrix Gesamtsumme -->
+                    <div class="matrix-total-summary">
+                        <div class="matrix-total-item">
+                            <span class="matrix-total-label">Gesamt:</span>
+                            <span class="matrix-total-value">10.234 Fälle</span>
+                        </div>
+                        <div class="matrix-total-divider">•</div>
+                        <div class="matrix-total-item">
+                            <span class="matrix-total-value">€ 47,8 Mio</span>
+                            <span class="matrix-total-label">Forderungen</span>
+                        </div>
+                        <div class="matrix-total-divider">•</div>
+                        <div class="matrix-total-item">
+                            <span class="matrix-total-value">Ø € 4.672</span>
+                            <span class="matrix-total-label">pro Fall</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right: Ehemalige Fälle Section (Compact) -->
-            <div class="collapsible-section ehemalige-section ehemalige-compact" id="ehemaligeSection">
-                <div class="collapsible-header" onclick="toggleSection('ehemaligeSection')">
-                    <div class="collapsible-header-left">
-                        <h3>Ehemalige Fälle</h3>
-                    </div>
-                    <div class="collapse-toggle">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                            <polyline points="6 9 12 15 18 9"></polyline>
+            <!-- Ehemalige Fälle Trigger Button (ersetzt Sidebar) -->
+            <button class="ehemalige-trigger-btn" onclick="toggleEhemaligeDrawer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span class="ehemalige-trigger-count">847</span>
+                <span class="ehemalige-trigger-label">Fälle abgeschlossen</span>
+                <span class="ehemalige-trigger-volume">€4,2 Mio</span>
+            </button>
+        </div>
+
+        <!-- Ehemalige Fälle Drawer (Slide-in von rechts) -->
+        <div class="ehemalige-drawer-overlay" id="ehemaligeDrawerOverlay" onclick="closeEhemaligeDrawer()"></div>
+        <div class="ehemalige-drawer" id="ehemaligeDrawer">
+            <div class="ehemalige-drawer-header">
+                <div class="drawer-title-section">
+                    <div class="drawer-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
                         </svg>
                     </div>
-                </div>
-                <div class="collapsible-content" style="padding: 0;">
-                    <div class="ehemalige-tile-compact" onclick="openSegmentFullscreen('ehemalige')">
-                        <div class="ehemalige-header-row">
-                            <div class="ehemalige-icon-small">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                            </div>
-                            <div class="ehemalige-count-inline">847</div>
-                            <div class="ehemalige-label">abgeschlossen</div>
-                            <div class="ehemalige-volume-inline">€4,2 Mio</div>
-                        </div>
-                    </div>
-                    <div class="ehemalige-list-compact">
-                        <div class="ehemalige-list-title">Kürzlich abgeschlossen</div>
-                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-6891')">
-                            <div>
-                                <div class="ehemalige-item-name">Klein KG</div>
-                                <div class="ehemalige-item-info">Betriebsmittel • vor 5 Tagen</div>
-                            </div>
-                            <div class="ehemalige-item-amount">€8.400</div>
-                        </div>
-                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5982')">
-                            <div>
-                                <div class="ehemalige-item-name">Meier, Stefan</div>
-                                <div class="ehemalige-item-info">Dispo • vor 1 Woche</div>
-                            </div>
-                            <div class="ehemalige-item-amount">€2.340</div>
-                        </div>
-                        <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5876')">
-                            <div>
-                                <div class="ehemalige-item-name">Schneider Logistik</div>
-                                <div class="ehemalige-item-info">Kontokorrent • vor 1 Woche</div>
-                            </div>
-                            <div class="ehemalige-item-amount">€15.200</div>
-                        </div>
-                        <button class="ehemalige-show-all-compact" onclick="showAllEhemalige()">
-                            Alle anzeigen →
-                        </button>
+                    <div>
+                        <h3>Ehemalige Fälle</h3>
+                        <p class="drawer-subtitle">Abgeschlossene Vorgänge diesen Monat</p>
                     </div>
                 </div>
+                <button class="drawer-close-btn" onclick="closeEhemaligeDrawer()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="ehemalige-drawer-stats">
+                <div class="drawer-stat">
+                    <span class="drawer-stat-value">847</span>
+                    <span class="drawer-stat-label">Fälle</span>
+                </div>
+                <div class="drawer-stat">
+                    <span class="drawer-stat-value">€4,2 Mio</span>
+                    <span class="drawer-stat-label">Volumen</span>
+                </div>
+                <div class="drawer-stat">
+                    <span class="drawer-stat-value">72%</span>
+                    <span class="drawer-stat-label">Recovery</span>
+                </div>
+            </div>
+            <div class="ehemalige-drawer-content">
+                <div class="ehemalige-list-title">Kürzlich abgeschlossen</div>
+                <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-6891')">
+                    <div>
+                        <div class="ehemalige-item-name">Klein KG</div>
+                        <div class="ehemalige-item-info">Betriebsmittel • vor 5 Tagen</div>
+                    </div>
+                    <div class="ehemalige-item-amount success">€8.400</div>
+                </div>
+                <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5982')">
+                    <div>
+                        <div class="ehemalige-item-name">Meier, Stefan</div>
+                        <div class="ehemalige-item-info">Dispo • vor 1 Woche</div>
+                    </div>
+                    <div class="ehemalige-item-amount success">€2.340</div>
+                </div>
+                <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5876')">
+                    <div>
+                        <div class="ehemalige-item-name">Schneider Logistik</div>
+                        <div class="ehemalige-item-info">Kontokorrent • vor 1 Woche</div>
+                    </div>
+                    <div class="ehemalige-item-amount success">€15.200</div>
+                </div>
+                <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5801')">
+                    <div>
+                        <div class="ehemalige-item-name">Weber Transport</div>
+                        <div class="ehemalige-item-info">Ratenkredit • vor 2 Wochen</div>
+                    </div>
+                    <div class="ehemalige-item-amount success">€22.800</div>
+                </div>
+                <div class="ehemalige-item" onclick="openCustomerDetail('K-2024-5755')">
+                    <div>
+                        <div class="ehemalige-item-name">Fischer, Anna</div>
+                        <div class="ehemalige-item-info">Kreditkarte • vor 2 Wochen</div>
+                    </div>
+                    <div class="ehemalige-item-amount success">€1.890</div>
+                </div>
+            </div>
+            <div class="ehemalige-drawer-footer">
+                <button class="btn-primary" onclick="openSegmentFullscreen('ehemalige')">
+                    Alle 847 Fälle anzeigen
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -515,14 +595,14 @@
                 <table class="customer-table">
                     <thead>
                         <tr>
-                            <th>Kunde</th>
+                            <th onclick="sortCustomerTable('name')" class="sortable">Kunde <span class="sort-icon"></span></th>
                             <th>Produkt</th>
-                            <th>Forderung</th>
-                            <th>Verzugstage</th>
-                            <th>Segment</th>
+                            <th onclick="sortCustomerTable('amount')" class="sortable">Forderung <span class="sort-icon"></span></th>
+                            <th onclick="sortCustomerTable('dpd')" class="sortable">Verzugstage <span class="sort-icon"></span></th>
+                            <th onclick="sortCustomerTable('segment')" class="sortable">Segment <span class="sort-icon"></span></th>
                             <th>W/A Score</th>
-                            <th>Mahnstufe</th>
-                            <th>Nächste Aktion</th>
+                            <th onclick="sortCustomerTable('mahnstufe')" class="sortable">Mahnstufe <span class="sort-icon"></span></th>
+                            <th onclick="sortCustomerTable('action')" class="sortable">Nächste Aktion <span class="sort-icon"></span></th>
                             <th>Status</th>
                             <th>Bearbeiter</th>
                             <th>Aktionen</th>
