@@ -11356,14 +11356,42 @@ body.modal-open {
     border-radius: 0 8px 8px 0;
 }
 
-.recommendation-icon {
-    font-size: 16px;
+.recommendation-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.recommendation-indicator.danger {
+    background: #ef4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+}
+
+.recommendation-indicator.warning {
+    background: #f59e0b;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+.recommendation-indicator.info {
+    background: #3b82f6;
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+}
+
+.recommendation-indicator.success {
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.recommendation-indicator.muted {
+    background: #64748b;
+    box-shadow: 0 0 6px rgba(100, 116, 139, 0.3);
 }
 
 .recommendation-text {
     font-size: 12px;
     font-weight: 500;
-    color: #92400e;
+    color: #475569;
     line-height: 1.4;
 }
 
