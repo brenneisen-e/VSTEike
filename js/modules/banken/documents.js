@@ -15,7 +15,12 @@ let uploadedFileData = null;
 // ========================================
 
 export function openDocumentScanner() {
-    document.getElementById('documentScannerModal')?.classList.add('active');
+    const modal = document.getElementById('documentScannerModal');
+    if (!modal) {
+        console.error('[DOCUMENTS] documentScannerModal not found in DOM');
+        return;
+    }
+    modal.classList.add('active');
     resetScanner();
 }
 

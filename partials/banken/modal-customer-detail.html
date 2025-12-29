@@ -320,12 +320,12 @@
                             <span class="kpi-label">Überfällig</span>
                             <span class="kpi-value" id="kontenUeberfaellig">€0</span>
                         </div>
-                        <div class="finanzen-kpi">
+                        <div class="finanzen-kpi" title="Anteil der bereits zurückgezahlten Forderung">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                                 <polyline points="17 6 23 6 23 12"></polyline>
                             </svg>
-                            <span class="kpi-label">Rückgabequote</span>
+                            <span class="kpi-label">Rückzahlquote</span>
                             <span class="kpi-value" id="kontenRueckgabequote">0%</span>
                         </div>
                     </div>
@@ -353,12 +353,21 @@
                     <!-- Einkommen & Ausgaben -->
                     <div class="einkommen-ausgaben-compact">
                         <div class="ea-header">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
-                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
-                                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"></path>
-                            </svg>
-                            <span>Einkommen & Ausgaben</span>
+                            <div class="ea-header-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                    <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                                    <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                                    <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"></path>
+                                </svg>
+                                <span>Einkommen & Ausgaben</span>
+                            </div>
+                            <button class="btn-haushalt" onclick="showCustomerTab('haushalt')" title="Detaillierte Haushaltsrechnung anzeigen">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                                Details
+                            </button>
                         </div>
                         <div class="ea-row">
                             <span class="label">Monatl. Einkommen</span>

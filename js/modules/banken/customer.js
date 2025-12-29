@@ -923,8 +923,9 @@ export function openCustomerDetail(customerId, options = {}) {
     updateKiAnalyseFields(modal, customer);
     updateOpenFinanceFields(modal, customer);
     updateHaushaltGuvTab(customer);
-    updateHaushaltFields(modal, customer);
 
+    // Delay haushalt update to ensure DOM elements are ready
+    setTimeout(() => updateHaushaltFields(modal, customer), 50);
     setTimeout(() => renderCustomerActivities(customerId), 100);
 
     if (options.showKommunikation) {
@@ -956,6 +957,13 @@ export function showCustomerTab(tabName) {
     modal.querySelectorAll('.customer-tab').forEach(content => {
         content.classList.toggle('active', content.id === `tab-${tabName}`);
     });
+
+    // Re-update data when switching to haushalt tab (ensures data is rendered)
+    if (tabName === 'haushalt' && currentCustomerId) {
+        const customer = getFullCustomerData(currentCustomerId);
+        updateHaushaltGuvTab(customer);
+        setTimeout(() => updateHaushaltFields(modal, customer), 50);
+    }
 }
 
 function updateStammdatenFields(modal, customer) {

@@ -4,6 +4,7 @@
  */
 
 @import '_reply.css';
+@import '_detail-modal.css';
 @import '_haushalt.css';
 @import '_guv.css';
 @import '_openfinance.css';

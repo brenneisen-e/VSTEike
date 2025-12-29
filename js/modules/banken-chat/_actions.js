@@ -33,16 +33,23 @@ export const sendBankenMessage = () => {
 export const showFilteredCustomers = (customerIdsString) => {
     const customerIds = customerIdsString.split(',').map(id => id.trim());
 
+    // Show filter indicator
+    showChatFilterIndicator(customerIds.length);
+
     const customerListSection = document.querySelector('.customer-list-section');
     if (customerListSection) {
         customerListSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        customerListSection.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
-        setTimeout(() => { customerListSection.style.boxShadow = ''; }, 2000);
     }
 
-    const rows = document.querySelectorAll('.customer-table tbody tr');
-    let matchCount = 0;
-    let firstMatch = null;
+    const table = document.querySelector('.banken-page .customer-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const matchingRows = [];
+    const hiddenRows = [];
 
     rows.forEach(row => {
         const onclickAttr = row.getAttribute('onclick') ?? '';
@@ -50,21 +57,84 @@ export const showFilteredCustomers = (customerIdsString) => {
         const matches = customerIds.some(id => onclickAttr.includes(id) || cellText.includes(id));
 
         if (matches) {
-            matchCount++;
-            row.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
-            row.style.transition = 'background-color 0.3s ease';
-            row.style.boxShadow = 'inset 4px 0 0 #3b82f6';
-            firstMatch ??= row;
+            matchingRows.push(row);
+            row.style.display = '';
+            row.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
         } else {
-            row.style.backgroundColor = '';
-            row.style.boxShadow = '';
+            hiddenRows.push(row);
+            row.style.display = 'none';
         }
     });
 
-    if (firstMatch) setTimeout(() => firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' }), 500);
-    if (typeof showNotification === 'function') showNotification(`${matchCount} Kunden hervorgehoben`, 'info');
+    // Re-order: matching rows first
+    matchingRows.forEach(row => tbody.appendChild(row));
+    hiddenRows.forEach(row => tbody.appendChild(row));
 
-    setTimeout(() => rows.forEach(row => { row.style.backgroundColor = ''; row.style.boxShadow = ''; }), 10000);
+    // Update pagination text
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = `Zeige ${matchingRows.length} gefilterte Kunden aus KI-Chat`;
+    }
+
+    window.showNotification?.(`${matchingRows.length} Kunden gefiltert`, 'info');
+};
+
+/**
+ * Show filter indicator for chat-based filtering
+ */
+const showChatFilterIndicator = (count) => {
+    // Remove any existing indicator
+    document.querySelector('.chat-filter-indicator')?.remove();
+    document.querySelector('.segment-filter-indicator')?.remove();
+
+    const indicator = document.createElement('div');
+    indicator.className = 'chat-filter-indicator';
+    indicator.innerHTML = `
+        <span class="filter-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            KI-Chat Filter: ${count} Kunden
+        </span>
+        <button class="filter-clear-btn" onclick="clearChatFilter()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Filter aufheben
+        </button>
+    `;
+
+    const tableWrapper = document.querySelector('.customer-table-wrapper');
+    if (tableWrapper) {
+        tableWrapper.insertAdjacentElement('beforebegin', indicator);
+    }
+};
+
+/**
+ * Clear chat-based filter and show all customers
+ */
+export const clearChatFilter = () => {
+    document.querySelector('.chat-filter-indicator')?.remove();
+
+    const table = document.querySelector('.banken-page .customer-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    tbody.querySelectorAll('tr').forEach(row => {
+        row.style.display = '';
+        row.style.backgroundColor = '';
+    });
+
+    const paginationText = document.querySelector('.table-pagination span');
+    if (paginationText) {
+        paginationText.textContent = 'Zeige alle Kunden';
+    }
+
+    window.showNotification?.('Filter aufgehoben', 'info');
 };
 
 /**

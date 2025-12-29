@@ -73,8 +73,10 @@ const segmentConfig = {
 };
 
 export function filterBySegment(segment) {
+    console.log('[SEGMENT] filterBySegment called with:', segment);
     const config = segmentConfig[segment];
     if (!config) {
+        console.error('[SEGMENT] No config found for segment:', segment);
         return;
     }
 
@@ -82,10 +84,16 @@ export function filterBySegment(segment) {
     document.querySelector(`.matrix-quadrant.segment-${segment}`)?.classList.add('selected');
 
     const table = document.querySelector('.banken-page .customer-table');
-    if (!table) return;
+    if (!table) {
+        console.error('[SEGMENT] Customer table not found - selector: .banken-page .customer-table');
+        return;
+    }
 
     const tbody = table.querySelector('tbody');
-    if (!tbody) return;
+    if (!tbody) {
+        console.error('[SEGMENT] Table tbody not found');
+        return;
+    }
 
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const matchingRows = [];
