@@ -1191,7 +1191,7 @@ function showLoadingProgress(container) {
 }
 
 // Update loading progress for Banken module
-function updateBankenLoadingProgress(percent, text) {
+function updateLoadingProgress(percent, text) {
     const bar = document.getElementById('bankenProgressBar');
     const statusEl = document.getElementById('bankenLoadingStatus');
     const percentEl = document.getElementById('bankenLoadingPercent');
