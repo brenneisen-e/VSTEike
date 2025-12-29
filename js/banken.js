@@ -7630,33 +7630,32 @@ async function printToolOverview() {
 
         // Screenshots als Seiten hinzufügen
         for (const screenshot of screenshots) {
-            pdf.addPage();
+            try {
+                // Validate image data
+                if (!screenshot.data || !screenshot.data.startsWith('data:image/')) {
+                    console.warn(`Skipping invalid screenshot: ${screenshot.name}`);
+                    continue;
+                }
 
-            // Header
-            pdf.setFillColor(248, 250, 252);
-            pdf.rect(0, 0, pageWidth, 15, 'F');
-            pdf.setTextColor(30, 41, 59);
-            pdf.setFontSize(14);
-            pdf.text(screenshot.name, margin, 10);
+                pdf.addPage();
 
-            // Screenshot einfügen
-            const imgProps = pdf.getImageProperties(screenshot.data);
-            const imgRatio = imgProps.width / imgProps.height;
-            const maxWidth = pageWidth - (margin * 2);
-            const maxHeight = pageHeight - 25 - margin;
+                // Header
+                pdf.setFillColor(248, 250, 252);
+                pdf.rect(0, 0, pageWidth, 15, 'F');
+                pdf.setTextColor(30, 41, 59);
+                pdf.setFontSize(14);
+                pdf.text(screenshot.name, margin, 10);
 
-            let imgWidth = maxWidth;
-            let imgHeight = imgWidth / imgRatio;
+                // Screenshot einfügen - use JPEG format for better compatibility
+                const maxWidth = pageWidth - (margin * 2);
+                const maxHeight = pageHeight - 25 - margin;
 
-            if (imgHeight > maxHeight) {
-                imgHeight = maxHeight;
-                imgWidth = imgHeight * imgRatio;
+                // Add image with auto-detection of format
+                pdf.addImage(screenshot.data, 'JPEG', margin, 20, maxWidth, maxHeight, undefined, 'FAST');
+            } catch (imgError) {
+                console.error(`Fehler beim Hinzufügen von ${screenshot.name}:`, imgError);
+                // Continue with next screenshot instead of failing completely
             }
-
-            const x = (pageWidth - imgWidth) / 2;
-            const y = 20;
-
-            pdf.addImage(screenshot.data, 'PNG', x, y, imgWidth, imgHeight);
         }
 
         // PDF speichern
@@ -7844,7 +7843,7 @@ async function captureSection(selector, name) {
             windowWidth: element.scrollWidth,
             windowHeight: element.scrollHeight
         });
-        return canvas.toDataURL('image/png');
+        return canvas.toDataURL('image/jpeg', 0.95);
     } catch (error) {
         console.error(`Screenshot Fehler für ${name}:`, error);
         return null;
@@ -7876,7 +7875,7 @@ async function openAndCaptureCustomerDetail() {
                 logging: false,
                 backgroundColor: '#ffffff'
             });
-            return canvas.toDataURL('image/png');
+            return canvas.toDataURL('image/jpeg', 0.95);
         } catch (error) {
             console.error('Kundendetail Screenshot Fehler:', error);
         }
@@ -7906,7 +7905,7 @@ async function captureCustomerTab(tabName) {
                 logging: false,
                 backgroundColor: '#ffffff'
             });
-            return canvas.toDataURL('image/png');
+            return canvas.toDataURL('image/jpeg', 0.95);
         } catch (error) {
             console.error(`Tab ${tabName} Screenshot Fehler:`, error);
         }
@@ -7952,7 +7951,7 @@ async function openAndCaptureCrmProfile() {
                 logging: false,
                 backgroundColor: '#ffffff'
             });
-            return canvas.toDataURL('image/png');
+            return canvas.toDataURL('image/jpeg', 0.95);
         } catch (error) {
             console.error('CRM Profil Screenshot Fehler:', error);
         }
@@ -8020,7 +8019,7 @@ async function openAndCaptureChatbot() {
             const closeChat = document.querySelector('.banken-chat-close');
             if (closeChat) closeChat.click();
 
-            return canvas.toDataURL('image/png');
+            return canvas.toDataURL('image/jpeg', 0.95);
         } catch (error) {
             console.error('Chatbot Screenshot Fehler:', error);
         }
