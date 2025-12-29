@@ -4,6 +4,152 @@
    ======================================== */
 
 /* ========================================
+   BANKEN MODULE LOADING SCREEN
+   ======================================== */
+
+.banken-loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 40px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.banken-loading-logo {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    animation: logoPulse 2s ease-in-out infinite;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
+}
+
+.banken-loading-logo svg {
+    color: white;
+}
+
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.banken-loading-title {
+    color: #1e293b;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.banken-loading-subtitle {
+    color: #64748b;
+    font-size: 16px;
+    margin: 0 0 32px 0;
+    text-align: center;
+}
+
+.banken-loading-progress-wrapper {
+    width: 100%;
+    max-width: 320px;
+}
+
+.banken-loading-progress-track {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.banken-loading-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #667eea, #8b5cf6, #a855f7);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.banken-loading-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.banken-loading-progress-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.banken-loading-status {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.banken-loading-percent {
+    color: #667eea;
+    font-size: 14px;
+    font-weight: 700;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+@media (max-width: 480px) {
+    .banken-loading-screen {
+        padding: 30px 20px;
+        min-height: 60vh;
+    }
+
+    .banken-loading-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+    }
+
+    .banken-loading-logo svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .banken-loading-title {
+        font-size: 22px;
+    }
+
+    .banken-loading-subtitle {
+        font-size: 14px;
+    }
+
+    .banken-loading-progress-wrapper {
+        max-width: 280px;
+    }
+}
+
+/* ========================================
    ALERT BANNER
    ======================================== */
 

@@ -1164,24 +1164,26 @@ async function loadBankenComponents(container) {
     console.log(`Loaded ${componentPlaceholders.length} components`);
 }
 
-// Show loading progress bar
+// Show loading progress bar with modern animation
 function showLoadingProgress(container) {
     container.innerHTML = `
         <div class="banken-loading-screen">
-            <div class="loading-content">
-                <div class="loading-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="3" y1="9" x2="21" y2="9"></line>
-                        <line x1="9" y1="21" x2="9" y2="9"></line>
-                    </svg>
+            <div class="banken-loading-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+            </div>
+            <h2 class="banken-loading-title">Collections Management</h2>
+            <p class="banken-loading-subtitle">Forderungsmanagement wird vorbereitet</p>
+            <div class="banken-loading-progress-wrapper">
+                <div class="banken-loading-progress-track">
+                    <div class="banken-loading-progress-bar" id="bankenProgressBar"></div>
                 </div>
-                <h2 class="loading-title">Collections Management</h2>
-                <div class="loading-progress-container">
-                    <div class="loading-progress-bar">
-                        <div class="loading-progress-fill" id="loadingProgressFill"></div>
-                    </div>
-                    <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
+                <div class="banken-loading-progress-details">
+                    <span class="banken-loading-status" id="bankenLoadingStatus">Initialisiere...</span>
+                    <span class="banken-loading-percent" id="bankenLoadingPercent">0%</span>
                 </div>
             </div>
         </div>
@@ -1190,11 +1192,13 @@ function showLoadingProgress(container) {
 
 // Update loading progress for Banken module
 function updateBankenLoadingProgress(percent, text) {
-    const fill = document.getElementById('loadingProgressFill');
-    const textEl = document.getElementById('loadingProgressText');
+    const bar = document.getElementById('bankenProgressBar');
+    const statusEl = document.getElementById('bankenLoadingStatus');
+    const percentEl = document.getElementById('bankenLoadingPercent');
 
-    if (fill) fill.style.width = `${percent}%`;
-    if (textEl) textEl.textContent = text;
+    if (bar) bar.style.width = `${percent}%`;
+    if (statusEl) statusEl.textContent = text;
+    if (percentEl) percentEl.textContent = `${Math.round(percent)}%`;
 }
 
 // Load Banken module from partial (modular version) - loads in background
@@ -2376,6 +2380,9 @@ function openCustomerDetail(customerId, options = {}) {
         updateOpenFinanceFields(modal, customer);
         updateKommunikationFields(modal, customer);
         updateKiAnalyseFields(modal, customer);
+
+        // Update AI summary card with customer data
+        updateAiSummary(customer);
 
         // Switch between Haushaltsrechnung (Privat) and GuV (Gewerbe)
         updateHaushaltGuvTab(customer);
@@ -7471,25 +7478,48 @@ function updateAiSummary(customer) {
 
     if (!summaryContent || !recommendation) return;
 
-    const dpd = customer?.dpd || 45;
-    const forderung = customer?.forderung || 4230;
-    const segment = customer?.segment || 'priorität';
+    // Get real customer data
+    const dpd = customer?.dpd || 0;
+    const forderung = customer?.gesamtforderung || customer?.restschuld || 0;
+    const segment = customer?.segment || 'standard';
+    const kernproblem = customer?.kernproblem || '';
+    const willingness = customer?.willingness || 50;
+    const ability = customer?.ability || 50;
+    const name = customer?.name || 'Kunde';
+    const status = customer?.status || '';
 
     let summaryText = '';
     let recommendationText = '';
     let recommendationIcon = '⚠️';
 
-    if (dpd > 60 || segment === 'eskalation') {
-        summaryText = `<strong>Kritischer Fall:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Zahlungsverhalten negativ. Sofortiger Handlungsbedarf.`;
-        recommendationText = 'Empfehlung: Inkasso-Verfahren einleiten oder Forderungsverkauf prüfen. Interne Eskalation empfohlen.';
-        recommendationIcon = '🚨';
-    } else if (dpd > 30) {
-        summaryText = `<strong>Erhöhtes Risiko:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Kunde hat in der Vergangenheit Zahlungsprobleme gezeigt.`;
-        recommendationText = 'Empfehlung: Letzte Mahnung versenden und Ratenzahlungsangebot unterbreiten.';
-        recommendationIcon = '⚠️';
+    // Use kernproblem if available, otherwise generate based on data
+    if (kernproblem) {
+        summaryText = `<strong>${name}:</strong> ${kernproblem}`;
+    } else if (segment === 'eskalation' || dpd > 60) {
+        summaryText = `<strong>Kritischer Fall:</strong> ${name} hat eine offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen. Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%. Sofortiger Handlungsbedarf.`;
+    } else if (segment === 'prioritaet' || dpd > 30) {
+        summaryText = `<strong>Erhöhtes Risiko:</strong> ${name} mit € ${forderung.toLocaleString('de-DE')} offener Forderung (${dpd} DPD). Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
+    } else if (segment === 'restrukturierung') {
+        summaryText = `<strong>Restrukturierung möglich:</strong> ${name} zeigt Kooperationsbereitschaft. Forderung: € ${forderung.toLocaleString('de-DE')}. Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
     } else {
-        summaryText = `<strong>Standard-Fall:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Zahlungshistorie grundsätzlich positiv.`;
-        recommendationText = 'Empfehlung: Freundliche Zahlungserinnerung versenden.';
+        summaryText = `<strong>${name}:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} (${dpd} Tage überfällig). Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
+    }
+
+    // Generate recommendation based on segment and data
+    if (segment === 'eskalation' || status === 'Inkasso') {
+        recommendationText = 'Empfehlung: Inkasso-Verfahren fortführen. Bei Kontaktaufnahme letztmalige Ratenzahlung anbieten. Forderungsverkauf als Alternative prüfen.';
+        recommendationIcon = '🚨';
+    } else if (segment === 'abwicklung' || willingness < 30) {
+        recommendationText = 'Empfehlung: Abschreibung oder Forderungsverkauf prüfen. Geringe Erfolgsaussichten bei Standardmaßnahmen.';
+        recommendationIcon = '⚫';
+    } else if (segment === 'prioritaet' || dpd > 30) {
+        recommendationText = 'Empfehlung: Sofortige telefonische Kontaktaufnahme. Letzte Mahnung mit Ratenzahlungsangebot versenden.';
+        recommendationIcon = '⚠️';
+    } else if (segment === 'restrukturierung' || ability > 50) {
+        recommendationText = 'Empfehlung: Aktive Ratenzahlungsvereinbarung anbieten. Kunde zeigt Potenzial zur Kooperation.';
+        recommendationIcon = '🔵';
+    } else {
+        recommendationText = 'Empfehlung: Freundliche Zahlungserinnerung versenden und Kontakt suchen.';
         recommendationIcon = '💡';
     }
 
