@@ -7584,13 +7584,11 @@ async function printToolOverview() {
     const originalContentScroll = bankenContent ? bankenContent.scrollTop : 0;
 
     const steps = [
-        { name: 'Dashboard Header & KPIs', action: () => captureViewportAt(0) },
-        { name: 'Scatter Plot & Segmentierung', action: () => captureViewportAt(600) },
-        { name: 'Kundenliste (oben)', action: () => captureViewportAt(1200) },
-        { name: 'Kundenliste (Mitte)', action: () => captureViewportAt(1800) },
-        { name: 'Kundendetail - Übersicht', action: () => captureCustomerDetailView('overview') },
-        { name: 'Kundendetail - Stammdaten', action: () => captureCustomerDetailView('stammdaten') },
-        { name: 'Kundendetail - KI-Analyse', action: () => captureCustomerDetailView('ki-analyse') },
+        { name: 'Dashboard - KPIs & Übersicht', action: () => captureDashboardSection('top') },
+        { name: 'Dashboard - Kundenliste', action: () => captureDashboardSection('table') },
+        { name: 'Kundendetail - Stammdaten', action: () => captureCustomerTab('stammdaten') },
+        { name: 'Kundendetail - Konten & Finanzen', action: () => captureCustomerTab('konten') },
+        { name: 'Kundendetail - KI-Analyse', action: () => captureCustomerTab('ki-analyse') },
         { name: 'KI Chatbot', action: () => captureChatbotView() }
     ];
 
@@ -7715,81 +7713,97 @@ async function printToolOverview() {
     if (style) style.remove();
 }
 
-// Viewport an bestimmter Scroll-Position erfassen
-async function captureViewportAt(scrollY) {
-    const bankenModule = document.getElementById('bankenModule');
-    if (!bankenModule) return null;
+// Dashboard-Bereich erfassen
+async function captureDashboardSection(section) {
+    // Finde scrollbaren Container
+    const scrollContainer = document.querySelector('.banken-content-area') ||
+                           document.querySelector('.banken-page') ||
+                           document.getElementById('bankenModule');
 
-    // Zur Position scrollen
-    bankenModule.scrollTop = scrollY;
-    window.scrollTo(0, 0);
-    await delay(400);
+    if (!scrollContainer) return null;
 
+    // Scroll-Position basierend auf Sektion
+    let targetElement;
+    if (section === 'top') {
+        // KPIs und Scatter Plot am Anfang
+        scrollContainer.scrollTop = 0;
+        window.scrollTo(0, 0);
+        targetElement = document.querySelector('.kpi-metrics-row, .kpi-cards-grid, .banken-header');
+    } else if (section === 'table') {
+        // Kundenliste
+        targetElement = document.querySelector('.kunden-table-container, .customer-table-wrapper');
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }
+    }
+
+    await delay(500);
+
+    // Erfasse den sichtbaren Bereich
     try {
-        // Nur den sichtbaren Banken-Bereich erfassen
-        const canvas = await html2canvas(bankenModule, {
-            scale: 1.5,
+        const captureTarget = document.querySelector('.banken-page') || scrollContainer;
+        const canvas = await html2canvas(captureTarget, {
+            scale: 1,
             useCORS: true,
             logging: false,
             backgroundColor: '#f8fafc',
-            width: bankenModule.clientWidth,
-            height: Math.min(bankenModule.clientHeight, window.innerHeight),
-            scrollX: 0,
-            scrollY: -scrollY,
-            windowWidth: bankenModule.clientWidth,
-            windowHeight: window.innerHeight
+            width: Math.min(captureTarget.scrollWidth, 1400),
+            height: Math.min(window.innerHeight, 900),
+            windowWidth: 1400,
+            windowHeight: 900
         });
-        return canvas.toDataURL('image/jpeg', 0.92);
+        return canvas.toDataURL('image/jpeg', 0.88);
     } catch (error) {
-        console.error('Viewport Screenshot Fehler:', error);
+        console.error('Dashboard Screenshot Fehler:', error);
         return null;
     }
 }
 
-// Kundendetail-Ansicht öffnen und erfassen
-async function captureCustomerDetailView(section) {
+// Kundendetail Tab öffnen und erfassen
+async function captureCustomerTab(tabName) {
     // Modal öffnen wenn noch nicht offen
-    const existingModal = document.querySelector('.customer-detail-modal.open, .crm-profile-view[style*="flex"]');
+    let modal = document.getElementById('customerDetailModal');
 
-    if (!existingModal) {
+    if (!modal || modal.style.display === 'none') {
         // Ersten Kunden öffnen
         if (typeof openCustomerDetail === 'function') {
             openCustomerDetail('K-2024-0001');
-        } else {
-            const firstRow = document.querySelector('.kunden-table tbody tr');
-            if (firstRow) firstRow.click();
-        }
-        await delay(800);
-    }
-
-    // Tab wechseln wenn nötig
-    if (section !== 'overview') {
-        const tabBtn = document.querySelector(`[onclick*="showCrmSection('${section}')"]`);
-        if (tabBtn) {
-            tabBtn.click();
-            await delay(400);
-        } else if (typeof showCrmSection === 'function') {
-            showCrmSection(section);
-            await delay(400);
+            await delay(1000);
+            modal = document.getElementById('customerDetailModal');
         }
     }
 
-    // Modal finden
-    const modal = document.querySelector('.customer-detail-modal, .crm-profile-view');
     if (!modal) return null;
 
+    // Tab wechseln mit showCustomerTab (die richtige Funktion!)
+    if (typeof showCustomerTab === 'function') {
+        showCustomerTab(tabName);
+        await delay(600);
+    } else {
+        // Fallback: Tab-Button direkt klicken
+        const tabBtn = document.querySelector(`.modal-tab[onclick*="showCustomerTab('${tabName}')"]`);
+        if (tabBtn) {
+            tabBtn.click();
+            await delay(600);
+        }
+    }
+
+    // Modal-Content erfassen
+    const modalContent = modal.querySelector('.modal-content');
+    if (!modalContent) return null;
+
     try {
-        const canvas = await html2canvas(modal, {
-            scale: 1.5,
+        const canvas = await html2canvas(modalContent, {
+            scale: 1,
             useCORS: true,
             logging: false,
             backgroundColor: '#ffffff',
-            width: modal.offsetWidth,
-            height: Math.min(modal.offsetHeight, 900)
+            width: modalContent.offsetWidth,
+            height: Math.min(modalContent.scrollHeight, 800)
         });
-        return canvas.toDataURL('image/jpeg', 0.92);
+        return canvas.toDataURL('image/jpeg', 0.88);
     } catch (error) {
-        console.error('Customer Detail Screenshot Fehler:', error);
+        console.error('Customer Tab Screenshot Fehler:', error);
         return null;
     }
 }
