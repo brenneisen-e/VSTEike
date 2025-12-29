@@ -7559,7 +7559,7 @@ window.refreshAiSummary = refreshAiSummary;
 window.updateAiSummary = updateAiSummary;
 
 // ========================================
-// PDF SCREENSHOT AGENT
+// PDF SCREENSHOT AGENT - v2.0
 // ========================================
 
 // Screenshot Agent - navigiert durch das Dashboard und erstellt PDF mit Screenshots
@@ -7578,17 +7578,20 @@ async function printToolOverview() {
     const overlay = createScreenshotAgentOverlay();
     document.body.appendChild(overlay);
 
+    // Scroll position merken
+    const originalScrollTop = window.scrollY;
+    const bankenContent = document.querySelector('.banken-content-area');
+    const originalContentScroll = bankenContent ? bankenContent.scrollTop : 0;
+
     const steps = [
-        { name: 'Dashboard Übersicht', action: () => captureSection('.banken-content-area', 'Dashboard') },
-        { name: 'KPI Cards', action: () => captureSection('.kpi-cards-grid, .kpi-metrics-row', 'KPIs') },
-        { name: 'Scatter Plot Matrix', action: () => captureSection('.scatter-plot-card, .segmentation-scatter', 'Scatter Plot') },
-        { name: 'Segmentierung', action: () => captureSection('.segmentation-matrix, .segment-matrix-grid', 'Segmentierung') },
-        { name: 'Kundenliste', action: () => captureSection('.kunden-table-container, .customer-table', 'Kundenliste') },
-        { name: 'Kundendetail öffnen', action: () => openAndCaptureCustomerDetail() },
-        { name: 'Kundendetail Stammdaten', action: () => captureCustomerTab('stammdaten') },
-        { name: 'Kundendetail KI-Analyse', action: () => captureCustomerTab('ki-analyse') },
-        { name: 'CRM Akte öffnen', action: () => openAndCaptureCrmProfile() },
-        { name: 'KI Chatbot', action: () => openAndCaptureChatbot() }
+        { name: 'Dashboard Header & KPIs', action: () => captureViewportAt(0) },
+        { name: 'Scatter Plot & Segmentierung', action: () => captureViewportAt(600) },
+        { name: 'Kundenliste (oben)', action: () => captureViewportAt(1200) },
+        { name: 'Kundenliste (Mitte)', action: () => captureViewportAt(1800) },
+        { name: 'Kundendetail - Übersicht', action: () => captureCustomerDetailView('overview') },
+        { name: 'Kundendetail - Stammdaten', action: () => captureCustomerDetailView('stammdaten') },
+        { name: 'Kundendetail - KI-Analyse', action: () => captureCustomerDetailView('ki-analyse') },
+        { name: 'KI Chatbot', action: () => captureChatbotView() }
     ];
 
     try {
@@ -7596,65 +7599,100 @@ async function printToolOverview() {
             const step = steps[i];
             updateAgentProgress(overlay, i + 1, steps.length, step.name);
 
+            // Overlay kurz verstecken für Screenshot
+            overlay.style.display = 'none';
+            await delay(100);
+
             const screenshot = await step.action();
+
+            // Overlay wieder zeigen
+            overlay.style.display = 'flex';
+
             if (screenshot) {
                 screenshots.push({ name: step.name, data: screenshot });
+                console.log(`✅ Screenshot ${i + 1}: ${step.name}`);
+            } else {
+                console.warn(`⚠️ Kein Screenshot für: ${step.name}`);
             }
 
-            // Kurze Pause zwischen Schritten
-            await delay(500);
+            await delay(300);
         }
 
-        // Modal schließen falls offen
-        closeCustomerDetailModal();
+        // Alles schließen und zurücksetzen
+        closeAllModals();
+        window.scrollTo(0, originalScrollTop);
+        if (bankenContent) bankenContent.scrollTop = originalContentScroll;
 
         updateAgentProgress(overlay, steps.length, steps.length, 'PDF wird generiert...');
         await delay(300);
 
-        // PDF erstellen
-        const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const margin = 10;
+        // PDF erstellen - Landscape A4
+        const pdf = new jsPDF('l', 'mm', 'a4');
+        const pageWidth = pdf.internal.pageSize.getWidth(); // 297mm
+        const pageHeight = pdf.internal.pageSize.getHeight(); // 210mm
 
         // Titelseite
         pdf.setFillColor(30, 41, 59);
         pdf.rect(0, 0, pageWidth, pageHeight, 'F');
         pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(32);
-        pdf.text('Collections Management', pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
-        pdf.setFontSize(16);
+        pdf.setFontSize(36);
+        pdf.text('Collections Management', pageWidth / 2, pageHeight / 2 - 25, { align: 'center' });
+        pdf.setFontSize(18);
         pdf.text('Forderungsmanagement mit KI-Unterstützung', pageWidth / 2, pageHeight / 2 + 5, { align: 'center' });
         pdf.setFontSize(12);
-        pdf.text('Tool-Übersicht · Erstellt am ' + new Date().toLocaleDateString('de-DE'), pageWidth / 2, pageHeight / 2 + 25, { align: 'center' });
+        pdf.setTextColor(200, 200, 200);
+        pdf.text('Tool-Übersicht · Erstellt am ' + new Date().toLocaleDateString('de-DE'), pageWidth / 2, pageHeight / 2 + 30, { align: 'center' });
 
         // Screenshots als Seiten hinzufügen
         for (const screenshot of screenshots) {
             try {
-                // Validate image data
                 if (!screenshot.data || !screenshot.data.startsWith('data:image/')) {
-                    console.warn(`Skipping invalid screenshot: ${screenshot.name}`);
+                    console.warn(`Überspringe ungültigen Screenshot: ${screenshot.name}`);
                     continue;
                 }
 
                 pdf.addPage();
 
-                // Header
-                pdf.setFillColor(248, 250, 252);
-                pdf.rect(0, 0, pageWidth, 15, 'F');
-                pdf.setTextColor(30, 41, 59);
-                pdf.setFontSize(14);
-                pdf.text(screenshot.name, margin, 10);
+                // Header-Bereich
+                pdf.setFillColor(30, 41, 59);
+                pdf.rect(0, 0, pageWidth, 12, 'F');
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(11);
+                pdf.text(screenshot.name, 8, 8);
+                pdf.setFontSize(9);
+                pdf.text('Collections Management', pageWidth - 8, 8, { align: 'right' });
 
-                // Screenshot einfügen - use JPEG format for better compatibility
-                const maxWidth = pageWidth - (margin * 2);
-                const maxHeight = pageHeight - 25 - margin;
+                // Bild laden und Proportionen berechnen
+                const img = new Image();
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    img.src = screenshot.data;
+                });
 
-                // Add image with auto-detection of format
-                pdf.addImage(screenshot.data, 'JPEG', margin, 20, maxWidth, maxHeight, undefined, 'FAST');
+                const imgRatio = img.width / img.height;
+                const availableWidth = pageWidth - 16; // 8mm margin each side
+                const availableHeight = pageHeight - 20; // 12mm header + 8mm bottom
+
+                let finalWidth, finalHeight;
+
+                if (imgRatio > availableWidth / availableHeight) {
+                    // Bild ist breiter - an Breite anpassen
+                    finalWidth = availableWidth;
+                    finalHeight = finalWidth / imgRatio;
+                } else {
+                    // Bild ist höher - an Höhe anpassen
+                    finalHeight = availableHeight;
+                    finalWidth = finalHeight * imgRatio;
+                }
+
+                const x = (pageWidth - finalWidth) / 2;
+                const y = 14; // Nach Header
+
+                pdf.addImage(screenshot.data, 'JPEG', x, y, finalWidth, finalHeight);
+
             } catch (imgError) {
-                console.error(`Fehler beim Hinzufügen von ${screenshot.name}:`, imgError);
-                // Continue with next screenshot instead of failing completely
+                console.error(`Fehler bei ${screenshot.name}:`, imgError);
             }
         }
 
@@ -7662,7 +7700,6 @@ async function printToolOverview() {
         const filename = `Collections_Management_${new Date().toISOString().split('T')[0]}.pdf`;
         pdf.save(filename);
 
-        // Erfolgs-Nachricht
         updateAgentProgress(overlay, steps.length, steps.length, 'PDF erfolgreich erstellt!', true);
         await delay(1500);
 
@@ -7673,6 +7710,167 @@ async function printToolOverview() {
     }
 
     overlay.remove();
+    // Style entfernen
+    const style = document.getElementById('screenshotAgentStyles');
+    if (style) style.remove();
+}
+
+// Viewport an bestimmter Scroll-Position erfassen
+async function captureViewportAt(scrollY) {
+    const bankenModule = document.getElementById('bankenModule');
+    if (!bankenModule) return null;
+
+    // Zur Position scrollen
+    bankenModule.scrollTop = scrollY;
+    window.scrollTo(0, 0);
+    await delay(400);
+
+    try {
+        // Nur den sichtbaren Banken-Bereich erfassen
+        const canvas = await html2canvas(bankenModule, {
+            scale: 1.5,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#f8fafc',
+            width: bankenModule.clientWidth,
+            height: Math.min(bankenModule.clientHeight, window.innerHeight),
+            scrollX: 0,
+            scrollY: -scrollY,
+            windowWidth: bankenModule.clientWidth,
+            windowHeight: window.innerHeight
+        });
+        return canvas.toDataURL('image/jpeg', 0.92);
+    } catch (error) {
+        console.error('Viewport Screenshot Fehler:', error);
+        return null;
+    }
+}
+
+// Kundendetail-Ansicht öffnen und erfassen
+async function captureCustomerDetailView(section) {
+    // Modal öffnen wenn noch nicht offen
+    const existingModal = document.querySelector('.customer-detail-modal.open, .crm-profile-view[style*="flex"]');
+
+    if (!existingModal) {
+        // Ersten Kunden öffnen
+        if (typeof openCustomerDetail === 'function') {
+            openCustomerDetail('K-2024-0001');
+        } else {
+            const firstRow = document.querySelector('.kunden-table tbody tr');
+            if (firstRow) firstRow.click();
+        }
+        await delay(800);
+    }
+
+    // Tab wechseln wenn nötig
+    if (section !== 'overview') {
+        const tabBtn = document.querySelector(`[onclick*="showCrmSection('${section}')"]`);
+        if (tabBtn) {
+            tabBtn.click();
+            await delay(400);
+        } else if (typeof showCrmSection === 'function') {
+            showCrmSection(section);
+            await delay(400);
+        }
+    }
+
+    // Modal finden
+    const modal = document.querySelector('.customer-detail-modal, .crm-profile-view');
+    if (!modal) return null;
+
+    try {
+        const canvas = await html2canvas(modal, {
+            scale: 1.5,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff',
+            width: modal.offsetWidth,
+            height: Math.min(modal.offsetHeight, 900)
+        });
+        return canvas.toDataURL('image/jpeg', 0.92);
+    } catch (error) {
+        console.error('Customer Detail Screenshot Fehler:', error);
+        return null;
+    }
+}
+
+// Chatbot-Ansicht öffnen und erfassen
+async function captureChatbotView() {
+    // Alle Modals schließen
+    closeAllModals();
+    await delay(300);
+
+    // Chatbot öffnen
+    const chatToggle = document.querySelector('#bankenChatToggle');
+    if (chatToggle) {
+        chatToggle.click();
+        await delay(500);
+    }
+
+    const chatWidget = document.querySelector('#bankenChatWidget');
+    if (!chatWidget || chatWidget.style.display === 'none') {
+        return null;
+    }
+
+    // Demo-Konversation einfügen falls leer
+    const chatBody = document.querySelector('#bankenChatBody');
+    if (chatBody) {
+        const hasMessages = chatBody.querySelector('.banken-chat-message');
+        if (!hasMessages) {
+            const welcome = chatBody.querySelector('.banken-chat-welcome');
+            if (welcome) welcome.style.display = 'none';
+
+            chatBody.innerHTML += `
+                <div class="banken-chat-message user">
+                    <div class="message-content">Zeige mir die Top 3 Kunden mit höchster Forderung</div>
+                </div>
+                <div class="banken-chat-message assistant">
+                    <div class="message-content">
+                        <p><strong>Top 3 Kunden nach Restforderung:</strong></p>
+                        <p>1. <strong>K-2024-0003</strong> - €45.230 (92 Tage überfällig)<br>
+                        2. <strong>K-2024-0007</strong> - €38.750 (67 Tage überfällig)<br>
+                        3. <strong>K-2024-0015</strong> - €31.200 (45 Tage überfällig)</p>
+                        <p>Möchten Sie Details zu einem Kunden sehen?</p>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    await delay(300);
+
+    try {
+        const canvas = await html2canvas(chatWidget, {
+            scale: 1.5,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+        });
+
+        // Chatbot schließen
+        const closeBtn = document.querySelector('.banken-chat-close');
+        if (closeBtn) closeBtn.click();
+
+        return canvas.toDataURL('image/jpeg', 0.92);
+    } catch (error) {
+        console.error('Chatbot Screenshot Fehler:', error);
+        return null;
+    }
+}
+
+// Alle Modals schließen
+function closeAllModals() {
+    // Customer Detail Modal
+    const customerClose = document.querySelector('.customer-detail-close, .crm-close-btn');
+    if (customerClose) customerClose.click();
+
+    // CRM Profile
+    if (typeof closeCustomerDetail === 'function') {
+        try { closeCustomerDetail(); } catch (e) {}
+    }
+
+    // Chatbot
+    const chatClose = document.querySelector('.banken-chat-close');
+    if (chatClose) chatClose.click();
 }
 
 // Overlay für Screenshot-Agent erstellen
@@ -7813,218 +8011,6 @@ function updateAgentProgress(overlay, current, total, stepName, success = false,
         modal.classList.add('screenshot-agent-error');
         subtitle.textContent = 'Ein Fehler ist aufgetreten';
     }
-}
-
-// Sektion erfassen
-async function captureSection(selector, name) {
-    const selectors = selector.split(',').map(s => s.trim());
-    let element = null;
-
-    for (const sel of selectors) {
-        element = document.querySelector(sel);
-        if (element) break;
-    }
-
-    if (!element) {
-        console.log(`Sektion "${name}" nicht gefunden: ${selector}`);
-        return null;
-    }
-
-    // Scroll zur Sektion
-    element.scrollIntoView({ behavior: 'instant', block: 'start' });
-    await delay(300);
-
-    try {
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#ffffff',
-            windowWidth: element.scrollWidth,
-            windowHeight: element.scrollHeight
-        });
-        return canvas.toDataURL('image/jpeg', 0.95);
-    } catch (error) {
-        console.error(`Screenshot Fehler für ${name}:`, error);
-        return null;
-    }
-}
-
-// Kundendetail öffnen und erfassen
-async function openAndCaptureCustomerDetail() {
-    // Ersten Kunden in der Tabelle finden und klicken
-    const firstCustomer = document.querySelector('.kunden-table tbody tr, .customer-table tbody tr');
-    if (firstCustomer) {
-        firstCustomer.click();
-        await delay(800); // Warten bis Modal geöffnet
-    } else {
-        // Fallback: direkt openCustomerDetail aufrufen
-        if (typeof openCustomerDetail === 'function') {
-            openCustomerDetail('K-2024-0001');
-            await delay(800);
-        }
-    }
-
-    // Modal erfassen
-    const modal = document.querySelector('.customer-detail-modal, .crm-profile-view');
-    if (modal) {
-        try {
-            const canvas = await html2canvas(modal, {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff'
-            });
-            return canvas.toDataURL('image/jpeg', 0.95);
-        } catch (error) {
-            console.error('Kundendetail Screenshot Fehler:', error);
-        }
-    }
-    return null;
-}
-
-// Kundendetail Tab erfassen
-async function captureCustomerTab(tabName) {
-    // Tab aktivieren
-    const tabButton = document.querySelector(`[onclick*="showCrmSection('${tabName}')"], .crm-nav-item[data-section="${tabName}"]`);
-    if (tabButton) {
-        tabButton.click();
-        await delay(500);
-    } else if (typeof showCrmSection === 'function') {
-        showCrmSection(tabName);
-        await delay(500);
-    }
-
-    // Tab-Inhalt erfassen
-    const tabContent = document.querySelector(`.crm-section.active, .crm-section[data-section="${tabName}"], .customer-detail-modal`);
-    if (tabContent) {
-        try {
-            const canvas = await html2canvas(tabContent, {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff'
-            });
-            return canvas.toDataURL('image/jpeg', 0.95);
-        } catch (error) {
-            console.error(`Tab ${tabName} Screenshot Fehler:`, error);
-        }
-    }
-    return null;
-}
-
-// Modal schließen
-function closeCustomerDetailModal() {
-    const closeBtn = document.querySelector('.customer-detail-close, .crm-close-btn, .modal-close');
-    if (closeBtn) {
-        closeBtn.click();
-    }
-    // Auch über Funktion versuchen
-    if (typeof closeCustomerDetail === 'function') {
-        closeCustomerDetail();
-    }
-}
-
-// CRM Profil öffnen und erfassen
-async function openAndCaptureCrmProfile() {
-    // Erst Kundendetail schließen falls offen
-    closeCustomerDetailModal();
-    await delay(300);
-
-    // CRM Akte Button finden und klicken (falls vorhanden)
-    const crmButton = document.querySelector('[onclick*="openCrmProfile"], .btn-crm-akte, .crm-profile-btn');
-    if (crmButton) {
-        crmButton.click();
-        await delay(800);
-    } else if (typeof openCrmProfile === 'function') {
-        openCrmProfile('K-2024-0001');
-        await delay(800);
-    }
-
-    // CRM Ansicht erfassen
-    const crmView = document.querySelector('.crm-profile-view, .crm-profile-modal');
-    if (crmView && crmView.style.display !== 'none') {
-        try {
-            const canvas = await html2canvas(crmView, {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff'
-            });
-            return canvas.toDataURL('image/jpeg', 0.95);
-        } catch (error) {
-            console.error('CRM Profil Screenshot Fehler:', error);
-        }
-    }
-    return null;
-}
-
-// KI Chatbot öffnen und erfassen
-async function openAndCaptureChatbot() {
-    // Alle Modals schließen
-    closeCustomerDetailModal();
-    const crmClose = document.querySelector('.crm-close-btn');
-    if (crmClose) crmClose.click();
-    await delay(300);
-
-    // Chatbot öffnen
-    const chatToggle = document.querySelector('#bankenChatToggle, .banken-chat-toggle');
-    if (chatToggle) {
-        chatToggle.click();
-        await delay(500);
-    }
-
-    // Beispiel-Frage stellen für Screenshot
-    const chatWidget = document.querySelector('#bankenChatWidget, .banken-chat-widget');
-    if (chatWidget) {
-        // Eine Beispiel-Nachricht für den Screenshot hinzufügen
-        const chatBody = document.querySelector('#bankenChatBody, .banken-chat-body');
-        if (chatBody) {
-            // Prüfen ob schon Nachrichten da sind, sonst Demo-Nachricht einfügen
-            const hasMessages = chatBody.querySelector('.banken-chat-message');
-            if (!hasMessages) {
-                const demoMessages = `
-                    <div class="banken-chat-message user">
-                        <div class="message-content">Zeige mir die Kunden mit höchster Forderung</div>
-                    </div>
-                    <div class="banken-chat-message assistant">
-                        <div class="message-content">
-                            <p>Hier sind die Top 3 Kunden mit der höchsten Restforderung:</p>
-                            <ol>
-                                <li><strong>K-2024-0003</strong> - €45.230 (92 Tage überfällig)</li>
-                                <li><strong>K-2024-0007</strong> - €38.750 (67 Tage überfällig)</li>
-                                <li><strong>K-2024-0015</strong> - €31.200 (45 Tage überfällig)</li>
-                            </ol>
-                            <p>Soll ich Details zu einem dieser Kunden anzeigen?</p>
-                        </div>
-                    </div>
-                `;
-                // Welcome ausblenden und Demo einfügen
-                const welcome = chatBody.querySelector('.banken-chat-welcome');
-                if (welcome) welcome.style.display = 'none';
-                chatBody.insertAdjacentHTML('beforeend', demoMessages);
-            }
-        }
-        await delay(300);
-
-        try {
-            const canvas = await html2canvas(chatWidget, {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff'
-            });
-
-            // Chatbot wieder schließen
-            const closeChat = document.querySelector('.banken-chat-close');
-            if (closeChat) closeChat.click();
-
-            return canvas.toDataURL('image/jpeg', 0.95);
-        } catch (error) {
-            console.error('Chatbot Screenshot Fehler:', error);
-        }
-    }
-    return null;
 }
 
 // Hilfs-Funktion für Verzögerung
