@@ -16,7 +16,7 @@
 import { DEMO_CUSTOMER_DATA, DEMO_PAYMENTS } from './_constants.js';
 import { lastChatQueryResult } from './_state.js';
 import { initBankenChat, toggleBankenChat, askBankenQuestion } from './_init.js';
-import { sendBankenMessage, showFilteredCustomers, exportChatToExcel, exportChatToPdf } from './_actions.js';
+import { sendBankenMessage, showFilteredCustomers, clearChatFilter, exportChatToExcel, exportChatToPdf } from './_actions.js';
 
 // Re-export all public functions and data for backwards compatibility
 export {
@@ -30,6 +30,7 @@ export {
     askBankenQuestion,
     sendBankenMessage,
     showFilteredCustomers,
+    clearChatFilter,
     exportChatToExcel,
     exportChatToPdf
 };
@@ -44,6 +45,7 @@ Object.assign(window, {
     askBankenQuestion,
     sendBankenMessage,
     showFilteredCustomers,
+    clearChatFilter,
     exportChatToExcel,
     exportChatToPdf,
     get lastChatQueryResult() { return lastChatQueryResult; }

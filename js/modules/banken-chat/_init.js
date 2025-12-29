@@ -88,8 +88,9 @@ export const initBankenChat = () => {
     });
 
     chatBody.addEventListener('click', (e) => {
-        if (e.target.classList.contains('example-btn')) {
-            chatInput.value = e.target.dataset.question;
+        const exampleBtn = e.target.closest('.example-btn');
+        if (exampleBtn && exampleBtn.dataset.question) {
+            chatInput.value = exampleBtn.dataset.question;
             sendBankenMessage();
         }
     });
