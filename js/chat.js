@@ -1038,21 +1038,41 @@ function hideTyping() {
 function askSampleQuestion(question) {
     console.log('📝 Sample Question clicked:', question);
 
-    // Verstecke Welcome Screen
-    const welcomeDiv = document.querySelector('.chat-welcome');
-    if (welcomeDiv) {
-        welcomeDiv.style.display = 'none';
-    }
+    // Check if we're on landing page or dashboard
+    const landingChatInput = document.getElementById('landingChatInput');
+    const dashboardChatInput = document.getElementById('chatInput');
 
-    // Setze die Frage in den Input
-    const chatInput = document.getElementById('chatInput');
-    if (chatInput) {
-        chatInput.value = question;
-    }
+    if (landingChatInput) {
+        // Landing Page Chat
+        console.log('📝 Using Landing Chat');
+        landingChatInput.value = question;
 
-    // Sende die Nachricht
-    if (typeof sendMessage === 'function') {
-        sendMessage();
+        // Trigger the landing chat send
+        if (typeof sendLandingChatMessage === 'function') {
+            sendLandingChatMessage();
+        } else {
+            // Fallback: click the send button
+            const sendBtn = document.getElementById('landingChatSend');
+            if (sendBtn) sendBtn.click();
+        }
+    } else if (dashboardChatInput) {
+        // Dashboard Chat
+        console.log('📝 Using Dashboard Chat');
+
+        // Verstecke Welcome Screen
+        const welcomeDiv = document.querySelector('.chat-welcome');
+        if (welcomeDiv) {
+            welcomeDiv.style.display = 'none';
+        }
+
+        dashboardChatInput.value = question;
+
+        // Sende die Nachricht
+        if (typeof sendMessage === 'function') {
+            sendMessage();
+        }
+    } else {
+        console.error('❌ Kein Chat-Input gefunden');
     }
 }
 
