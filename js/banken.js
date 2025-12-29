@@ -7559,127 +7559,478 @@ window.refreshAiSummary = refreshAiSummary;
 window.updateAiSummary = updateAiSummary;
 
 // ========================================
-// PDF PRINT OVERVIEW
+// PDF SCREENSHOT AGENT
 // ========================================
 
-function printToolOverview() {
-    // Show loading indicator
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.id = 'printLoadingOverlay';
-    loadingOverlay.innerHTML = `
-        <div style="background: white; padding: 40px 60px; border-radius: 16px; text-align: center;">
-            <div style="width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-            <h3 style="margin: 0 0 8px 0; color: #1e293b;">PDF wird erstellt...</h3>
-            <p style="margin: 0; color: #64748b;">Bitte warten Sie.</p>
-        </div>
-    `;
-    loadingOverlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 99999;';
+// Screenshot Agent - navigiert durch das Dashboard und erstellt PDF mit Screenshots
+async function printToolOverview() {
+    const { jsPDF } = window.jspdf;
 
-    const style = document.createElement('style');
-    style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
-    document.head.appendChild(style);
-    document.body.appendChild(loadingOverlay);
+    if (!jsPDF) {
+        alert('PDF-Bibliothek nicht geladen. Bitte Seite neu laden.');
+        return;
+    }
 
-    setTimeout(() => {
-        const printContent = generatePrintContent();
-        const printWindow = window.open('', '_blank', 'width=1200,height=800');
+    // Screenshots sammeln
+    const screenshots = [];
 
-        if (!printWindow) {
-            loadingOverlay.remove();
-            style.remove();
-            alert('Popup wurde blockiert. Bitte erlauben Sie Popups für diese Seite.');
-            return;
+    // Fortschritts-Overlay erstellen
+    const overlay = createScreenshotAgentOverlay();
+    document.body.appendChild(overlay);
+
+    const steps = [
+        { name: 'Dashboard Übersicht', action: () => captureSection('.banken-content-area', 'Dashboard') },
+        { name: 'KPI Cards', action: () => captureSection('.kpi-cards-grid, .kpi-metrics-row', 'KPIs') },
+        { name: 'Scatter Plot Matrix', action: () => captureSection('.scatter-plot-card, .segmentation-scatter', 'Scatter Plot') },
+        { name: 'Segmentierung', action: () => captureSection('.segmentation-matrix, .segment-matrix-grid', 'Segmentierung') },
+        { name: 'Kundenliste', action: () => captureSection('.kunden-table-container, .customer-table', 'Kundenliste') },
+        { name: 'Kundendetail öffnen', action: () => openAndCaptureCustomerDetail() },
+        { name: 'Kundendetail Stammdaten', action: () => captureCustomerTab('stammdaten') },
+        { name: 'Kundendetail KI-Analyse', action: () => captureCustomerTab('ki-analyse') },
+        { name: 'CRM Akte öffnen', action: () => openAndCaptureCrmProfile() },
+        { name: 'KI Chatbot', action: () => openAndCaptureChatbot() }
+    ];
+
+    try {
+        for (let i = 0; i < steps.length; i++) {
+            const step = steps[i];
+            updateAgentProgress(overlay, i + 1, steps.length, step.name);
+
+            const screenshot = await step.action();
+            if (screenshot) {
+                screenshots.push({ name: step.name, data: screenshot });
+            }
+
+            // Kurze Pause zwischen Schritten
+            await delay(500);
         }
 
-        printWindow.document.write(printContent);
-        printWindow.document.close();
+        // Modal schließen falls offen
+        closeCustomerDetailModal();
 
-        printWindow.onload = () => {
-            setTimeout(() => {
-                loadingOverlay.remove();
-                style.remove();
-                printWindow.print();
-            }, 500);
-        };
-    }, 100);
+        updateAgentProgress(overlay, steps.length, steps.length, 'PDF wird generiert...');
+        await delay(300);
+
+        // PDF erstellen
+        const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 10;
+
+        // Titelseite
+        pdf.setFillColor(30, 41, 59);
+        pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(32);
+        pdf.text('Collections Management', pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
+        pdf.setFontSize(16);
+        pdf.text('Forderungsmanagement mit KI-Unterstützung', pageWidth / 2, pageHeight / 2 + 5, { align: 'center' });
+        pdf.setFontSize(12);
+        pdf.text('Tool-Übersicht · Erstellt am ' + new Date().toLocaleDateString('de-DE'), pageWidth / 2, pageHeight / 2 + 25, { align: 'center' });
+
+        // Screenshots als Seiten hinzufügen
+        for (const screenshot of screenshots) {
+            pdf.addPage();
+
+            // Header
+            pdf.setFillColor(248, 250, 252);
+            pdf.rect(0, 0, pageWidth, 15, 'F');
+            pdf.setTextColor(30, 41, 59);
+            pdf.setFontSize(14);
+            pdf.text(screenshot.name, margin, 10);
+
+            // Screenshot einfügen
+            const imgProps = pdf.getImageProperties(screenshot.data);
+            const imgRatio = imgProps.width / imgProps.height;
+            const maxWidth = pageWidth - (margin * 2);
+            const maxHeight = pageHeight - 25 - margin;
+
+            let imgWidth = maxWidth;
+            let imgHeight = imgWidth / imgRatio;
+
+            if (imgHeight > maxHeight) {
+                imgHeight = maxHeight;
+                imgWidth = imgHeight * imgRatio;
+            }
+
+            const x = (pageWidth - imgWidth) / 2;
+            const y = 20;
+
+            pdf.addImage(screenshot.data, 'PNG', x, y, imgWidth, imgHeight);
+        }
+
+        // PDF speichern
+        const filename = `Collections_Management_${new Date().toISOString().split('T')[0]}.pdf`;
+        pdf.save(filename);
+
+        // Erfolgs-Nachricht
+        updateAgentProgress(overlay, steps.length, steps.length, 'PDF erfolgreich erstellt!', true);
+        await delay(1500);
+
+    } catch (error) {
+        console.error('Screenshot Agent Fehler:', error);
+        updateAgentProgress(overlay, 0, steps.length, 'Fehler: ' + error.message, false, true);
+        await delay(2000);
+    }
+
+    overlay.remove();
 }
 
-function generatePrintContent() {
-    const today = new Date().toLocaleDateString('de-DE');
-
-    return `
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Collections Management - Tool-Übersicht</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11pt; line-height: 1.5; color: #1e293b; }
-        .page { page-break-after: always; padding: 40px; min-height: 100vh; }
-        .page:last-child { page-break-after: auto; }
-        .page-header { display: flex; justify-content: space-between; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0; }
-        .page-title { font-size: 24pt; font-weight: 700; }
-        .page-subtitle { font-size: 14pt; color: #64748b; }
-        .title-page { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .title-page h1 { font-size: 36pt; margin-bottom: 10px; }
-        .title-page h2 { font-size: 18pt; color: #64748b; margin-bottom: 60px; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-        .kpi-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; }
-        .kpi-label { font-size: 10pt; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
-        .kpi-value { font-size: 24pt; font-weight: 700; }
-        .matrix-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
-        .matrix-quadrant { padding: 20px; border-radius: 12px; border: 1px solid; }
-        .quadrant-title { font-size: 14pt; font-weight: 600; margin-bottom: 8px; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th { background: #f1f5f9; padding: 12px; text-align: left; font-size: 10pt; }
-        td { padding: 12px; border-top: 1px solid #e2e8f0; }
-        .badge { padding: 4px 12px; border-radius: 20px; font-size: 9pt; }
-        .badge.danger { background: #fee2e2; color: #dc2626; }
-        .badge.warning { background: #fef3c7; color: #d97706; }
-        @media print { body { -webkit-print-color-adjust: exact; } }
-    </style>
-</head>
-<body>
-    <div class="page title-page">
-        <h1>Collections Management</h1>
-        <h2>Forderungsmanagement mit KI-Unterstützung</h2>
-        <p>Tool-Übersicht · Erstellt am ${today}</p>
-    </div>
-    <div class="page">
-        <div class="page-header"><div><div class="page-title">Dashboard Übersicht</div><div class="page-subtitle">KPIs auf einen Blick</div></div></div>
-        <div class="kpi-grid">
-            <div class="kpi-card"><div class="kpi-label">Gesamtforderungen</div><div class="kpi-value">€ 847 Mio</div></div>
-            <div class="kpi-card"><div class="kpi-label">Überfällig >90 Tage</div><div class="kpi-value">€ 12,4 Mio</div></div>
-            <div class="kpi-card"><div class="kpi-label">Aktive Fälle</div><div class="kpi-value">2.344</div></div>
-            <div class="kpi-card"><div class="kpi-label">Realisierungsquote</div><div class="kpi-value">67,8%</div></div>
+// Overlay für Screenshot-Agent erstellen
+function createScreenshotAgentOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'screenshotAgentOverlay';
+    overlay.innerHTML = `
+        <div class="screenshot-agent-modal">
+            <div class="screenshot-agent-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            <h3 class="screenshot-agent-title">Screenshot Agent</h3>
+            <p class="screenshot-agent-subtitle">Navigiert durch das Dashboard...</p>
+            <div class="screenshot-agent-progress">
+                <div class="screenshot-agent-progress-bar" style="width: 0%"></div>
+            </div>
+            <div class="screenshot-agent-step">
+                <span class="step-current">0</span> / <span class="step-total">0</span>
+                <span class="step-name">Initialisiere...</span>
+            </div>
         </div>
-    </div>
-    <div class="page">
-        <div class="page-header"><div><div class="page-title">KI-Segmentierung</div></div></div>
-        <div class="matrix-container">
-            <div class="matrix-quadrant" style="background: #fee2e2; border-color: #fecaca;"><div class="quadrant-title">🔴 Eskalation</div><p>312 Fälle · € 8,7 Mio</p></div>
-            <div class="matrix-quadrant" style="background: #fef3c7; border-color: #fde68a;"><div class="quadrant-title">🟡 Priorität</div><p>845 Fälle · € 21,4 Mio</p></div>
-            <div class="matrix-quadrant" style="background: #dbeafe; border-color: #93c5fd;"><div class="quadrant-title">🔵 Restrukturierung</div><p>523 Fälle · € 45,2 Mio</p></div>
-            <div class="matrix-quadrant" style="background: #f4f4f5; border-color: #d4d4d8;"><div class="quadrant-title">⚫ Abwicklung</div><p>664 Fälle · € 15,8 Mio</p></div>
-        </div>
-    </div>
-    <div class="page">
-        <div class="page-header"><div><div class="page-title">Kundendetail-Ansicht</div></div></div>
-        <p>360° Kundenübersicht mit KI-Zusammenfassung, Stammdaten, Finanzen, Kommunikation und KI-Analyse.</p>
-        <h3 style="margin: 20px 0 10px;">Schnellaktionen</h3>
-        <table>
-            <tr><th>Aktion</th><th>Beschreibung</th></tr>
-            <tr><td>📧 Mahnung versenden</td><td>Automatische Mahnung in 3 Stufen</td></tr>
-            <tr><td>💳 Lastschriftsperre</td><td>SEPA-Mandate sperren</td></tr>
-            <tr><td>📅 Ratenzahlung</td><td>Individuelle Ratenvereinbarung</td></tr>
-            <tr><td>📞 Anruf planen</td><td>Telefonat terminieren</td></tr>
-            <tr><td>⚠️ Inkasso einleiten</td><td>Übergabe an Inkasso-Partner</td></tr>
-        </table>
-    </div>
-</body>
-</html>
     `;
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+    `;
+
+    const style = document.createElement('style');
+    style.id = 'screenshotAgentStyles';
+    style.textContent = `
+        .screenshot-agent-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 60px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .screenshot-agent-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .screenshot-agent-icon svg {
+            color: white;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .screenshot-agent-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 8px 0;
+        }
+        .screenshot-agent-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0 0 24px 0;
+        }
+        .screenshot-agent-progress {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .screenshot-agent-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .screenshot-agent-step {
+            font-size: 13px;
+            color: #64748b;
+        }
+        .screenshot-agent-step .step-current {
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        .screenshot-agent-step .step-name {
+            display: block;
+            margin-top: 4px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        .screenshot-agent-success .screenshot-agent-icon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .screenshot-agent-error .screenshot-agent-icon {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+    `;
+    document.head.appendChild(style);
+
+    return overlay;
+}
+
+// Fortschritt aktualisieren
+function updateAgentProgress(overlay, current, total, stepName, success = false, error = false) {
+    const progressBar = overlay.querySelector('.screenshot-agent-progress-bar');
+    const stepCurrent = overlay.querySelector('.step-current');
+    const stepTotal = overlay.querySelector('.step-total');
+    const stepNameEl = overlay.querySelector('.step-name');
+    const subtitle = overlay.querySelector('.screenshot-agent-subtitle');
+    const modal = overlay.querySelector('.screenshot-agent-modal');
+
+    const percent = (current / total) * 100;
+    progressBar.style.width = percent + '%';
+    stepCurrent.textContent = current;
+    stepTotal.textContent = total;
+    stepNameEl.textContent = stepName;
+
+    if (success) {
+        modal.classList.add('screenshot-agent-success');
+        subtitle.textContent = 'Fertig!';
+    } else if (error) {
+        modal.classList.add('screenshot-agent-error');
+        subtitle.textContent = 'Ein Fehler ist aufgetreten';
+    }
+}
+
+// Sektion erfassen
+async function captureSection(selector, name) {
+    const selectors = selector.split(',').map(s => s.trim());
+    let element = null;
+
+    for (const sel of selectors) {
+        element = document.querySelector(sel);
+        if (element) break;
+    }
+
+    if (!element) {
+        console.log(`Sektion "${name}" nicht gefunden: ${selector}`);
+        return null;
+    }
+
+    // Scroll zur Sektion
+    element.scrollIntoView({ behavior: 'instant', block: 'start' });
+    await delay(300);
+
+    try {
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff',
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight
+        });
+        return canvas.toDataURL('image/png');
+    } catch (error) {
+        console.error(`Screenshot Fehler für ${name}:`, error);
+        return null;
+    }
+}
+
+// Kundendetail öffnen und erfassen
+async function openAndCaptureCustomerDetail() {
+    // Ersten Kunden in der Tabelle finden und klicken
+    const firstCustomer = document.querySelector('.kunden-table tbody tr, .customer-table tbody tr');
+    if (firstCustomer) {
+        firstCustomer.click();
+        await delay(800); // Warten bis Modal geöffnet
+    } else {
+        // Fallback: direkt openCustomerDetail aufrufen
+        if (typeof openCustomerDetail === 'function') {
+            openCustomerDetail('K-2024-0001');
+            await delay(800);
+        }
+    }
+
+    // Modal erfassen
+    const modal = document.querySelector('.customer-detail-modal, .crm-profile-view');
+    if (modal) {
+        try {
+            const canvas = await html2canvas(modal, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+            return canvas.toDataURL('image/png');
+        } catch (error) {
+            console.error('Kundendetail Screenshot Fehler:', error);
+        }
+    }
+    return null;
+}
+
+// Kundendetail Tab erfassen
+async function captureCustomerTab(tabName) {
+    // Tab aktivieren
+    const tabButton = document.querySelector(`[onclick*="showCrmSection('${tabName}')"], .crm-nav-item[data-section="${tabName}"]`);
+    if (tabButton) {
+        tabButton.click();
+        await delay(500);
+    } else if (typeof showCrmSection === 'function') {
+        showCrmSection(tabName);
+        await delay(500);
+    }
+
+    // Tab-Inhalt erfassen
+    const tabContent = document.querySelector(`.crm-section.active, .crm-section[data-section="${tabName}"], .customer-detail-modal`);
+    if (tabContent) {
+        try {
+            const canvas = await html2canvas(tabContent, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+            return canvas.toDataURL('image/png');
+        } catch (error) {
+            console.error(`Tab ${tabName} Screenshot Fehler:`, error);
+        }
+    }
+    return null;
+}
+
+// Modal schließen
+function closeCustomerDetailModal() {
+    const closeBtn = document.querySelector('.customer-detail-close, .crm-close-btn, .modal-close');
+    if (closeBtn) {
+        closeBtn.click();
+    }
+    // Auch über Funktion versuchen
+    if (typeof closeCustomerDetail === 'function') {
+        closeCustomerDetail();
+    }
+}
+
+// CRM Profil öffnen und erfassen
+async function openAndCaptureCrmProfile() {
+    // Erst Kundendetail schließen falls offen
+    closeCustomerDetailModal();
+    await delay(300);
+
+    // CRM Akte Button finden und klicken (falls vorhanden)
+    const crmButton = document.querySelector('[onclick*="openCrmProfile"], .btn-crm-akte, .crm-profile-btn');
+    if (crmButton) {
+        crmButton.click();
+        await delay(800);
+    } else if (typeof openCrmProfile === 'function') {
+        openCrmProfile('K-2024-0001');
+        await delay(800);
+    }
+
+    // CRM Ansicht erfassen
+    const crmView = document.querySelector('.crm-profile-view, .crm-profile-modal');
+    if (crmView && crmView.style.display !== 'none') {
+        try {
+            const canvas = await html2canvas(crmView, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+            return canvas.toDataURL('image/png');
+        } catch (error) {
+            console.error('CRM Profil Screenshot Fehler:', error);
+        }
+    }
+    return null;
+}
+
+// KI Chatbot öffnen und erfassen
+async function openAndCaptureChatbot() {
+    // Alle Modals schließen
+    closeCustomerDetailModal();
+    const crmClose = document.querySelector('.crm-close-btn');
+    if (crmClose) crmClose.click();
+    await delay(300);
+
+    // Chatbot öffnen
+    const chatToggle = document.querySelector('#bankenChatToggle, .banken-chat-toggle');
+    if (chatToggle) {
+        chatToggle.click();
+        await delay(500);
+    }
+
+    // Beispiel-Frage stellen für Screenshot
+    const chatWidget = document.querySelector('#bankenChatWidget, .banken-chat-widget');
+    if (chatWidget) {
+        // Eine Beispiel-Nachricht für den Screenshot hinzufügen
+        const chatBody = document.querySelector('#bankenChatBody, .banken-chat-body');
+        if (chatBody) {
+            // Prüfen ob schon Nachrichten da sind, sonst Demo-Nachricht einfügen
+            const hasMessages = chatBody.querySelector('.banken-chat-message');
+            if (!hasMessages) {
+                const demoMessages = `
+                    <div class="banken-chat-message user">
+                        <div class="message-content">Zeige mir die Kunden mit höchster Forderung</div>
+                    </div>
+                    <div class="banken-chat-message assistant">
+                        <div class="message-content">
+                            <p>Hier sind die Top 3 Kunden mit der höchsten Restforderung:</p>
+                            <ol>
+                                <li><strong>K-2024-0003</strong> - €45.230 (92 Tage überfällig)</li>
+                                <li><strong>K-2024-0007</strong> - €38.750 (67 Tage überfällig)</li>
+                                <li><strong>K-2024-0015</strong> - €31.200 (45 Tage überfällig)</li>
+                            </ol>
+                            <p>Soll ich Details zu einem dieser Kunden anzeigen?</p>
+                        </div>
+                    </div>
+                `;
+                // Welcome ausblenden und Demo einfügen
+                const welcome = chatBody.querySelector('.banken-chat-welcome');
+                if (welcome) welcome.style.display = 'none';
+                chatBody.insertAdjacentHTML('beforeend', demoMessages);
+            }
+        }
+        await delay(300);
+
+        try {
+            const canvas = await html2canvas(chatWidget, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+
+            // Chatbot wieder schließen
+            const closeChat = document.querySelector('.banken-chat-close');
+            if (closeChat) closeChat.click();
+
+            return canvas.toDataURL('image/png');
+        } catch (error) {
+            console.error('Chatbot Screenshot Fehler:', error);
+        }
+    }
+    return null;
+}
+
+// Hilfs-Funktion für Verzögerung
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 window.printToolOverview = printToolOverview;
