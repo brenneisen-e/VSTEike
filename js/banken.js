@@ -7505,27 +7505,28 @@ function updateAiSummary(customer) {
         summaryText = `<strong>${name}:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} (${dpd} Tage überfällig). Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
     }
 
-    // Generate recommendation based on segment and data
+    // Generate recommendation based on segment and data (no emojis - professional style)
+    let recommendationClass = 'info';
     if (segment === 'eskalation' || status === 'Inkasso') {
         recommendationText = 'Empfehlung: Inkasso-Verfahren fortführen. Bei Kontaktaufnahme letztmalige Ratenzahlung anbieten. Forderungsverkauf als Alternative prüfen.';
-        recommendationIcon = '🚨';
+        recommendationClass = 'danger';
     } else if (segment === 'abwicklung' || willingness < 30) {
         recommendationText = 'Empfehlung: Abschreibung oder Forderungsverkauf prüfen. Geringe Erfolgsaussichten bei Standardmaßnahmen.';
-        recommendationIcon = '⚫';
+        recommendationClass = 'muted';
     } else if (segment === 'prioritaet' || dpd > 30) {
         recommendationText = 'Empfehlung: Sofortige telefonische Kontaktaufnahme. Letzte Mahnung mit Ratenzahlungsangebot versenden.';
-        recommendationIcon = '⚠️';
+        recommendationClass = 'warning';
     } else if (segment === 'restrukturierung' || ability > 50) {
         recommendationText = 'Empfehlung: Aktive Ratenzahlungsvereinbarung anbieten. Kunde zeigt Potenzial zur Kooperation.';
-        recommendationIcon = '🔵';
+        recommendationClass = 'info';
     } else {
         recommendationText = 'Empfehlung: Freundliche Zahlungserinnerung versenden und Kontakt suchen.';
-        recommendationIcon = '💡';
+        recommendationClass = 'success';
     }
 
     summaryContent.innerHTML = `<p class="ai-summary-text">${summaryText}</p>`;
     recommendation.innerHTML = `
-        <span class="recommendation-icon">${recommendationIcon}</span>
+        <span class="recommendation-indicator ${recommendationClass}"></span>
         <span class="recommendation-text">${recommendationText}</span>
     `;
 }
