@@ -1164,24 +1164,26 @@ async function loadBankenComponents(container) {
     console.log(`Loaded ${componentPlaceholders.length} components`);
 }
 
-// Show loading progress bar
+// Show loading progress bar with modern animation
 function showLoadingProgress(container) {
     container.innerHTML = `
         <div class="banken-loading-screen">
-            <div class="loading-content">
-                <div class="loading-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="3" y1="9" x2="21" y2="9"></line>
-                        <line x1="9" y1="21" x2="9" y2="9"></line>
-                    </svg>
+            <div class="banken-loading-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+            </div>
+            <h2 class="banken-loading-title">Collections Management</h2>
+            <p class="banken-loading-subtitle">Forderungsmanagement wird vorbereitet</p>
+            <div class="banken-loading-progress-wrapper">
+                <div class="banken-loading-progress-track">
+                    <div class="banken-loading-progress-bar" id="bankenProgressBar"></div>
                 </div>
-                <h2 class="loading-title">Collections Management</h2>
-                <div class="loading-progress-container">
-                    <div class="loading-progress-bar">
-                        <div class="loading-progress-fill" id="loadingProgressFill"></div>
-                    </div>
-                    <span class="loading-progress-text" id="loadingProgressText">Initialisiere...</span>
+                <div class="banken-loading-progress-details">
+                    <span class="banken-loading-status" id="bankenLoadingStatus">Initialisiere...</span>
+                    <span class="banken-loading-percent" id="bankenLoadingPercent">0%</span>
                 </div>
             </div>
         </div>
@@ -1190,11 +1192,13 @@ function showLoadingProgress(container) {
 
 // Update loading progress for Banken module
 function updateBankenLoadingProgress(percent, text) {
-    const fill = document.getElementById('loadingProgressFill');
-    const textEl = document.getElementById('loadingProgressText');
+    const bar = document.getElementById('bankenProgressBar');
+    const statusEl = document.getElementById('bankenLoadingStatus');
+    const percentEl = document.getElementById('bankenLoadingPercent');
 
-    if (fill) fill.style.width = `${percent}%`;
-    if (textEl) textEl.textContent = text;
+    if (bar) bar.style.width = `${percent}%`;
+    if (statusEl) statusEl.textContent = text;
+    if (percentEl) percentEl.textContent = `${Math.round(percent)}%`;
 }
 
 // Load Banken module from partial (modular version) - loads in background
