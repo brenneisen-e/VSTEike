@@ -1208,18 +1208,38 @@ async function loadBankenModule() {
     const container = document.getElementById('bankenModule');
     if (!container) return;
 
+    // Show loading screen first
+    showLoadingProgress(container);
+
     try {
+        // Update progress: Starting
+        updateLoadingProgress(10, 'Lade Modul-Template...');
+
         // Load main shell template
         const response = await fetch('partials/banken-module.html');
         if (response.ok) {
             const html = await response.text();
 
+            updateLoadingProgress(30, 'Template geladen...');
+
             // Create temporary container to load components
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = html;
 
+            updateLoadingProgress(50, 'Lade Komponenten...');
+
             // Load all components in background
             await loadBankenComponents(tempContainer);
+
+            updateLoadingProgress(80, 'Initialisiere Dashboard...');
+
+            // Small delay to show progress animation
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            updateLoadingProgress(100, 'Fertig!');
+
+            // Another small delay before showing content
+            await new Promise(resolve => setTimeout(resolve, 200));
 
             // Set the content once everything is loaded
             container.innerHTML = tempContainer.innerHTML;
