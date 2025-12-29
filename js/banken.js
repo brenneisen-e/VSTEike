@@ -7715,42 +7715,44 @@ async function printToolOverview() {
 
 // Dashboard-Bereich erfassen
 async function captureDashboardSection(section) {
-    // Finde scrollbaren Container
-    const scrollContainer = document.querySelector('.banken-content-area') ||
-                           document.querySelector('.banken-page') ||
-                           document.getElementById('bankenModule');
-
-    if (!scrollContainer) return null;
-
-    // Scroll-Position basierend auf Sektion
+    // Erfasse das spezifische Element direkt!
     let targetElement;
+
     if (section === 'top') {
-        // KPIs und Scatter Plot am Anfang
-        scrollContainer.scrollTop = 0;
-        window.scrollTo(0, 0);
-        targetElement = document.querySelector('.kpi-metrics-row, .kpi-cards-grid, .banken-header');
+        // KPI-Grid (die 5 KPI-Kacheln oben)
+        targetElement = document.querySelector('.portfolio-kpi-grid');
+
+        if (!targetElement) {
+            // Fallback zu anderen KPI-Klassen
+            targetElement = document.querySelector('.kpi-metrics-row, .kpi-cards-grid');
+        }
+
     } else if (section === 'table') {
-        // Kundenliste
-        targetElement = document.querySelector('.kunden-table-container, .customer-table-wrapper');
-        if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+        // Kundentabelle direkt erfassen
+        targetElement = document.querySelector('.customer-table-wrapper');
+
+        if (!targetElement) {
+            // Fallback
+            targetElement = document.querySelector('.customer-table')?.parentElement ||
+                           document.querySelector('table.customer-table');
         }
     }
 
-    await delay(500);
+    if (!targetElement) {
+        console.warn('Kein Element gefunden für:', section);
+        return null;
+    }
 
-    // Erfasse den sichtbaren Bereich
+    await delay(300);
+
     try {
-        const captureTarget = document.querySelector('.banken-page') || scrollContainer;
-        const canvas = await html2canvas(captureTarget, {
+        const canvas = await html2canvas(targetElement, {
             scale: 1,
             useCORS: true,
             logging: false,
-            backgroundColor: '#f8fafc',
-            width: Math.min(captureTarget.scrollWidth, 1400),
-            height: Math.min(window.innerHeight, 900),
-            windowWidth: 1400,
-            windowHeight: 900
+            backgroundColor: '#ffffff',
+            width: Math.min(targetElement.scrollWidth, 1400),
+            height: Math.min(targetElement.scrollHeight, 800)
         });
         return canvas.toDataURL('image/jpeg', 0.88);
     } catch (error) {
