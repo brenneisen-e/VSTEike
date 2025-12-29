@@ -59,29 +59,25 @@
 }
 
 .matrix-quadrant.selected {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 3px currentColor;
+    transform: scale(1.01);
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Segment-specific selected states */
+/* Segment-specific selected states - subtle outline only */
 .segment-eskalation.selected {
-    background: rgba(251, 191, 36, 0.15);
-    border-width: 3px;
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .segment-prioritaet.selected {
-    background: rgba(34, 197, 94, 0.15);
-    border-width: 3px;
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(34, 197, 94, 0.3);
 }
 
 .segment-abwicklung.selected {
-    background: rgba(239, 68, 68, 0.15);
-    border-width: 3px;
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .segment-restrukturierung.selected {
-    background: rgba(99, 102, 241, 0.15);
-    border-width: 3px;
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 /* Segment Filter Indicator */

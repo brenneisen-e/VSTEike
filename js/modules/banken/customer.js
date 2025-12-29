@@ -2712,3 +2712,288 @@ export function addActivityModalStyles() {
 // Export current customer ID getter/setter
 export const getCurrentCustomerId = () => currentCustomerId;
 export const setCurrentCustomerId = (id) => { currentCustomerId = id; };
+
+// ========================================
+// CUSTOMER ACTIONS
+// ========================================
+
+const actionConfig = {
+    mahnung: {
+        title: 'Mahnung senden',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+        color: '#3b82f6',
+        description: 'Automatische Mahnung per E-Mail oder Brief versenden'
+    },
+    lastschriftsperre: {
+        title: 'Lastschriftsperre einrichten',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
+        color: '#f59e0b',
+        description: 'Automatische Lastschriften für diesen Kunden sperren'
+    },
+    ratenzahlung: {
+        title: 'Ratenzahlung vereinbaren',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>',
+        color: '#22c55e',
+        description: 'Individuellen Ratenplan erstellen'
+    },
+    anruf: {
+        title: 'Anruf planen',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
+        color: '#6366f1',
+        description: 'Telefonat mit dem Kunden terminieren'
+    },
+    inkasso: {
+        title: 'An Inkasso übergeben',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+        color: '#f59e0b',
+        description: 'Fall an externes Inkassounternehmen übergeben'
+    },
+    kuendigung: {
+        title: 'Kreditkündigung',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        color: '#dc2626',
+        description: 'Außerordentliche Kündigung des Kreditvertrags einleiten'
+    }
+};
+
+export function executeCustomerAction(actionType) {
+    const config = actionConfig[actionType];
+    if (!config) return;
+
+    // Create action modal
+    let modal = document.getElementById('customerActionModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'customerActionModal';
+        modal.className = 'action-modal-overlay';
+        document.body.appendChild(modal);
+    }
+
+    const customerName = document.getElementById('customerName')?.textContent || 'Kunde';
+
+    modal.innerHTML = `
+        <div class="action-modal">
+            <div class="action-modal-header" style="background: linear-gradient(135deg, ${config.color} 0%, ${config.color}dd 100%);">
+                <h3>${config.icon} ${config.title}</h3>
+                <button class="action-modal-close" onclick="closeCustomerActionModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="action-modal-body">
+                <p style="margin: 0 0 16px 0; color: #64748b;">${config.description}</p>
+                <div style="background: #f8fafc; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                    <strong style="color: #1e293b;">Kunde:</strong>
+                    <span style="color: #475569; margin-left: 8px;">${customerName}</span>
+                </div>
+                ${getActionFormFields(actionType)}
+            </div>
+            <div class="action-modal-footer">
+                <button class="btn-secondary" onclick="closeCustomerActionModal()">Abbrechen</button>
+                <button class="btn-primary" onclick="confirmCustomerAction('${actionType}')" style="background: ${config.color};">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Bestätigen
+                </button>
+            </div>
+        </div>
+    `;
+
+    setTimeout(() => modal.classList.add('open'), 10);
+}
+
+function getActionFormFields(actionType) {
+    switch (actionType) {
+        case 'mahnung':
+            return `
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Mahnstufe</label>
+                    <select style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                        <option>1. Mahnung - Freundliche Erinnerung</option>
+                        <option>2. Mahnung - Nachdrückliche Aufforderung</option>
+                        <option selected>3. Mahnung - Letzte Aufforderung</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Versandart</label>
+                    <select style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                        <option selected>E-Mail</option>
+                        <option>Brief (Einschreiben)</option>
+                        <option>E-Mail + Brief</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Frist (Tage)</label>
+                    <input type="number" value="14" min="7" max="30" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                </div>
+            `;
+        case 'lastschriftsperre':
+            return `
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Sperrgrund</label>
+                    <select style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                        <option>Rücklastschrift - Kontokeine Deckung</option>
+                        <option selected>SEPA-Mandat widerrufen</option>
+                        <option>Betrug / Verdacht</option>
+                        <option>Kundenwunsch</option>
+                    </select>
+                </div>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px;">
+                    <p style="margin: 0; font-size: 13px; color: #991b1b;">
+                        <strong>Hinweis:</strong> Nach Einrichtung der Sperre sind keine automatischen Abbuchungen mehr möglich.
+                    </p>
+                </div>
+            `;
+        case 'ratenzahlung':
+            return `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Gesamtbetrag</label>
+                        <input type="text" value="€125.000" readonly style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: #f8fafc;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Anzahl Raten</label>
+                        <select style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                            <option>6 Raten</option>
+                            <option selected>12 Raten</option>
+                            <option>24 Raten</option>
+                            <option>36 Raten</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Erste Rate am</label>
+                    <input type="date" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                </div>
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px;">
+                    <p style="margin: 0; font-size: 13px; color: #166534;">
+                        <strong>Monatliche Rate:</strong> ca. €10.417
+                    </p>
+                </div>
+            `;
+        case 'anruf':
+            return `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Datum</label>
+                        <input type="date" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Uhrzeit</label>
+                        <input type="time" value="10:00" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                    </div>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Notiz</label>
+                    <textarea rows="3" placeholder="Gesprächsziel, wichtige Punkte..." style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
+                </div>
+            `;
+        case 'inkasso':
+            return `
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Inkasso-Partner</label>
+                    <select style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                        <option>Creditreform Inkasso</option>
+                        <option selected>EOS Deutschland GmbH</option>
+                        <option>Intrum Justitia</option>
+                    </select>
+                </div>
+                <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <p style="margin: 0; font-size: 13px; color: #92400e;">
+                        <strong>Provision:</strong> 15% der eingezogenen Forderung
+                    </p>
+                </div>
+                <div>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" style="width: 16px; height: 16px;">
+                        <span style="font-size: 13px; color: #475569;">Alle Unterlagen digital übermitteln</span>
+                    </label>
+                </div>
+            `;
+        case 'kuendigung':
+            return `
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #991b1b;">
+                        ⚠️ Irreversible Aktion
+                    </p>
+                    <p style="margin: 0; font-size: 13px; color: #991b1b;">
+                        Die Kündigung kann nicht rückgängig gemacht werden. Die gesamte Restforderung wird sofort fällig.
+                    </p>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; color: #475569; margin-bottom: 6px;">Kündigungsgrund</label>
+                    <select style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                        <option selected>Zahlungsverzug &gt; 60 Tage</option>
+                        <option>Vertragsverletzung</option>
+                        <option>Insolvenzantrag des Schuldners</option>
+                        <option>Betrugsverdacht</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" required style="width: 16px; height: 16px;">
+                        <span style="font-size: 13px; color: #dc2626; font-weight: 500;">Ich bestätige die außerordentliche Kündigung</span>
+                    </label>
+                </div>
+            `;
+        default:
+            return '';
+    }
+}
+
+export function closeCustomerActionModal() {
+    const modal = document.getElementById('customerActionModal');
+    if (modal) {
+        modal.classList.remove('open');
+        setTimeout(() => modal.remove(), 200);
+    }
+}
+
+export function confirmCustomerAction(actionType) {
+    const config = actionConfig[actionType];
+    closeCustomerActionModal();
+
+    window.showNotification?.(`${config.title} wurde erfolgreich eingeleitet`, 'success');
+
+    // Log activity
+    const activity = {
+        type: actionType,
+        title: config.title,
+        timestamp: new Date().toISOString(),
+        user: 'Eike Brenneisen'
+    };
+    console.log('[CUSTOMER-ACTION]', activity);
+}
+
+export function refreshAiSummary() {
+    const content = document.getElementById('aiSummaryContent');
+    if (!content) return;
+
+    content.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px; padding: 20px;">
+            <div class="loading-spinner" style="width: 24px; height: 24px; border: 2px solid #e2e8f0; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <span style="color: #64748b; font-size: 13px;">KI analysiert Kundendaten...</span>
+        </div>
+    `;
+
+    // Simulate AI response
+    setTimeout(() => {
+        content.innerHTML = `
+            <p class="ai-summary-text">
+                <strong>Aktualisierte Einschätzung:</strong> Kunde zeigt zunehmende Zahlungsschwierigkeiten.
+                Letzte Kontaktaufnahme vor 14 Tagen ohne Reaktion.
+                <span class="ai-highlight warning">Empfehlung: Eskalation prüfen oder Ratenzahlungsangebot unterbreiten.</span>
+            </p>
+            <div class="ai-summary-tags">
+                <span class="ai-tag risk-high">Hohes Risiko</span>
+                <span class="ai-tag">Keine Reaktion</span>
+                <span class="ai-tag">35 DPD</span>
+                <span class="ai-tag">Stage 3</span>
+            </div>
+        `;
+        window.showNotification?.('KI-Zusammenfassung aktualisiert', 'info');
+    }, 1500);
+}

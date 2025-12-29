@@ -203,6 +203,12 @@ Object.assign(window, {
     writeOffCase: customer.writeOffCase,
     createActivityElement: customer.createActivityElement,
     addActivityModalStyles: customer.addActivityModalStyles,
+
+    // Customer Actions
+    executeCustomerAction: customer.executeCustomerAction,
+    closeCustomerActionModal: customer.closeCustomerActionModal,
+    confirmCustomerAction: customer.confirmCustomerAction,
+    refreshAiSummary: customer.refreshAiSummary,
 });
 
 // ========================================
