@@ -739,42 +739,65 @@ function generateLandingMockResponse(message) {
     return `Ich habe deine Frage verstanden: "${message}"\n\n⚠️ **Mock-Modus aktiv** - Claude AI wird über den Worker konfiguriert.\n\n**Verfügbare Mock-Befehle:**\n• "Wie viele Daten haben wir?"\n• "Zeige Top 5 Vermittler"\n• "Wie ist die Performance von Freiburg?"`;
 }
 
-// Add message to chat - GLEICH WIE DASHBOARD
+// Add message to chat - Display in response container below input
 function addLandingChatMessage(role, content) {
-    const chatMessages = document.getElementById('landingChatMessages');
-
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `landing-chat-message ${role}`;
-
-    const avatar = document.createElement('div');
-    if (role === 'user') {
-        avatar.className = 'chat-avatar';
-        avatar.textContent = '👤';
-    } else {
-        avatar.className = 'chat-avatar-deloitte';
-        avatar.innerHTML = '<span class="deloitte-d">D</span>';
+    const responseContainer = document.getElementById('landingChatResponse');
+    if (!responseContainer) {
+        console.error('Landing chat response container not found');
+        return;
     }
 
-    const bubble = document.createElement('div');
-    bubble.className = 'chat-bubble';
+    // Show the container
+    responseContainer.style.display = 'block';
 
-    // Format content (basic markdown support)
-    let formattedContent = content
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/`(.*?)`/g, '<code>$1</code>')
-        .replace(/\n/g, '<br>');
+    // For assistant messages, replace entire content (cleaner UX)
+    if (role === 'assistant') {
+        // Format content (basic markdown support)
+        let formattedContent = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/`(.*?)`/g, '<code>$1</code>')
+            .replace(/\n/g, '<br>')
+            .replace(/• /g, '<br>• ');
 
-    bubble.innerHTML = formattedContent;
-
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(bubble);
-
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+        responseContainer.innerHTML = `
+            <div class="landing-response-card">
+                <div class="landing-response-header">
+                    <div class="chat-avatar-deloitte"><span class="deloitte-d">D</span></div>
+                    <span class="landing-response-title">Antwort</span>
+                </div>
+                <div class="landing-response-content">${formattedContent}</div>
+            </div>
+        `;
+    }
+    // User messages are not displayed (just sent)
 }
 
 // Show typing indicator
 function showLandingChatTyping() {
+    const responseContainer = document.getElementById('landingChatResponse');
+    if (!responseContainer) return;
+
+    responseContainer.style.display = 'block';
+    responseContainer.innerHTML = `
+        <div class="landing-response-card">
+            <div class="landing-response-header">
+                <div class="chat-avatar-deloitte"><span class="deloitte-d">D</span></div>
+                <span class="landing-response-title">Denke nach...</span>
+            </div>
+            <div class="landing-chat-typing" id="landingTypingIndicator">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    `;
+}
+
+// Hide typing indicator
+function hideLandingChatTyping() {
+    // Typing gets replaced by the actual response, no action needed
+}
+
+// OLD FUNCTIONS - kept for reference but not used
+function showLandingChatTypingOLD() {
     const chatMessages = document.getElementById('landingChatMessages');
 
     const typingDiv = document.createElement('div');
