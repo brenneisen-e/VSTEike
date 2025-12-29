@@ -15,6 +15,7 @@ import * as customer from './customer.js';
 import * as documents from './documents.js';
 import * as tasks from './tasks.js';
 import * as charts from './charts.js';
+import * as print from './print.js';
 
 // ========================================
 // FEEDBACK FUNCTIONS
@@ -255,6 +256,14 @@ Object.assign(window, {
     updatePortfolioChart: charts.updatePortfolioChart,
     filterCustomers: charts.filterCustomers,
     searchCustomers: charts.searchCustomers,
+});
+
+// ========================================
+// PRINT FUNCTIONS
+// ========================================
+
+Object.assign(window, {
+    printToolOverview: print.printToolOverview,
 });
 
 // ========================================
