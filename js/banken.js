@@ -2377,6 +2377,9 @@ function openCustomerDetail(customerId, options = {}) {
         updateKommunikationFields(modal, customer);
         updateKiAnalyseFields(modal, customer);
 
+        // Update AI summary card with customer data
+        updateAiSummary(customer);
+
         // Switch between Haushaltsrechnung (Privat) and GuV (Gewerbe)
         updateHaushaltGuvTab(customer);
 
@@ -7471,25 +7474,48 @@ function updateAiSummary(customer) {
 
     if (!summaryContent || !recommendation) return;
 
-    const dpd = customer?.dpd || 45;
-    const forderung = customer?.forderung || 4230;
-    const segment = customer?.segment || 'priorität';
+    // Get real customer data
+    const dpd = customer?.dpd || 0;
+    const forderung = customer?.gesamtforderung || customer?.restschuld || 0;
+    const segment = customer?.segment || 'standard';
+    const kernproblem = customer?.kernproblem || '';
+    const willingness = customer?.willingness || 50;
+    const ability = customer?.ability || 50;
+    const name = customer?.name || 'Kunde';
+    const status = customer?.status || '';
 
     let summaryText = '';
     let recommendationText = '';
     let recommendationIcon = '⚠️';
 
-    if (dpd > 60 || segment === 'eskalation') {
-        summaryText = `<strong>Kritischer Fall:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Zahlungsverhalten negativ. Sofortiger Handlungsbedarf.`;
-        recommendationText = 'Empfehlung: Inkasso-Verfahren einleiten oder Forderungsverkauf prüfen. Interne Eskalation empfohlen.';
-        recommendationIcon = '🚨';
-    } else if (dpd > 30) {
-        summaryText = `<strong>Erhöhtes Risiko:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Kunde hat in der Vergangenheit Zahlungsprobleme gezeigt.`;
-        recommendationText = 'Empfehlung: Letzte Mahnung versenden und Ratenzahlungsangebot unterbreiten.';
-        recommendationIcon = '⚠️';
+    // Use kernproblem if available, otherwise generate based on data
+    if (kernproblem) {
+        summaryText = `<strong>${name}:</strong> ${kernproblem}`;
+    } else if (segment === 'eskalation' || dpd > 60) {
+        summaryText = `<strong>Kritischer Fall:</strong> ${name} hat eine offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen. Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%. Sofortiger Handlungsbedarf.`;
+    } else if (segment === 'prioritaet' || dpd > 30) {
+        summaryText = `<strong>Erhöhtes Risiko:</strong> ${name} mit € ${forderung.toLocaleString('de-DE')} offener Forderung (${dpd} DPD). Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
+    } else if (segment === 'restrukturierung') {
+        summaryText = `<strong>Restrukturierung möglich:</strong> ${name} zeigt Kooperationsbereitschaft. Forderung: € ${forderung.toLocaleString('de-DE')}. Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
     } else {
-        summaryText = `<strong>Standard-Fall:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Zahlungshistorie grundsätzlich positiv.`;
-        recommendationText = 'Empfehlung: Freundliche Zahlungserinnerung versenden.';
+        summaryText = `<strong>${name}:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} (${dpd} Tage überfällig). Zahlungsbereitschaft: ${willingness}%, Zahlungsfähigkeit: ${ability}%.`;
+    }
+
+    // Generate recommendation based on segment and data
+    if (segment === 'eskalation' || status === 'Inkasso') {
+        recommendationText = 'Empfehlung: Inkasso-Verfahren fortführen. Bei Kontaktaufnahme letztmalige Ratenzahlung anbieten. Forderungsverkauf als Alternative prüfen.';
+        recommendationIcon = '🚨';
+    } else if (segment === 'abwicklung' || willingness < 30) {
+        recommendationText = 'Empfehlung: Abschreibung oder Forderungsverkauf prüfen. Geringe Erfolgsaussichten bei Standardmaßnahmen.';
+        recommendationIcon = '⚫';
+    } else if (segment === 'prioritaet' || dpd > 30) {
+        recommendationText = 'Empfehlung: Sofortige telefonische Kontaktaufnahme. Letzte Mahnung mit Ratenzahlungsangebot versenden.';
+        recommendationIcon = '⚠️';
+    } else if (segment === 'restrukturierung' || ability > 50) {
+        recommendationText = 'Empfehlung: Aktive Ratenzahlungsvereinbarung anbieten. Kunde zeigt Potenzial zur Kooperation.';
+        recommendationIcon = '🔵';
+    } else {
+        recommendationText = 'Empfehlung: Freundliche Zahlungserinnerung versenden und Kontakt suchen.';
         recommendationIcon = '💡';
     }
 
