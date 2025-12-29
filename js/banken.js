@@ -7205,6 +7205,434 @@ Entscheidungshilfe und ersetzen nicht die fachliche Einzelfallprüfung.
 // Export download function
 window.downloadDashboardSummary = downloadDashboardSummary;
 
+// ========================================
+// CUSTOMER ACTIONS
+// ========================================
+
+const actionConfig = {
+    lastschriftsperre: {
+        title: 'Lastschriftsperre einrichten',
+        icon: 'warning',
+        confirmClass: '',
+        fields: ['grund', 'datum']
+    },
+    mahnung: {
+        title: 'Mahnung versenden',
+        icon: 'warning',
+        confirmClass: '',
+        fields: ['stufe', 'frist', 'betrag']
+    },
+    ratenzahlung: {
+        title: 'Ratenzahlung vereinbaren',
+        icon: 'info',
+        confirmClass: '',
+        fields: ['raten', 'startdatum', 'betrag']
+    },
+    anruf: {
+        title: 'Anruf planen',
+        icon: 'info',
+        confirmClass: '',
+        fields: ['datum', 'uhrzeit', 'notiz']
+    },
+    inkasso: {
+        title: 'Inkasso einleiten',
+        icon: 'danger',
+        confirmClass: 'danger',
+        fields: ['grund', 'aktenzeichen']
+    },
+    kuendigung: {
+        title: 'Kündigung vorbereiten',
+        icon: 'danger',
+        confirmClass: 'danger',
+        fields: ['grund', 'kuendigungsdatum']
+    }
+};
+
+let currentActionType = null;
+
+function executeCustomerAction(actionType) {
+    currentActionType = actionType;
+    const config = actionConfig[actionType];
+    if (!config) return;
+
+    // Create modal if not exists
+    let modal = document.getElementById('customerActionModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'customerActionModal';
+        modal.className = 'customer-action-modal';
+        document.body.appendChild(modal);
+    }
+
+    const formFields = getActionFormFields(actionType);
+
+    modal.innerHTML = `
+        <div class="action-modal-content">
+            <div class="action-modal-header">
+                <div class="action-icon ${config.icon}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                        <path d="M12 8v4M12 16h.01"></path>
+                    </svg>
+                </div>
+                <h3>${config.title}</h3>
+                <button class="action-modal-close" onclick="closeCustomerActionModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="action-modal-body">
+                ${formFields}
+            </div>
+            <div class="action-modal-footer">
+                <button class="btn-cancel-action" onclick="closeCustomerActionModal()">Abbrechen</button>
+                <button class="btn-confirm-action ${config.confirmClass}" onclick="confirmCustomerAction('${actionType}')">Bestätigen</button>
+            </div>
+        </div>
+    `;
+
+    setTimeout(() => modal.classList.add('open'), 10);
+}
+
+function getActionFormFields(actionType) {
+    const today = new Date().toISOString().split('T')[0];
+
+    switch (actionType) {
+        case 'lastschriftsperre':
+            return `
+                <div class="action-form-group">
+                    <label>Grund der Sperre</label>
+                    <select id="actionGrund">
+                        <option value="ruecklastschrift">Rücklastschrift</option>
+                        <option value="kundenwunsch">Kundenwunsch</option>
+                        <option value="betrug">Betrugsverdacht</option>
+                        <option value="insolvenz">Insolvenz</option>
+                    </select>
+                </div>
+                <div class="action-form-group">
+                    <label>Wirksamkeitsdatum</label>
+                    <input type="date" id="actionDatum" value="${today}">
+                </div>
+            `;
+        case 'mahnung':
+            return `
+                <div class="action-form-group">
+                    <label>Mahnstufe</label>
+                    <select id="actionStufe">
+                        <option value="1">1. Mahnung (Zahlungserinnerung)</option>
+                        <option value="2">2. Mahnung</option>
+                        <option value="3">3. Mahnung (Letzte Warnung)</option>
+                    </select>
+                </div>
+                <div class="action-form-group">
+                    <label>Zahlungsfrist (Tage)</label>
+                    <input type="number" id="actionFrist" value="14" min="7" max="30">
+                </div>
+                <div class="action-form-group">
+                    <label>Offener Betrag</label>
+                    <input type="text" id="actionBetrag" value="€ 4.230,00" readonly>
+                </div>
+            `;
+        case 'ratenzahlung':
+            return `
+                <div class="action-form-group">
+                    <label>Anzahl Raten</label>
+                    <select id="actionRaten">
+                        <option value="3">3 Raten</option>
+                        <option value="6">6 Raten</option>
+                        <option value="12" selected>12 Raten</option>
+                        <option value="24">24 Raten</option>
+                    </select>
+                </div>
+                <div class="action-form-group">
+                    <label>Startdatum</label>
+                    <input type="date" id="actionStartdatum" value="${today}">
+                </div>
+                <div class="action-form-group">
+                    <label>Monatliche Rate (berechnet)</label>
+                    <input type="text" id="actionRate" value="€ 352,50" readonly>
+                </div>
+            `;
+        case 'anruf':
+            return `
+                <div class="action-form-group">
+                    <label>Datum</label>
+                    <input type="date" id="actionDatum" value="${today}">
+                </div>
+                <div class="action-form-group">
+                    <label>Uhrzeit</label>
+                    <input type="time" id="actionUhrzeit" value="10:00">
+                </div>
+                <div class="action-form-group">
+                    <label>Notiz</label>
+                    <textarea id="actionNotiz" rows="3" placeholder="Gesprächspunkte..."></textarea>
+                </div>
+            `;
+        case 'inkasso':
+            return `
+                <div class="action-form-group">
+                    <label>Begründung</label>
+                    <textarea id="actionGrund" rows="3" placeholder="Begründung für Inkasso-Übergabe...">Kunde reagiert nicht auf Mahnungen. Letzte Kontaktaufnahme vor 45 Tagen ohne Erfolg.</textarea>
+                </div>
+                <div class="action-form-group">
+                    <label>Inkasso-Partner</label>
+                    <select id="actionPartner">
+                        <option value="internes">Internes Inkasso</option>
+                        <option value="externes">Externes Inkasso (EOS)</option>
+                        <option value="anwalt">Anwalt</option>
+                    </select>
+                </div>
+            `;
+        case 'kuendigung':
+            return `
+                <div class="action-form-group">
+                    <label>Kündigungsgrund</label>
+                    <select id="actionGrund">
+                        <option value="zahlungsverzug">Zahlungsverzug > 90 Tage</option>
+                        <option value="vertragsbruch">Vertragsbruch</option>
+                        <option value="insolvenz">Insolvenz des Kunden</option>
+                        <option value="betrug">Betrug</option>
+                    </select>
+                </div>
+                <div class="action-form-group">
+                    <label>Kündigungsdatum</label>
+                    <input type="date" id="actionKuendigungsdatum" value="${today}">
+                </div>
+                <div class="action-form-group">
+                    <label>Hinweis</label>
+                    <p style="font-size: 12px; color: #dc2626; margin: 0;">⚠️ Diese Aktion ist nicht umkehrbar und erfordert die Genehmigung der Abteilungsleitung.</p>
+                </div>
+            `;
+        default:
+            return '<p>Keine Formularfelder verfügbar.</p>';
+    }
+}
+
+function closeCustomerActionModal() {
+    const modal = document.getElementById('customerActionModal');
+    if (modal) {
+        modal.classList.remove('open');
+        setTimeout(() => modal.remove(), 300);
+    }
+    currentActionType = null;
+}
+
+function confirmCustomerAction(actionType) {
+    const config = actionConfig[actionType];
+    if (!config) return;
+
+    // Show success notification
+    showNotification(`${config.title} wurde erfolgreich initiiert.`, 'success');
+
+    // Close modal
+    closeCustomerActionModal();
+
+    // Log action (in production would save to backend)
+    console.log(`Customer action executed: ${actionType}`, {
+        timestamp: new Date().toISOString(),
+        actionType: actionType
+    });
+}
+
+function refreshAiSummary() {
+    const summaryContent = document.getElementById('aiSummaryContent');
+    const recommendation = document.getElementById('aiRecommendation');
+
+    if (summaryContent) {
+        summaryContent.innerHTML = '<p class="ai-summary-text">Analysiere Kundendaten...</p>';
+    }
+
+    // Simulate AI analysis
+    setTimeout(() => {
+        if (summaryContent) {
+            summaryContent.innerHTML = `
+                <p class="ai-summary-text">
+                    <strong>Kritischer Fall:</strong> Kunde hat offene Forderungen seit über 60 Tagen.
+                    Letzte Teilzahlung (€ 500) am 15.10.2025. Kommunikationsversuche bisher erfolglos.
+                    Bonitätsverschlechterung festgestellt.
+                </p>
+            `;
+        }
+        if (recommendation) {
+            recommendation.innerHTML = `
+                <span class="recommendation-icon">⚠️</span>
+                <span class="recommendation-text">Empfehlung: Letzte Mahnung versenden und gleichzeitig Ratenzahlungsangebot unterbreiten. Bei ausbleibender Reaktion Inkasso-Verfahren einleiten.</span>
+            `;
+        }
+    }, 1000);
+}
+
+// Initialize AI summary when opening customer modal
+function updateAiSummary(customer) {
+    const summaryContent = document.getElementById('aiSummaryContent');
+    const recommendation = document.getElementById('aiRecommendation');
+
+    if (!summaryContent || !recommendation) return;
+
+    const dpd = customer?.dpd || 45;
+    const forderung = customer?.forderung || 4230;
+    const segment = customer?.segment || 'priorität';
+
+    let summaryText = '';
+    let recommendationText = '';
+    let recommendationIcon = '⚠️';
+
+    if (dpd > 60 || segment === 'eskalation') {
+        summaryText = `<strong>Kritischer Fall:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Zahlungsverhalten negativ. Sofortiger Handlungsbedarf.`;
+        recommendationText = 'Empfehlung: Inkasso-Verfahren einleiten oder Forderungsverkauf prüfen. Interne Eskalation empfohlen.';
+        recommendationIcon = '🚨';
+    } else if (dpd > 30) {
+        summaryText = `<strong>Erhöhtes Risiko:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Kunde hat in der Vergangenheit Zahlungsprobleme gezeigt.`;
+        recommendationText = 'Empfehlung: Letzte Mahnung versenden und Ratenzahlungsangebot unterbreiten.';
+        recommendationIcon = '⚠️';
+    } else {
+        summaryText = `<strong>Standard-Fall:</strong> Offene Forderung von € ${forderung.toLocaleString('de-DE')} seit ${dpd} Tagen überfällig. Zahlungshistorie grundsätzlich positiv.`;
+        recommendationText = 'Empfehlung: Freundliche Zahlungserinnerung versenden.';
+        recommendationIcon = '💡';
+    }
+
+    summaryContent.innerHTML = `<p class="ai-summary-text">${summaryText}</p>`;
+    recommendation.innerHTML = `
+        <span class="recommendation-icon">${recommendationIcon}</span>
+        <span class="recommendation-text">${recommendationText}</span>
+    `;
+}
+
+// Export customer action functions
+window.executeCustomerAction = executeCustomerAction;
+window.closeCustomerActionModal = closeCustomerActionModal;
+window.confirmCustomerAction = confirmCustomerAction;
+window.refreshAiSummary = refreshAiSummary;
+window.updateAiSummary = updateAiSummary;
+
+// ========================================
+// PDF PRINT OVERVIEW
+// ========================================
+
+function printToolOverview() {
+    // Show loading indicator
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'printLoadingOverlay';
+    loadingOverlay.innerHTML = `
+        <div style="background: white; padding: 40px 60px; border-radius: 16px; text-align: center;">
+            <div style="width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+            <h3 style="margin: 0 0 8px 0; color: #1e293b;">PDF wird erstellt...</h3>
+            <p style="margin: 0; color: #64748b;">Bitte warten Sie.</p>
+        </div>
+    `;
+    loadingOverlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 99999;';
+
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+    document.head.appendChild(style);
+    document.body.appendChild(loadingOverlay);
+
+    setTimeout(() => {
+        const printContent = generatePrintContent();
+        const printWindow = window.open('', '_blank', 'width=1200,height=800');
+
+        if (!printWindow) {
+            loadingOverlay.remove();
+            style.remove();
+            alert('Popup wurde blockiert. Bitte erlauben Sie Popups für diese Seite.');
+            return;
+        }
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+
+        printWindow.onload = () => {
+            setTimeout(() => {
+                loadingOverlay.remove();
+                style.remove();
+                printWindow.print();
+            }, 500);
+        };
+    }, 100);
+}
+
+function generatePrintContent() {
+    const today = new Date().toLocaleDateString('de-DE');
+
+    return `
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Collections Management - Tool-Übersicht</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11pt; line-height: 1.5; color: #1e293b; }
+        .page { page-break-after: always; padding: 40px; min-height: 100vh; }
+        .page:last-child { page-break-after: auto; }
+        .page-header { display: flex; justify-content: space-between; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0; }
+        .page-title { font-size: 24pt; font-weight: 700; }
+        .page-subtitle { font-size: 14pt; color: #64748b; }
+        .title-page { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .title-page h1 { font-size: 36pt; margin-bottom: 10px; }
+        .title-page h2 { font-size: 18pt; color: #64748b; margin-bottom: 60px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .kpi-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; }
+        .kpi-label { font-size: 10pt; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
+        .kpi-value { font-size: 24pt; font-weight: 700; }
+        .matrix-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .matrix-quadrant { padding: 20px; border-radius: 12px; border: 1px solid; }
+        .quadrant-title { font-size: 14pt; font-weight: 600; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { background: #f1f5f9; padding: 12px; text-align: left; font-size: 10pt; }
+        td { padding: 12px; border-top: 1px solid #e2e8f0; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 9pt; }
+        .badge.danger { background: #fee2e2; color: #dc2626; }
+        .badge.warning { background: #fef3c7; color: #d97706; }
+        @media print { body { -webkit-print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+    <div class="page title-page">
+        <h1>Collections Management</h1>
+        <h2>Forderungsmanagement mit KI-Unterstützung</h2>
+        <p>Tool-Übersicht · Erstellt am ${today}</p>
+    </div>
+    <div class="page">
+        <div class="page-header"><div><div class="page-title">Dashboard Übersicht</div><div class="page-subtitle">KPIs auf einen Blick</div></div></div>
+        <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-label">Gesamtforderungen</div><div class="kpi-value">€ 847 Mio</div></div>
+            <div class="kpi-card"><div class="kpi-label">Überfällig >90 Tage</div><div class="kpi-value">€ 12,4 Mio</div></div>
+            <div class="kpi-card"><div class="kpi-label">Aktive Fälle</div><div class="kpi-value">2.344</div></div>
+            <div class="kpi-card"><div class="kpi-label">Realisierungsquote</div><div class="kpi-value">67,8%</div></div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page-header"><div><div class="page-title">KI-Segmentierung</div></div></div>
+        <div class="matrix-container">
+            <div class="matrix-quadrant" style="background: #fee2e2; border-color: #fecaca;"><div class="quadrant-title">🔴 Eskalation</div><p>312 Fälle · € 8,7 Mio</p></div>
+            <div class="matrix-quadrant" style="background: #fef3c7; border-color: #fde68a;"><div class="quadrant-title">🟡 Priorität</div><p>845 Fälle · € 21,4 Mio</p></div>
+            <div class="matrix-quadrant" style="background: #dbeafe; border-color: #93c5fd;"><div class="quadrant-title">🔵 Restrukturierung</div><p>523 Fälle · € 45,2 Mio</p></div>
+            <div class="matrix-quadrant" style="background: #f4f4f5; border-color: #d4d4d8;"><div class="quadrant-title">⚫ Abwicklung</div><p>664 Fälle · € 15,8 Mio</p></div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page-header"><div><div class="page-title">Kundendetail-Ansicht</div></div></div>
+        <p>360° Kundenübersicht mit KI-Zusammenfassung, Stammdaten, Finanzen, Kommunikation und KI-Analyse.</p>
+        <h3 style="margin: 20px 0 10px;">Schnellaktionen</h3>
+        <table>
+            <tr><th>Aktion</th><th>Beschreibung</th></tr>
+            <tr><td>📧 Mahnung versenden</td><td>Automatische Mahnung in 3 Stufen</td></tr>
+            <tr><td>💳 Lastschriftsperre</td><td>SEPA-Mandate sperren</td></tr>
+            <tr><td>📅 Ratenzahlung</td><td>Individuelle Ratenvereinbarung</td></tr>
+            <tr><td>📞 Anruf planen</td><td>Telefonat terminieren</td></tr>
+            <tr><td>⚠️ Inkasso einleiten</td><td>Übergabe an Inkasso-Partner</td></tr>
+        </table>
+    </div>
+</body>
+</html>
+    `;
+}
+
+window.printToolOverview = printToolOverview;
+
 // Initialize module selector on DOM ready
 document.addEventListener('DOMContentLoaded', function() {
     initModuleSelector();
