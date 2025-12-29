@@ -4,6 +4,7 @@
  */
 
 @import '_base.css';
+@import '_customer-overview.css';
 @import '_ki-analyse.css';
 @import '_scanner.css';
 @import '_profile.css';
