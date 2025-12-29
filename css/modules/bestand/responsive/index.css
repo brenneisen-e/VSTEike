@@ -1,8 +1,0 @@
-/**
- * Responsive Styles - Entry Point
- * Organized by screen size breakpoints
- */
-
-@import '_desktop.css';
-@import '_tablet.css';
-@import '_mobile.css';

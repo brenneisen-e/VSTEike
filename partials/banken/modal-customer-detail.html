@@ -36,83 +36,76 @@
         <div class="modal-body">
             <!-- Tab: Stammdaten -->
             <div class="customer-tab active" id="tab-stammdaten">
-                <!-- KI-Zusammenfassung & Schnellaktionen -->
+                <!-- KI-Zusammenfassung und Schnellaktionen -->
                 <div class="customer-overview-header">
-                    <!-- KI-Zusammenfassung -->
                     <div class="ai-summary-card" id="aiSummaryCard">
                         <div class="ai-summary-header">
-                            <div class="ai-summary-icon">
+                            <div class="ai-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                    <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
+                                    <circle cx="7.5" cy="14.5" r="1.5"></circle>
+                                    <circle cx="16.5" cy="14.5" r="1.5"></circle>
                                 </svg>
                             </div>
-                            <span class="ai-summary-title">KI-Einschätzung</span>
-                            <button class="ai-summary-refresh" onclick="refreshAiSummary()" title="Neu generieren">
+                            <span class="ai-label">KI-Zusammenfassung</span>
+                            <button class="ai-refresh-btn" onclick="refreshAiSummary()" title="Aktualisieren">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                                     <polyline points="23 4 23 10 17 10"></polyline>
-                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
                                 </svg>
                             </button>
                         </div>
                         <div class="ai-summary-content" id="aiSummaryContent">
-                            <p class="ai-summary-text">
-                                <strong>Kritischer Fall:</strong> Gewerbekunde mit 35 Tagen Zahlungsverzug und widerrufener SEPA-Lastschrift.
-                                Rating C- deutet auf erhöhtes Ausfallrisiko hin. Restforderung €125.000 bei geschätztem Sicherheitenwert von €85.000.
-                                <span class="ai-highlight warning">Empfehlung: Sofortige Kontaktaufnahme und Prüfung alternativer Rückzahlungsoptionen.</span>
-                            </p>
-                            <div class="ai-summary-tags">
-                                <span class="ai-tag risk-high">Hohes Risiko</span>
-                                <span class="ai-tag">SEPA widerrufen</span>
-                                <span class="ai-tag">35 DPD</span>
-                                <span class="ai-tag">Stage 3</span>
-                            </div>
+                            <p class="ai-summary-text">Analysiere Kundendaten...</p>
+                        </div>
+                        <div class="ai-recommendation" id="aiRecommendation">
+                            <span class="recommendation-icon">⚠️</span>
+                            <span class="recommendation-text">Lade Empfehlung...</span>
                         </div>
                     </div>
-
-                    <!-- Schnellaktionen -->
                     <div class="customer-quick-actions">
-                        <h4>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                            </svg>
-                            Schnellaktionen
-                        </h4>
+                        <h4 class="quick-actions-title">Schnellaktionen</h4>
                         <div class="quick-actions-grid">
+                            <button class="quick-action-btn" onclick="executeCustomerAction('lastschriftsperre')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                                <span>Lastschriftsperre</span>
+                            </button>
                             <button class="quick-action-btn" onclick="executeCustomerAction('mahnung')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
-                                <span>Mahnung senden</span>
-                            </button>
-                            <button class="quick-action-btn" onclick="executeCustomerAction('lastschriftsperre')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </svg>
-                                <span>Lastschriftsperre</span>
+                                <span>Mahnung versenden</span>
                             </button>
                             <button class="quick-action-btn" onclick="executeCustomerAction('ratenzahlung')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    <line x1="6" y1="11" x2="6" y2="11"></line>
+                                    <line x1="10" y1="11" x2="10" y2="11"></line>
+                                    <line x1="14" y1="11" x2="14" y2="11"></line>
+                                    <line x1="18" y1="11" x2="18" y2="11"></line>
                                 </svg>
                                 <span>Ratenzahlung</span>
                             </button>
                             <button class="quick-action-btn" onclick="executeCustomerAction('anruf')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"></path>
                                 </svg>
                                 <span>Anruf planen</span>
                             </button>
-                            <button class="quick-action-btn warning" onclick="executeCustomerAction('inkasso')">
+                            <button class="quick-action-btn danger" onclick="executeCustomerAction('inkasso')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                                     <line x1="12" y1="9" x2="12" y2="13"></line>
                                     <line x1="12" y1="17" x2="12.01" y2="17"></line>
                                 </svg>
-                                <span>Inkasso übergeben</span>
+                                <span>Inkasso einleiten</span>
                             </button>
                             <button class="quick-action-btn danger" onclick="executeCustomerAction('kuendigung')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
@@ -383,7 +376,7 @@
                                 <line x1="2" y1="10" x2="22" y2="10"></line>
                             </svg>
                             <span class="kpi-label">Kredite</span>
-                            <span class="kpi-value" id="kontenKrediteAnzahl">0</span>
+                            <span class="kpi-value">5</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -391,7 +384,7 @@
                                 <path d="M15 15a7 7 0 0 0-6-6"></path>
                             </svg>
                             <span class="kpi-label">Gesamtforderung</span>
-                            <span class="kpi-value" id="kontenGesamtforderung">€0</span>
+                            <span class="kpi-value">€350.500</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -399,7 +392,7 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <span class="kpi-label">Monatl. Rate</span>
-                            <span class="kpi-value" id="kontenMonatsrate">€0</span>
+                            <span class="kpi-value">€2.380</span>
                         </div>
                         <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -408,15 +401,15 @@
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
                             <span class="kpi-label">Überfällig</span>
-                            <span class="kpi-value" id="kontenUeberfaellig">€0</span>
+                            <span class="kpi-value">€15.000</span>
                         </div>
-                        <div class="finanzen-kpi" title="Anteil der bereits zurückgezahlten Forderung">
+                        <div class="finanzen-kpi">
                             <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                                 <polyline points="17 6 23 6 23 12"></polyline>
                             </svg>
-                            <span class="kpi-label">Rückzahlquote</span>
-                            <span class="kpi-value" id="kontenRueckgabequote">0%</span>
+                            <span class="kpi-label">Rückgabequote</span>
+                            <span class="kpi-value">34%</span>
                         </div>
                     </div>
 
@@ -424,61 +417,52 @@
                     <div class="forderungen-compact">
                         <div class="forderung-breakdown-row">
                             <span class="label">Hauptforderung</span>
-                            <span class="value" id="kontenHauptforderung">€0</span>
+                            <span class="value">€110.000</span>
                         </div>
                         <div class="forderung-breakdown-row">
                             <span class="label">Zinsen</span>
-                            <span class="value" id="kontenZinsen">€0</span>
+                            <span class="value">€8.450</span>
                         </div>
                         <div class="forderung-breakdown-row">
                             <span class="label">Mahngebühren</span>
-                            <span class="value" id="kontenMahngebuehren">€0</span>
+                            <span class="value">€350</span>
                         </div>
                         <div class="forderung-breakdown-row">
                             <span class="label">Inkassokosten</span>
-                            <span class="value" id="kontenInkassokosten">€0</span>
+                            <span class="value">€6.200</span>
                         </div>
                     </div>
 
                     <!-- Einkommen & Ausgaben -->
                     <div class="einkommen-ausgaben-compact">
                         <div class="ea-header">
-                            <div class="ea-header-title">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                    <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
-                                    <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
-                                    <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"></path>
-                                </svg>
-                                <span>Einkommen & Ausgaben</span>
-                            </div>
-                            <button class="btn-haushalt" onclick="showCustomerTab('haushalt')" title="Detaillierte Haushaltsrechnung anzeigen">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                    <line x1="1" y1="10" x2="23" y2="10"></line>
-                                </svg>
-                                Details
-                            </button>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"></path>
+                            </svg>
+                            <span>Einkommen & Ausgaben</span>
                         </div>
                         <div class="ea-row">
                             <span class="label">Monatl. Einkommen</span>
-                            <span class="value einkommen" id="kontenEinkommen">€0</span>
+                            <span class="value einkommen">€45.000</span>
                         </div>
                         <div class="ea-row">
                             <span class="label">Monatl. Ausgaben</span>
-                            <span class="value ausgaben" id="kontenAusgaben">€0</span>
+                            <span class="value ausgaben">€52.000</span>
                         </div>
                         <div class="ea-row differenz">
                             <span class="label">Differenz</span>
-                            <span class="value" id="kontenDifferenz">€0</span>
+                            <span class="value negativ">-€7.000</span>
                         </div>
                         <div class="ea-details">
-                            <span class="details-text" id="kontenAusgabenDetails">-</span>
+                            <span class="details-text">Personal: €28.000, Miete: €8.500, Wareneinkauf: €12.000</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kredit-Produkte mit großen Charts (dynamisch befüllt) -->
-                <div class="credit-products-large" id="creditProductsContainer">
+                <!-- Kredit-Produkte mit großen Charts -->
+                <div class="credit-products-large">
                     <!-- Kreditkarte Gold - großes Chart mit realistischem Saldoverlauf -->
                     <div class="credit-product-large danger" data-product="kreditkarte">
                         <div class="credit-product-header-large">
@@ -1313,18 +1297,18 @@
                                 </svg>
                                 Erträge
                             </h4>
-                            <div class="guv-breakdown" id="guvErtraegeBreakdown">
+                            <div class="guv-breakdown">
                                 <div class="breakdown-row">
                                     <span class="breakdown-label">Umsatzerlöse</span>
-                                    <span class="breakdown-value">€0</span>
+                                    <span class="breakdown-value">€540.000</span>
                                 </div>
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">Sonstige Erträge</span>
-                                    <span class="breakdown-value">€0</span>
+                                    <span class="breakdown-label">Sonstige betr. Erträge</span>
+                                    <span class="breakdown-value">€12.500</span>
                                 </div>
                                 <div class="breakdown-row total">
-                                    <span class="breakdown-label">Gesamt Erträge</span>
-                                    <span class="breakdown-value">€0</span>
+                                    <span class="breakdown-label">Gesamterträge</span>
+                                    <span class="breakdown-value">€552.500</span>
                                 </div>
                             </div>
                         </div>
@@ -1337,26 +1321,30 @@
                                 </svg>
                                 Aufwendungen
                             </h4>
-                            <div class="guv-breakdown" id="guvAufwendungenBreakdown">
+                            <div class="guv-breakdown">
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">Personal</span>
-                                    <span class="breakdown-value negative">€0</span>
+                                    <span class="breakdown-label">Materialaufwand</span>
+                                    <span class="breakdown-value negative">€144.000</span>
                                 </div>
                                 <div class="breakdown-row">
-                                    <span class="breakdown-label">Miete/Raumkosten</span>
-                                    <span class="breakdown-value negative">€0</span>
+                                    <span class="breakdown-label">Personalaufwand</span>
+                                    <span class="breakdown-value negative">€252.000</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Miete/Pacht</span>
+                                    <span class="breakdown-value negative">€102.000</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Sonstige betr. Aufwendungen</span>
+                                    <span class="breakdown-value negative">€78.500</span>
                                 </div>
                                 <div class="breakdown-row">
                                     <span class="breakdown-label">Abschreibungen</span>
-                                    <span class="breakdown-value negative">€0</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span class="breakdown-label">Sonstige</span>
-                                    <span class="breakdown-value negative">€0</span>
+                                    <span class="breakdown-value negative">€18.000</span>
                                 </div>
                                 <div class="breakdown-row total">
-                                    <span class="breakdown-label">Gesamt Aufwendungen</span>
-                                    <span class="breakdown-value negative">€0</span>
+                                    <span class="breakdown-label">Gesamtaufwendungen</span>
+                                    <span class="breakdown-value negative">€594.500</span>
                                 </div>
                             </div>
                         </div>
@@ -1374,28 +1362,28 @@
                         <div class="liquidity-grid">
                             <div class="liquidity-item">
                                 <span class="liquidity-label">Ø Kontostand</span>
-                                <span class="liquidity-value" id="guvKontostand">€0</span>
+                                <span class="liquidity-value negative">-€8.450</span>
                             </div>
                             <div class="liquidity-item">
                                 <span class="liquidity-label">Ø Zahlungseingänge/M</span>
-                                <span class="liquidity-value" id="guvMonatlicheEinnahmen">€0</span>
+                                <span class="liquidity-value">€45.000</span>
                             </div>
                             <div class="liquidity-item">
                                 <span class="liquidity-label">Ø Zahlungsausgänge/M</span>
-                                <span class="liquidity-value" id="guvMonatlicheAusgaben">€0</span>
+                                <span class="liquidity-value negative">€52.000</span>
                             </div>
-                            <div class="liquidity-item" id="guvCashflowItem">
-                                <span class="liquidity-label">Cashflow/M</span>
-                                <span class="liquidity-value" id="guvCashflow">€0</span>
+                            <div class="liquidity-item warning">
+                                <span class="liquidity-label">Liquiditätslücke/M</span>
+                                <span class="liquidity-value negative">-€7.000</span>
                             </div>
                         </div>
-                        <div class="liquidity-warning" id="guvLiquidityWarning" style="display: none;">
+                        <div class="liquidity-warning">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                                 <line x1="12" y1="9" x2="12" y2="13"></line>
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
-                            <span id="guvLiquidityWarningText"></span>
+                            <span>Negativer Cashflow: Monatliche Ausgaben übersteigen Einnahmen um ca. €7.000</span>
                         </div>
                     </div>
                 </div>

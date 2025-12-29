@@ -24,14 +24,14 @@ function initFirebase() {
         if (typeof firebase !== 'undefined' && !firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
             feedbackDb = firebase.database();
-            // Firebase ready
+            console.log('✅ Firebase initialisiert');
             loadFeedbackFromFirebase();
         } else if (firebase.apps.length) {
             feedbackDb = firebase.database();
             loadFeedbackFromFirebase();
         }
     } catch (error) {
-        // Firebase unavailable, using LocalStorage
+        console.warn('Firebase nicht verfügbar, nutze LocalStorage:', error);
         loadFeedbackFromLocalStorage();
     }
 }
@@ -91,7 +91,7 @@ function submitFeedback() {
         // In Firebase speichern
         feedbackDb.ref('feedback').push(feedback)
             .then(() => {
-                // Saved to Firebase
+                console.log('✅ Feedback in Firebase gespeichert');
                 document.getElementById('feedbackText').value = '';
                 showFeedbackNotification('Feedback gespeichert!');
             })
@@ -148,10 +148,10 @@ function renderFeedbackList(feedbacks) {
     }
 
     const typeIcons = {
-        'verbesserung': '[IDEA]',
-        'fehler': '[BUG]',
-        'frage': '[?]',
-        'lob': '[+1]'
+        'verbesserung': '💡',
+        'fehler': '🐛',
+        'frage': '❓',
+        'lob': '👍'
     };
 
     const areaLabels = {
@@ -236,4 +236,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initFirebase, 500);
 });
 
-// Banken Feedback Module loaded
+console.log('📝 Banken Feedback Module geladen');
