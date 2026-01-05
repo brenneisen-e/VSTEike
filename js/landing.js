@@ -1130,6 +1130,89 @@ function closeBestandsuebertragung() {
 }
 
 // ========================================
+// PMO TOOLBOX MODULE
+// ========================================
+
+let pmoToolboxLoaded = false;
+
+async function openPMOToolbox() {
+    console.log('📊 PMO Toolbox öffnen...');
+
+    // Hide landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'none';
+    }
+
+    // Hide main app if visible
+    const mainApp = document.getElementById('mainApp');
+    if (mainApp) {
+        mainApp.style.display = 'none';
+    }
+
+    // Hide other modules
+    const bankenModule = document.getElementById('bankenModule');
+    if (bankenModule) {
+        bankenModule.style.display = 'none';
+    }
+
+    const rsModule = document.getElementById('risikoscoringModule');
+    if (rsModule) {
+        rsModule.style.display = 'none';
+    }
+
+    const bestandModule = document.getElementById('bestandsuebertragungModule');
+    if (bestandModule) {
+        bestandModule.style.display = 'none';
+    }
+
+    // Show PMO Toolbox module
+    const pmoModule = document.getElementById('pmoToolboxModule');
+    if (pmoModule) {
+        pmoModule.style.display = 'block';
+
+        // Load module content if not already loaded
+        if (!pmoToolboxLoaded) {
+            try {
+                const response = await fetch('partials/pmo-toolbox-module.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    pmoModule.innerHTML = html;
+                    pmoToolboxLoaded = true;
+
+                    // Initialize the PMO Toolbox app
+                    if (typeof PMO !== 'undefined' && typeof PMO.init === 'function') {
+                        PMO.init();
+                    }
+                    console.log('✅ PMO Toolbox Modul geladen');
+                } else {
+                    pmoModule.innerHTML = '<div class="error-message">Fehler beim Laden des PMO Toolbox-Moduls</div>';
+                }
+            } catch (error) {
+                console.error('Error loading PMO Toolbox module:', error);
+                pmoModule.innerHTML = '<div class="error-message">Fehler beim Laden des PMO Toolbox-Moduls</div>';
+            }
+        }
+    }
+}
+
+function closePMOToolbox() {
+    console.log('📊 PMO Toolbox schließen...');
+
+    // Hide PMO Toolbox module
+    const pmoModule = document.getElementById('pmoToolboxModule');
+    if (pmoModule) {
+        pmoModule.style.display = 'none';
+    }
+
+    // Show landing page (use flex for proper centering)
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.style.display = 'flex';
+    }
+}
+
+// ========================================
 // AUTO-LOAD CSV MOCK DATA
 // ========================================
 
