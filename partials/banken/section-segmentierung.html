@@ -609,6 +609,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Eskalation/Inkasso Case - Mueller GmbH (K-2024-0001) - vollständige Demoakte -->
                         <tr onclick="openCustomerDetail('K-2024-0001')">
                             <td>
                                 <div class="customer-cell">
@@ -638,14 +639,14 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="mahnstufe-badge m2">M2</span></td>
+                            <td><span class="mahnstufe-badge m3">M3</span></td>
                             <td>
                                 <div class="next-action">
-                                    <span class="action-type">2. Mahnung versenden</span>
-                                    <small class="action-date upcoming">18.12.2024</small>
+                                    <span class="action-type">Inkasso-Verfahren</span>
+                                    <small class="action-date overdue">10.12.2025</small>
                                 </div>
                             </td>
-                            <td><span class="status-badge offen">Offen</span></td>
+                            <td><span class="status-badge inkasso">Inkasso</span></td>
                             <td><span class="bearbeiter-badge">M. Schneider</span></td>
                             <td class="actions-cell" onclick="event.stopPropagation();">
                                 <button class="action-btn" onclick="startMahnprozess('K-2024-0001')" title="Mahnprozess">
@@ -668,333 +669,155 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0002')">
-                            <td>
-                                <div class="customer-cell">
-                                    <strong>Schmidt, Peter</strong>
-                                    <small>Privat | K-2024-0002</small>
-                                </div>
-                            </td>
+                        <!-- Priorität - Müller, Hans (K-2024-8847) - vollständige Demoakte mit Zahlungszusage -->
+                        <tr onclick="openCustomerDetail('K-2024-8847')">
+                            <td><div class="customer-cell"><strong>Müller, Hans</strong><small>Privat | K-2024-8847</small></div></td>
                             <td>Ratenkredit</td>
-                            <td class="amount">€8.450</td>
-                            <td><span class="dpd-badge low">21</span></td>
-                            <td><span class="segment-badge priority">Priorität</span></td>
-                            <td>
-                                <div class="wa-score-visual">
-                                    <div class="wa-bar-container">
-                                        <span class="wa-label">W</span>
-                                        <div class="wa-bar">
-                                            <div class="wa-bar-fill willingness high" style="width: 85%;"></div>
-                                        </div>
-                                        <span class="wa-value">85%</span>
-                                    </div>
-                                    <div class="wa-bar-container">
-                                        <span class="wa-label">A</span>
-                                        <div class="wa-bar">
-                                            <div class="wa-bar-fill ability" style="width: 70%;"></div>
-                                        </div>
-                                        <span class="wa-value">70%</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="mahnstufe-badge m1">M1</span></td>
-                            <td>
-                                <div class="next-action">
-                                    <span class="action-type">Telefonat</span>
-                                    <small class="action-date upcoming">18.12.2024</small>
-                                </div>
-                            </td>
-                            <td><span class="status-badge offen">Offen</span></td>
-                            <td><span class="bearbeiter-badge">K. Weber</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();">
-                                <button class="action-btn primary" onclick="scheduleCall('K-2024-0002')" title="Anrufen">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                    </svg>
-                                </button>
-                                <button class="action-btn" onclick="createAgreement('K-2024-0002')" title="Vereinbarung">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0003')">
-                            <td>
-                                <div class="customer-cell">
-                                    <strong>Weber KG</strong>
-                                    <small>Gewerbe | K-2024-0003</small>
-                                </div>
-                            </td>
-                            <td>Kontokorrent</td>
-                            <td class="amount">€45.780</td>
-                            <td><span class="dpd-badge low">14</span></td>
-                            <td><span class="segment-badge restructure">Restrukturierung</span></td>
-                            <td>
-                                <div class="wa-score-visual">
-                                    <div class="wa-bar-container">
-                                        <span class="wa-label">W</span>
-                                        <div class="wa-bar">
-                                            <div class="wa-bar-fill willingness" style="width: 70%;"></div>
-                                        </div>
-                                        <span class="wa-value">70%</span>
-                                    </div>
-                                    <div class="wa-bar-container">
-                                        <span class="wa-label">A</span>
-                                        <div class="wa-bar">
-                                            <div class="wa-bar-fill ability low" style="width: 35%;"></div>
-                                        </div>
-                                        <span class="wa-value">35%</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="mahnstufe-badge m2">M2</span></td>
-                            <td>
-                                <div class="next-action">
-                                    <span class="action-type">Ratenzahlung prüfen</span>
-                                    <small class="action-date">20.12.2024</small>
-                                </div>
-                            </td>
-                            <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
-                            <td><span class="bearbeiter-badge">S. Müller</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();">
-                                <button class="action-btn" onclick="viewAgreement('K-2024-0003')" title="Vereinbarung ansehen">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0004')">
-                            <td>
-                                <div class="customer-cell">
-                                    <strong>Braun, Maria</strong>
-                                    <small>Privat | K-2024-0004</small>
-                                </div>
-                            </td>
-                            <td>Kreditkarte</td>
-                            <td class="amount">€3.210</td>
-                            <td><span class="dpd-badge medium">67</span></td>
-                            <td><span class="segment-badge writeoff">Abwicklung</span></td>
-                            <td>
-                                <div class="wa-score-visual">
-                                    <div class="wa-bar-container">
-                                        <span class="wa-label">W</span>
-                                        <div class="wa-bar">
-                                            <div class="wa-bar-fill willingness low" style="width: 15%;"></div>
-                                        </div>
-                                        <span class="wa-value">15%</span>
-                                    </div>
-                                    <div class="wa-bar-container">
-                                        <span class="wa-label">A</span>
-                                        <div class="wa-bar">
-                                            <div class="wa-bar-fill ability low" style="width: 10%;"></div>
-                                        </div>
-                                        <span class="wa-value">10%</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="mahnstufe-badge m4">M4</span></td>
-                            <td>
-                                <div class="next-action">
-                                    <span class="action-type">Abschreibung</span>
-                                    <small class="action-date overdue">10.12.2024</small>
-                                </div>
-                            </td>
-                            <td><span class="status-badge abschreibung">Abschreibung</span></td>
-                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();">
-                                <button class="action-btn" onclick="sellCase('K-2024-0004')" title="Verkaufen">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                                    </svg>
-                                </button>
-                                <button class="action-btn danger" onclick="writeOff('K-2024-0004')" title="Abschreiben">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Additional Eskalation cases -->
-                        <tr onclick="openCustomerDetail('K-2024-0005')">
-                            <td><div class="customer-cell"><strong>Hoffmann Bau GmbH</strong><small>Gewerbe | K-2024-0005</small></div></td>
-                            <td>Investitionskredit</td>
-                            <td class="amount">€287.500</td>
-                            <td><span class="dpd-badge medium">48</span></td>
-                            <td><span class="segment-badge escalate">Eskalation</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 20%;"></div></div><span class="wa-value">20%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 45%;"></div></div><span class="wa-value">45%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m3">M3</span></td>
-                            <td><div class="next-action"><span class="action-type">Rechtliche Schritte</span><small class="action-date overdue">12.12.2024</small></div></td>
-                            <td><span class="status-badge inkasso">Inkasso</span></td>
-                            <td><span class="bearbeiter-badge">A. Becker</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Mahnprozess"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0006')">
-                            <td><div class="customer-cell"><strong>Keller, Thomas</strong><small>Privat | K-2024-0006</small></div></td>
-                            <td>Dispositionskredit</td>
-                            <td class="amount">€15.800</td>
-                            <td><span class="dpd-badge medium">42</span></td>
-                            <td><span class="segment-badge escalate">Eskalation</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 15%;"></div></div><span class="wa-value">15%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 55%;"></div></div><span class="wa-value">55%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m3">M3</span></td>
-                            <td><div class="next-action"><span class="action-type">Inkasso-Übergabe</span><small class="action-date overdue">14.12.2024</small></div></td>
-                            <td><span class="status-badge inkasso">Inkasso</span></td>
-                            <td><span class="bearbeiter-badge">K. Weber</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn danger" title="Abschreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0007')">
-                            <td><div class="customer-cell"><strong>Autohaus Berger</strong><small>Gewerbe | K-2024-0007</small></div></td>
-                            <td>Betriebsmittelkredit</td>
-                            <td class="amount">€89.300</td>
-                            <td><span class="dpd-badge medium">55</span></td>
-                            <td><span class="segment-badge escalate">Eskalation</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 30%;"></div></div><span class="wa-value">30%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 40%;"></div></div><span class="wa-value">40%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m4">M4</span></td>
-                            <td><div class="next-action"><span class="action-type">Zwangsvollstreckung</span><small class="action-date overdue">08.12.2024</small></div></td>
-                            <td><span class="status-badge inkasso">Inkasso</span></td>
-                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Verkaufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></button></td>
-                        </tr>
-                        <!-- Additional Priorität cases -->
-                        <tr onclick="openCustomerDetail('K-2024-0008')">
-                            <td><div class="customer-cell"><strong>Lehmann, Sandra</strong><small>Privat | K-2024-0008</small></div></td>
-                            <td>Autokredit</td>
-                            <td class="amount">€12.650</td>
+                            <td class="amount">€4.230</td>
                             <td><span class="dpd-badge low">18</span></td>
                             <td><span class="segment-badge priority">Priorität</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 90%;"></div></div><span class="wa-value">90%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 75%;"></div></div><span class="wa-value">75%</span></div></div></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 85%;"></div></div><span class="wa-value">85%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 70%;"></div></div><span class="wa-value">70%</span></div></div></td>
                             <td><span class="mahnstufe-badge m1">M1</span></td>
-                            <td><div class="next-action"><span class="action-type">Zahlungserinnerung</span><small class="action-date upcoming">19.12.2024</small></div></td>
-                            <td><span class="status-badge offen">Offen</span></td>
-                            <td><span class="bearbeiter-badge">S. Müller</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0009')">
-                            <td><div class="customer-cell"><strong>Meier Elektro OHG</strong><small>Gewerbe | K-2024-0009</small></div></td>
-                            <td>Kontokorrent</td>
-                            <td class="amount">€34.200</td>
-                            <td><span class="dpd-badge low">25</span></td>
-                            <td><span class="segment-badge priority">Priorität</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 80%;"></div></div><span class="wa-value">80%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 65%;"></div></div><span class="wa-value">65%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m2">M2</span></td>
-                            <td><div class="next-action"><span class="action-type">Telefonat</span><small class="action-date upcoming">17.12.2024</small></div></td>
-                            <td><span class="status-badge offen">Offen</span></td>
-                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0010')">
-                            <td><div class="customer-cell"><strong>Fischer, Hans</strong><small>Privat | K-2024-0010</small></div></td>
-                            <td>Ratenkredit</td>
-                            <td class="amount">€6.890</td>
-                            <td><span class="dpd-badge low">12</span></td>
-                            <td><span class="segment-badge priority">Priorität</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 95%;"></div></div><span class="wa-value">95%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 80%;"></div></div><span class="wa-value">80%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m1">M1</span></td>
-                            <td><div class="next-action"><span class="action-type">Zahlungszusage</span><small class="action-date upcoming">20.12.2024</small></div></td>
+                            <td><div class="next-action"><span class="action-type">Zahlungszusage 23.12.</span><small class="action-date upcoming">23.12.2025</small></div></td>
                             <td><span class="status-badge zusage">Zusage</span></td>
-                            <td><span class="bearbeiter-badge">A. Becker</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Vereinbarung"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></button></td>
-                        </tr>
-                        <!-- Additional Restrukturierung cases -->
-                        <tr onclick="openCustomerDetail('K-2024-0011')">
-                            <td><div class="customer-cell"><strong>Bäckerei Schulze</strong><small>Gewerbe | K-2024-0011</small></div></td>
-                            <td>Betriebsmittelkredit</td>
-                            <td class="amount">€67.400</td>
-                            <td><span class="dpd-badge low">28</span></td>
-                            <td><span class="segment-badge restructure">Restrukturierung</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 75%;"></div></div><span class="wa-value">75%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 30%;"></div></div><span class="wa-value">30%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m2">M2</span></td>
-                            <td><div class="next-action"><span class="action-type">Stundungsvereinbarung</span><small class="action-date">22.12.2024</small></div></td>
-                            <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
-                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0012')">
-                            <td><div class="customer-cell"><strong>Neumann, Klaus</strong><small>Privat | K-2024-0012</small></div></td>
-                            <td>Baufinanzierung</td>
-                            <td class="amount">€156.000</td>
-                            <td><span class="dpd-badge low">8</span></td>
-                            <td><span class="segment-badge restructure">Restrukturierung</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 85%;"></div></div><span class="wa-value">85%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 25%;"></div></div><span class="wa-value">25%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m1">M1</span></td>
-                            <td><div class="next-action"><span class="action-type">Ratenpause</span><small class="action-date">18.12.2024</small></div></td>
-                            <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
                             <td><span class="bearbeiter-badge">K. Weber</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" onclick="scheduleCall('K-2024-8847')" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
                         </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0013')">
-                            <td><div class="customer-cell"><strong>Gasthaus zum Löwen</strong><small>Gewerbe | K-2024-0013</small></div></td>
-                            <td>Investitionskredit</td>
-                            <td class="amount">€112.800</td>
-                            <td><span class="dpd-badge low">19</span></td>
-                            <td><span class="segment-badge restructure">Restrukturierung</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 65%;"></div></div><span class="wa-value">65%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 40%;"></div></div><span class="wa-value">40%</span></div></div></td>
+                        <!-- Priorität - Schmidt GmbH (K-2024-8846) - vollständige Demoakte mit Zahlungszusage -->
+                        <tr onclick="openCustomerDetail('K-2024-8846')">
+                            <td><div class="customer-cell"><strong>Schmidt GmbH</strong><small>Gewerbe | K-2024-8846</small></div></td>
+                            <td>Kontokorrentkredit</td>
+                            <td class="amount">€12.890</td>
+                            <td><span class="dpd-badge low">18</span></td>
+                            <td><span class="segment-badge priority">Priorität</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 75%;"></div></div><span class="wa-value">75%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 80%;"></div></div><span class="wa-value">80%</span></div></div></td>
                             <td><span class="mahnstufe-badge m2">M2</span></td>
-                            <td><div class="next-action"><span class="action-type">Tilgungsstreckung</span><small class="action-date">21.12.2024</small></div></td>
-                            <td><span class="status-badge vereinbarung">Vereinbarung</span></td>
-                            <td><span class="bearbeiter-badge">S. Müller</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
-                        </tr>
-                        <!-- Additional Abwicklung cases -->
-                        <tr onclick="openCustomerDetail('K-2024-0014')">
-                            <td><div class="customer-cell"><strong>Werner, Sabine</strong><small>Privat | K-2024-0014</small></div></td>
-                            <td>Ratenkredit</td>
-                            <td class="amount">€4.560</td>
-                            <td><span class="dpd-badge high">92</span></td>
-                            <td><span class="segment-badge writeoff">Abwicklung</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 10%;"></div></div><span class="wa-value">10%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 5%;"></div></div><span class="wa-value">5%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m4">M4</span></td>
-                            <td><div class="next-action"><span class="action-type">Forderungsverkauf</span><small class="action-date overdue">05.12.2024</small></div></td>
-                            <td><span class="status-badge abschreibung">Abschreibung</span></td>
-                            <td><span class="bearbeiter-badge">A. Becker</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" title="Verkaufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0015')">
-                            <td><div class="customer-cell"><strong>Maier Transporte</strong><small>Gewerbe | K-2024-0015</small></div></td>
-                            <td>Leasingvertrag</td>
-                            <td class="amount">€78.900</td>
-                            <td><span class="dpd-badge medium">78</span></td>
-                            <td><span class="segment-badge writeoff">Abwicklung</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 20%;"></div></div><span class="wa-value">20%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 15%;"></div></div><span class="wa-value">15%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m4">M4</span></td>
-                            <td><div class="next-action"><span class="action-type">Insolvenzanmeldung</span><small class="action-date overdue">01.12.2024</small></div></td>
-                            <td><span class="status-badge abschreibung">Abschreibung</span></td>
-                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn danger" title="Abschreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
-                        </tr>
-                        <tr onclick="openCustomerDetail('K-2024-0016')">
-                            <td><div class="customer-cell"><strong>Zimmermann, Frank</strong><small>Privat | K-2024-0016</small></div></td>
-                            <td>Kreditkarte</td>
-                            <td class="amount">€2.340</td>
-                            <td><span class="dpd-badge high">105</span></td>
-                            <td><span class="segment-badge writeoff">Abwicklung</span></td>
-                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness low" style="width: 5%;"></div></div><span class="wa-value">5%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability low" style="width: 5%;"></div></div><span class="wa-value">5%</span></div></div></td>
-                            <td><span class="mahnstufe-badge m4">M4</span></td>
-                            <td><div class="next-action"><span class="action-type">Abschreibung</span><small class="action-date overdue">28.11.2024</small></div></td>
-                            <td><span class="status-badge abschreibung">Abschreibung</span></td>
+                            <td><div class="next-action"><span class="action-type">Zahlungszusage 27.12.</span><small class="action-date upcoming">27.12.2025</small></div></td>
+                            <td><span class="status-badge zusage">Zusage</span></td>
                             <td><span class="bearbeiter-badge">T. Fischer</span></td>
-                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn danger" title="Abschreiben"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" onclick="scheduleCall('K-2024-8846')" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
+                        </tr>
+                        <!-- Priorität - Weber, Anna (K-2024-8845) - vollständige Demoakte mit Zahlungszusage -->
+                        <tr onclick="openCustomerDetail('K-2024-8845')">
+                            <td><div class="customer-cell"><strong>Weber, Anna</strong><small>Privat | K-2024-8845</small></div></td>
+                            <td>Kreditkarte</td>
+                            <td class="amount">€2.150</td>
+                            <td><span class="dpd-badge low">18</span></td>
+                            <td><span class="segment-badge priority">Priorität</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 70%;"></div></div><span class="wa-value">70%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 55%;"></div></div><span class="wa-value">55%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m2">M2</span></td>
+                            <td><div class="next-action"><span class="action-type">Zahlungszusage 28.12.</span><small class="action-date upcoming">28.12.2025</small></div></td>
+                            <td><span class="status-badge zusage">Zusage</span></td>
+                            <td><span class="bearbeiter-badge">S. Müller</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn primary" onclick="scheduleCall('K-2024-8845')" title="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button></td>
+                        </tr>
+                        <!-- Monitoring - Braun, Thomas (K-2024-7234) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-7234')">
+                            <td><div class="customer-cell"><strong>Braun, Thomas</strong><small>Privat | K-2024-7234</small></div></td>
+                            <td>Baufinanzierung</td>
+                            <td class="amount">€289.350</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge priority">Stabil</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 90%;"></div></div><span class="wa-value">90%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability high" style="width: 85%;"></div></div><span class="wa-value">85%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type">Monitoring</span><small class="action-date">Aktiv</small></div></td>
+                            <td><span class="status-badge offen">Aktiv</span></td>
+                            <td><span class="bearbeiter-badge">A. Becker</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-7234')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                        </tr>
+                        <!-- Monitoring - Fischer, Maria (K-2024-6234) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-6234')">
+                            <td><div class="customer-cell"><strong>Fischer, Maria</strong><small>Privat | K-2024-6234</small></div></td>
+                            <td>Ratenkredit</td>
+                            <td class="amount">€3.200</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge priority">Stabil</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 80%;"></div></div><span class="wa-value">80%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 50%;"></div></div><span class="wa-value">50%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type">Monitoring</span><small class="action-date">Aktiv</small></div></td>
+                            <td><span class="status-badge offen">Aktiv</span></td>
+                            <td><span class="bearbeiter-badge">K. Weber</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-6234')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                        </tr>
+                        <!-- Abgeschlossen - Klein KG (K-2024-6891) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-6891')">
+                            <td><div class="customer-cell"><strong>Klein KG</strong><small>Gewerbe | K-2024-6891</small></div></td>
+                            <td>Betriebsmittelkredit</td>
+                            <td class="amount success">€0</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge success">Abgeschlossen</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 85%;"></div></div><span class="wa-value">85%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 75%;"></div></div><span class="wa-value">75%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type success">Ratenvereinbarung erfüllt</span><small class="action-date">19.12.2025</small></div></td>
+                            <td><span class="status-badge success">Bezahlt</span></td>
+                            <td><span class="bearbeiter-badge">M. Schneider</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-6891')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                        </tr>
+                        <!-- Abgeschlossen - Meier, Stefan (K-2024-5982) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-5982')">
+                            <td><div class="customer-cell"><strong>Meier, Stefan</strong><small>Privat | K-2024-5982</small></div></td>
+                            <td>Dispositionskredit</td>
+                            <td class="amount success">€0</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge success">Abgeschlossen</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness" style="width: 75%;"></div></div><span class="wa-value">75%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability" style="width: 70%;"></div></div><span class="wa-value">70%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type success">Dispo ausgeglichen</span><small class="action-date">15.12.2025</small></div></td>
+                            <td><span class="status-badge success">Bezahlt</span></td>
+                            <td><span class="bearbeiter-badge">T. Fischer</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-5982')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                        </tr>
+                        <!-- Abgeschlossen - Schneider Logistik GmbH (K-2024-5876) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-5876')">
+                            <td><div class="customer-cell"><strong>Schneider Logistik GmbH</strong><small>Gewerbe | K-2024-5876</small></div></td>
+                            <td>Kontokorrentkredit</td>
+                            <td class="amount success">€0</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge success">Abgeschlossen</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 80%;"></div></div><span class="wa-value">80%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability high" style="width: 85%;"></div></div><span class="wa-value">85%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type success">Alle Kredite beglichen</span><small class="action-date">12.12.2025</small></div></td>
+                            <td><span class="status-badge success">Bezahlt</span></td>
+                            <td><span class="bearbeiter-badge">A. Becker</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-5876')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                        </tr>
+                        <!-- Abgeschlossen - Fischer, Anna (K-2024-5734) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-5734')">
+                            <td><div class="customer-cell"><strong>Fischer, Anna</strong><small>Privat | K-2024-5734</small></div></td>
+                            <td>Kreditkarte</td>
+                            <td class="amount success">€0</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge success">Abgeschlossen</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 95%;"></div></div><span class="wa-value">95%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability high" style="width: 90%;"></div></div><span class="wa-value">90%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type success">Kreditkarte beglichen</span><small class="action-date">10.12.2025</small></div></td>
+                            <td><span class="status-badge success">Bezahlt</span></td>
+                            <td><span class="bearbeiter-badge">S. Müller</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-5734')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
+                        </tr>
+                        <!-- Abgeschlossen - Bäckerei Müller (K-2024-5612) - vollständige Demoakte -->
+                        <tr onclick="openCustomerDetail('K-2024-5612')">
+                            <td><div class="customer-cell"><strong>Bäckerei Müller</strong><small>Gewerbe | K-2024-5612</small></div></td>
+                            <td>Investitionskredit</td>
+                            <td class="amount success">€0</td>
+                            <td><span class="dpd-badge low">0</span></td>
+                            <td><span class="segment-badge success">Abgeschlossen</span></td>
+                            <td><div class="wa-score-visual"><div class="wa-bar-container"><span class="wa-label">W</span><div class="wa-bar"><div class="wa-bar-fill willingness high" style="width: 85%;"></div></div><span class="wa-value">85%</span></div><div class="wa-bar-container"><span class="wa-label">A</span><div class="wa-bar"><div class="wa-bar-fill ability high" style="width: 80%;"></div></div><span class="wa-value">80%</span></div></div></td>
+                            <td><span class="mahnstufe-badge m0">M0</span></td>
+                            <td><div class="next-action"><span class="action-type success">Kredit vollständig getilgt</span><small class="action-date">08.12.2025</small></div></td>
+                            <td><span class="status-badge success">Bezahlt</span></td>
+                            <td><span class="bearbeiter-badge">K. Weber</span></td>
+                            <td class="actions-cell" onclick="event.stopPropagation();"><button class="action-btn" onclick="viewCustomer('K-2024-5612')" title="Ansehen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="table-pagination">
-                <span>Zeige 1-16 von 10.234 Kunden</span>
+                <span>Zeige 1-11 von 11 Demo-Kunden</span>
                 <div class="pagination-controls">
                     <button class="pagination-btn" disabled>Zurück</button>
                     <button class="pagination-btn active">1</button>
-                    <button class="pagination-btn">2</button>
-                    <button class="pagination-btn">3</button>
-                    <span>...</span>
-                    <button class="pagination-btn">2559</button>
-                    <button class="pagination-btn">Weiter</button>
+                    <button class="pagination-btn" disabled>Weiter</button>
                 </div>
             </div>
         </div>
