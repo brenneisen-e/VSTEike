@@ -1180,10 +1180,18 @@ async function openPMOToolbox() {
                     pmoModule.innerHTML = html;
                     pmoToolboxLoaded = true;
 
-                    // Initialize the PMO Toolbox app
-                    if (typeof PMO !== 'undefined' && typeof PMO.init === 'function') {
-                        PMO.init();
-                    }
+                    // Execute scripts manually (innerHTML doesn't execute scripts)
+                    const scripts = pmoModule.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+
                     console.log('✅ PMO Toolbox Modul geladen');
                 } else {
                     pmoModule.innerHTML = '<div class="error-message">Fehler beim Laden des PMO Toolbox-Moduls</div>';
