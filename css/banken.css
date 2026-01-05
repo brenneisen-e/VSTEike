@@ -11661,16 +11661,16 @@ body.modal-open {
 
 .axis-y-label {
     position: absolute;
-    left: 8px;
-    top: 50%;
+    left: -25px;
+    top: 45%;
     transform: translateY(-50%) rotate(-90deg);
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 12px;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
-    color: #64748b;
+    color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -11706,9 +11706,9 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     padding: 12px 8px 0 8px;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
-    color: #64748b;
+    color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-top: 1px solid #e2e8f0;
