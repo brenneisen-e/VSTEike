@@ -1747,8 +1747,7 @@ body.modal-open {
 }
 
 .matrix-section-wrapper .collapsible-content {
-    padding: 0 20px 20px 50px;
-    position: relative;
+    padding: 0 20px 20px 20px;
 }
 
 .card-subtitle {
@@ -11653,62 +11652,42 @@ body.modal-open {
    NEUE MATRIX ACHSEN UND GESAMTSUMME
    ======================================== */
 
-/* Matrix Axis Container - Redesigned */
-.matrix-axis-container {
-    position: static;
-    padding: 16px 0 0 0;
+/* Matrix with Axes - Flexbox Layout (dynamisch) */
+.matrix-with-axes {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
 }
 
 .axis-y-label {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    font-size: 11px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    padding: 20px 8px;
+    font-size: 13px;
     font-weight: 600;
-    color: #64748b;
+    color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
+    min-width: 30px;
 }
 
-.axis-y-label .axis-arrow-up,
-.axis-y-label .axis-arrow-down {
-    width: 24px;
-    height: 1px;
-    background: #94a3b8;
-    position: relative;
-}
-
-.axis-y-label .axis-arrow-up::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: -3px;
-    border: 3px solid transparent;
-    border-left: 5px solid #94a3b8;
-}
-
-.axis-y-label .axis-arrow-down::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -3px;
-    border: 3px solid transparent;
-    border-right: 5px solid #94a3b8;
+.matrix-main-area {
+    flex: 1;
 }
 
 .axis-x-label {
     display: flex;
     justify-content: space-between;
     padding: 12px 8px 0 8px;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
-    color: #64748b;
+    color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-top: 1px solid #e2e8f0;
