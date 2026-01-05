@@ -1184,12 +1184,9 @@ async function openPMOToolbox() {
                     const scripts = pmoModule.querySelectorAll('script');
                     scripts.forEach(oldScript => {
                         const newScript = document.createElement('script');
-                        if (oldScript.src) {
-                            newScript.src = oldScript.src;
-                        } else {
-                            newScript.textContent = oldScript.textContent;
-                        }
-                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                        newScript.textContent = oldScript.textContent;
+                        document.body.appendChild(newScript);
+                        oldScript.remove();
                     });
 
                     console.log('✅ PMO Toolbox Modul geladen');
