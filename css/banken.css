@@ -1747,7 +1747,8 @@ body.modal-open {
 }
 
 .matrix-section-wrapper .collapsible-content {
-    padding: 0 20px 20px 20px;
+    padding: 0 20px 20px 50px;
+    position: relative;
 }
 
 .card-subtitle {
@@ -11654,21 +11655,21 @@ body.modal-open {
 
 /* Matrix Axis Container - Redesigned */
 .matrix-axis-container {
-    position: relative;
+    position: static;
     padding: 16px 0 0 0;
 }
 
 .axis-y-label {
     position: absolute;
-    left: -45px;
+    left: 8px;
     top: 50%;
     transform: translateY(-50%) rotate(-90deg);
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    font-weight: 500;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 600;
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -11677,7 +11678,7 @@ body.modal-open {
 
 .axis-y-label .axis-arrow-up,
 .axis-y-label .axis-arrow-down {
-    width: 20px;
+    width: 24px;
     height: 1px;
     background: #94a3b8;
     position: relative;
@@ -11705,8 +11706,8 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     padding: 12px 8px 0 8px;
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 600;
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
