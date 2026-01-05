@@ -1,0 +1,1990 @@
+<div class="pmo-page">
+    <!-- Header -->
+    <div class="pmo-header">
+        <button class="back-button" onclick="closePMOToolbox()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Zurück
+        </button>
+        <div class="pmo-header-info">
+            <h1 class="pmo-title">PMO Toolbox</h1>
+            <p class="pmo-subtitle">Sales Excellence Transformationsprogramm</p>
+        </div>
+        <div class="pmo-header-actions">
+            <button class="pmo-btn pmo-btn-secondary" onclick="PMO.openSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                Suche
+            </button>
+            <button class="pmo-btn pmo-btn-primary" onclick="PMO.openStatusModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Neuer Status
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="pmo-nav">
+        <button class="pmo-nav-btn active" data-view="dashboard" onclick="PMO.showView('dashboard')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+        </button>
+        <button class="pmo-nav-btn" data-view="timeline" onclick="PMO.showView('timeline')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <line x1="12" y1="20" x2="12" y2="10"></line>
+                <line x1="18" y1="20" x2="18" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="16"></line>
+            </svg>
+            Timeline
+        </button>
+        <button class="pmo-nav-btn" data-view="risiken" onclick="PMO.showView('risiken')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Risiken & Issues
+        </button>
+        <button class="pmo-nav-btn" data-view="meilensteine" onclick="PMO.showView('meilensteine')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Meilensteine
+        </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="pmo-content">
+        <!-- Dashboard View -->
+        <div id="pmo-dashboard" class="pmo-view active">
+            <!-- Quick Stats -->
+            <div class="pmo-quick-stats">
+                <div class="pmo-stat-card">
+                    <div class="pmo-stat-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="pmo-stat-info">
+                        <span class="pmo-stat-value" id="stat-green">0</span>
+                        <span class="pmo-stat-label">Im Plan</span>
+                    </div>
+                </div>
+                <div class="pmo-stat-card">
+                    <div class="pmo-stat-icon yellow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <div class="pmo-stat-info">
+                        <span class="pmo-stat-value" id="stat-yellow">0</span>
+                        <span class="pmo-stat-label">Achtung</span>
+                    </div>
+                </div>
+                <div class="pmo-stat-card">
+                    <div class="pmo-stat-icon red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="pmo-stat-info">
+                        <span class="pmo-stat-value" id="stat-red">0</span>
+                        <span class="pmo-stat-label">Kritisch</span>
+                    </div>
+                </div>
+                <div class="pmo-stat-card">
+                    <div class="pmo-stat-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div class="pmo-stat-info">
+                        <span class="pmo-stat-value" id="stat-risks">0</span>
+                        <span class="pmo-stat-label">Offene Risiken</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <h3 class="pmo-section-title">Projekte</h3>
+            <div class="pmo-projects-grid" id="pmo-projects-grid">
+                <!-- Projects will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Timeline View -->
+        <div id="pmo-timeline" class="pmo-view">
+            <div class="pmo-timeline-header">
+                <h3 class="pmo-section-title">Programm-Timeline</h3>
+                <div class="pmo-timeline-filters">
+                    <select id="timeline-project-filter" onchange="PMO.filterTimeline()">
+                        <option value="">Alle Projekte</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pmo-timeline-container" id="pmo-timeline-container">
+                <!-- Timeline will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Risks View -->
+        <div id="pmo-risiken" class="pmo-view">
+            <div class="pmo-risks-header">
+                <h3 class="pmo-section-title">Risiken & Herausforderungen</h3>
+                <div class="pmo-risks-filters">
+                    <select id="risks-status-filter" onchange="PMO.filterRisks()">
+                        <option value="">Alle Status</option>
+                        <option value="Neu">Neu</option>
+                        <option value="Offen">Offen</option>
+                        <option value="Geschlossen">Geschlossen</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pmo-risks-table-container">
+                <table class="pmo-table">
+                    <thead>
+                        <tr>
+                            <th>Typ</th>
+                            <th>Projekt</th>
+                            <th>Beschreibung</th>
+                            <th>Identifiziert</th>
+                            <th>Zieldatum</th>
+                            <th>Status</th>
+                            <th>Maßnahmen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pmo-risks-tbody">
+                        <!-- Risks will be rendered here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Milestones View -->
+        <div id="pmo-meilensteine" class="pmo-view">
+            <div class="pmo-milestones-header">
+                <h3 class="pmo-section-title">Meilensteine</h3>
+                <div class="pmo-milestones-filters">
+                    <select id="milestones-status-filter" onchange="PMO.filterMilestones()">
+                        <option value="">Alle Status</option>
+                        <option value="Im Plan">Im Plan</option>
+                        <option value="Verzögert">Verzögert</option>
+                        <option value="Geschlossen">Geschlossen</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pmo-milestones-table-container">
+                <table class="pmo-table">
+                    <thead>
+                        <tr>
+                            <th>Projekt</th>
+                            <th>Workstream</th>
+                            <th>Meilenstein</th>
+                            <th>Geplant</th>
+                            <th>Aktuell</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pmo-milestones-tbody">
+                        <!-- Milestones will be rendered here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal -->
+    <div class="pmo-modal" id="pmo-project-modal">
+        <div class="pmo-modal-backdrop" onclick="PMO.closeProjectModal()"></div>
+        <div class="pmo-modal-content pmo-modal-large">
+            <div class="pmo-modal-header">
+                <h2 id="project-modal-title">Projekt Details</h2>
+                <button class="pmo-modal-close" onclick="PMO.closeProjectModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="pmo-modal-body" id="project-modal-body">
+                <!-- Project details will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Input Modal -->
+    <div class="pmo-modal" id="pmo-status-modal">
+        <div class="pmo-modal-backdrop" onclick="PMO.closeStatusModal()"></div>
+        <div class="pmo-modal-content pmo-modal-large">
+            <div class="pmo-modal-header">
+                <h2>Neuen Status erfassen</h2>
+                <button class="pmo-modal-close" onclick="PMO.closeStatusModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="pmo-modal-body">
+                <form id="pmo-status-form" onsubmit="PMO.saveStatus(event)">
+                    <!-- Project & Workstream Selection -->
+                    <div class="pmo-form-row">
+                        <div class="pmo-form-group">
+                            <label>Projekt *</label>
+                            <select id="status-project" required onchange="PMO.updateWorkstreamOptions()">
+                                <option value="">Projekt wählen...</option>
+                            </select>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Workstream *</label>
+                            <select id="status-workstream" required>
+                                <option value="">Erst Projekt wählen...</option>
+                            </select>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Status-Datum *</label>
+                            <input type="date" id="status-date" required>
+                        </div>
+                    </div>
+
+                    <!-- Traffic Lights -->
+                    <div class="pmo-form-section">
+                        <h4>Status-Ampeln</h4>
+                        <div class="pmo-traffic-lights-grid">
+                            <div class="pmo-traffic-light-group">
+                                <label>Gesamt</label>
+                                <div class="pmo-traffic-light-selector" data-field="overall">
+                                    <button type="button" class="tl-btn green" data-value="green"></button>
+                                    <button type="button" class="tl-btn yellow" data-value="yellow"></button>
+                                    <button type="button" class="tl-btn red" data-value="red"></button>
+                                </div>
+                            </div>
+                            <div class="pmo-traffic-light-group">
+                                <label>Budget</label>
+                                <div class="pmo-traffic-light-selector" data-field="budget">
+                                    <button type="button" class="tl-btn green" data-value="green"></button>
+                                    <button type="button" class="tl-btn yellow" data-value="yellow"></button>
+                                    <button type="button" class="tl-btn red" data-value="red"></button>
+                                </div>
+                            </div>
+                            <div class="pmo-traffic-light-group">
+                                <label>Scope</label>
+                                <div class="pmo-traffic-light-selector" data-field="scope">
+                                    <button type="button" class="tl-btn green" data-value="green"></button>
+                                    <button type="button" class="tl-btn yellow" data-value="yellow"></button>
+                                    <button type="button" class="tl-btn red" data-value="red"></button>
+                                </div>
+                            </div>
+                            <div class="pmo-traffic-light-group">
+                                <label>Zeit</label>
+                                <div class="pmo-traffic-light-selector" data-field="time">
+                                    <button type="button" class="tl-btn green" data-value="green"></button>
+                                    <button type="button" class="tl-btn yellow" data-value="yellow"></button>
+                                    <button type="button" class="tl-btn red" data-value="red"></button>
+                                </div>
+                            </div>
+                            <div class="pmo-traffic-light-group">
+                                <label>Ressourcen</label>
+                                <div class="pmo-traffic-light-selector" data-field="resources">
+                                    <button type="button" class="tl-btn green" data-value="green"></button>
+                                    <button type="button" class="tl-btn yellow" data-value="yellow"></button>
+                                    <button type="button" class="tl-btn red" data-value="red"></button>
+                                </div>
+                            </div>
+                            <div class="pmo-traffic-light-group">
+                                <label>Risiken</label>
+                                <div class="pmo-traffic-light-selector" data-field="risks">
+                                    <button type="button" class="tl-btn green" data-value="green"></button>
+                                    <button type="button" class="tl-btn yellow" data-value="yellow"></button>
+                                    <button type="button" class="tl-btn red" data-value="red"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Management Summary -->
+                    <div class="pmo-form-section">
+                        <h4>Management Summary (4 Kernpunkte)</h4>
+                        <div class="pmo-form-group">
+                            <label>Hauptfortschritt</label>
+                            <div class="pmo-input-with-counter">
+                                <input type="text" id="summary-1" maxlength="120" placeholder="Hauptfortschritt dieser Woche...">
+                                <span class="pmo-char-counter"><span class="current">0</span>/120</span>
+                            </div>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Wichtige Erkenntnis</label>
+                            <div class="pmo-input-with-counter">
+                                <input type="text" id="summary-2" maxlength="120" placeholder="Wichtige Erkenntnis...">
+                                <span class="pmo-char-counter"><span class="current">0</span>/120</span>
+                            </div>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Kritischer Punkt</label>
+                            <div class="pmo-input-with-counter">
+                                <input type="text" id="summary-3" maxlength="120" placeholder="Kritischer Punkt...">
+                                <span class="pmo-char-counter"><span class="current">0</span>/120</span>
+                            </div>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Nächster Fokus</label>
+                            <div class="pmo-input-with-counter">
+                                <input type="text" id="summary-4" maxlength="120" placeholder="Nächster Fokus...">
+                                <span class="pmo-char-counter"><span class="current">0</span>/120</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Details -->
+                    <div class="pmo-form-section">
+                        <h4>Detaillierte Informationen</h4>
+                        <div class="pmo-form-group">
+                            <label>Projektfortschritt</label>
+                            <div class="pmo-input-with-counter">
+                                <textarea id="progress-details" maxlength="500" rows="3" placeholder="Detaillierter Fortschritt gegenüber Vorwoche..."></textarea>
+                                <span class="pmo-char-counter"><span class="current">0</span>/500</span>
+                            </div>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Anstehende Aktivitäten</label>
+                            <div class="pmo-input-with-counter">
+                                <textarea id="upcoming-activities" maxlength="500" rows="3" placeholder="Geplante Aktivitäten für die kommende Woche..."></textarea>
+                                <span class="pmo-char-counter"><span class="current">0</span>/500</span>
+                            </div>
+                        </div>
+                        <div class="pmo-form-group">
+                            <label>Erforderliche Entscheidungen</label>
+                            <div class="pmo-input-with-counter">
+                                <textarea id="required-decisions" maxlength="300" rows="2" placeholder="Ausstehende Entscheidungen..."></textarea>
+                                <span class="pmo-char-counter"><span class="current">0</span>/300</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="pmo-form-actions">
+                        <button type="button" class="pmo-btn pmo-btn-secondary" onclick="PMO.closeStatusModal()">Abbrechen</button>
+                        <button type="submit" class="pmo-btn pmo-btn-primary">Status speichern</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="pmo-modal" id="pmo-search-modal">
+        <div class="pmo-modal-backdrop" onclick="PMO.closeSearch()"></div>
+        <div class="pmo-modal-content pmo-modal-large">
+            <div class="pmo-modal-header">
+                <h2>Suche</h2>
+                <button class="pmo-modal-close" onclick="PMO.closeSearch()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="pmo-modal-body">
+                <div class="pmo-search-input-container">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="pmo-search-input" placeholder="Suche nach Projekten, Risiken, Meilensteinen..." oninput="PMO.performSearch()">
+                </div>
+                <div class="pmo-search-results" id="pmo-search-results">
+                    <p class="pmo-search-hint">Geben Sie einen Suchbegriff ein...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ========================================
+   PMO TOOLBOX STYLES
+   ======================================== */
+
+.pmo-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header */
+.pmo-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 24px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back-button:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.pmo-header-info {
+    flex: 1;
+}
+
+.pmo-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.pmo-subtitle {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.pmo-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Buttons */
+.pmo-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pmo-btn-primary {
+    background: #E30613;
+    color: white;
+}
+
+.pmo-btn-primary:hover {
+    background: #B8000F;
+}
+
+.pmo-btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.pmo-btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+/* Navigation */
+.pmo-nav {
+    display: flex;
+    gap: 8px;
+    padding: 12px 24px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pmo-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pmo-nav-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.pmo-nav-btn.active {
+    background: #E30613;
+    color: white;
+}
+
+/* Content */
+.pmo-content {
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.pmo-view {
+    display: none;
+}
+
+.pmo-view.active {
+    display: block;
+}
+
+.pmo-section-title {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Quick Stats */
+.pmo-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.pmo-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.pmo-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pmo-stat-icon.green { background: #dcfce7; color: #16a34a; }
+.pmo-stat-icon.yellow { background: #fef3c7; color: #d97706; }
+.pmo-stat-icon.red { background: #fee2e2; color: #dc2626; }
+.pmo-stat-icon.blue { background: #dbeafe; color: #2563eb; }
+
+.pmo-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.pmo-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.pmo-stat-label {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Projects Grid */
+.pmo-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.pmo-project-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.pmo-project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: #E30613;
+}
+
+.pmo-project-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.pmo-project-id {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #E30613;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.pmo-project-name {
+    margin: 8px 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.pmo-project-full-name {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.pmo-project-workstreams {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 12px;
+}
+
+.pmo-project-status-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pmo-mini-light {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+}
+
+.pmo-mini-light.green { background: #22c55e; }
+.pmo-mini-light.yellow { background: #eab308; }
+.pmo-mini-light.red { background: #ef4444; }
+.pmo-mini-light.gray { background: #94a3b8; }
+
+/* Traffic Light (large) */
+.pmo-traffic-light {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pmo-traffic-light.green { background: #22c55e; }
+.pmo-traffic-light.yellow { background: #eab308; }
+.pmo-traffic-light.red { background: #ef4444; }
+
+/* Modal */
+.pmo-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.pmo-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pmo-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+}
+
+.pmo-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.pmo-modal-large {
+    width: 90%;
+    max-width: 900px;
+}
+
+.pmo-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pmo-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.pmo-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.pmo-modal-close:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.pmo-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Form Styles */
+.pmo-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.pmo-form-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pmo-form-section h4 {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pmo-form-group {
+    margin-bottom: 16px;
+}
+
+.pmo-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.pmo-form-group input,
+.pmo-form-group select,
+.pmo-form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.pmo-form-group input:focus,
+.pmo-form-group select:focus,
+.pmo-form-group textarea:focus {
+    outline: none;
+    border-color: #E30613;
+    box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+}
+
+/* Input with counter */
+.pmo-input-with-counter {
+    position: relative;
+}
+
+.pmo-input-with-counter input,
+.pmo-input-with-counter textarea {
+    padding-right: 70px;
+}
+
+.pmo-char-counter {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.pmo-input-with-counter textarea + .pmo-char-counter {
+    top: auto;
+    bottom: 8px;
+    transform: none;
+}
+
+.pmo-char-counter.warning { color: #d97706; }
+.pmo-char-counter.error { color: #dc2626; }
+
+/* Traffic Light Selector */
+.pmo-traffic-lights-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+}
+
+.pmo-traffic-light-group {
+    text-align: center;
+}
+
+.pmo-traffic-light-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.pmo-traffic-light-selector {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.tl-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all 0.2s;
+}
+
+.tl-btn:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+}
+
+.tl-btn.active {
+    opacity: 1;
+    border-color: #1e293b;
+    transform: scale(1.15);
+}
+
+.tl-btn.green { background: #22c55e; }
+.tl-btn.yellow { background: #eab308; }
+.tl-btn.red { background: #ef4444; }
+
+/* Form Actions */
+.pmo-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Tables */
+.pmo-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pmo-table th,
+.pmo-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pmo-table th {
+    background: #f8fafc;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pmo-table td {
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.pmo-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Status Badges */
+.pmo-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.pmo-status-badge.neu { background: #dbeafe; color: #1d4ed8; }
+.pmo-status-badge.offen { background: #fef3c7; color: #b45309; }
+.pmo-status-badge.geschlossen { background: #dcfce7; color: #15803d; }
+.pmo-status-badge.im-plan { background: #dcfce7; color: #15803d; }
+.pmo-status-badge.verzögert { background: #fee2e2; color: #b91c1c; }
+
+/* Type Badge */
+.pmo-type-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.pmo-type-badge.R { background: #fee2e2; color: #b91c1c; }
+.pmo-type-badge.H { background: #fef3c7; color: #b45309; }
+
+/* Timeline */
+.pmo-timeline-container {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.pmo-timeline-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.pmo-timeline-item:last-child {
+    border-bottom: none;
+}
+
+.pmo-timeline-date {
+    width: 100px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.pmo-timeline-content {
+    flex: 1;
+}
+
+.pmo-timeline-project {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.pmo-timeline-summary {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Search */
+.pmo-search-input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.pmo-search-input-container svg {
+    color: #94a3b8;
+}
+
+.pmo-search-input-container input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: 15px;
+    outline: none;
+}
+
+.pmo-search-results {
+    min-height: 200px;
+}
+
+.pmo-search-hint {
+    color: #94a3b8;
+    text-align: center;
+    padding: 40px;
+}
+
+.pmo-search-result-item {
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pmo-search-result-item:hover {
+    background: #f8fafc;
+}
+
+.pmo-search-result-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.pmo-search-result-context {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.pmo-search-result-context mark {
+    background: #fef3c7;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* Project Detail in Modal */
+.pmo-project-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pmo-project-detail-id {
+    width: 48px;
+    height: 48px;
+    background: #E30613;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pmo-project-detail-info h3 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    color: #1e293b;
+}
+
+.pmo-project-detail-info p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.pmo-workstreams-list {
+    margin-top: 24px;
+}
+
+.pmo-workstream-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pmo-workstream-item:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+}
+
+.pmo-workstream-id {
+    font-weight: 700;
+    color: #E30613;
+    margin-right: 12px;
+}
+
+.pmo-workstream-name {
+    flex: 1;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.pmo-workstream-status {
+    display: flex;
+    gap: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .pmo-projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pmo-quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .pmo-projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pmo-quick-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .pmo-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .pmo-traffic-lights-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+</style>
+
+<script>
+// ========================================
+// PMO TOOLBOX - JavaScript
+// ========================================
+
+const PMO = {
+    // Program Structure
+    PROGRAM_STRUCTURE: {
+        projects: [
+            {
+                id: "A",
+                name: "Hybrider Kunde",
+                fullName: "Omnikanalstärkung der Agenturbetriebe",
+                workstreams: [
+                    { id: "A1", name: "Skalierung Neukunden-Leads und Optimierung Lead-Routing" },
+                    { id: "A2", name: "Ausbau der K-EWE Servicepunkte bei Bestandskunden" },
+                    { id: "A3", name: "Skalierung des Service-2-Sales Geschäfts auf weitere Segmente" },
+                    { id: "A4", name: "Aufbau zentrale Telefoneinheit (Inside Sales)" }
+                ]
+            },
+            {
+                id: "B",
+                name: "Vertriebssteuerung",
+                fullName: "Professionalisierung der Agenturbetriebe über standardbasierte Steuerungs- und Entwicklungsprozesse",
+                workstreams: [
+                    { id: "B1", name: "Optimierung Vertriebssteuerung mit vereinheitlichten Reports" },
+                    { id: "B2", name: "Aufbau Performance-Steuerung und Agenturentwicklungspläne" },
+                    { id: "B3", name: "Optimierung Provisionsmanagement" }
+                ]
+            },
+            {
+                id: "C",
+                name: "Kapazität & Ausbildung",
+                fullName: "Kapazitätsstabilisierung der Agenturbetriebe durch verbessertes Recruiting und effektives Onboarding",
+                workstreams: [
+                    { id: "C1", name: "Optimierte Kapazitätssteuerung und Skalierung des Recruitings" },
+                    { id: "C2", name: "E2E Optimierung des Einstellungsprozesses und der Ausbildungsformate" }
+                ]
+            },
+            {
+                id: "D",
+                name: "A-TOM",
+                fullName: "Produktivitätssteigerung der Agenturbetriebe mit standardisiertem und verbessertem Servicemodell",
+                workstreams: [
+                    { id: "D1", name: "Implementierung klarer Agenturformate mit einheitlichem Servicemodell" },
+                    { id: "D2", name: "Optimierung der Kundenanalytik und Potenzialidentifikation" },
+                    { id: "D3", name: "Einführung von einheitlichen und intuitiven Beratungsmodell" },
+                    { id: "D4", name: "Optimierung von Service-Prozessen durch Innovation und Digitalisierung" },
+                    { id: "D5", name: "Stringente Abarbeitung des EASY Backlogs (z.B. Antragsstrecke)" },
+                    { id: "D6", name: "Prozessoptimierung im RD-ID zur Gewährleistung schlanker Strukturen" }
+                ]
+            },
+            {
+                id: "E",
+                name: "DIP",
+                fullName: "Ausbau der digitalen Reichweite der Agenturbetriebe über modernisierte Vermittler-Homepages, SEO und SoMe",
+                workstreams: [
+                    { id: "E1", name: "Ausbau EMOK und Social Media Funktionen" },
+                    { id: "E2", name: "SEO-Skalierung der Vermittler Homepages" },
+                    { id: "E3", name: "Einführung von KI-Optimierungen für Vermittler Homepages" },
+                    { id: "E4", name: "Ausbau der Dynamisierung und Personalisierung der Vermittler Homepages" }
+                ]
+            },
+            {
+                id: "F",
+                name: "Struktur",
+                fullName: "Schaffung Investitionsräume für Agenturbetriebe durch effektives Kosten-Mgmt. und schlanke Strukturen",
+                workstreams: [
+                    { id: "F1", name: "Sicherstellung der Erreichung der Effizienzziele" }
+                ]
+            },
+            {
+                id: "G",
+                name: "Change & Einführungs-Mgmt.",
+                fullName: "Gemeinsame Transformation der Agenturbetriebe über aktive Einbindung des Vertriebs und effektive Kommunikation",
+                workstreams: [
+                    { id: "G1", name: "Koordination des Change und Einführungs-Mgmt. im Vertrieb" },
+                    { id: "G2", name: "Sicherstellung des Betriebsübergangs im Innen- und Außendienst" }
+                ]
+            },
+            {
+                id: "H",
+                name: "Sales Middle Layer",
+                fullName: "Prozessoptimierung für Agenturbetriebe durch harmonisierte IT-Infrastruktur mit Fokus auf TAA-Prozesse",
+                workstreams: [
+                    { id: "H1", name: "Aufsatz eines eigenen Programms für vertriebswegübergreifende Einführung eines Sales Middle Layer" }
+                ]
+            }
+        ]
+    },
+
+    // State
+    statusData: [],
+    currentView: 'dashboard',
+    selectedTrafficLights: {},
+
+    // Initialize
+    init() {
+        console.log('🚀 PMO Toolbox initialisiert');
+        this.loadData();
+        this.renderDashboard();
+        this.setupEventListeners();
+        this.populateProjectSelect();
+        this.setDefaultDate();
+    },
+
+    // Load data from localStorage
+    loadData() {
+        const stored = localStorage.getItem('pmo_status_data');
+        if (stored) {
+            this.statusData = JSON.parse(stored);
+        } else {
+            this.generateDemoData();
+        }
+    },
+
+    // Save data to localStorage
+    saveData() {
+        localStorage.setItem('pmo_status_data', JSON.stringify(this.statusData));
+    },
+
+    // Generate Demo Data
+    generateDemoData() {
+        const scenarios = {
+            "A": { trend: "improving", currentStatus: "yellow", themes: ["Lead-Routing System in Pilotphase", "K-EWE Integration verzögert", "Inside Sales Team im Aufbau"] },
+            "B": { trend: "stable", currentStatus: "green", themes: ["Reporting-Framework implementiert", "Performance-Dashboards live"] },
+            "C": { trend: "declining", currentStatus: "yellow", themes: ["Recruiting-Ziele unter Plan", "Onboarding-Prozess optimiert"] },
+            "D": { trend: "stable", currentStatus: "green", themes: ["Servicemodell definiert", "Pilotierung in 3 Regionen"] },
+            "E": { trend: "improving", currentStatus: "green", themes: ["SEO-Maßnahmen zeigen Wirkung", "Social Media Strategie umgesetzt"] },
+            "F": { trend: "critical", currentStatus: "red", themes: ["Effizienzziele gefährdet", "Kosteneinsparungen unter Plan"] },
+            "G": { trend: "stable", currentStatus: "yellow", themes: ["Change-Kommunikation läuft", "Widerstand im Außendienst"] },
+            "H": { trend: "starting", currentStatus: "yellow", themes: ["Programmaufsatz in Arbeit", "Anforderungsanalyse läuft"] }
+        };
+
+        const demoData = [];
+        const today = new Date();
+
+        // Generate 8 weeks of data for each workstream
+        this.PROGRAM_STRUCTURE.projects.forEach(project => {
+            const scenario = scenarios[project.id];
+
+            project.workstreams.forEach(ws => {
+                for (let week = 0; week < 8; week++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - (week * 7));
+
+                    const status = this.generateStatusForWeek(project.id, ws.id, scenario, week);
+                    status.date = date.toISOString().split('T')[0];
+                    status.id = `status_${project.id}_${ws.id}_${date.toISOString().split('T')[0]}`;
+
+                    demoData.push(status);
+                }
+            });
+        });
+
+        this.statusData = demoData;
+        this.saveData();
+    },
+
+    generateStatusForWeek(projectId, wsId, scenario, weekOffset) {
+        const statuses = ['green', 'yellow', 'red'];
+        const statusIndex = statuses.indexOf(scenario.currentStatus);
+
+        // Slight variation based on trend
+        let adjustedStatus = scenario.currentStatus;
+        if (weekOffset > 2 && scenario.trend === 'improving') {
+            adjustedStatus = statuses[Math.min(statusIndex + 1, 2)];
+        } else if (weekOffset > 2 && scenario.trend === 'declining') {
+            adjustedStatus = statuses[Math.max(statusIndex - 1, 0)];
+        }
+
+        const risks = [];
+        if (scenario.currentStatus !== 'green' && Math.random() > 0.5) {
+            risks.push({
+                type: Math.random() > 0.5 ? 'R' : 'H',
+                description: scenario.themes[Math.floor(Math.random() * scenario.themes.length)],
+                identifiedDate: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                targetDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                status: weekOffset === 0 ? 'Offen' : (Math.random() > 0.7 ? 'Geschlossen' : 'Offen'),
+                countermeasures: 'Maßnahmen werden umgesetzt'
+            });
+        }
+
+        const milestones = [];
+        if (Math.random() > 0.6) {
+            milestones.push({
+                name: ['Kick-off', 'Design Complete', 'Pilotierung', 'Go-Live'][Math.floor(Math.random() * 4)],
+                plannedDate: new Date(Date.now() + Math.random() * 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                currentEstimate: new Date(Date.now() + Math.random() * 70 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                status: ['Im Plan', 'Verzögert', 'Geschlossen'][Math.floor(Math.random() * 3)]
+            });
+        }
+
+        return {
+            projectId,
+            workstreamId: wsId,
+            status: {
+                overall: adjustedStatus,
+                budget: ['green', 'green', 'yellow'][Math.floor(Math.random() * 3)],
+                scope: adjustedStatus,
+                time: adjustedStatus,
+                resources: ['green', 'yellow', 'yellow'][Math.floor(Math.random() * 3)],
+                risks: risks.length > 0 ? 'yellow' : 'green'
+            },
+            summary: scenario.themes.slice(0, 4),
+            progress: `Fortschritt in KW ${52 - weekOffset}: ${scenario.themes[0]}`,
+            upcoming: 'Nächste Schritte werden geplant',
+            risksAndIssues: risks,
+            milestones,
+            decisions: weekOffset === 0 ? 'Entscheidung zu Ressourcenallokation ausstehend' : ''
+        };
+    },
+
+    // Render Dashboard
+    renderDashboard() {
+        this.updateQuickStats();
+        this.renderProjectsGrid();
+    },
+
+    updateQuickStats() {
+        const latestStatuses = this.getLatestStatuses();
+
+        let green = 0, yellow = 0, red = 0, openRisks = 0;
+
+        latestStatuses.forEach(status => {
+            if (status.status.overall === 'green') green++;
+            else if (status.status.overall === 'yellow') yellow++;
+            else if (status.status.overall === 'red') red++;
+
+            openRisks += status.risksAndIssues.filter(r => r.status !== 'Geschlossen').length;
+        });
+
+        document.getElementById('stat-green').textContent = green;
+        document.getElementById('stat-yellow').textContent = yellow;
+        document.getElementById('stat-red').textContent = red;
+        document.getElementById('stat-risks').textContent = openRisks;
+    },
+
+    getLatestStatuses() {
+        const latest = {};
+        this.statusData.forEach(status => {
+            const key = `${status.projectId}_${status.workstreamId}`;
+            if (!latest[key] || status.date > latest[key].date) {
+                latest[key] = status;
+            }
+        });
+        return Object.values(latest);
+    },
+
+    getProjectLatestStatus(projectId) {
+        const projectStatuses = this.statusData
+            .filter(s => s.projectId === projectId)
+            .sort((a, b) => b.date.localeCompare(a.date));
+
+        if (projectStatuses.length === 0) return null;
+
+        // Get the most recent status for each workstream
+        const wsStatuses = {};
+        projectStatuses.forEach(s => {
+            if (!wsStatuses[s.workstreamId]) {
+                wsStatuses[s.workstreamId] = s;
+            }
+        });
+
+        // Aggregate overall status (worst case)
+        const allStatuses = Object.values(wsStatuses);
+        const hasRed = allStatuses.some(s => s.status.overall === 'red');
+        const hasYellow = allStatuses.some(s => s.status.overall === 'yellow');
+
+        return {
+            overall: hasRed ? 'red' : (hasYellow ? 'yellow' : 'green'),
+            budget: this.aggregateStatus(allStatuses.map(s => s.status.budget)),
+            scope: this.aggregateStatus(allStatuses.map(s => s.status.scope)),
+            time: this.aggregateStatus(allStatuses.map(s => s.status.time)),
+            resources: this.aggregateStatus(allStatuses.map(s => s.status.resources)),
+            risks: this.aggregateStatus(allStatuses.map(s => s.status.risks))
+        };
+    },
+
+    aggregateStatus(statuses) {
+        if (statuses.includes('red')) return 'red';
+        if (statuses.includes('yellow')) return 'yellow';
+        return 'green';
+    },
+
+    renderProjectsGrid() {
+        const grid = document.getElementById('pmo-projects-grid');
+        grid.innerHTML = '';
+
+        this.PROGRAM_STRUCTURE.projects.forEach(project => {
+            const status = this.getProjectLatestStatus(project.id);
+            const card = document.createElement('div');
+            card.className = 'pmo-project-card';
+            card.onclick = () => this.openProjectDetail(project.id);
+
+            card.innerHTML = `
+                <div class="pmo-project-header">
+                    <span class="pmo-project-id">${project.id}</span>
+                    <div class="pmo-traffic-light ${status?.overall || 'gray'}"></div>
+                </div>
+                <h4 class="pmo-project-name">${project.name}</h4>
+                <p class="pmo-project-full-name">${project.fullName}</p>
+                <p class="pmo-project-workstreams">${project.workstreams.length} Workstreams</p>
+                <div class="pmo-project-status-row">
+                    <span class="pmo-mini-light ${status?.budget || 'gray'}" title="Budget">B</span>
+                    <span class="pmo-mini-light ${status?.scope || 'gray'}" title="Scope">S</span>
+                    <span class="pmo-mini-light ${status?.time || 'gray'}" title="Zeit">Z</span>
+                    <span class="pmo-mini-light ${status?.resources || 'gray'}" title="Ressourcen">R</span>
+                    <span class="pmo-mini-light ${status?.risks || 'gray'}" title="Risiken">I</span>
+                </div>
+            `;
+
+            grid.appendChild(card);
+        });
+    },
+
+    // View Management
+    showView(viewId) {
+        document.querySelectorAll('.pmo-view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.pmo-nav-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(`pmo-${viewId}`).classList.add('active');
+        document.querySelector(`[data-view="${viewId}"]`).classList.add('active');
+
+        this.currentView = viewId;
+
+        if (viewId === 'risiken') this.renderRisks();
+        if (viewId === 'meilensteine') this.renderMilestones();
+        if (viewId === 'timeline') this.renderTimeline();
+    },
+
+    // Project Detail Modal
+    openProjectDetail(projectId) {
+        const project = this.PROGRAM_STRUCTURE.projects.find(p => p.id === projectId);
+        if (!project) return;
+
+        document.getElementById('project-modal-title').textContent = `Projekt ${project.id}: ${project.name}`;
+
+        const body = document.getElementById('project-modal-body');
+        const status = this.getProjectLatestStatus(projectId);
+
+        body.innerHTML = `
+            <div class="pmo-project-detail-header">
+                <div class="pmo-project-detail-id">${project.id}</div>
+                <div class="pmo-project-detail-info">
+                    <h3>${project.name}</h3>
+                    <p>${project.fullName}</p>
+                </div>
+                <div class="pmo-traffic-light ${status?.overall || 'gray'}"></div>
+            </div>
+
+            <div class="pmo-project-status-row" style="margin-bottom: 24px;">
+                <span class="pmo-mini-light ${status?.budget || 'gray'}">Budget</span>
+                <span class="pmo-mini-light ${status?.scope || 'gray'}">Scope</span>
+                <span class="pmo-mini-light ${status?.time || 'gray'}">Zeit</span>
+                <span class="pmo-mini-light ${status?.resources || 'gray'}">Ressourcen</span>
+                <span class="pmo-mini-light ${status?.risks || 'gray'}">Risiken</span>
+            </div>
+
+            <h4 style="margin: 0 0 16px; color: #64748b; font-size: 13px; text-transform: uppercase;">Workstreams</h4>
+            <div class="pmo-workstreams-list">
+                ${project.workstreams.map(ws => {
+                    const wsStatus = this.getWorkstreamLatestStatus(ws.id);
+                    return `
+                        <div class="pmo-workstream-item">
+                            <span class="pmo-workstream-id">${ws.id}</span>
+                            <span class="pmo-workstream-name">${ws.name}</span>
+                            <div class="pmo-workstream-status">
+                                <span class="pmo-mini-light ${wsStatus?.status?.overall || 'gray'}"></span>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <div style="margin-top: 24px;">
+                <button class="pmo-btn pmo-btn-primary" onclick="PMO.openStatusModalForProject('${projectId}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    Neuen Status erfassen
+                </button>
+            </div>
+        `;
+
+        document.getElementById('pmo-project-modal').classList.add('active');
+    },
+
+    getWorkstreamLatestStatus(wsId) {
+        const wsStatuses = this.statusData
+            .filter(s => s.workstreamId === wsId)
+            .sort((a, b) => b.date.localeCompare(a.date));
+        return wsStatuses[0] || null;
+    },
+
+    closeProjectModal() {
+        document.getElementById('pmo-project-modal').classList.remove('active');
+    },
+
+    // Status Modal
+    openStatusModal() {
+        document.getElementById('pmo-status-modal').classList.add('active');
+        this.selectedTrafficLights = {};
+    },
+
+    openStatusModalForProject(projectId) {
+        this.closeProjectModal();
+        this.openStatusModal();
+        document.getElementById('status-project').value = projectId;
+        this.updateWorkstreamOptions();
+    },
+
+    closeStatusModal() {
+        document.getElementById('pmo-status-modal').classList.remove('active');
+        document.getElementById('pmo-status-form').reset();
+        this.selectedTrafficLights = {};
+        this.resetTrafficLightSelectors();
+    },
+
+    populateProjectSelect() {
+        const select = document.getElementById('status-project');
+        this.PROGRAM_STRUCTURE.projects.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.id;
+            option.textContent = `${p.id} - ${p.name}`;
+            select.appendChild(option);
+        });
+    },
+
+    updateWorkstreamOptions() {
+        const projectId = document.getElementById('status-project').value;
+        const wsSelect = document.getElementById('status-workstream');
+        wsSelect.innerHTML = '<option value="">Workstream wählen...</option>';
+
+        if (!projectId) return;
+
+        const project = this.PROGRAM_STRUCTURE.projects.find(p => p.id === projectId);
+        if (!project) return;
+
+        project.workstreams.forEach(ws => {
+            const option = document.createElement('option');
+            option.value = ws.id;
+            option.textContent = `${ws.id} - ${ws.name}`;
+            wsSelect.appendChild(option);
+        });
+    },
+
+    setDefaultDate() {
+        const dateInput = document.getElementById('status-date');
+        dateInput.value = new Date().toISOString().split('T')[0];
+    },
+
+    saveStatus(event) {
+        event.preventDefault();
+
+        const projectId = document.getElementById('status-project').value;
+        const workstreamId = document.getElementById('status-workstream').value;
+        const date = document.getElementById('status-date').value;
+
+        if (!projectId || !workstreamId || !date) {
+            alert('Bitte alle Pflichtfelder ausfüllen');
+            return;
+        }
+
+        const newStatus = {
+            id: `status_${projectId}_${workstreamId}_${date}_${Date.now()}`,
+            projectId,
+            workstreamId,
+            date,
+            status: {
+                overall: this.selectedTrafficLights.overall || 'gray',
+                budget: this.selectedTrafficLights.budget || 'gray',
+                scope: this.selectedTrafficLights.scope || 'gray',
+                time: this.selectedTrafficLights.time || 'gray',
+                resources: this.selectedTrafficLights.resources || 'gray',
+                risks: this.selectedTrafficLights.risks || 'gray'
+            },
+            summary: [
+                document.getElementById('summary-1').value,
+                document.getElementById('summary-2').value,
+                document.getElementById('summary-3').value,
+                document.getElementById('summary-4').value
+            ].filter(s => s),
+            progress: document.getElementById('progress-details').value,
+            upcoming: document.getElementById('upcoming-activities').value,
+            risksAndIssues: [],
+            milestones: [],
+            decisions: document.getElementById('required-decisions').value
+        };
+
+        this.statusData.push(newStatus);
+        this.saveData();
+        this.renderDashboard();
+        this.closeStatusModal();
+
+        console.log('✅ Status gespeichert:', newStatus);
+    },
+
+    resetTrafficLightSelectors() {
+        document.querySelectorAll('.tl-btn').forEach(btn => btn.classList.remove('active'));
+    },
+
+    // Risks View
+    renderRisks() {
+        const tbody = document.getElementById('pmo-risks-tbody');
+        const filter = document.getElementById('risks-status-filter').value;
+
+        const allRisks = [];
+        this.statusData.forEach(status => {
+            status.risksAndIssues.forEach(risk => {
+                allRisks.push({
+                    ...risk,
+                    projectId: status.projectId,
+                    workstreamId: status.workstreamId
+                });
+            });
+        });
+
+        const filteredRisks = filter
+            ? allRisks.filter(r => r.status === filter)
+            : allRisks;
+
+        tbody.innerHTML = filteredRisks.map(risk => `
+            <tr>
+                <td><span class="pmo-type-badge ${risk.type}">${risk.type}</span></td>
+                <td>${risk.projectId} / ${risk.workstreamId}</td>
+                <td>${risk.description}</td>
+                <td>${this.formatDate(risk.identifiedDate)}</td>
+                <td>${this.formatDate(risk.targetDate)}</td>
+                <td><span class="pmo-status-badge ${risk.status.toLowerCase()}">${risk.status}</span></td>
+                <td>${risk.countermeasures}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="7" style="text-align: center; color: #94a3b8;">Keine Risiken gefunden</td></tr>';
+    },
+
+    filterRisks() {
+        this.renderRisks();
+    },
+
+    // Milestones View
+    renderMilestones() {
+        const tbody = document.getElementById('pmo-milestones-tbody');
+        const filter = document.getElementById('milestones-status-filter').value;
+
+        const allMilestones = [];
+        this.statusData.forEach(status => {
+            status.milestones.forEach(ms => {
+                allMilestones.push({
+                    ...ms,
+                    projectId: status.projectId,
+                    workstreamId: status.workstreamId
+                });
+            });
+        });
+
+        // Remove duplicates by name per workstream
+        const uniqueMilestones = [];
+        const seen = new Set();
+        allMilestones.forEach(ms => {
+            const key = `${ms.workstreamId}_${ms.name}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                uniqueMilestones.push(ms);
+            }
+        });
+
+        const filteredMilestones = filter
+            ? uniqueMilestones.filter(m => m.status === filter)
+            : uniqueMilestones;
+
+        tbody.innerHTML = filteredMilestones.map(ms => `
+            <tr>
+                <td>${ms.projectId}</td>
+                <td>${ms.workstreamId}</td>
+                <td>${ms.name}</td>
+                <td>${this.formatDate(ms.plannedDate)}</td>
+                <td>${this.formatDate(ms.currentEstimate)}</td>
+                <td><span class="pmo-status-badge ${ms.status.toLowerCase().replace(' ', '-')}">${ms.status}</span></td>
+            </tr>
+        `).join('') || '<tr><td colspan="6" style="text-align: center; color: #94a3b8;">Keine Meilensteine gefunden</td></tr>';
+    },
+
+    filterMilestones() {
+        this.renderMilestones();
+    },
+
+    // Timeline View
+    renderTimeline() {
+        const container = document.getElementById('pmo-timeline-container');
+        const filterSelect = document.getElementById('timeline-project-filter');
+
+        // Populate filter if empty
+        if (filterSelect.options.length === 1) {
+            this.PROGRAM_STRUCTURE.projects.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = `${p.id} - ${p.name}`;
+                filterSelect.appendChild(option);
+            });
+        }
+
+        const filter = filterSelect.value;
+        let statuses = [...this.statusData].sort((a, b) => b.date.localeCompare(a.date));
+
+        if (filter) {
+            statuses = statuses.filter(s => s.projectId === filter);
+        }
+
+        // Group by date
+        const byDate = {};
+        statuses.forEach(s => {
+            if (!byDate[s.date]) byDate[s.date] = [];
+            byDate[s.date].push(s);
+        });
+
+        const dates = Object.keys(byDate).sort((a, b) => b.localeCompare(a)).slice(0, 20);
+
+        container.innerHTML = dates.map(date => `
+            <div class="pmo-timeline-item">
+                <div class="pmo-timeline-date">${this.formatDate(date)}</div>
+                <div class="pmo-timeline-content">
+                    ${byDate[date].map(s => `
+                        <div style="margin-bottom: 8px;">
+                            <div class="pmo-timeline-project">
+                                <span class="pmo-mini-light ${s.status.overall}" style="margin-right: 8px;"></span>
+                                ${s.projectId} / ${s.workstreamId}
+                            </div>
+                            <div class="pmo-timeline-summary">${s.summary[0] || 'Kein Summary'}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('') || '<p style="text-align: center; color: #94a3b8;">Keine Timeline-Einträge gefunden</p>';
+    },
+
+    filterTimeline() {
+        this.renderTimeline();
+    },
+
+    // Search
+    openSearch() {
+        document.getElementById('pmo-search-modal').classList.add('active');
+        document.getElementById('pmo-search-input').focus();
+    },
+
+    closeSearch() {
+        document.getElementById('pmo-search-modal').classList.remove('active');
+        document.getElementById('pmo-search-input').value = '';
+        document.getElementById('pmo-search-results').innerHTML = '<p class="pmo-search-hint">Geben Sie einen Suchbegriff ein...</p>';
+    },
+
+    performSearch() {
+        const query = document.getElementById('pmo-search-input').value.toLowerCase().trim();
+        const resultsContainer = document.getElementById('pmo-search-results');
+
+        if (query.length < 2) {
+            resultsContainer.innerHTML = '<p class="pmo-search-hint">Geben Sie mindestens 2 Zeichen ein...</p>';
+            return;
+        }
+
+        const results = [];
+
+        // Search in status data
+        this.statusData.forEach(status => {
+            const searchableText = [
+                ...status.summary,
+                status.progress,
+                status.upcoming,
+                status.decisions,
+                ...status.risksAndIssues.map(r => r.description),
+                ...status.milestones.map(m => m.name)
+            ].join(' ').toLowerCase();
+
+            if (searchableText.includes(query)) {
+                results.push({
+                    type: 'status',
+                    title: `${status.projectId} / ${status.workstreamId} - ${this.formatDate(status.date)}`,
+                    context: this.highlightMatch(searchableText, query),
+                    data: status
+                });
+            }
+        });
+
+        // Search in projects
+        this.PROGRAM_STRUCTURE.projects.forEach(project => {
+            if (project.name.toLowerCase().includes(query) ||
+                project.fullName.toLowerCase().includes(query)) {
+                results.push({
+                    type: 'project',
+                    title: `Projekt ${project.id}: ${project.name}`,
+                    context: project.fullName,
+                    data: project
+                });
+            }
+        });
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '<p class="pmo-search-hint">Keine Ergebnisse gefunden</p>';
+            return;
+        }
+
+        resultsContainer.innerHTML = results.slice(0, 20).map(r => `
+            <div class="pmo-search-result-item" onclick="PMO.handleSearchResultClick('${r.type}', '${r.data.id || r.data.projectId}')">
+                <div class="pmo-search-result-title">${r.title}</div>
+                <div class="pmo-search-result-context">${r.context.substring(0, 150)}...</div>
+            </div>
+        `).join('');
+    },
+
+    highlightMatch(text, query) {
+        const index = text.toLowerCase().indexOf(query);
+        if (index === -1) return text;
+
+        const start = Math.max(0, index - 50);
+        const end = Math.min(text.length, index + query.length + 50);
+        let excerpt = text.substring(start, end);
+
+        if (start > 0) excerpt = '...' + excerpt;
+        if (end < text.length) excerpt = excerpt + '...';
+
+        return excerpt.replace(new RegExp(query, 'gi'), '<mark>$&</mark>');
+    },
+
+    handleSearchResultClick(type, id) {
+        this.closeSearch();
+        if (type === 'project') {
+            this.openProjectDetail(id);
+        }
+    },
+
+    // Setup Event Listeners
+    setupEventListeners() {
+        // Traffic light selectors
+        document.querySelectorAll('.pmo-traffic-light-selector').forEach(selector => {
+            const field = selector.dataset.field;
+            selector.querySelectorAll('.tl-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selector.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    this.selectedTrafficLights[field] = btn.dataset.value;
+                });
+            });
+        });
+
+        // Character counters
+        document.querySelectorAll('.pmo-input-with-counter input, .pmo-input-with-counter textarea').forEach(input => {
+            const counter = input.parentElement.querySelector('.pmo-char-counter .current');
+            const max = parseInt(input.getAttribute('maxlength'));
+
+            input.addEventListener('input', () => {
+                const current = input.value.length;
+                counter.textContent = current;
+
+                const counterEl = input.parentElement.querySelector('.pmo-char-counter');
+                counterEl.classList.remove('warning', 'error');
+
+                if (current >= max) {
+                    counterEl.classList.add('error');
+                } else if (current >= max * 0.8) {
+                    counterEl.classList.add('warning');
+                }
+            });
+        });
+    },
+
+    // Utility
+    formatDate(dateStr) {
+        if (!dateStr) return '-';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+};
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => PMO.init());
+} else {
+    PMO.init();
+}
+</script>
